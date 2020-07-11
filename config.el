@@ -28,7 +28,8 @@
 (setq doom-theme 'doom-nord)
 
 ;; Set a custom font
-(setq doom-font (font-spec :family "Source Code Pro" :size 14))
+(setq doom-font (font-spec :family "Source Code Pro" :size 14)
+      doom-variable-pitch-font (font-spec :family "Segoe UI"))
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -51,7 +52,6 @@
   (setq centaur-tabs-modified-marker "●")
   (setq centaur-tabs-height 32)
   (setq centaur-tabs-set-bar nil)
-  (centaur-tabs-change-fonts "Segoe UI" 100)
   (setq centaur-tabs-style "wave"))
 
 ;; When storing links by ID, add them to the normal `org-stored-links' variable
