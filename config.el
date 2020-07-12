@@ -59,6 +59,10 @@
   (setq centaur-tabs-set-bar nil)
   (setq centaur-tabs-style "wave"))
 
+(after! avy
+  ;; Configure avy to use colemak home row
+  (setq avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o)))
+
 ;; When storing links by ID, add them to the normal `org-stored-links' variable
 (defadvice! +org--store-id-link-a (link)
   :filter-return #'org-id-store-link
