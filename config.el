@@ -41,7 +41,12 @@
   ;; Show more whitespace in org mode when cycling
   (setq org-cycle-separator-lines -1)
   ;; Always use ID properties to store links
-  (setq org-id-link-to-org-use-id 'use-existing))
+  (setq org-id-link-to-org-use-id 'use-existing)
+  ;; Set custom header bullets
+  (setq org-superstar-headline-bullets-list '("★" "▶" "▪" "•" "·"))
+  (setq org-superstar-cycle-headline-bullets nil)
+  ;; Always use fast plain lists in org-superstar
+  (org-superstar-toggle-lightweight-lists))
 
 (after! evil
   ;; Don't move backwards
