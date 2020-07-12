@@ -54,7 +54,7 @@
   (setq evil-move-beyond-eol t))
 
 (after! centaur-tabs
-  (setq centaur-tabs-modified-marker "●")
+  (setq centaur-tabs-modified-marker "■")
   (setq centaur-tabs-height 32)
   (setq centaur-tabs-set-bar nil)
   (setq centaur-tabs-style "wave"))
