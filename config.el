@@ -63,6 +63,31 @@
   ;; Configure avy to use colemak home row
   (setq avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o)))
 
+(after! neotree
+  ;; Allow resizing of neotree window
+  (setq neo-window-fixed-size nil)
+  ;; Don't reset neotree window size when opening a file
+  (add-to-list 'window-size-change-functions
+               (lambda (frame)
+                 (let ((neo-window (neo-global--get-window)))
+                   (unless (null neo-window)
+                     (setq neo-window-width (window-width neo-window))))))
+  ;; Keep neotree window size when opening/closing
+  (defun neo-window--zoom (method)
+    "Zoom the NeoTree window, the METHOD should one of these options:
+     'maximize 'minimize 'zoom-in 'zoom-out."
+    (neo-buffer--unlock-width)
+    (cond
+     ((eq method 'maximize)
+      (maximize-window))
+     ((eq method 'minimize)
+      (message "neotree override: its window width will not be reset"))
+     ((eq method 'zoom-in)
+      (shrink-window-horizontally 2))
+     ((eq method 'zoom-out)
+      (enlarge-window-horizontally 2)))
+    (neo-buffer--lock-width)))
+
 ;; When storing links by ID, add them to the normal `org-stored-links' variable
 (defadvice! +org--store-id-link-a (link)
   :filter-return #'org-id-store-link
