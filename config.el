@@ -28,7 +28,7 @@
 (setq doom-theme 'doom-nord)
 
 ;; Set a custom font
-(setq doom-font (font-spec :family "Source Code Pro" :size 14)
+(setq doom-font (font-spec :family "Cascadia Code" :size 15)
       doom-variable-pitch-font (font-spec :family "Segoe UI"))
 
 ;; If you use `org' and don't want your org files in the default location below,
@@ -43,7 +43,7 @@
   ;; Always use ID properties to store links
   (setq org-id-link-to-org-use-id 'use-existing)
   ;; Set custom header bullets
-  (setq org-superstar-headline-bullets-list '("★" "▶" "▪" "•" "·"))
+  (setq org-superstar-headline-bullets-list '("★" "▶" "◾" "•" "·"))
   (setq org-superstar-cycle-headline-bullets nil)
   ;; Always use fast plain lists in org-superstar
   (org-superstar-toggle-lightweight-lists))
