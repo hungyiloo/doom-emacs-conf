@@ -52,7 +52,7 @@
 
 (after! evil
   ;; Don't move backwards
-  (setq evil-move-cursor-back nil)
+  (setq evil-move-cursor-back t)
   (setq evil-move-beyond-eol t))
 
 (after! centaur-tabs
