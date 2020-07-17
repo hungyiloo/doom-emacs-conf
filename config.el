@@ -111,6 +111,11 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
+;; Make sure tabs don't get hidden when launching magit
+;; Weird... https://github.com/ema2159/centaur-tabs/issues/100
+(add-hook! 'magit-status-mode-hook
+  (call-interactively 'centaur-tabs-local-mode)
+  (call-interactively 'centaur-tabs-local-mode))
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
