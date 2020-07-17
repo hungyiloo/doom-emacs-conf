@@ -65,12 +65,18 @@
   ;; Configure avy to use colemak home row
   (setq avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o)))
 
+(after! ivy
+  (setq ivy-more-chars-alist '((counsel-grep . 3)
+                              (counsel-rg . 3)
+                              (counsel-search . 3)
+                              (t . 3))))
+
 (after! neotree
   ;; Allow resizing of neotree window
   (setq neo-window-fixed-size nil)
   ;; Don't reset neotree window size when opening a file
   (add-to-list 'window-size-change-functions
-               (lambda (frame)
+               (lambda ()
                  (let ((neo-window (neo-global--get-window)))
                    (unless (null neo-window)
                      (setq neo-window-width (window-width neo-window))))))
