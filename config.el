@@ -161,9 +161,13 @@
   (setq web-mode-code-indent-offset 2)
   (setq web-mode-css-indent-offset 2))
 
-;; Make tab bar background transparent so that it matches the theme
 (custom-set-faces!
- '(tab-line :inherit variable-pitch :foreground "black" :height 0.9))
+  ;; Make tab bar background transparent so that it matches the theme
+  '(tab-line :inherit variable-pitch :foreground "black" :height 0.9)
+  ;; Customize ediff highlighting
+  '(ediff-fine-diff-A    :background "black" :weight bold :extend t)
+  `(ediff-current-diff-A :background ,(doom-darken (nth 1 (doom-themes--colors-p 'bg)) 0.2) :extend t)
+  `(ediff-even-diff-A    :background ,(doom-lighten (nth 1 (doom-themes--colors-p 'bg)) 0.065)))
 
 ;; Allow links to be opened outside WSL
 (cond
