@@ -144,6 +144,16 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
+;; Fix some edge case javascript indenting
+(after! js2-mode
+  (setq js-indent-level 2))
+
+;; Use 2-space indentation in web-mode always
+(after! web-mode
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-css-indent-offset 2))
+
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
