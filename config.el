@@ -84,6 +84,12 @@
         (:prefix ("l" . "links")
          "y" #'my-org-retrieve-url-from-point)))
 
+;; Temporarily disable eldoc mode in org mode due to
+;; bugs in Emacs 28
+;; https://www.mail-archive.com/emacs-orgmode@gnu.org/msg129389.html
+;; (add-hook! 'org-mode-hook
+;;   (funcall eldoc-mode -1))
+
 (after! evil
   ;; Don't move backwards
   (setq evil-move-cursor-back t)
