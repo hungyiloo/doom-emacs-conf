@@ -93,7 +93,8 @@
 (after! evil
   ;; Don't move backwards
   (setq evil-move-cursor-back t)
-  (setq evil-move-beyond-eol t))
+  (setq evil-move-beyond-eol t)
+  (setq evil-snipe-scope 'visible))
 
 (after! centaur-tabs
   (setq centaur-tabs-modified-marker "■")
