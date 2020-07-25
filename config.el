@@ -57,7 +57,7 @@
   ;; Always use ID properties to store links
   (setq org-id-link-to-org-use-id 'use-existing)
   ;; Set custom header bullets
-  (setq org-superstar-headline-bullets-list '("★" "▶" "◾" "•" "·"))
+  (setq org-superstar-headline-bullets-list '("★" "▶" "◼" "•" "·"))
   (setq org-superstar-cycle-headline-bullets nil)
   ;; Always use fast plain lists in org-superstar
   (org-superstar-toggle-lightweight-lists))
