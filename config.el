@@ -60,7 +60,29 @@
   (setq org-superstar-headline-bullets-list '("★" "▶" "◼" "•" "·"))
   (setq org-superstar-cycle-headline-bullets nil)
   ;; Always use fast plain lists in org-superstar
-  (org-superstar-toggle-lightweight-lists))
+  (org-superstar-toggle-lightweight-lists)
+  ;; Don't export org files with table of contents by default
+  (setq org-export-with-toc nil)
+  (setq org-export-with-section-numbers nil)
+  ;; A function to copy the URL from an org mode link
+  (defun my-org-retrieve-url-from-point ()
+    "Copies the URL from an org link at the point"
+    (interactive)
+    (let* ((link-info (assoc :link (org-context)))
+           (text (when link-info
+                   ;; org-context seems to return nil if the current element
+                   ;; starts at buffer-start or ends at buffer-end
+                   (buffer-substring-no-properties (or (cadr link-info) (point-min))
+                                                   (or (caddr link-info) (point-max))))))
+      (if (not text)
+          (error "Oops! Point isn't in an org link")
+        (string-match org-link-bracket-re text)
+        (kill-new (substring text (match-beginning 1) (match-end 1))))))
+  ;; Map `my-org-retrieve-url-from-point' to live with its org link friends
+  (map! :map org-mode-map
+        :localleader
+        (:prefix ("l" . "links")
+         "y" #'my-org-retrieve-url-from-point)))
 
 (after! evil
   ;; Don't move backwards
