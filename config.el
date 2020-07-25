@@ -148,6 +148,10 @@
 (after! js2-mode
   (setq js-indent-level 2))
 
+;; Always group tabs by project
+(after! centaur-tabs
+  (centaur-tabs-group-by-projectile-project))
+
 ;; Use 2-space indentation in web-mode always
 (after! web-mode
   (setq web-mode-markup-indent-offset 2)
