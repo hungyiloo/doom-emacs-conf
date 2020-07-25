@@ -162,6 +162,16 @@
 (custom-set-faces!
  '(tab-line :inherit variable-pitch :foreground "black" :height 0.9))
 
+;; Allow links to be opened outside WSL
+(cond
+ ((eq system-type 'gnu/linux)
+  (when (string-match "Linux.*Microsoft.*Linux"
+                      (shell-command-to-string "uname -a"))
+    (setq
+     browse-url-generic-program  "/mnt/c/Windows/explorer.exe"
+     browse-url-generic-args     nil
+     browse-url-browser-function 'browse-url-generic)
+    )))
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
