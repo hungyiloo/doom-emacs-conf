@@ -37,6 +37,18 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Notes/")
 
+;; Make sure org supports org-id stuff
+(add-to-list 'org-modules 'org-id)
+
+;; When storing links by ID, add them to the normal `org-stored-links' variable
+(defadvice! +org--store-id-link-a (link)
+  :filter-return #'org-id-store-link
+  (when (and link org-store-link-plist)
+    (add-to-list 'org-stored-links
+                 (list (plist-get org-store-link-plist :link)
+                       (plist-get org-store-link-plist :description))))
+  link)
+
 (after! org
   ;; Log CLOSED timestamp when notes are set to DONE state
   (setq org-log-done 'time)
