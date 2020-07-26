@@ -165,16 +165,17 @@
 
 (add-hook! elisp-mode (funcall smartparens-strict-mode 1))
 
-(let* ((bg (doom-color 'bg))
-       (darker-bg (doom-darken bg 0.2))
-       (lighter-bg (doom-lighten bg 0.065)))
-  (custom-set-faces!
-    ;; Make tab bar background transparent so that it matches the theme
-    '(tab-line :inherit variable-pitch :foreground "black" :height 0.9)
-    ;; Customize ediff highlighting
-    '(ediff-fine-diff-A    :background "black" :weight bold :extend t)
-    `(ediff-current-diff-A :background ,darker-bg :extend t)
-    `(ediff-even-diff-A    :background ,lighter-bg :extend t)))
+(add-hook! 'doom-load-theme-hook
+  (let* ((bg (doom-color 'bg))
+         (darker-bg (doom-darken bg 0.2))
+         (lighter-bg (doom-lighten bg 0.065)))
+    (custom-set-faces!
+      ;; Make tab bar background transparent so that it matches the theme
+      '(tab-line :inherit variable-pitch :foreground "black" :height 0.9)
+      ;; Customize ediff highlighting
+      '(ediff-fine-diff-A    :background "black" :weight bold :extend t)
+      `(ediff-current-diff-A :background ,darker-bg :extend t)
+      `(ediff-even-diff-A    :background ,lighter-bg :extend t))))
 
 ;; Allow links to be opened outside WSL
 (when (and (eq system-type 'gnu/linux)
