@@ -28,7 +28,7 @@
 (setq doom-theme 'doom-material)
 
 ;; Wider fringe (emacs default) for better magit support
-(fringe-mode 8)
+(add-hook! 'magit-mode-hook (fringe-mode 12))
 
 ;; Set a custom font
 (setq doom-font (font-spec :family "Fira Code" :size 16)
@@ -99,11 +99,18 @@
   (setq evil-move-beyond-eol t)
   (setq evil-snipe-scope 'visible))
 
-(after! centaur-tabs
-  (setq centaur-tabs-modified-marker "●")
-  (setq centaur-tabs-height 32)
-  (setq centaur-tabs-set-bar nil)
-  (setq centaur-tabs-style "wave"))
+;; (after! centaur-tabs
+;;   (setq centaur-tabs-modified-marker "●")
+;;   (setq centaur-tabs-height 32)
+;;   (setq centaur-tabs-set-bar nil)
+;;   (setq centaur-tabs-style "wave"))
+
+;; ;; Always group tabs by project
+;; (after! centaur-tabs
+;;   (centaur-tabs-group-by-projectile-project))
+
+;; ;; Disable centaur tabs in ediff mode
+;; (add-hook! 'ediff-mode-hook 'centaur-tabs-local-mode)
 
 (after! avy
   ;; Configure avy to use colemak home row
@@ -111,9 +118,9 @@
 
 (after! ivy
   (setq ivy-more-chars-alist '((counsel-grep . 3)
-                              (counsel-rg . 3)
-                              (counsel-search . 3)
-                              (t . 3))))
+                               (counsel-rg . 3)
+                               (counsel-search . 3)
+                               (t . 3))))
 
 (after! neotree
   ;; Allow resizing of neotree window
@@ -151,34 +158,32 @@
 (after! js2-mode
   (setq js-indent-level 2))
 
-;; Always group tabs by project
-(after! centaur-tabs
-  (centaur-tabs-group-by-projectile-project))
-
 ;; Use 2-space indentation in web-mode always
 (after! web-mode
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
   (setq web-mode-css-indent-offset 2))
 
-(custom-set-faces!
-  ;; Make tab bar background transparent so that it matches the theme
-  '(tab-line :inherit variable-pitch :foreground "black" :height 0.9)
-  ;; Customize ediff highlighting
-  '(ediff-fine-diff-A    :background "black" :weight bold :extend t)
-  `(ediff-current-diff-A :background ,(doom-darken (nth 1 (doom-themes--colors-p 'bg)) 0.2) :extend t)
-  `(ediff-even-diff-A    :background ,(doom-lighten (nth 1 (doom-themes--colors-p 'bg)) 0.065)))
+(add-hook! elisp-mode (funcall smartparens-strict-mode 1))
+
+(let* ((bg (doom-color 'bg))
+       (darker-bg (doom-darken bg 0.2))
+       (lighter-bg (doom-lighten bg 0.065)))
+  (custom-set-faces!
+    ;; Make tab bar background transparent so that it matches the theme
+    '(tab-line :inherit variable-pitch :foreground "black" :height 0.9)
+    ;; Customize ediff highlighting
+    '(ediff-fine-diff-A    :background "black" :weight bold :extend t)
+    `(ediff-current-diff-A :background ,darker-bg :extend t)
+    `(ediff-even-diff-A    :background ,lighter-bg :extend t)))
 
 ;; Allow links to be opened outside WSL
-(cond
- ((eq system-type 'gnu/linux)
-  (when (string-match "Linux.*Microsoft.*Linux"
-                      (shell-command-to-string "uname -a"))
-    (setq
-     browse-url-generic-program  "/mnt/c/Windows/explorer.exe"
-     browse-url-generic-args     nil
-     browse-url-browser-function 'browse-url-generic)
-    )))
+(when (and (eq system-type 'gnu/linux)
+           (string-match "Linux.*Microsoft.*Linux" (shell-command-to-string "uname -a")))
+  (setq
+   browse-url-generic-program  "/mnt/c/Windows/explorer.exe"
+   browse-url-generic-args     nil
+   browse-url-browser-function 'browse-url-generic))
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
