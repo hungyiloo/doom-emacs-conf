@@ -176,6 +176,8 @@
     (custom-set-faces!
       ;; Make tab bar background transparent so that it matches the theme
       '(tab-line :inherit variable-pitch :foreground "black" :height 0.9)
+      ;; Customize material cursor color to not be so garish
+      `(cursor :background ,(doom-color 'dark-cyan))
       ;; Customize ediff highlighting
       '(ediff-fine-diff-A    :background "black" :weight bold :extend t)
       `(ediff-current-diff-A :background ,darker-bg :extend t)
