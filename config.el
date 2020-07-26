@@ -28,7 +28,11 @@
 (setq doom-theme 'doom-material)
 
 ;; Wider fringe (emacs default) for better magit support
-(add-hook! 'magit-mode-hook (fringe-mode 12))
+(defun my-magit-fringes ()
+  (setq left-fringe-width 20
+        right-fringe-width 0))
+
+(add-hook! 'magit-mode-hook 'my-magit-fringes)
 
 ;; Set a custom font
 (setq doom-font (font-spec :family "Fira Code" :size 16)
