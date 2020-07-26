@@ -43,15 +43,6 @@
 ;; Make sure org supports org-id stuff
 (add-to-list 'org-modules 'org-id)
 
-;; When storing links by ID, add them to the normal `org-stored-links' variable
-(defadvice! +org--store-id-link-a (link)
-  :filter-return #'org-id-store-link
-  (when (and link org-store-link-plist)
-    (add-to-list 'org-stored-links
-                 (list (plist-get org-store-link-plist :link)
-                       (plist-get org-store-link-plist :description))))
-  link)
-
 (after! org
   ;; Log CLOSED timestamp when notes are set to DONE state
   (setq org-log-done 'time)
@@ -67,6 +58,14 @@
   ;; Don't export org files with table of contents by default
   (setq org-export-with-toc nil)
   (setq org-export-with-section-numbers nil)
+  ;; When storing links by ID, add them to the normal `org-stored-links' variable
+  (defadvice! +org--store-id-link-a (link)
+    :filter-return #'org-id-store-link
+    (when (and link org-store-link-plist)
+      (add-to-list 'org-stored-links
+                   (list (plist-get org-store-link-plist :link)
+                         (plist-get org-store-link-plist :description))))
+    link)
   ;; A function to copy the URL from an org mode link
   (defun my-org-retrieve-url-from-point ()
     "Copies the URL from an org link at the point"
