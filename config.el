@@ -35,7 +35,7 @@
 (add-hook! 'magit-mode-hook 'my-magit-fringes)
 
 ;; Set a custom font
-(setq doom-font (font-spec :family "Fira Code" :size 16)
+(setq doom-font (font-spec :family "Iosevka Extended" :size 17)
       doom-variable-pitch-font (font-spec :family "Segoe UI"))
 
 (setq initial-frame-alist '((width . 141) (height . 45) (fullscreen . fullheight)))
@@ -55,7 +55,7 @@
   ;; Always use ID properties to store links
   (setq org-id-link-to-org-use-id 'use-existing)
   ;; Set custom header bullets
-  (setq org-superstar-headline-bullets-list '("★" "▶" "◼" "•" "·"))
+  (setq org-superstar-headline-bullets-list '("★" "▸" "◼" "•" "·"))
   (setq org-superstar-cycle-headline-bullets nil)
   ;; Always use fast plain lists in org-superstar
   (org-superstar-toggle-lightweight-lists)
@@ -90,16 +90,12 @@
         (:prefix ("l" . "links")
          "y" #'my-org-retrieve-url-from-point)))
 
-;; Temporarily disable eldoc mode in org mode due to
-;; bugs in Emacs 28
-;; https://www.mail-archive.com/emacs-orgmode@gnu.org/msg129389.html
-;; (add-hook! 'org-mode-hook
-;;   (funcall eldoc-mode -1))
-
 (after! evil
-  ;; Don't move backwards
   (setq evil-move-cursor-back t)
   (setq evil-move-beyond-eol t)
+  (setq evil-escape-key-sequence "gj")
+  (setq evil-escape-unordered-key-sequence t)
+  (setq evil-escape-delay 0.05)
   (setq evil-snipe-scope 'visible))
 
 ;; (after! centaur-tabs
@@ -120,37 +116,133 @@
   (setq avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o)))
 
 (after! ivy
+  (setq ivy-read-action-function #'ivy-hydra-read-action)
   (setq ivy-more-chars-alist '((counsel-grep . 3)
                                (counsel-rg . 3)
                                (counsel-search . 3)
                                (t . 3))))
 
-(after! neotree
-  ;; Allow resizing of neotree window
-  (setq neo-window-fixed-size nil)
-  ;; Don't reset neotree window size when opening a file
-  (add-to-list 'window-size-change-functions
-               (lambda ()
-                 (let ((neo-window (neo-global--get-window)))
-                   (unless (null neo-window)
-                     (setq neo-window-width (window-width neo-window))))))
-  ;; Keep neotree window size when opening/closing
-  (defun neo-window--zoom (method)
-    "Zoom the NeoTree window, the METHOD should one of these options:
-     'maximize 'minimize 'zoom-in 'zoom-out."
-    (neo-buffer--unlock-width)
-    (cond
-     ((eq method 'maximize)
-      (maximize-window))
-     ((eq method 'minimize)
-      (message "neotree override: its window width will not be reset"))
-     ((eq method 'zoom-in)
-      (shrink-window-horizontally 2))
-     ((eq method 'zoom-out)
-      (enlarge-window-horizontally 2)))
-    (neo-buffer--lock-width))
-  ;; Enable richer icons on neotree
-  (setq doom-themes-neotree-enable-file-icons t))
+(after! ivy
+  (setq
+   ivy-rich-display-transformers-list
+   '(ivy-switch-buffer
+     (:columns
+      ((ivy-switch-buffer-transformer
+        (:width 60)) ;; Wider than the default
+       (ivy-rich-switch-buffer-size
+        (:width 7))
+       (ivy-rich-switch-buffer-indicators
+        (:width 4 :face error :align right))
+       (ivy-rich-switch-buffer-major-mode
+        (:width 12 :face warning))
+       (ivy-rich-switch-buffer-project
+        (:width 15 :face success))
+       (ivy-rich-switch-buffer-path
+        (:width
+         (lambda
+           (x)
+           (ivy-rich-switch-buffer-shorten-path x
+                                                (ivy-rich-minibuffer-width 0.3))))))
+      :predicate
+      (lambda
+        (cand)
+        (get-buffer cand)))
+     counsel-find-file
+     (:columns
+      ((ivy-read-file-transformer)
+       (ivy-rich-counsel-find-file-truename
+        (:face font-lock-doc-face))))
+     counsel-M-x
+     (:columns
+      ((counsel-M-x-transformer
+        (:width 60))
+       (ivy-rich-counsel-function-docstring
+        (:face font-lock-doc-face))))
+     counsel-describe-function
+     (:columns
+      ((counsel-describe-function-transformer
+        (:width 40))
+       (ivy-rich-counsel-function-docstring
+        (:face font-lock-doc-face))))
+     counsel-describe-variable
+     (:columns
+      ((counsel-describe-variable-transformer
+        (:width 40))
+       (+ivy-rich-describe-variable-transformer
+        (:width 50))
+       (ivy-rich-counsel-variable-docstring
+        (:face font-lock-doc-face))))
+     counsel-recentf
+     (:columns
+      ((ivy-rich-candidate
+        (:width 0.8))
+       (ivy-rich-file-last-modified-time
+        (:face font-lock-comment-face))))
+     package-install
+     (:columns
+      ((ivy-rich-candidate
+        (:width 30))
+       (ivy-rich-package-version
+        (:width 16 :face font-lock-comment-face))
+       (ivy-rich-package-archive-summary
+        (:width 7 :face font-lock-builtin-face))
+       (ivy-rich-package-install-summary
+        (:face font-lock-doc-face))))
+     counsel-projectile-switch-to-buffer
+     (:columns
+      ((ivy-switch-buffer-transformer
+        (:width 30))
+       (ivy-rich-switch-buffer-size
+        (:width 7))
+       (ivy-rich-switch-buffer-indicators
+        (:width 4 :face error :align right))
+       (ivy-rich-switch-buffer-major-mode
+        (:width 12 :face warning))
+       (ivy-rich-switch-buffer-project
+        (:width 15 :face success))
+       (ivy-rich-switch-buffer-path
+        (:width
+         (lambda
+           (x)
+           (ivy-rich-switch-buffer-shorten-path x
+                                                (ivy-rich-minibuffer-width 0.3))))))
+      :predicate
+      (lambda
+        (cand)
+        (get-buffer cand)))
+     counsel-bookmark
+     (:columns
+      ((ivy-rich-candidate
+        (:width 0.5))
+       (ivy-rich-bookmark-filename
+        (:width 60)))))))
+
+;; (after! neotree
+;;   ;; Allow resizing of neotree window
+;;   (setq neo-window-fixed-size nil)
+;;   ;; Don't reset neotree window size when opening a file
+;;   (add-to-list 'window-size-change-functions
+;;                (lambda ()
+;;                  (let ((neo-window (neo-global--get-window)))
+;;                    (unless (null neo-window)
+;;                      (setq neo-window-width (window-width neo-window))))))
+;;   ;; Keep neotree window size when opening/closing
+;;   (defun neo-window--zoom (method)
+;;     "Zoom the NeoTree window, the METHOD should one of these options:
+;;      'maximize 'minimize 'zoom-in 'zoom-out."
+;;     (neo-buffer--unlock-width)
+;;     (cond
+;;      ((eq method 'maximize)
+;;       (maximize-window))
+;;      ((eq method 'minimize)
+;;       (message "neotree override: its window width will not be reset"))
+;;      ((eq method 'zoom-in)
+;;       (shrink-window-horizontally 2))
+;;      ((eq method 'zoom-out)
+;;       (enlarge-window-horizontally 2)))
+;;     (neo-buffer--lock-width))
+;;   ;; Enable richer icons on neotree
+;;   (setq doom-themes-neotree-enable-file-icons t))
 
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -160,6 +252,8 @@
 ;; Fix some edge case javascript indenting
 (after! js2-mode
   (setq js-indent-level 2))
+(after! typescript-mode
+  (setq typescript-indent-level 2))
 
 ;; Use 2-space indentation in web-mode always
 (after! web-mode
@@ -171,17 +265,37 @@
 
 (add-hook! 'doom-load-theme-hook
   (let* ((bg (doom-color 'bg))
-         (darker-bg (doom-darken bg 0.2))
-         (lighter-bg (doom-lighten bg 0.065)))
+         (bg-alt (doom-color 'bg-alt))
+         (red (doom-color 'red))
+         (green (doom-color 'green))
+         (blue (doom-color 'cyan))
+         (current-bg (doom-color 'bg-alt))
+         (current-bg-fine-A (doom-blend red bg-alt 0.2))
+         (current-bg-fine-B (doom-blend green bg-alt 0.2))
+         (current-bg-fine-C (doom-blend blue bg-alt 0.225))
+         (other-bg-A (doom-blend red bg 0.075))
+         (other-bg-B (doom-blend green bg 0.075))
+         (other-bg-C (doom-blend blue bg 0.085)))
     (custom-set-faces!
       ;; Make tab bar background transparent so that it matches the theme
       '(tab-line :inherit variable-pitch :foreground "black" :height 0.9)
       ;; Customize material cursor color to not be so garish
       `(cursor :background ,(doom-color 'dark-cyan))
       ;; Customize ediff highlighting
-      '(ediff-fine-diff-A    :background "black" :weight bold :extend t)
-      `(ediff-current-diff-A :background ,darker-bg :extend t)
-      `(ediff-even-diff-A    :background ,lighter-bg :extend t))))
+      `(ediff-fine-diff-A    :background ,current-bg-fine-A :weight unspecified :extend t)
+      `(ediff-fine-diff-B    :background ,current-bg-fine-B :weight unspecified :extend t)
+      `(ediff-fine-diff-C    :background ,current-bg-fine-C :weight unspecified :extend t)
+      `(ediff-current-diff-A :background ,current-bg :extend t)
+      `(ediff-current-diff-B :background ,current-bg :extend t)
+      `(ediff-current-diff-C :background ,current-bg :extend t)
+      `(ediff-even-diff-A    :background ,other-bg-A :extend t)
+      `(ediff-even-diff-B    :background ,other-bg-B :extend t)
+      `(ediff-even-diff-C    :background ,other-bg-C :extend t)
+      `(ediff-odd-diff-A     :background ,other-bg-A :extend t)
+      `(ediff-odd-diff-B     :background ,other-bg-B :extend t)
+      `(ediff-odd-diff-C     :background ,other-bg-C :extend t))))
+
+(add-hook! 'ediff-prepare-buffer-hook #'solaire-mode)
 
 ;; Allow links to be opened outside WSL
 (when (and (eq system-type 'gnu/linux)
@@ -207,3 +321,41 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+
+;; Temporary fixes below
+;; They should be reviewed regularly to see if they are still needed
+
+;; DEPRECATED: Check if the original implementation at
+;; ~/.emacs.d/modules/config/default/autoload/files.el
+;; is fixed or not. Does it still throw an error "stringp nil"?
+;; Seems to be fixed here: https://github.com/hlissner/doom-emacs/commit/9c96feba56ff687f2c8376bfe76363a53bf601ec
+;; (defun +default/dired (arg)
+;;   "Open a directory in dired.
+;; If prefix ARG is non-nil, prompt for a known project to open in dired."
+;;   (interactive "P")
+;;   (if arg
+;;       (dired (completing-read "Open dired in project: " projectile-known-projects))
+;;     ;; This line is the key to the fix.
+;;     ;; `dired-read-dir-and-switches' returns a list, but dired doesn't take a list
+;;      (apply #'dired (dired-read-dir-and-switches ""))))
+
+;; DEPRECATED: Temporarily disable eldoc mode in org mode due to
+;; bugs in Emacs 28. Maybe this isn't needed anymore?
+;; https://www.mail-archive.com/emacs-orgmode@gnu.org/msg129389.html
+;; (add-hook! 'org-mode-hook
+;;   (funcall eldoc-mode -1))
+
+;; Fixing eldoc issues in tide with emacs 28
+;; PR already in tide -- might not be needed once doom bumps
+;; (when (< 28 emacs-major-version)
+;;   (defalias 'eldoc-display-message-no-interference-p 'eldoc-display-message-p))
+;; (add-hook! 'tide-mode-hook
+;;   ;;; Copied from eldoc.el
+;;   (defun tide-eldoc-maybe-show (text)
+;;     (with-demoted-errors "eldoc error: %s"
+;;       (and (or (eldoc-display-message-no-interference-p)
+;;               ;; Erase the last message if we won't display a new one.
+;;               (when eldoc-last-message
+;;                 (eldoc-message nil)
+;;                 nil))
+;;           (eldoc-message text)))))
