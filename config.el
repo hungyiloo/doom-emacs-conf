@@ -35,7 +35,7 @@
 (add-hook! 'magit-mode-hook 'my-magit-fringes)
 
 ;; Set a custom font
-(setq doom-font (font-spec :family "Iosevka Extended" :size 17)
+(setq doom-font (font-spec :family "Iosevka SS09 Extended" :size 17)
       doom-variable-pitch-font (font-spec :family "Segoe UI"))
 
 (setq initial-frame-alist '((width . 141) (height . 45) (fullscreen . fullheight)))
@@ -55,10 +55,8 @@
   ;; Always use ID properties to store links
   (setq org-id-link-to-org-use-id 'use-existing)
   ;; Set custom header bullets
-  (setq org-superstar-headline-bullets-list '("★" "▸" "◼" "•" "·"))
-  (setq org-superstar-cycle-headline-bullets nil)
-  ;; Always use fast plain lists in org-superstar
-  (org-superstar-toggle-lightweight-lists)
+  ;; (setq org-superstar-headline-bullets-list '("★" "▸" "◼" "•" "·"))
+  ;; (setq org-superstar-cycle-headline-bullets nil)
   ;; Don't export org files with table of contents by default
   (setq org-export-with-toc nil)
   (setq org-export-with-section-numbers nil)
@@ -253,7 +251,9 @@
 (after! js2-mode
   (setq js-indent-level 2))
 (after! typescript-mode
-  (setq typescript-indent-level 2))
+  (setq typescript-indent-level 2)
+  (setq tide-native-json-parsing t)
+  (setq tide-completion-ignore-case t))
 
 ;; Use 2-space indentation in web-mode always
 (after! web-mode
