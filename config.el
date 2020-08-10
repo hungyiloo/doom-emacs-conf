@@ -91,7 +91,7 @@
 (after! evil
   (setq evil-move-cursor-back t)
   (setq evil-move-beyond-eol t)
-  (setq evil-escape-key-sequence "gj")
+  (setq evil-escape-key-sequence "hl")
   (setq evil-escape-unordered-key-sequence t)
   (setq evil-escape-delay 0.05)
   (setq evil-snipe-scope 'visible))
@@ -304,8 +304,8 @@
 (when (and (eq system-type 'gnu/linux)
            (string-match "Linux.*Microsoft.*Linux" (shell-command-to-string "uname -a")))
   (setq
-   browse-url-generic-program  "/mnt/c/Windows/explorer.exe"
-   browse-url-generic-args     nil
+   browse-url-generic-program  "/mnt/c/Windows/System32/cmd.exe"
+   browse-url-generic-args     '("/c" "start")
    browse-url-browser-function 'browse-url-generic))
 
 ;; Here are some additional functions/macros that could help you configure Doom:
