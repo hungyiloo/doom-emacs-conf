@@ -48,6 +48,8 @@
 (add-to-list 'org-modules 'org-id)
 
 (after! org
+  ;; Always revert files automatically
+  (global-auto-revert-mode 1)
   ;; Log CLOSED timestamp when notes are set to DONE state
   (setq org-log-done 'time)
   ;; Show more whitespace in org mode when cycling
@@ -119,6 +121,17 @@
                                (counsel-rg . 3)
                                (counsel-search . 3)
                                (t . 3))))
+
+(after! lsp-mode
+  (setq lsp-enable-symbol-highlighting nil)
+  (setq lsp-clients-angular-language-server-command
+  '("node"
+    "/home/hungyi/.config/yarn/global/node_modules/@angular/language-server"
+    "--ngProbeLocations"
+    "/home/hungyi/.config/yarn/global/node_modules"
+    "--tsProbeLocations"
+    "/home/hungyi/.config/yarn/global/node_modules"
+    "--stdio")))
 
 (setq
  ivy-rich-display-transformers-list
