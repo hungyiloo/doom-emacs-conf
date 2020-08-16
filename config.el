@@ -132,8 +132,11 @@ Replace with the return value of the function FN with ARGS"
   (map! :map (css-mode-map sass-mode-map stylus-mode-map)
         :localleader
         (:prefix ("c" . "colors")
-         "h" #'hl-line-mode
          "k" #'my-kurecolor-open-hydra)))
+
+(map! :leader
+      (:prefix-map ("t" . "toggle")
+       :desc "Highlight line" "h" #'hl-line-mode))
 
 (use-package! evil
   :config
