@@ -99,6 +99,41 @@
   ;; Hide emphasis markers (e.g. italics, bold)
   (setq org-hide-emphasis-markers t))
 
+(use-package! kurecolor
+  :config
+  ;; Redefine this function.
+  ;; The old one used to delete a space before hex colors.
+  ;; I think `bounds-of-thing-at-point' for 'symbol already
+  ;; accounts for the '#' character at the beginning, so we
+  ;; don't need to move back one space for pos1.
+  (defun kurecolor-replace-current (fn &rest args)
+    "Get the current unspaced string at point.
+Replace with the return value of the function FN with ARGS"
+    (let (pos1 pos2 replacement excerpt change)
+      (if (and transient-mark-mode mark-active)
+          (setq pos1 (region-beginning) pos2 (region-end))
+        (progn
+          (when (looking-at "#") (forward-char 1))
+          (setq pos1 (car (bounds-of-thing-at-point 'symbol))
+                pos2 (cdr (bounds-of-thing-at-point 'symbol)))))
+      (setq excerpt (buffer-substring-no-properties pos1 pos2))
+      (if args
+          (progn (setq change (car args))
+                 (setq replacement (funcall fn excerpt change)))
+        ;; no args
+        (setq replacement (funcall fn excerpt)))
+      (delete-region pos1 pos2)
+      (insert replacement)))
+  (defun my-kurecolor-open-hydra ()
+    "Makes sure hl-line-mode is off and opens the kurecolor hydra"
+    (interactive)
+    (hl-line-mode -1)
+    (funcall #'+rgb/kurecolor-hydra/body))
+  (map! :map (css-mode-map sass-mode-map stylus-mode-map)
+        :localleader
+        (:prefix ("c" . "colors")
+         "h" #'hl-line-mode
+         "k" #'my-kurecolor-open-hydra)))
 
 (use-package! evil
   :config
