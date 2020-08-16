@@ -262,38 +262,9 @@ Replace with the return value of the function FN with ARGS"
        (ivy-rich-bookmark-filename
         (:width 60)))))))
 
-
-;; (after! neotree
-;;   ;; Allow resizing of neotree window
-;;   (setq neo-window-fixed-size nil)
-;;   ;; Don't reset neotree window size when opening a file
-;;   (add-to-list 'window-size-change-functions
-;;                (lambda ()
-;;                  (let ((neo-window (neo-global--get-window)))
-;;                    (unless (null neo-window)
-;;                      (setq neo-window-width (window-width neo-window))))))
-;;   ;; Keep neotree window size when opening/closing
-;;   (defun neo-window--zoom (method)
-;;     "Zoom the NeoTree window, the METHOD should one of these options:
-;;      'maximize 'minimize 'zoom-in 'zoom-out."
-;;     (neo-buffer--unlock-width)
-;;     (cond
-;;      ((eq method 'maximize)
-;;       (maximize-window))
-;;      ((eq method 'minimize)
-;;       (message "neotree override: its window width will not be reset"))
-;;      ((eq method 'zoom-in)
-;;       (shrink-window-horizontally 2))
-;;      ((eq method 'zoom-out)
-;;       (enlarge-window-horizontally 2)))
-;;     (neo-buffer--lock-width))
-;;   ;; Enable richer icons on neotree
-;;   (setq doom-themes-neotree-enable-file-icons t))
-
-
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type t)
+(setq display-line-numbers-type 'relative)
 
 ;; Fix some edge case javascript indenting
 (after! js2-mode
@@ -326,7 +297,7 @@ Replace with the return value of the function FN with ARGS"
          (other-bg-C (doom-blend color-C bg 0.05)))
     (custom-set-faces!
       ;; Make tab bar background transparent so that it matches the theme
-      '(tab-line :inherit variable-pitch :foreground "black" :height 0.9)
+      ;; '(tab-line :inherit variable-pitch :foreground "black" :height 0.9)
       ;; Customize material cursor color to not be so garish
       ;; Also so that it doesn't conflict with the mc/multiedit cursors
       `(cursor :background ,(doom-color 'dark-cyan))
@@ -344,6 +315,8 @@ Replace with the return value of the function FN with ARGS"
       `(ediff-odd-diff-B     :background ,other-bg-B :extend t)
       `(ediff-odd-diff-C     :background ,other-bg-C :extend t))))
 
+;; Include ediff buffers in solaire-mode so they look the same
+;; as regular editing buffers
 (add-hook! 'ediff-prepare-buffer-hook #'solaire-mode)
 
 ;; Allow links to be opened outside WSL
@@ -387,24 +360,3 @@ Replace with the return value of the function FN with ARGS"
 ;;     ;; This line is the key to the fix.
 ;;     ;; `dired-read-dir-and-switches' returns a list, but dired doesn't take a list
 ;;      (apply #'dired (dired-read-dir-and-switches ""))))
-
-;; DEPRECATED: Temporarily disable eldoc mode in org mode due to
-;; bugs in Emacs 28. Maybe this isn't needed anymore?
-;; https://www.mail-archive.com/emacs-orgmode@gnu.org/msg129389.html
-;; (add-hook! 'org-mode-hook
-;;   (funcall eldoc-mode -1))
-
-;; Fixing eldoc issues in tide with emacs 28
-;; PR already in tide -- might not be needed once doom bumps
-;; (when (< 28 emacs-major-version)
-;;   (defalias 'eldoc-display-message-no-interference-p 'eldoc-display-message-p))
-;; (add-hook! 'tide-mode-hook
-;;   ;;; Copied from eldoc.el
-;;   (defun tide-eldoc-maybe-show (text)
-;;     (with-demoted-errors "eldoc error: %s"
-;;       (and (or (eldoc-display-message-no-interference-p)
-;;               ;; Erase the last message if we won't display a new one.
-;;               (when eldoc-last-message
-;;                 (eldoc-message nil)
-;;                 nil))
-;;           (eldoc-message text)))))
