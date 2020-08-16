@@ -27,18 +27,27 @@
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'doom-material)
 
-;; Wider fringe (emacs default) for better magit support
-(defun my-magit-fringes ()
-  (setq left-fringe-width 20
-        right-fringe-width 0))
-
-(add-hook! 'magit-mode-hook 'my-magit-fringes)
-
 ;; Set a custom font
-(setq doom-font (font-spec :family "Iosevka SS09 Extended" :size 17)
-      doom-variable-pitch-font (font-spec :family "Segoe UI"))
+(setq doom-font (font-spec :family "JetBrains Mono Semi Light" :size 16))
 
+;; Better default window placement on startup
 (setq initial-frame-alist '((width . 141) (height . 45) (fullscreen . fullheight)))
+
+;; Always revert files automatically
+(global-auto-revert-mode 1)
+
+(use-package! magit
+  :hook (magit-mode . my-magit-fringes)
+  :config
+  ;; Wider fringe (emacs default) for better magit support
+  (defun my-magit-fringes ()
+    (setq left-fringe-width 20
+          right-fringe-width 0)))
+
+(use-package! olivetti
+  :hook (text-mode . olivetti-mode)
+  :init
+  (setq olivetti-body-width 80))
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -48,8 +57,6 @@
 (add-to-list 'org-modules 'org-id)
 
 (after! org
-  ;; Always revert files automatically
-  (global-auto-revert-mode 1)
   ;; Log CLOSED timestamp when notes are set to DONE state
   (setq org-log-done 'time)
   ;; Show more whitespace in org mode when cycling
@@ -57,7 +64,7 @@
   ;; Always use ID properties to store links
   (setq org-id-link-to-org-use-id 'use-existing)
   ;; Set custom header bullets
-  ;; (setq org-superstar-headline-bullets-list '("★" "▸" "◼" "•" "·"))
+  ;; (setq org-superstar-headline-bullets-list '("★" "▸" "◼" "⚫" "·"))
   ;; (setq org-superstar-cycle-headline-bullets nil)
   ;; Don't export org files with table of contents by default
   (setq org-export-with-toc nil)
@@ -88,28 +95,19 @@
   (map! :map org-mode-map
         :localleader
         (:prefix ("l" . "links")
-         "y" #'my-org-retrieve-url-from-point)))
+         "y" #'my-org-retrieve-url-from-point))
+  ;; Hide emphasis markers (e.g. italics, bold)
+  (setq org-hide-emphasis-markers t))
 
-(after! evil
+
+(use-package! evil
+  :config
   (setq evil-move-cursor-back t)
   (setq evil-move-beyond-eol t)
-  (setq evil-escape-key-sequence "hl")
-  (setq evil-escape-unordered-key-sequence t)
-  (setq evil-escape-delay 0.05)
+  ;; (setq evil-escape-key-sequence "hl")
+  ;; (setq evil-escape-unordered-key-sequence t)
+  ;; (setq evil-escape-delay 0.05)
   (setq evil-snipe-scope 'visible))
-
-;; (after! centaur-tabs
-;;   (setq centaur-tabs-modified-marker "●")
-;;   (setq centaur-tabs-height 32)
-;;   (setq centaur-tabs-set-bar nil)
-;;   (setq centaur-tabs-style "wave"))
-
-;; ;; Always group tabs by project
-;; (after! centaur-tabs
-;;   (centaur-tabs-group-by-projectile-project))
-
-;; ;; Disable centaur tabs in ediff mode
-;; (add-hook! 'ediff-mode-hook 'centaur-tabs-local-mode)
 
 (after! avy
   ;; Configure avy to use colemak home row
@@ -133,99 +131,101 @@
     "/home/hungyi/.config/yarn/global/node_modules"
     "--stdio")))
 
-(setq
- ivy-rich-display-transformers-list
- '(ivy-switch-buffer
-   (:columns
-    ((ivy-switch-buffer-transformer
-      (:width 60)) ;; Wider than the default
-     (ivy-rich-switch-buffer-size
-      (:width 7))
-     (ivy-rich-switch-buffer-indicators
-      (:width 4 :face error :align right))
-     (ivy-rich-switch-buffer-major-mode
-      (:width 12 :face warning))
-     (ivy-rich-switch-buffer-project
-      (:width 15 :face success))
-     (ivy-rich-switch-buffer-path
-      (:width
-       (lambda
-         (x)
-         (ivy-rich-switch-buffer-shorten-path x
-                                              (ivy-rich-minibuffer-width 0.3))))))
-    :predicate
-    (lambda
-      (cand)
-      (get-buffer cand)))
-   counsel-find-file
-   (:columns
-    ((ivy-read-file-transformer)
-     (ivy-rich-counsel-find-file-truename
-      (:face font-lock-doc-face))))
-   counsel-M-x
-   (:columns
-    ((counsel-M-x-transformer
-      (:width 60))
-     (ivy-rich-counsel-function-docstring
-      (:face font-lock-doc-face))))
-   counsel-describe-function
-   (:columns
-    ((counsel-describe-function-transformer
-      (:width 40))
-     (ivy-rich-counsel-function-docstring
-      (:face font-lock-doc-face))))
-   counsel-describe-variable
-   (:columns
-    ((counsel-describe-variable-transformer
-      (:width 40))
-     (+ivy-rich-describe-variable-transformer
-      (:width 50))
-     (ivy-rich-counsel-variable-docstring
-      (:face font-lock-doc-face))))
-   counsel-recentf
-   (:columns
-    ((ivy-rich-candidate
-      (:width 0.8))
-     (ivy-rich-file-last-modified-time
-      (:face font-lock-comment-face))))
-   package-install
-   (:columns
-    ((ivy-rich-candidate
-      (:width 30))
-     (ivy-rich-package-version
-      (:width 16 :face font-lock-comment-face))
-     (ivy-rich-package-archive-summary
-      (:width 7 :face font-lock-builtin-face))
-     (ivy-rich-package-install-summary
-      (:face font-lock-doc-face))))
-   counsel-projectile-switch-to-buffer
-   (:columns
-    ((ivy-switch-buffer-transformer
-      (:width 30))
-     (ivy-rich-switch-buffer-size
-      (:width 7))
-     (ivy-rich-switch-buffer-indicators
-      (:width 4 :face error :align right))
-     (ivy-rich-switch-buffer-major-mode
-      (:width 12 :face warning))
-     (ivy-rich-switch-buffer-project
-      (:width 15 :face success))
-     (ivy-rich-switch-buffer-path
-      (:width
-       (lambda
-         (x)
-         (ivy-rich-switch-buffer-shorten-path x
-                                              (ivy-rich-minibuffer-width 0.3))))))
-    :predicate
-    (lambda
-      (cand)
-      (get-buffer cand)))
-   counsel-bookmark
-   (:columns
-    ((ivy-rich-candidate
-      (:width 0.5))
-     (ivy-rich-bookmark-filename
-      (:width 60))))))
+(use-package! ivy-rich
+  :init
+  (setq
+   ivy-rich-display-transformers-list
+   '(ivy-switch-buffer
+     (:columns
+      ((ivy-switch-buffer-transformer
+        (:width 60)) ;; Wider than the default
+       (ivy-rich-switch-buffer-size
+        (:width 7))
+       (ivy-rich-switch-buffer-indicators
+        (:width 4 :face error :align right))
+       (ivy-rich-switch-buffer-major-mode
+        (:width 12 :face warning))
+       (ivy-rich-switch-buffer-project
+        (:width 15 :face success))
+       (ivy-rich-switch-buffer-path
+        (:width
+         (lambda
+           (x)
+           (ivy-rich-switch-buffer-shorten-path x
+                                                (ivy-rich-minibuffer-width 0.3))))))
+      :predicate
+      (lambda
+        (cand)
+        (get-buffer cand)))
+     counsel-find-file
+     (:columns
+      ((ivy-read-file-transformer)
+       (ivy-rich-counsel-find-file-truename
+        (:face font-lock-doc-face))))
+     counsel-M-x
+     (:columns
+      ((counsel-M-x-transformer
+        (:width 60))
+       (ivy-rich-counsel-function-docstring
+        (:face font-lock-doc-face))))
+     counsel-describe-function
+     (:columns
+      ((counsel-describe-function-transformer
+        (:width 40))
+       (ivy-rich-counsel-function-docstring
+        (:face font-lock-doc-face))))
+     counsel-describe-variable
+     (:columns
+      ((counsel-describe-variable-transformer
+        (:width 40))
+       (+ivy-rich-describe-variable-transformer
+        (:width 50))
+       (ivy-rich-counsel-variable-docstring
+        (:face font-lock-doc-face))))
+     counsel-recentf
+     (:columns
+      ((ivy-rich-candidate
+        (:width 0.8))
+       (ivy-rich-file-last-modified-time
+        (:face font-lock-comment-face))))
+     package-install
+     (:columns
+      ((ivy-rich-candidate
+        (:width 30))
+       (ivy-rich-package-version
+        (:width 16 :face font-lock-comment-face))
+       (ivy-rich-package-archive-summary
+        (:width 7 :face font-lock-builtin-face))
+       (ivy-rich-package-install-summary
+        (:face font-lock-doc-face))))
+     counsel-projectile-switch-to-buffer
+     (:columns
+      ((ivy-switch-buffer-transformer
+        (:width 30))
+       (ivy-rich-switch-buffer-size
+        (:width 7))
+       (ivy-rich-switch-buffer-indicators
+        (:width 4 :face error :align right))
+       (ivy-rich-switch-buffer-major-mode
+        (:width 12 :face warning))
+       (ivy-rich-switch-buffer-project
+        (:width 15 :face success))
+       (ivy-rich-switch-buffer-path
+        (:width
+         (lambda
+           (x)
+           (ivy-rich-switch-buffer-shorten-path x
+                                                (ivy-rich-minibuffer-width 0.3))))))
+      :predicate
+      (lambda
+        (cand)
+        (get-buffer cand)))
+     counsel-bookmark
+     (:columns
+      ((ivy-rich-candidate
+        (:width 0.5))
+       (ivy-rich-bookmark-filename
+        (:width 60)))))))
 
 
 ;; (after! neotree
@@ -273,8 +273,6 @@
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
   (setq web-mode-css-indent-offset 2))
-
-(add-hook! elisp-mode (funcall smartparens-strict-mode 1))
 
 (add-hook! 'doom-load-theme-hook
   (let* ((bg (doom-color 'bg))
