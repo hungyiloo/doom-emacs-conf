@@ -101,37 +101,59 @@
 
 (use-package! kurecolor
   :config
-  ;; Redefine this function.
-  ;; The old one used to delete a space before hex colors.
-  ;; I think `bounds-of-thing-at-point' for 'symbol already
-  ;; accounts for the '#' character at the beginning, so we
-  ;; don't need to move back one space for pos1.
+
+  ;; Redefine this function to specifically detect rgba/hex color "symbols"
   (defun kurecolor-replace-current (fn &rest args)
-    "Get the current unspaced string at point.
-Replace with the return value of the function FN with ARGS"
-    (let (pos1 pos2 replacement excerpt change)
-      (if (and transient-mark-mode mark-active)
-          (setq pos1 (region-beginning) pos2 (region-end))
-        (progn
-          (when (looking-at "#") (forward-char 1))
-          (setq pos1 (car (bounds-of-thing-at-point 'symbol))
-                pos2 (cdr (bounds-of-thing-at-point 'symbol)))))
-      (setq excerpt (buffer-substring-no-properties pos1 pos2))
-      (if args
-          (progn (setq change (car args))
-                 (setq replacement (funcall fn excerpt change)))
-        ;; no args
-        (setq replacement (funcall fn excerpt)))
-      (delete-region pos1 pos2)
+    "Get the current unspaced string at point. Replace with the return value of the function FN with ARGS."
+    (let* ((search-range (max (- (point) (line-beginning-position))
+                              (- (line-end-position) (point))))
+           (bounds (if (and transient-mark-mode mark-active)
+                       (list (region-beginning) (region-end))
+                     (when (or (thing-at-point-looking-at
+                                "#[0-9a-f]\\{6,8\\}"
+                                search-range)
+                               (thing-at-point-looking-at
+                                "rgba?(\s*\\(,?\s*[0-9]\\{1,3\\}\\)\\{3\\}\\(,\s*[0-9]+\.?[0-9]*\\)?\s*)"
+                                search-range))
+                       (list (match-beginning 0) (match-end 0)))))
+           (excerpt (apply #'buffer-substring-no-properties bounds))
+           (change (car args))
+           (replacement (if args
+                            (funcall fn excerpt change)
+                          ;; no args
+                          (funcall fn excerpt))))
+
+      (apply #'delete-region bounds)
       (insert replacement)))
+
+  ;; Redefine this function to fully handle rgba
+  (defun kurecolor-cssrgb-to-hex (cssrgb)
+    "Convert a CSSRGB (or rgba) color to hex."
+    (let ((rgb (cdr
+                (s-match
+                 (concat "rgba?(\s*"
+                         "\\([0-9]\\{1,3\\}\\(?:\s*%\\)?\\)\s*,\s*"
+                         "\\([0-9]\\{1,3\\}\\(?:\s*%\\)?\\)\s*,\s*"
+                         "\\([0-9]\\{1,3\\}\\(?:\s*%\\)?\\)\s*,?\s*"
+                         "\\([0-9]\.?[0-9]*\\)?)")
+                 cssrgb))))
+      (if (= 3 (length rgb))
+          (cl-destructuring-bind (r g b) (mapcar 'string-to-number rgb)
+            (format "#%02X%02X%02X" r g b))
+        (cl-destructuring-bind (r g b a) (mapcar 'string-to-number rgb)
+          (format "#%02X%02X%02X%02X" r g b (min 255 (* a 255)))))))
+
   (defun my-kurecolor-open-hydra ()
     "Makes sure hl-line-mode is off and opens the kurecolor hydra"
     (interactive)
     (hl-line-mode -1)
     (funcall #'+rgb/kurecolor-hydra/body))
+
   (map! :map (css-mode-map sass-mode-map stylus-mode-map)
         :localleader
         (:prefix ("c" . "colors")
+         "h" #'kurecolor-cssrgb-at-point-or-region-to-hex
+         "r" #'kurecolor-hexcolor-at-point-or-region-to-css-rgb
          "k" #'my-kurecolor-open-hydra)))
 
 (map! :leader
