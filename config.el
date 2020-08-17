@@ -141,7 +141,25 @@
           (cl-destructuring-bind (r g b) (mapcar 'string-to-number rgb)
             (format "#%02X%02X%02X" r g b))
         (cl-destructuring-bind (r g b a) (mapcar 'string-to-number rgb)
-          (format "#%02X%02X%02X%02X" r g b (min 255 (* a 255)))))))
+          (format "#%02X%02X%02X%02X" r g b (min 255 (round (* a 255))))))))
+
+  (defun kurecolor-hex-to-rgba (hex)
+    "Convert a 8 digit HEX color to r g b a."
+    (setq hex (replace-regexp-in-string "#" "" hex))
+    (mapcar #'(lambda (s) (/ (string-to-number s 16) 255.0))
+            (list (substring hex 0 2)
+                  (substring hex 2 4)
+                  (substring hex 4 6)
+                  (substring hex 6 8))))
+
+  ;; Redefine this function to fully handle rgba
+  (defun kurecolor-hex-to-cssrgb (hex)
+    "Convert a HEX rgb color to cssrgb."
+    (if (< (length hex) 8)
+        (cl-destructuring-bind (r g b) (mapcar 'to-8bit (kurecolor-hex-to-rgb hex))
+          (format "rgb(%i, %i, %i)" r g b))
+      (cl-destructuring-bind (r g b a) (mapcar 'to-8bit (kurecolor-hex-to-rgba hex))
+        (format "rgba(%i, %i, %i, %f)" r g b (/ a 255.0)))))
 
   (defun my-kurecolor-open-hydra ()
     "Makes sure hl-line-mode is off and opens the kurecolor hydra"
