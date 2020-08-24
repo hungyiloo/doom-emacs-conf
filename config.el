@@ -45,7 +45,7 @@
           right-fringe-width 0)))
 
 (use-package! olivetti
-  :hook (text-mode . olivetti-mode)
+  :hook (org-mode . olivetti-mode)
   :init
   (setq olivetti-body-width 80))
 
@@ -56,16 +56,21 @@
 ;; Make sure org supports org-id stuff
 (add-to-list 'org-modules 'org-id)
 
-(after! org
-  ;; Log CLOSED timestamp when notes are set to DONE state
-  (setq org-log-done 'time)
+(use-package! org
+  :init
+  ;; Set custom header bullets
+  (setq org-superstar-headline-bullets-list '("•"))
+  (setq org-superstar-cycle-headline-bullets nil)
   ;; Show more whitespace in org mode when cycling
   (setq org-cycle-separator-lines -1)
+  ;; Hide emphasis markers (e.g. italics, bold)
+  (setq org-hide-emphasis-markers t)
+  :hook (org-mode . my-org-hook)
+  :config
+  ;; Log CLOSED timestamp when notes are set to DONE state
+  (setq org-log-done 'time)
   ;; Always use ID properties to store links
   (setq org-id-link-to-org-use-id 'use-existing)
-  ;; Set custom header bullets
-  ;; (setq org-superstar-headline-bullets-list '("★" "▸" "◼" "⚫" "·"))
-  ;; (setq org-superstar-cycle-headline-bullets nil)
   ;; Don't export org files with table of contents by default
   (setq org-export-with-toc nil)
   (setq org-export-with-section-numbers nil)
@@ -91,13 +96,39 @@
           (error "Oops! Point isn't in an org link")
         (string-match org-link-bracket-re text)
         (kill-new (substring text (match-beginning 1) (match-end 1))))))
+  (defun my-org-hook ()
+    ;; Manually set up git-gutter, but don't enable it
+    (+vc-gutter-explicit-init-maybe-h-start-off))
   ;; Map `my-org-retrieve-url-from-point' to live with its org link friends
   (map! :map org-mode-map
         :localleader
         (:prefix ("l" . "links")
-         "y" #'my-org-retrieve-url-from-point))
-  ;; Hide emphasis markers (e.g. italics, bold)
-  (setq org-hide-emphasis-markers t))
+         "y" #'my-org-retrieve-url-from-point)))
+
+(use-package! git-gutter
+  :init
+  (setq git-gutter:disabled-modes '(fundamental-mode image-mode pdf-view-mode org-mode))
+  :config
+  (defun +vc-gutter-explicit-init-maybe-h-start-off ()
+    "Set up `git-gutter-mode' in the current buffer regardless of `git-gutter:disabled-modes' and leave it off initially."
+    (let ((file-name (buffer-file-name (buffer-base-buffer))))
+      (when (or +vc-gutter-in-remote-files
+                (not (file-remote-p (or file-name default-directory))))
+        (if (null file-name)
+            (add-hook 'after-save-hook #'+vc-gutter-init-maybe-h nil 'local)
+          (when (vc-backend file-name)
+            (if (and (display-graphic-p)
+                     (require 'git-gutter-fringe nil t))
+                (setq-local git-gutter:init-function      #'git-gutter-fr:init
+                            git-gutter:view-diff-function #'git-gutter-fr:view-diff-infos
+                            git-gutter:clear-function     #'git-gutter-fr:clear
+                            git-gutter:window-width -1)
+              (setq-local git-gutter:init-function      'nil
+                          git-gutter:view-diff-function #'git-gutter:view-diff-infos
+                          git-gutter:clear-function     #'git-gutter:clear-diff-infos
+                          git-gutter:window-width 1))
+            (git-gutter-mode -1)
+            (remove-hook 'after-save-hook #'+vc-gutter-init-maybe-h 'local)))))))
 
 (use-package! kurecolor
   :config
@@ -162,21 +193,28 @@
         (format "rgba(%i, %i, %i, %f)" r g b (/ a 255.0)))))
 
   (defun my-kurecolor-open-hydra ()
-    "Makes sure hl-line-mode is off and opens the kurecolor hydra"
+    "Makes sure hl-line-mode is off, color is in hex format, and opens the kurecolor hydra"
     (interactive)
     (hl-line-mode -1)
+    (or (css--named-color-to-hex)
+        (css--rgb-to-named-color-or-hex))
     (funcall #'+rgb/kurecolor-hydra/body))
 
   (map! :map (css-mode-map sass-mode-map stylus-mode-map)
         :localleader
         (:prefix ("c" . "colors")
-         "h" #'kurecolor-cssrgb-at-point-or-region-to-hex
-         "r" #'kurecolor-hexcolor-at-point-or-region-to-css-rgb
+         "c" #'css-cycle-color-format
          "k" #'my-kurecolor-open-hydra)))
 
 (map! :leader
       (:prefix-map ("t" . "toggle")
+       :desc "Git gutter" "v" #'git-gutter-mode
        :desc "Highlight line" "h" #'hl-line-mode))
+
+(map! :map evil-window-map
+      ;; Use the normal other-window command
+      ;; to take advantage of the window-select module
+      "w" #'other-window)
 
 (use-package! evil
   :config
@@ -187,9 +225,15 @@
   ;; (setq evil-escape-delay 0.05)
   (setq evil-snipe-scope 'visible))
 
+(after! evil-goggles
+  (setq evil-goggles-duration 0.2))
+
 (after! avy
   ;; Configure avy to use colemak home row
   (setq avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o)))
+
+(after! ace-window
+  (setq aw-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o)))
 
 (after! ivy
   (setq ivy-read-action-function #'ivy-hydra-read-action)
@@ -207,7 +251,12 @@
     "/home/hungyi/.config/yarn/global/node_modules"
     "--tsProbeLocations"
     "/home/hungyi/.config/yarn/global/node_modules"
-    "--stdio")))
+    "--stdio"))
+  (map! :map lsp-command-map
+        (:prefix-map ("e" . "errors")
+         "n" #'flycheck-next-error
+         "p" #'flycheck-previous-error
+         "e" #'flycheck-buffer)))
 
 (use-package! ivy-rich
   :init
