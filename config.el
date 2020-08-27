@@ -452,16 +452,3 @@
 ;; Temporary fixes below
 ;; They should be reviewed regularly to see if they are still needed
 
-;; DEPRECATED: Check if the original implementation at
-;; ~/.emacs.d/modules/config/default/autoload/files.el
-;; is fixed or not. Does it still throw an error "stringp nil"?
-;; Seems to be fixed here: https://github.com/hlissner/doom-emacs/commit/9c96feba56ff687f2c8376bfe76363a53bf601ec
-;; (defun +default/dired (arg)
-;;   "Open a directory in dired.
-;; If prefix ARG is non-nil, prompt for a known project to open in dired."
-;;   (interactive "P")
-;;   (if arg
-;;       (dired (completing-read "Open dired in project: " projectile-known-projects))
-;;     ;; This line is the key to the fix.
-;;     ;; `dired-read-dir-and-switches' returns a list, but dired doesn't take a list
-;;      (apply #'dired (dired-read-dir-and-switches ""))))
