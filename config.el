@@ -264,12 +264,12 @@
     "/home/hungyi/.config/yarn/global/node_modules"
     "--tsProbeLocations"
     "/home/hungyi/.config/yarn/global/node_modules"
-    "--stdio"))
-  (map! :map lsp-command-map
-        (:prefix-map ("e" . "errors")
-         "n" #'flycheck-next-error
-         "p" #'flycheck-previous-error
-         "e" #'flycheck-buffer)))
+    "--stdio")))
+
+(after! flycheck
+  (map! :leader
+        (:prefix-map ("c" . "code")
+         "x" flycheck-command-map)))
 
 (use-package! ivy-rich
   :init
