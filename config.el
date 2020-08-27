@@ -87,16 +87,23 @@
   (defun my-org-retrieve-url-from-point ()
     "Copies the URL from an org link at the point"
     (interactive)
-    (let* ((link-info (assoc :link (org-context)))
-           (text (when link-info
-                   ;; org-context seems to return nil if the current element
-                   ;; starts at buffer-start or ends at buffer-end
-                   (buffer-substring-no-properties (or (cadr link-info) (point-min))
-                                                   (or (caddr link-info) (point-max))))))
-      (if (not text)
-          (error "Oops! Point isn't in an org link")
-        (string-match org-link-bracket-re text)
-        (kill-new (substring text (match-beginning 1) (match-end 1))))))
+    (let ((plain-url (url-get-url-at-point)))
+      (if plain-url
+          (progn
+            (kill-new plain-url)
+            (message (concat "Copied: " plain-url)))
+        (let* ((link-info (assoc :link (org-context)))
+               (text (when link-info
+                       ;; org-context seems to return nil if the current element
+                       ;; starts at buffer-start or ends at buffer-end
+                       (buffer-substring-no-properties (or (cadr link-info) (point-min))
+                                                       (or (caddr link-info) (point-max))))))
+          (if (not text)
+              (error "Oops! Point isn't in an org link")
+            (string-match org-link-bracket-re text)
+            (let ((url (substring text (match-beginning 1) (match-end 1))))
+              (kill-new url)
+              (message (concat "Copied: " url))))))))
   (defun my-org-hook ()
     ;; Manually set up git-gutter, but don't enable it
     (+vc-gutter-explicit-init-maybe-h-start-off))
