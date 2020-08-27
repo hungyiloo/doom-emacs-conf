@@ -215,6 +215,11 @@
          "k" #'my-kurecolor-open-hydra)))
 
 (map! :leader
+      (:prefix-map ("=" . "calc")
+       "=" #'calc-dispatch
+       "c" #'calc
+       "q" #'quick-calc
+       "g" #'calc-grab-region)
       (:prefix-map ("t" . "toggle")
        :desc "Git gutter" "v" #'git-gutter-mode
        :desc "Highlight line" "h" #'hl-line-mode))
