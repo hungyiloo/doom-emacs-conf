@@ -28,7 +28,8 @@
 (setq doom-theme 'doom-material)
 
 ;; Set a custom font
-(setq doom-font (font-spec :family "JetBrains Mono Semi Light" :size 16))
+(setq doom-font (font-spec :family "JetBrains Mono Semi Light" :size 16)
+      doom-variable-pitch-font (font-spec :family "Segoe UI" :size 15))
 
 ;; Better default window placement on startup
 (setq initial-frame-alist '((width . 141) (height . 45) (fullscreen . fullheight)))
