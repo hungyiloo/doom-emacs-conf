@@ -229,6 +229,11 @@
       ;; to take advantage of the window-select module
       "w" #'other-window)
 
+(map! :after dired
+      :map dired-mode-map
+      :n "RET" #'dired-find-alternate-file
+      :desc "dired-up-director (alt)" :n "^" (lambda () (interactive) (find-alternate-file "..")))
+
 (use-package! evil
   :config
   (setq evil-move-cursor-back t)
