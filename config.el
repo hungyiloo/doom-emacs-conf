@@ -444,7 +444,7 @@ This function is called by `org-babel-execute-src-block'."
   (setq
    browse-url-generic-program  "/mnt/c/Windows/System32/cmd.exe"
    browse-url-generic-args     '("/c" "start")
-   browse-url-browser-function 'browse-url-generic))
+   browse-url-browser-function #'browse-url-generic))
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
