@@ -47,6 +47,7 @@
 
 (use-package! olivetti
   :hook (org-mode . olivetti-mode)
+  :hook (markdown-mode . olivetti-mode)
   :init
   (setq olivetti-body-width 80))
 
