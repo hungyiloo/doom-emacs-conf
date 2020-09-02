@@ -395,6 +395,10 @@ This function is called by `org-babel-execute-src-block'."
   (setq web-mode-code-indent-offset 2)
   (setq web-mode-css-indent-offset 2))
 
+;; Use 2-space indentation in css
+(after! css-mode
+  (setq css-indent-offset 2))
+
 (add-hook! 'doom-load-theme-hook
   (let* ((bg (doom-color 'bg))
          (darker-bg (doom-darken bg 0.7))
