@@ -105,6 +105,10 @@
             (let ((url (substring text (match-beginning 1) (match-end 1))))
               (kill-new url)
               (message (concat "Copied: " url))))))))
+  (defun org-babel-execute:html (body _params)
+    "Execute a block of CSS code.
+This function is called by `org-babel-execute-src-block'."
+    body)
   (defun my-org-hook ()
     ;; Manually set up git-gutter, but don't enable it
     (+vc-gutter-explicit-init-maybe-h-start-off))
