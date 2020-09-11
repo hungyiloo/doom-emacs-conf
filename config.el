@@ -265,6 +265,16 @@ This function is called by `org-babel-execute-src-block'."
                                (counsel-search . 3)
                                (t . 3))))
 
+(use-package! swiper
+  :config
+  ;; Advise `swiper-isearch' to use `rxt-quote-pcre' so that
+  ;; SPC s s and SPC s S correctly deals with regex sensitive
+  ;; characters in the selected region or symbol at point
+  (defun my-rxt-quoted-swiper-isearch (orig-fun &rest args)
+    (interactive)
+    (apply orig-fun (mapcar #'rxt-quote-pcre args)))
+  (advice-add #'swiper-isearch :around #'my-rxt-quoted-swiper-isearch))
+
 (after! lsp-mode
   ;; Setting this disables DOOM's deferred shutdown functionality.
   (setq +lsp-defer-shutdown nil)
