@@ -65,8 +65,6 @@
   (setq org-superstar-cycle-headline-bullets nil)
   ;; Show more whitespace in org mode when cycling
   (setq org-cycle-separator-lines -1)
-  ;; Hide emphasis markers (e.g. italics, bold)
-  (setq org-hide-emphasis-markers t)
   :hook (org-mode . my-org-hook)
   :config
   ;; Log CLOSED timestamp when notes are set to DONE state
