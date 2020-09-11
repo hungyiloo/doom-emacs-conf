@@ -374,6 +374,11 @@ _s_: toggle strict  _u_: undo  _C-r_: redo
         (:prefix-map ("c" . "code")
          "x" flycheck-command-map)))
 
+(use-package! titlecase
+  :load-path "lisp"
+  :config
+  (setq titlecase-command (concat doom-private-dir "bin/titlecase")))
+
 (use-package! ivy-rich
   :after ivy
   :config
