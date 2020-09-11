@@ -241,6 +241,7 @@ This function is called by `org-babel-execute-src-block'."
 
 (use-package! evil
   :config
+  (setq evil-shift-width 2)
   (setq evil-move-cursor-back t)
   (setq evil-move-beyond-eol t)
   ;; (setq evil-escape-key-sequence "hl")
