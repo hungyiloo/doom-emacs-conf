@@ -382,28 +382,16 @@ _s_: toggle strict  _u_: undo  _C-r_: redo
 (use-package! ivy-rich
   :after ivy
   :config
-  (plist-put! ivy-rich-display-transformers-list
-              'ivy-switch-buffer
-              '(:columns
-                ((ivy-switch-buffer-transformer
-                  (:width 60)) ;; Wider than the default
-                 (ivy-rich-switch-buffer-size
-                  (:width 7))
-                 (ivy-rich-switch-buffer-indicators
-                  (:width 4 :face error :align right))
-                 (ivy-rich-switch-buffer-major-mode
-                  (:width 12 :face warning))
-                 (ivy-rich-switch-buffer-project
-                  (:width 15 :face success))
-                 (ivy-rich-switch-buffer-path
-                  (:width
-                   (lambda (x)
-                     (ivy-rich-switch-buffer-shorten-path
-                      x
-                      (ivy-rich-minibuffer-width 0.3))))))
-                :predicate
-                (lambda (cand)
-                  (get-buffer cand))))
+  (let* ((ivy-switch-buffer-plist (plist-get
+                                   ivy-rich-display-transformers-list
+                                   'ivy-switch-buffer))
+         (column-config (plist-get
+                         ivy-switch-buffer-plist
+                         :columns)))
+    (plist-put!
+     ivy-switch-buffer-plist
+     :columns
+     (cons '(ivy-switch-buffer-transformer (:width 60)) (cdr column-config))))
   (ivy-rich-mode -1)
   (ivy-rich-mode +1))
 
