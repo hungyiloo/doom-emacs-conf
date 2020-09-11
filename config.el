@@ -266,6 +266,8 @@ This function is called by `org-babel-execute-src-block'."
                                (t . 3))))
 
 (after! lsp-mode
+  ;; Setting this disables DOOM's deferred shutdown functionality.
+  (setq +lsp-defer-shutdown nil)
   (setq lsp-enable-symbol-highlighting nil)
   (setq lsp-clients-angular-language-server-command
   '("node"
