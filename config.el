@@ -375,7 +375,74 @@ This function is called by `org-babel-execute-src-block'."
       `(ediff-even-diff-C    :background ,other-bg-C :extend t)
       `(ediff-odd-diff-A     :background ,other-bg-A :extend t)
       `(ediff-odd-diff-B     :background ,other-bg-B :extend t)
-      `(ediff-odd-diff-C     :background ,other-bg-C :extend t))))
+      `(ediff-odd-diff-C     :background ,other-bg-C :extend t)))
+  (setq +ligatures-extra-symbols
+    '(;; org
+      :name          "»"
+      :src_block     "»"
+      :src_block_end "«"
+      :quote         "“"
+      :quote_end     "”"
+      ;; Functional
+      :lambda        "λ"
+      :def           "ƒ"
+      :composition   "○"
+      :map           "→"
+      ;; Types
+      :null          "∅"
+      :true          "⊤"
+      :false         "⊥"
+      :int           "ℤ"
+      :float         "ℝ"
+      :str           "ℂ"
+      :bool          "𝔹"
+      :list          "ℓ"
+      ;; Flow
+      :not           "¬"
+      :in            "∈"
+      :not-in        "∉"
+      :and           "∧"
+      :or            "∨"
+      :for           "∀"
+      :some          "∃"
+      :return        "⟼"
+      :yield         "⟻"
+      ;; Other
+      :union         "∪"
+      :intersect     "∩"
+      :diff          "∖"
+      :tuple         "⨂"
+      :pipe          "║"
+      :dot           "•"))
+  (set-fontset-font t ?» (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?» (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?« (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?“ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?” (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?λ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?ƒ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?∅ (font-spec :family "Fira Code"))
+  (set-fontset-font t ?⊤ (font-spec :family "Fira Code"))
+  (set-fontset-font t ?⊥ (font-spec :family "Fira Code"))
+  (set-fontset-font t ?ℤ (font-spec :family "Fira Code"))
+  (set-fontset-font t ?ℝ (font-spec :family "Fira Code"))
+  (set-fontset-font t ?𝔹 (font-spec :family "Fira Code"))
+  (set-fontset-font t ?ℂ (font-spec :family "Fira Code"))
+  (set-fontset-font t ?𝔹 (font-spec :family "Fira Code"))
+  (set-fontset-font t ?∈ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?∉ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?∧ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?∨ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?∀ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?∃ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?⟼ (font-spec :family "Fira Code"))
+  (set-fontset-font t ?⟻ (font-spec :family "Fira Code"))
+  (set-fontset-font t ?∪ (font-spec :family "Free Mono"))
+  (set-fontset-font t ?∩ (font-spec :family "Free Mono"))
+  (set-fontset-font t ?∖ (font-spec :family "Free Mono"))
+  (set-fontset-font t ?⨂ (font-spec :family "Free Mono"))
+  (set-fontset-font t ?• (font-spec :family "JetBrains Mono")))
+
 
 ;; Include ediff buffers in solaire-mode so they look the same
 ;; as regular editing buffers
