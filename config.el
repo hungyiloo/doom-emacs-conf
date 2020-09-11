@@ -294,100 +294,32 @@ This function is called by `org-babel-execute-src-block'."
          "x" flycheck-command-map)))
 
 (use-package! ivy-rich
-  :init
-  (setq
-   ivy-rich-display-transformers-list
-   '(ivy-switch-buffer
-     (:columns
-      ((ivy-switch-buffer-transformer
-        (:width 60)) ;; Wider than the default
-       (ivy-rich-switch-buffer-size
-        (:width 7))
-       (ivy-rich-switch-buffer-indicators
-        (:width 4 :face error :align right))
-       (ivy-rich-switch-buffer-major-mode
-        (:width 12 :face warning))
-       (ivy-rich-switch-buffer-project
-        (:width 15 :face success))
-       (ivy-rich-switch-buffer-path
-        (:width
-         (lambda
-           (x)
-           (ivy-rich-switch-buffer-shorten-path x
-                                                (ivy-rich-minibuffer-width 0.3))))))
-      :predicate
-      (lambda
-        (cand)
-        (get-buffer cand)))
-     counsel-find-file
-     (:columns
-      ((ivy-read-file-transformer)
-       (ivy-rich-counsel-find-file-truename
-        (:face font-lock-doc-face))))
-     counsel-M-x
-     (:columns
-      ((counsel-M-x-transformer
-        (:width 60))
-       (ivy-rich-counsel-function-docstring
-        (:face font-lock-doc-face))))
-     counsel-describe-function
-     (:columns
-      ((counsel-describe-function-transformer
-        (:width 40))
-       (ivy-rich-counsel-function-docstring
-        (:face font-lock-doc-face))))
-     counsel-describe-variable
-     (:columns
-      ((counsel-describe-variable-transformer
-        (:width 40))
-       (+ivy-rich-describe-variable-transformer
-        (:width 50))
-       (ivy-rich-counsel-variable-docstring
-        (:face font-lock-doc-face))))
-     counsel-recentf
-     (:columns
-      ((ivy-rich-candidate
-        (:width 0.8))
-       (ivy-rich-file-last-modified-time
-        (:face font-lock-comment-face))))
-     package-install
-     (:columns
-      ((ivy-rich-candidate
-        (:width 30))
-       (ivy-rich-package-version
-        (:width 16 :face font-lock-comment-face))
-       (ivy-rich-package-archive-summary
-        (:width 7 :face font-lock-builtin-face))
-       (ivy-rich-package-install-summary
-        (:face font-lock-doc-face))))
-     counsel-projectile-switch-to-buffer
-     (:columns
-      ((ivy-switch-buffer-transformer
-        (:width 30))
-       (ivy-rich-switch-buffer-size
-        (:width 7))
-       (ivy-rich-switch-buffer-indicators
-        (:width 4 :face error :align right))
-       (ivy-rich-switch-buffer-major-mode
-        (:width 12 :face warning))
-       (ivy-rich-switch-buffer-project
-        (:width 15 :face success))
-       (ivy-rich-switch-buffer-path
-        (:width
-         (lambda
-           (x)
-           (ivy-rich-switch-buffer-shorten-path x
-                                                (ivy-rich-minibuffer-width 0.3))))))
-      :predicate
-      (lambda
-        (cand)
-        (get-buffer cand)))
-     counsel-bookmark
-     (:columns
-      ((ivy-rich-candidate
-        (:width 0.5))
-       (ivy-rich-bookmark-filename
-        (:width 60)))))))
+  :after ivy
+  :config
+  (plist-put! ivy-rich-display-transformers-list
+              'ivy-switch-buffer
+              '(:columns
+                ((ivy-switch-buffer-transformer
+                  (:width 60)) ;; Wider than the default
+                 (ivy-rich-switch-buffer-size
+                  (:width 7))
+                 (ivy-rich-switch-buffer-indicators
+                  (:width 4 :face error :align right))
+                 (ivy-rich-switch-buffer-major-mode
+                  (:width 12 :face warning))
+                 (ivy-rich-switch-buffer-project
+                  (:width 15 :face success))
+                 (ivy-rich-switch-buffer-path
+                  (:width
+                   (lambda (x)
+                     (ivy-rich-switch-buffer-shorten-path
+                      x
+                      (ivy-rich-minibuffer-width 0.3))))))
+                :predicate
+                (lambda (cand)
+                  (get-buffer cand))))
+  (ivy-rich-mode -1)
+  (ivy-rich-mode +1))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
