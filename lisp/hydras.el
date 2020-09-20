@@ -39,9 +39,9 @@ _h_: backward sexp     _x_: kill sexp        _t_: transpose
 _L_: forward sexp      _<_: barf backward    _r_: raise
 _H_: previous sexp     _>_: barf forward     _/_: split
 _k_: up sexp (back)    _,_: slurp backward   _|_: splice
-_j_: down sexp         _._: slurp forward    _<delete>_: splice kill forward
-_K_: down sexp (back)  _?_: slurp hybrid     _<backspace>_: splice kill backward
-_J_: up sexp           _d_: kill whole line
+_j_: down sexp         _._: slurp forward    _=_: clone
+_K_: down sexp (back)  _?_: slurp hybrid     _<delete>_: splice kill forward
+_J_: up sexp           _d_: kill whole line  _<backspace>_: splice kill backward
 _b_: sexp beginning    _c_: comment
 _e_: sexp end
 
@@ -75,6 +75,7 @@ _s_: toggle strict
   ("|" #'sp-splice-sexp)
   ("<delete>" #'sp-splice-sexp-killing-forward)
   ("<backspace>" #'sp-splice-sexp-killing-backward)
+  ("=" #'sp-clone-sexp)
   ("s" #'smartparens-strict-mode :exit t)
   ("u" #'undo-fu-only-undo)
   ("C-r" #'undo-fu-only-redo)
