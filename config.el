@@ -38,6 +38,9 @@
 ;; Always revert files automatically
 (global-auto-revert-mode 1)
 
+;; Load some external files
+(load! "lisp/hydras.el")
+
 (use-package! magit
   :hook (magit-mode . my-magit-fringes)
   :config
@@ -247,88 +250,19 @@ This function is called by `org-babel-execute-src-block'."
   ;; (setq evil-escape-unordered-key-sequence t)
   ;; (setq evil-escape-delay 0.05)
   (setq evil-snipe-scope 'visible)
-  (defhydra my-mc-hydra (:color pink
-                         :hint nil
-                         :pre (evil-mc-pause-cursors))
-    "
-^Match^            ^Line-wise^           ^Manual^
-^^^^^^----------------------------------------------------
-_Z_: match all     _J_: make & go down   _z_: toggle here
-_m_: make & next   _K_: make & go up     _r_: remove last
-_M_: make & prev   ^ ^                   _R_: remove all
-_n_: skip & next   ^ ^                   _p_: pause/resume
-_N_: skip & prev
-
-Current pattern: %`evil-mc-pattern
-
-"
-    ("Z" #'evil-mc-make-all-cursors)
-    ("m" #'evil-mc-make-and-goto-next-match)
-    ("M" #'evil-mc-make-and-goto-prev-match)
-    ("n" #'evil-mc-skip-and-goto-next-match)
-    ("N" #'evil-mc-skip-and-goto-prev-match)
-    ("J" #'evil-mc-make-cursor-move-next-line)
-    ("K" #'evil-mc-make-cursor-move-prev-line)
-    ("z" #'+multiple-cursors/evil-mc-toggle-cursor-here)
-    ("r" #'+multiple-cursors/evil-mc-undo-cursor)
-    ("R" #'evil-mc-undo-all-cursors)
-    ("p" #'+multiple-cursors/evil-mc-toggle-cursors)
-    ("q" #'evil-mc-resume-cursors "quit" :color blue)
-    ("<escape>" #'evil-mc-resume-cursors "quit" :color blue))
-  (defhydra my-sp-hydra (:color amaranth
-                         :hint nil)
-    "
-^Navigation^           ^Editing^
-^^^^-----------------  ---------------------------------------------------------
-_l_: next sexp         _D_: kill hybrid      _T_: transpose hybrid
-_h_: backward sexp     _d_: kill sexp        _t_: transpose
-_b_: sexp beginning    _<_: barf backward    _r_: raise
-_e_: sexp end          _>_: barf forward     _/_: split
-_k_: up sexp (back)    _,_: slurp backward   _<delete>_: splice kill forward
-_j_: down sexp         _._: slurp forward    _<backspace>_: splice kill backward
-_J_: up sexp           _?_: slurp hybrid
-_K_: down sexp (back)
-_L: forward sexp
-_H: previous sexp
-
-_s_: toggle strict  _u_: undo  _C-r_: redo
-
-"
-    ("l" #'sp-next-sexp)
-    ("h" #'sp-backward-sexp)
-    ("L" #'sp-forward-sexp)
-    ("H" #'sp-previous-sexp)
-    ("b" #'sp-beginning-of-sexp)
-    ("e" #'sp-end-of-sexp)
-    ("k" #'sp-backward-up-sexp)
-    ("j" #'sp-down-sexp)
-    ("J" #'sp-up-sexp)
-    ("K" #'sp-backward-down-sexp)
-    ("D" #'sp-kill-hybrid-sexp)
-    ("d" #'sp-kill-sexp)
-    ("<" #'sp-backward-barf-sexp)
-    (">" #'sp-forward-barf-sexp)
-    ("," #'sp-backward-slurp-sexp)
-    ("." #'sp-forward-slurp-sexp)
-    ("?" #'sp-slurp-hybrid-sexp)
-    ("t" #'sp-transpose-sexp)
-    ("T" #'sp-transpose-hybrid-sexp)
-    ("r" #'sp-raise-sexp)
-    ("/" #'sp-split-sexp)
-    ("|" #'sp-splice-sexp)
-    ("<delete>" #'sp-splice-sexp-killing-forward)
-    ("<backspace>" #'sp-splice-sexp-killing-backward)
-    ("s" #'smartparens-strict-mode :exit t)
-    ("u" #'undo-fu-only-undo)
-    ("C-r" #'undo-fu-only-redo)
-    ("q" nil "quit" :color blue)
-    ("<escape>" nil "quit" :color blue))
+  (setq evil-snipe-repeat-keys nil)
   (map!
+   :i "C-S-SPC" #'hippie-expand
    (:when (featurep! :editor multiple-cursors)
     :prefix "g"
     :nv "z" #'my-mc-hydra/body)
    :prefix "gs"
-   :nv "p" #'my-sp-hydra/body))
+   :nv "p" #'my-sp-hydra/body)
+  ;; Fix ^ movement to also respect visual line mode
+  (when evil-respect-visual-line-mode
+    (evil-define-minor-mode-key 'motion 'visual-line-mode
+      "^"  #'evil-first-non-blank-of-visual-line
+      "g^" #'evil-first-non-blank)))
 
 (after! evil-goggles
   (setq evil-goggles-duration 0.2))
