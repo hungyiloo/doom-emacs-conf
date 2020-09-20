@@ -391,13 +391,28 @@ This function is called by `org-babel-execute-src-block'."
          (current-bg-fine-C (doom-blend color-C bg 0.25))
          (other-bg-A (doom-blend color-A bg 0.05))
          (other-bg-B (doom-blend color-B bg 0.05))
-         (other-bg-C (doom-blend color-C bg 0.05)))
+         (other-bg-C (doom-blend color-C bg 0.05))
+         ;; (clearer-region (doom-blend (doom-color 'base4) (doom-color 'base3) 0.1))
+         )
     (custom-set-faces!
       ;; Make tab bar background transparent so that it matches the theme
       ;; '(tab-line :inherit variable-pitch :foreground "black" :height 0.9)
+
       ;; Customize material cursor color to not be so garish
       ;; Also so that it doesn't conflict with the mc/multiedit cursors
-      `(cursor :background ,(doom-color 'dark-cyan))
+      ;; `(cursor :background ,(doom-color 'dark-cyan))
+
+      ;; These might make comments clearer in miramare?
+      ;; `(font-lock-comment-face :foreground ,(doom-color 'base5))
+      ;; `(magit-hash :foreground ,(doom-color 'base5))
+
+      ;; More visible region background faces
+      ;; `(region :background ,clearer-region)
+      ;; `(evil-mc-region-face :background ,clearer-region)
+
+      ;; Better styling for parentheses matching
+      `(show-paren-match :background unspecified :foreground "#ff0000" :underline t)
+
       ;; Customize ediff highlighting
       `(ediff-fine-diff-A    :background ,current-bg-fine-A :weight unspecified :extend t)
       `(ediff-fine-diff-B    :background ,current-bg-fine-B :weight unspecified :extend t)
