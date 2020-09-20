@@ -119,11 +119,30 @@ This function is called by `org-babel-execute-src-block'."
   (defun my-org-hook ()
     ;; Manually set up git-gutter, but don't enable it
     (+vc-gutter-explicit-init-maybe-h-start-off))
+  (defun my-org-time-stamp-plain()
+    (format-time-string (substring (car org-time-stamp-formats) 1 -1) (current-time)))
+  (defun my-org-insert-time-stamp-plain ()
+    (insert (my-org-time-stamp-plain)))
+  (defun my-org-goto-or-create-today (arg)
+    (interactive "P")
+    (goto-char 0)
+    (let* ((today (my-org-time-stamp-plain))
+           (today-posn (search-forward (concat "* " today) nil t)))
+      (when (and (not today-posn) (search-forward (concat "* Daily Log") nil t))
+        (org-show-subtree)
+        (org-next-visible-heading 1)
+        (org-insert-heading arg)
+        (org-move-subtree-up)
+        (my-org-insert-time-stamp-plain)
+        (org-insert-subheading arg)))
+    (recenter))
   ;; Map `my-org-retrieve-url-from-point' to live with its org link friends
   (map! :map org-mode-map
         :localleader
         (:prefix ("l" . "links")
-         "y" #'my-org-retrieve-url-from-point)))
+         "y" #'my-org-retrieve-url-from-point)
+        (:prefix ("j" . "journal")
+         "j" #'my-org-goto-or-create-today)))
 
 (use-package! git-gutter
   :init
