@@ -320,13 +320,16 @@ This function is called by `org-babel-execute-src-block'."
   (setq +lsp-defer-shutdown nil)
   (setq lsp-enable-symbol-highlighting nil)
   (setq lsp-clients-angular-language-server-command
-  '("node"
-    "/home/hungyi/.config/yarn/global/node_modules/@angular/language-server"
-    "--ngProbeLocations"
-    "/home/hungyi/.config/yarn/global/node_modules"
-    "--tsProbeLocations"
-    "/home/hungyi/.config/yarn/global/node_modules"
-    "--stdio")))
+        '("node"
+          "/home/hungyi/.config/yarn/global/node_modules/@angular/language-server"
+          "--ngProbeLocations"
+          "/home/hungyi/.config/yarn/global/node_modules"
+          "--tsProbeLocations"
+          "/home/hungyi/.config/yarn/global/node_modules"
+          "--stdio"))
+  (setq lsp-clients-typescript-server-args
+        '("--stdio"
+          "--tsserver-path=/home/hungyi/.yarn/bin/tsserver")))
 
 (after! flycheck
   (map! :leader
