@@ -51,4 +51,4 @@
 
 (package! olivetti)
 (package! evil-escape :disable t)
-(package! lsp-mode :pin "0b05aa9b8f77eb129d0a8f430894e657af05d386")
+(package! lsp-mode :pin "aaba6911f113c4c769e989c923b01f77496039bd")
