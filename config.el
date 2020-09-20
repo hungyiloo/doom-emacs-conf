@@ -357,9 +357,7 @@ This function is called by `org-babel-execute-src-block'."
   (ivy-rich-mode -1)
   (ivy-rich-mode +1))
 
-;; This determines the style of line numbers in effect. If set to `nil', line
-;; numbers are disabled. For relative line numbers, set this to `relative'.
-(setq display-line-numbers-type 'relative)
+(setq display-line-numbers-type t)
 
 ;; Fix some edge case javascript indenting
 (after! js2-mode
