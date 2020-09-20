@@ -52,3 +52,4 @@
 (package! olivetti)
 (package! evil-escape :disable t)
 (package! lsp-mode :pin "aaba6911f113c4c769e989c923b01f77496039bd")
+(package! doom-themes :pin "d6ee47dc8ed2cf9e585f62243214af03ba5b1687")
