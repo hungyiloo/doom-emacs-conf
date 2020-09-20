@@ -501,10 +501,25 @@ This function is called by `org-babel-execute-src-block'."
 ;; Allow links to be opened outside WSL
 (when (and (eq system-type 'gnu/linux)
            (string-match "Linux.*Microsoft.*Linux" (shell-command-to-string "uname -a")))
+  (defun my-browse-url-generic-wsl-safe (url &optional new-window)
+    (interactive)
+    (let ((parsed-url (thread-last
+                          url
+                        (replace-regexp-in-string "file://" "file://wsl%24/Ubuntu")
+                        (replace-regexp-in-string "\\(wsl%24/Ubuntu\\)?/mnt/c/" "C:/"))))
+      (message "%s" (concat "Browsing to: " parsed-url))
+      (apply #'browse-url-generic (list parsed-url new-window))))
   (setq
    browse-url-generic-program  "/mnt/c/Windows/System32/cmd.exe"
    browse-url-generic-args     '("/c" "start")
-   browse-url-browser-function #'browse-url-generic))
+   browse-url-browser-function #'my-browse-url-generic-wsl-safe)
+  (after! org
+    ;; Make sure org export opens things in the right directory
+    (setq org-file-apps '((auto-mode . emacs)
+                          (directory . emacs)
+                          ("\\.mm\\'" . default)
+                          ("\\.x?html?\\'" . (lambda (_file link) (my-browse-url-generic-wsl-safe link)))
+                          ("\\.pdf\\'" . (lambda (_file link) (my-browse-url-generic-wsl-safe link)))))))
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
