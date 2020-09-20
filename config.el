@@ -119,11 +119,11 @@ This function is called by `org-babel-execute-src-block'."
   (defun my-org-hook ()
     ;; Manually set up git-gutter, but don't enable it
     (+vc-gutter-explicit-init-maybe-h-start-off))
-  (defun my-org-time-stamp-plain()
-    (format-time-string (substring (car org-time-stamp-formats) 1 -1) (current-time)))
-  (defun my-org-insert-time-stamp-plain ()
-    (insert (my-org-time-stamp-plain)))
-  (defun my-org-goto-or-create-today (arg)
+  (defun my-org-time-stamp-plain (&optional timestamp)
+    (format-time-string
+     (substring (car org-time-stamp-formats) 1 -1)
+     (or timestamp (current-time))))
+  (defun my-journal-goto-or-create-today (arg)
     (interactive "P")
     (goto-char 0)
     (let* ((today (my-org-time-stamp-plain))
@@ -133,8 +133,19 @@ This function is called by `org-babel-execute-src-block'."
         (org-next-visible-heading 1)
         (org-insert-heading arg)
         (org-move-subtree-up)
-        (my-org-insert-time-stamp-plain)
+        (insert (my-org-time-stamp-plain))
         (org-insert-subheading arg)))
+    (recenter))
+  (defun my-journal-goto-exercise (arg)
+    (interactive "P")
+    (goto-char 0)
+    (search-forward "* Exercise" nil t)
+    (search-forward (number-to-string (nth 1 (calendar-current-date))) nil t)
+    (recenter))
+  (defun my-journal-goto-monthly-log (arg)
+    (interactive "P")
+    (goto-char 0)
+    (search-forward "* Monthly Log" nil t)
     (recenter))
   ;; Map `my-org-retrieve-url-from-point' to live with its org link friends
   (map! :map org-mode-map
@@ -142,7 +153,9 @@ This function is called by `org-babel-execute-src-block'."
         (:prefix ("l" . "links")
          "y" #'my-org-retrieve-url-from-point)
         (:prefix ("j" . "journal")
-         "j" #'my-org-goto-or-create-today)))
+         "j" #'my-journal-goto-or-create-today
+         "m" #'my-journal-goto-monthly-log
+         "x" #'my-journal-goto-exercise)))
 
 (use-package! git-gutter
   :init
