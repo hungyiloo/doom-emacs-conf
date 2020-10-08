@@ -29,17 +29,22 @@
 ;; (load-theme 'doom-miramare t)
 
 ;; Set a custom font
-(setq doom-font (font-spec :family "JetBrains Mono Semi Light" :size 16)
+(setq doom-font (font-spec :family "JetBrains Mono Semi Light" :size 15)
       doom-variable-pitch-font (font-spec :family "Segoe UI" :size 15))
 
 ;; Better default window placement on startup
 (setq initial-frame-alist '((width . 141) (height . 45) (fullscreen . fullheight)))
+
+;; Font adjustments should be more fine
+(setq text-scale-mode-step 1.05)
+(setq-default line-spacing 1)
 
 ;; Always revert files automatically
 (global-auto-revert-mode 1)
 
 ;; Load some external files
 (load! "lisp/hydras.el")
+(load! "lisp/journal.el")
 
 (use-package! magit
   :hook (magit-mode . my-magit-fringes)
@@ -59,13 +64,39 @@
     (setq doom--line-number-style nil)
     (setq display-line-numbers nil)))
 
+;; (use-package! writeroom-mode
+;;   :config
+;;   (setq writeroom-width 50)
+;;   (setq +zen-text-scale 1)
+;;   (setq +zen-window-divider-size 1))
+
+;; (use-package mixed-pitch
+;;   :hook (mixed-pitch-mode . my-mixed-pitch-setup)
+;;   :config
+;;   (defun my-mixed-pitch-setup ()
+;;     (if mixed-pitch-mode
+;;         (progn (set-face-attribute 'org-hide nil :inherit '(fixed-pitch))
+;;                (set-face-attribute 'org-superstar-leading nil :inherit '(fixed-pitch))
+;;                (set-face-attribute 'org-superstar-header-bullet nil :inherit '(fixed-pitch))
+;;                (setq line-spacing 6))
+;;       (progn
+;;         (set-face-attribute 'org-verbatim nil :font (font-spec :family "JetBrains Mono NL"))
+;;         (setq line-spacing nil))))
+;;   (pushnew! mixed-pitch-fixed-pitch-faces
+;;             'outline-1
+;;             'outline-2
+;;             'outline-3
+;;             'outline-4
+;;             'outline-5
+;;             'outline-6
+;;             'outline-7
+;;             'outline-8))
+
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Notes/")
 
-;; Make sure org supports org-id stuff
-(add-to-list 'org-modules 'org-id)
 
 (use-package! org
   :init
@@ -74,7 +105,8 @@
   (setq org-superstar-cycle-headline-bullets nil)
   ;; Show more whitespace in org mode when cycling
   (setq org-cycle-separator-lines -1)
-  :hook (org-mode . my-org-hook)
+  ;; Make sure org supports org-id stuff
+  (add-to-list 'org-modules 'org-id)
   :config
   ;; Log CLOSED timestamp when notes are set to DONE state
   (setq org-log-done 'time)
@@ -82,7 +114,12 @@
   (setq org-id-link-to-org-use-id 'use-existing)
   ;; Don't export org files with table of contents by default
   (setq org-export-with-toc nil)
+  ;; Don't export section numbers
   (setq org-export-with-section-numbers nil)
+  ;; Also show state changes (such as finished recurring tasks) in agenda
+  (setq org-agenda-log-mode-items '(closed clock state))
+  ;; Allow large tables to be processed
+  (setq org-table-convert-region-max-lines 9999)
   ;; When storing links by ID, add them to the normal `org-stored-links' variable
   (defadvice! +org--store-id-link-a (link)
     :filter-return #'org-id-store-link
@@ -113,55 +150,21 @@
               (kill-new url)
               (message (concat "Copied: " url))))))))
   (defun org-babel-execute:html (body _params)
-    "Execute a block of CSS code.
+    "Execute a block of HTML code.
 This function is called by `org-babel-execute-src-block'."
     body)
-  (defun my-org-hook ()
-    ;; Manually set up git-gutter, but don't enable it
-    (+vc-gutter-explicit-init-maybe-h-start-off))
-  (defun my-org-time-stamp-plain (&optional timestamp)
-    (format-time-string
-     (substring (car org-time-stamp-formats) 1 -1)
-     (or timestamp (current-time))))
-  (defun my-journal-goto-or-create-today (arg)
-    (interactive "P")
-    (goto-char 0)
-    (let* ((today (my-org-time-stamp-plain))
-           (today-posn (search-forward (concat "* " today) nil t)))
-      (when (and (not today-posn) (search-forward (concat "* Daily Log") nil t))
-        (org-show-subtree)
-        (org-next-visible-heading 1)
-        (org-insert-heading arg)
-        (org-move-subtree-up)
-        (insert (my-org-time-stamp-plain))
-        (org-insert-subheading arg)))
-    (recenter))
-  (defun my-journal-goto-exercise (arg)
-    (interactive "P")
-    (goto-char 0)
-    (search-forward "* Exercise" nil t)
-    (search-forward (number-to-string (nth 1 (calendar-current-date))) nil t)
-    (recenter))
-  (defun my-journal-goto-monthly-log (arg)
-    (interactive "P")
-    (goto-char 0)
-    (search-forward "* Monthly Log" nil t)
-    (recenter))
+
   ;; Map `my-org-retrieve-url-from-point' to live with its org link friends
   (map! :map org-mode-map
         :localleader
         (:prefix ("l" . "links")
-         "y" #'my-org-retrieve-url-from-point)
-        (:prefix ("j" . "journal")
-         "j" #'my-journal-goto-or-create-today
-         "m" #'my-journal-goto-monthly-log
-         "x" #'my-journal-goto-exercise)))
+         "y" #'my-org-retrieve-url-from-point)))
 
 (use-package! git-gutter
   :init
   (setq git-gutter:disabled-modes '(fundamental-mode image-mode pdf-view-mode org-mode))
   :config
-  (defun +vc-gutter-explicit-init-maybe-h-start-off ()
+  (defun my-org-hook-start-without-vc-gutter ()
     "Set up `git-gutter-mode' in the current buffer regardless of `git-gutter:disabled-modes' and leave it off initially."
     (let ((file-name (buffer-file-name (buffer-base-buffer))))
       (when (or +vc-gutter-in-remote-files
@@ -180,7 +183,8 @@ This function is called by `org-babel-execute-src-block'."
                           git-gutter:clear-function     #'git-gutter:clear-diff-infos
                           git-gutter:window-width 1))
             (git-gutter-mode -1)
-            (remove-hook 'after-save-hook #'+vc-gutter-init-maybe-h 'local)))))))
+            (remove-hook 'after-save-hook #'+vc-gutter-init-maybe-h 'local))))))
+  (add-hook! 'org-mode-hook #'my-org-hook-start-without-vc-gutter))
 
 (use-package! kurecolor
   :config
@@ -266,12 +270,15 @@ This function is called by `org-babel-execute-src-block'."
        "g" #'calc-grab-region)
       (:prefix-map ("t" . "toggle")
        :desc "Git gutter" "v" #'git-gutter-mode
-       :desc "Highlight line" "h" #'hl-line-mode))
+       :desc "Highlight line" "h" #'hl-line-mode)
+      (:prefix-map ("p" . "project")
+       "v" #'projectile-run-vterm))
 
 (map! :map evil-window-map
       ;; Use the normal other-window command
       ;; to take advantage of the window-select module
-      "w" #'other-window)
+      "w" #'other-window
+      "~" #'ace-swap-window)
 
 (map! :after dired
       :map dired-mode-map
@@ -288,6 +295,7 @@ This function is called by `org-babel-execute-src-block'."
   ;; (setq evil-escape-delay 0.05)
   (setq evil-snipe-scope 'visible)
   (setq evil-snipe-repeat-keys nil)
+  (evil-set-initial-state 'vterm-mode 'normal)
   (map!
    :i "C-S-SPC" #'hippie-expand
    (:when (featurep! :editor multiple-cursors)
@@ -300,6 +308,16 @@ This function is called by `org-babel-execute-src-block'."
     (evil-define-minor-mode-key 'motion 'visual-line-mode
       "^"  #'evil-first-non-blank-of-visual-line
       "g^" #'evil-first-non-blank)))
+
+(use-package! evil-collection
+  :config
+  ;; Fix regular linewise movement in org mode and outline mode.
+  ;; Previously they were mapped to `outline-backward-same-level' and `outline-forward-same-level'.
+  ;; But in org mode (where this matters) it's available via '[h' and ']h' already.
+  ;; No need for gk and gj to be remapped.
+  (evil-collection-define-key 'normal 'outline-mode-map
+    "gk" nil
+    "gj" nil))
 
 (after! evil-goggles
   (setq evil-goggles-duration 0.2))
@@ -320,13 +338,26 @@ This function is called by `org-babel-execute-src-block'."
 
 (use-package! swiper
   :config
-  ;; Advise `swiper-isearch' to use `rxt-quote-pcre' so that
+  ;; Advise `swiper-isearch' to use `rxt-pcre-to-elisp' and `rxt-quote-pcre' so that
   ;; SPC s s and SPC s S correctly deals with regex sensitive
   ;; characters in the selected region or symbol at point
   (defun my-rxt-quoted-swiper-isearch (orig-fun &rest args)
     (interactive)
-    (apply orig-fun (mapcar #'rxt-quote-pcre args)))
+    (apply orig-fun (mapcar (lambda (x) (rxt-pcre-to-elisp (rxt-quote-pcre x))) args)))
   (advice-add #'swiper-isearch :around #'my-rxt-quoted-swiper-isearch))
+
+(use-package! counsel
+  :config
+  (setq counsel-search-engine 'google)
+  ;; Advise `counsel-rg' to use `rxt-pcre-to-elisp' so that
+  ;; SPC s p correctly deals with regex sensitive
+  ;; characters in the selected region or symbol at point
+  (defun my-rxt-elisp-counsel-rg (orig-fun &rest args)
+    (interactive)
+    (if (> 0 (length args))
+        (apply orig-fun (cons (rxt-pcre-to-elisp (car args)) (cdr args)))
+      (apply orig-fun args)))
+  (advice-add #'counsel-rg :around #'my-rxt-elisp-counsel-rg))
 
 (after! lsp-mode
   ;; Setting this disables DOOM's deferred shutdown functionality.
@@ -381,14 +412,43 @@ This function is called by `org-babel-execute-src-block'."
   (setq tide-completion-ignore-case t))
 
 ;; Use 2-space indentation in web-mode always
-(after! web-mode
+(use-package! web-mode
+  :config
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
-  (setq web-mode-css-indent-offset 2))
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-attr-indent-offset nil)
+  (setq emmet-indentation 2))
 
-;; Use 2-space indentation in css
+(use-package! editorconfig
+  :config
+  (setcdr (assq 'web-mode editorconfig-indentation-alist)
+          '((web-mode-indent-style lambda (size) 2)
+            ;; I prefer the web mode attr indent behavior when it's set to nil
+            ;;
+            ;; <a href="http://google.com"
+            ;;    target="_blank">See how the attributes line up vertically?</a>
+            ;; 
+            ;; web-mode-attr-indent-offset
+            ;; web-mode-attr-value-indent-offset
+
+            web-mode-code-indent-offset
+            web-mode-css-indent-offset
+            web-mode-markup-indent-offset
+            web-mode-sql-indent-offset
+            web-mode-block-padding
+            web-mode-script-padding
+            web-mode-style-padding)))
+
+;;Use 2-space indentation in css
 (after! css-mode
   (setq css-indent-offset 2))
+
+(use-package! tree-sitter
+  :config
+  (require 'tree-sitter-langs)
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
 (add-hook! 'doom-load-theme-hook
   (let* ((bg (doom-color 'bg))
@@ -438,7 +498,14 @@ This function is called by `org-babel-execute-src-block'."
       `(ediff-even-diff-C    :background ,other-bg-C :extend t)
       `(ediff-odd-diff-A     :background ,other-bg-A :extend t)
       `(ediff-odd-diff-B     :background ,other-bg-B :extend t)
-      `(ediff-odd-diff-C     :background ,other-bg-C :extend t)))
+      `(ediff-odd-diff-C     :background ,other-bg-C :extend t)
+
+      ;; Ignore ligatures in org-verbatim and org-code
+      `(org-verbatim :font ,(font-spec :family "JetBrains Mono NL" :extend t))
+      `(org-code     :font ,(font-spec :family "JetBrains Mono NL" :extend t))
+
+      ;; Fix tree-sitter punctuation having stuck bg color
+      `(tree-sitter-hl-face:punctuation :inherit unspecified)))
   (setq +ligatures-extra-symbols
     '(;; org
       :name          "»"
@@ -519,7 +586,8 @@ This function is called by `org-babel-execute-src-block'."
     (let ((parsed-url (thread-last
                           url
                         (replace-regexp-in-string "file://" "file://wsl%24/Ubuntu")
-                        (replace-regexp-in-string "\\(wsl%24/Ubuntu\\)?/mnt/c/" "C:/"))))
+                        (replace-regexp-in-string "\\(wsl%24/Ubuntu\\)?/mnt/c/" "C:/")
+                        (url-encode-url))))
       (message "%s" (concat "Browsing to: " parsed-url))
       (apply #'browse-url-generic (list parsed-url new-window))))
   (setq

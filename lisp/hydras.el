@@ -6,7 +6,7 @@
   "
 ^Match^            ^Line-wise^           ^Manual^
 ^^^^^^----------------------------------------------------
-_Z_: match all     _J_: make & go down   _z_: toggle here
+_Z_: match all     _J_: make & go down   _._: toggle here
 _m_: make & next   _K_: make & go up     _r_: remove last
 _M_: make & prev   ^ ^                   _R_: remove all
 _n_: skip & next   ^ ^                   _p_: pause/resume
@@ -22,7 +22,7 @@ Current pattern: %`evil-mc-pattern
   ("N" #'evil-mc-skip-and-goto-prev-match)
   ("J" #'evil-mc-make-cursor-move-next-line)
   ("K" #'evil-mc-make-cursor-move-prev-line)
-  ("z" #'+multiple-cursors/evil-mc-toggle-cursor-here)
+  ("." #'+multiple-cursors/evil-mc-toggle-cursor-here)
   ("r" #'+multiple-cursors/evil-mc-undo-cursor)
   ("R" #'evil-mc-undo-all-cursors)
   ("p" #'+multiple-cursors/evil-mc-toggle-cursors)
@@ -45,7 +45,7 @@ _J_: up sexp           _d_: kill whole line  _<backspace>_: splice kill backward
 _b_: sexp beginning    _c_: comment
 _e_: sexp end
 
-_u_: undo  _C-r_: redo
+_u_: undo  _C-r_: redo  _v_: set mark  _V_: set linewise mark
 
 _s_: toggle strict
 "
@@ -59,6 +59,8 @@ _s_: toggle strict
   ("j" #'sp-down-sexp)
   ("J" #'sp-up-sexp)
   ("K" #'sp-backward-down-sexp)
+  ("v" #'evil-visual-char)
+  ("V" #'evil-visual-line)
   ("X" #'sp-kill-hybrid-sexp)
   ("x" #'sp-kill-sexp)
   ("d" #'sp-kill-whole-line)
