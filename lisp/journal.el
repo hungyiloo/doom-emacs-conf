@@ -8,18 +8,20 @@
 (defun my-journal-goto-heading (heading &optional post-heading-action)
   (interactive)
   (find-file "~/Notes/Journal.org")
+  (doom/escape)
+  (org-set-startup-visibility)
   (goto-char 0)
   (search-forward (concat "* " heading) nil t)
   (when post-heading-action (funcall post-heading-action))
   (recenter))
-
-
 
 (let ((goto-first-heading (lambda () (interactive) (org-next-visible-heading 1))))
   (defun my-journal-goto-or-create-today ()
     (interactive)
     (find-file "~/Notes/Journal.org")
     (goto-char 0)
+    (doom/escape)
+    (org-set-startup-visibility)
     (let* ((today (my-journal-time-stamp))
            (today-posn (search-forward (concat "* " today) nil t)))
       (if (and (not today-posn) (search-forward (concat "* Daily Log") nil t))

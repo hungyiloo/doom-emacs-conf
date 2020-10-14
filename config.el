@@ -45,6 +45,7 @@
 ;; Load some external files
 (load! "lisp/hydras.el")
 (load! "lisp/journal.el")
+(load! "lisp/colors.el")
 
 (use-package! magit
   :hook (magit-mode . my-magit-fringes)
@@ -186,83 +187,9 @@ This function is called by `org-babel-execute-src-block'."
             (remove-hook 'after-save-hook #'+vc-gutter-init-maybe-h 'local))))))
   (add-hook! 'org-mode-hook #'my-org-hook-start-without-vc-gutter))
 
-(use-package! kurecolor
-  :config
-
-  ;; Redefine this function to specifically detect rgba/hex color "symbols"
-  (defun kurecolor-replace-current (fn &rest args)
-    "Get the current unspaced string at point. Replace with the return value of the function FN with ARGS."
-    (let* ((search-range (max (- (point) (line-beginning-position))
-                              (- (line-end-position) (point))))
-           (bounds (if (and transient-mark-mode mark-active)
-                       (list (region-beginning) (region-end))
-                     (when (or (thing-at-point-looking-at
-                                "#[0-9a-f]\\{6,8\\}"
-                                search-range)
-                               (thing-at-point-looking-at
-                                "rgba?(\s*\\(,?\s*[0-9]\\{1,3\\}\\)\\{3\\}\\(,\s*[0-9]+\.?[0-9]*\\)?\s*)"
-                                search-range))
-                       (list (match-beginning 0) (match-end 0)))))
-           (excerpt (apply #'buffer-substring-no-properties bounds))
-           (change (car args))
-           (replacement (if args
-                            (funcall fn excerpt change)
-                          ;; no args
-                          (funcall fn excerpt))))
-
-      (apply #'delete-region bounds)
-      (insert replacement)))
-
-  ;; Redefine this function to fully handle rgba
-  (defun kurecolor-cssrgb-to-hex (cssrgb)
-    "Convert a CSSRGB (or rgba) color to hex."
-    (let ((rgb (cdr
-                (s-match
-                 (concat "rgba?(\s*"
-                         "\\([0-9]\\{1,3\\}\\(?:\s*%\\)?\\)\s*,\s*"
-                         "\\([0-9]\\{1,3\\}\\(?:\s*%\\)?\\)\s*,\s*"
-                         "\\([0-9]\\{1,3\\}\\(?:\s*%\\)?\\)\s*,?\s*"
-                         "\\([0-9]\.?[0-9]*\\)?)")
-                 cssrgb))))
-      (if (= 3 (length rgb))
-          (cl-destructuring-bind (r g b) (mapcar 'string-to-number rgb)
-            (format "#%02X%02X%02X" r g b))
-        (cl-destructuring-bind (r g b a) (mapcar 'string-to-number rgb)
-          (format "#%02X%02X%02X%02X" r g b (min 255 (round (* a 255))))))))
-
-  (defun kurecolor-hex-to-rgba (hex)
-    "Convert a 8 digit HEX color to r g b a."
-    (setq hex (replace-regexp-in-string "#" "" hex))
-    (mapcar #'(lambda (s) (/ (string-to-number s 16) 255.0))
-            (list (substring hex 0 2)
-                  (substring hex 2 4)
-                  (substring hex 4 6)
-                  (substring hex 6 8))))
-
-  ;; Redefine this function to fully handle rgba
-  (defun kurecolor-hex-to-cssrgb (hex)
-    "Convert a HEX rgb color to cssrgb."
-    (if (< (length hex) 8)
-        (cl-destructuring-bind (r g b) (mapcar 'to-8bit (kurecolor-hex-to-rgb hex))
-          (format "rgb(%i, %i, %i)" r g b))
-      (cl-destructuring-bind (r g b a) (mapcar 'to-8bit (kurecolor-hex-to-rgba hex))
-        (format "rgba(%i, %i, %i, %f)" r g b (/ a 255.0)))))
-
-  (defun my-kurecolor-open-hydra ()
-    "Makes sure hl-line-mode is off, color is in hex format, and opens the kurecolor hydra"
-    (interactive)
-    (hl-line-mode -1)
-    (or (css--named-color-to-hex)
-        (css--rgb-to-named-color-or-hex))
-    (funcall #'+rgb/kurecolor-hydra/body))
-
-  (map! :map (css-mode-map sass-mode-map stylus-mode-map)
-        :localleader
-        (:prefix ("c" . "colors")
-         "c" #'css-cycle-color-format
-         "k" #'my-kurecolor-open-hydra)))
-
 (map! :leader
+      "<right>" #'better-jumper-jump-forward
+      "<left>" #'better-jumper-jump-backward
       (:prefix-map ("=" . "calc")
        "=" #'calc-dispatch
        "c" #'calc
@@ -448,7 +375,16 @@ This function is called by `org-babel-execute-src-block'."
   :config
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+  (pushnew! tree-sitter-major-mode-language-alist
+            '(scss-mode . css)))
+
+(use-package! treemacs
+  :init
+  (setq doom-themes-treemacs-enable-variable-pitch nil)
+  (setq doom-themes-treemacs-theme "doom-colors")
+  :config
+  (setq treemacs-wrap-around nil))
 
 (add-hook! 'doom-load-theme-hook
   (let* ((bg (doom-color 'bg))
@@ -465,6 +401,7 @@ This function is called by `org-babel-execute-src-block'."
          (other-bg-A (doom-blend color-A bg 0.05))
          (other-bg-B (doom-blend color-B bg 0.05))
          (other-bg-C (doom-blend color-C bg 0.05))
+         (treemacs-face-height 95)
          ;; (clearer-region (doom-blend (doom-color 'base4) (doom-color 'base3) 0.1))
          )
     (custom-set-faces!
@@ -505,7 +442,21 @@ This function is called by `org-babel-execute-src-block'."
       `(org-code     :font ,(font-spec :family "JetBrains Mono NL" :extend t))
 
       ;; Fix tree-sitter punctuation having stuck bg color
-      `(tree-sitter-hl-face:punctuation :inherit unspecified)))
+      `(tree-sitter-hl-face:punctuation :inherit unspecified)
+
+      ;; Treemacs customizations
+      `(treemacs-root-face :height 130 :weight light)
+      `(treemacs-file-face :height ,treemacs-face-height)
+      `(treemacs-git-modified-face :height ,treemacs-face-height)
+      `(treemacs-git-conflict-face :height ,treemacs-face-height)
+      `(treemacs-git-untracked-face :height ,treemacs-face-height :foreground ,(doom-color 'blue))
+      `(treemacs-git-ignored-face :height ,treemacs-face-height)
+      `(treemacs-git-renamed-face :height ,treemacs-face-height)
+      `(treemacs-git-unmodified-face :height ,treemacs-face-height)
+      `(treemacs-directory-face :height ,treemacs-face-height :weight normal)
+      ;; `(doom-themes-treemacs-file-face :height unspecified)
+      ;; `(doom-themes-treemacs-root-face :height unspecified :weight unspecified)
+      ))
   (setq +ligatures-extra-symbols
     '(;; org
       :name          "»"

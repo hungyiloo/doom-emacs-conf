@@ -51,7 +51,17 @@
 
 (package! olivetti)
 (package! evil-escape :disable t)
-(package! lsp-mode :pin "f9a56b967fb39ec05dcbcaef17692dc01c3e402b")
-(package! doom-themes :pin "d6ee47dc8ed2cf9e585f62243214af03ba5b1687")
-(package! tree-sitter :recipe (:host github :repo "ubolonton/emacs-tree-sitter" :files ("lisp/*.el")))
-(package! tree-sitter-langs :recipe (:host github :repo "ubolonton/emacs-tree-sitter" :files ("langs/*.el" "langs/queries")))
+;; (package! lsp-mode :pin "f9a56b967fb39ec05dcbcaef17692dc01c3e402b")
+(unpin! doom-themes)
+(package! tsc
+  :recipe (:host github
+           :repo "ubolonton/emacs-tree-sitter"
+           :files ("core/*.el")))
+(package! tree-sitter
+  :recipe (:host github
+           :repo "ubolonton/emacs-tree-sitter"
+           :files ("lisp/*.el")))
+(package! tree-sitter-langs
+  :recipe (:host github
+           :repo "ubolonton/emacs-tree-sitter"
+           :files ("langs/*.el" "langs/queries")))
