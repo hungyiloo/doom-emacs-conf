@@ -207,10 +207,10 @@ This function is called by `org-babel-execute-src-block'."
       "w" #'other-window
       "~" #'ace-swap-window)
 
-(map! :after dired
-      :map dired-mode-map
-      :n "RET" #'dired-find-alternate-file
-      :desc "dired-up-director (alt)" :n "^" (lambda () (interactive) (find-alternate-file "..")))
+;; (map! :after dired
+;;       :map dired-mode-map
+;;       :n "RET" #'dired-find-alternate-file
+;;       :desc "dired-up-directory (alt)" :n "^" (lambda () (interactive) (find-alternate-file "..")))
 
 (use-package! evil
   :config
@@ -345,7 +345,29 @@ This function is called by `org-babel-execute-src-block'."
   (setq web-mode-code-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-attr-indent-offset nil)
-  (setq emmet-indentation 2))
+  (setq emmet-indentation 2)
+  ;; Redefine this function to fix incomplete tag renames
+  (defun web-mode-element-rename (&optional tag-name)
+    "Rename the current html element."
+    (interactive)
+    (save-excursion
+      (let (pos)
+        (unless tag-name (setq tag-name (read-from-minibuffer "New tag name? ")))
+        (when (and (> (length tag-name) 0)
+                   (web-mode-element-beginning)
+                   ;; Changed this from ? to * ------------------------v
+                   (looking-at "<\\([[:alnum:]]+\\(:?[-][[:alpha:]]+\\)*\\)"))
+          (setq pos (point))
+          (unless (web-mode-element-is-void)
+            (save-match-data
+              (web-mode-tag-match)
+              ;; Changed this from ? to * ---------------------------------v
+              (if (looking-at "</[ ]*\\([[:alnum:]]+\\(:?[-][[:alpha:]]+\\)*\\)")
+                  (replace-match (concat "</" tag-name))
+                )))
+          (goto-char pos)
+          (replace-match (concat "<" tag-name))
+          )))))
 
 (use-package! editorconfig
   :config
@@ -378,6 +400,12 @@ This function is called by `org-babel-execute-src-block'."
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
   (pushnew! tree-sitter-major-mode-language-alist
             '(scss-mode . css)))
+
+(after! scss-mode
+  (defun my-scss-mode-setup ()
+    (setq comment-start "/* "
+          comment-end " */"))
+  (add-hook! 'scss-mode-hook #'my-scss-mode-setup))
 
 (use-package! treemacs
   :init
@@ -524,6 +552,12 @@ This function is called by `org-babel-execute-src-block'."
   (set-fontset-font t ?⨂ (font-spec :family "Free Mono"))
   (set-fontset-font t ?• (font-spec :family "JetBrains Mono")))
 
+(use-package! emojify
+  :config
+  ;; I created a folder ~/.emacs.d/emojis/twemoji-latest and
+  ;; downloaded the PNG assets from https://github.com/twitter/twemoji
+  (setq emojify-emoji-set "twemoji-latest")
+  (setq emojify-emoji-json (concat doom-private-dir "emoji.json")))
 
 ;; Include ediff buffers in solaire-mode so they look the same
 ;; as regular editing buffers
