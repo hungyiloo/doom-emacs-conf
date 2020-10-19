@@ -341,6 +341,7 @@ This function is called by `org-babel-execute-src-block'."
 ;; Use 2-space indentation in web-mode always
 (use-package! web-mode
   :config
+  (setq web-mode-prettify-symbols-alist nil)
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
@@ -486,43 +487,43 @@ This function is called by `org-babel-execute-src-block'."
       ;; `(doom-themes-treemacs-root-face :height unspecified :weight unspecified)
       ))
   (setq +ligatures-extra-symbols
-    '(;; org
-      :name          "»"
-      :src_block     "»"
-      :src_block_end "«"
-      :quote         "“"
-      :quote_end     "”"
-      ;; Functional
-      :lambda        "λ"
-      :def           "ƒ"
-      :composition   "○"
-      :map           "→"
-      ;; Types
-      :null          "∅"
-      :true          "⊤"
-      :false         "⊥"
-      :int           "ℤ"
-      :float         "ℝ"
-      :str           "ℂ"
-      :bool          "𝔹"
-      :list          "ℓ"
-      ;; Flow
-      :not           "¬"
-      :in            "∈"
-      :not-in        "∉"
-      :and           "∧"
-      :or            "∨"
-      :for           "∀"
-      :some          "∃"
-      :return        "⟼"
-      :yield         "⟻"
-      ;; Other
-      :union         "∪"
-      :intersect     "∩"
-      :diff          "∖"
-      :tuple         "⨂"
-      :pipe          "║"
-      :dot           "•"))
+        '(;; org
+          :name          "»"
+          :src_block     "»"
+          :src_block_end "«"
+          :quote         "“"
+          :quote_end     "”"
+          ;; Functional
+          :lambda        "λ"
+          :def           "ƒ"
+          :composition   "○"
+          :map           "→"
+          ;; Types
+          :null          "∅"
+          :true          "⊤"
+          :false         "⊥"
+          :int           "ℤ"
+          :float         "ℝ"
+          :str           "ℂ"
+          :bool          "𝔹"
+          :list          "ℓ"
+          ;; Flow
+          :not           "¬"
+          :in            "∈"
+          :not-in        "∉"
+          :and           "∧"
+          :or            "∨"
+          :for           "∀"
+          :some          "∃"
+          :return        "⟼"
+          :yield         "⟻"
+          ;; Other
+          :union         "∪"
+          :intersect     "∩"
+          :diff          "∖"
+          :tuple         "⨂"
+          :pipe          "║"
+          :dot           "•"))
   (set-fontset-font t ?» (font-spec :family "JetBrains Mono"))
   (set-fontset-font t ?» (font-spec :family "JetBrains Mono"))
   (set-fontset-font t ?« (font-spec :family "JetBrains Mono"))
@@ -552,11 +553,21 @@ This function is called by `org-babel-execute-src-block'."
   (set-fontset-font t ?⨂ (font-spec :family "Free Mono"))
   (set-fontset-font t ?• (font-spec :family "JetBrains Mono")))
 
+;; Fix some farty prettify-symbols-mode quirks in JavaScript.
+;; Ligature fonts already handle =>, <= and >=
+;; so I don't need emacs's prettification for them.
+(use-package! js
+  :config
+  (setq js--prettify-symbols-alist nil))
+
 (use-package! emojify
   :config
-  ;; I created a folder ~/.emacs.d/emojis/twemoji-latest and
+  ;; I created a folder ~/.doom.d/.local/emojis/twemoji-latest and
   ;; downloaded the PNG assets from https://github.com/twitter/twemoji
   (setq emojify-emoji-set "twemoji-latest")
+  (setq emojify-emojis-dir (concat doom-private-dir ".local/emojis/"))
+  ;; This file is generated via ~/.doom.d/generate-emoji-json.js
+  ;; Run it using "node generate-emoji-json.js"
   (setq emojify-emoji-json (concat doom-private-dir "emoji.json")))
 
 ;; Include ediff buffers in solaire-mode so they look the same
