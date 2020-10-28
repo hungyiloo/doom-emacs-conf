@@ -41,9 +41,20 @@ function toCodePoints(rawEmoji) {
 //   "unicode_version": "6.1",
 //   "ios_version": "6.0"
 // }
+//
+// Source emoji.json: https://unpkg.com/emoji.json@13.0.0/emoji.json
+// Format:
+// [
+//   {
+//     codes: '1F604',
+//     char: '😄',
+//     name: 'grinning face with smiling eyes',
+//     category: 'Smileys & Emotion'
+//   }
+// ]
 
-const request = https.get(
-  'https://raw.githubusercontent.com/github/gemoji/master/db/emoji.json',
+https.get(
+  'https://unpkg.com/emoji.json@13.0.0/emoji.json',
   response => {
     let data = '';
     response.on('data', chunk => data += chunk);
@@ -52,10 +63,16 @@ const request = https.get(
       console.log(`${sourceEmojis.length} emojis found`);
 
       const transformedEmojis = sourceEmojis.reduce((acc, curr) => {
-        acc[curr.emoji] = {
+        // const lowerDescription = curr.description.toLowerCase();
+        // const keywords = curr.aliases.concat(curr.tags);
+        // const filteredKeywords = keywords.filter(a => !a.includes('_') && !lowerDescription.includes(a.toLowerCase()));
+        // acc[curr.emoji] = {
+        acc[curr.char] = {
           style: 'unicode',
-          image: `${toCodePoints(curr.emoji)}.png`,
-          name: `${curr.description} [${curr.aliases.concat(curr.tags).join(', ')}]`
+          // image: `${toCodePoints(curr.emoji)}.png`,
+          image: `${toCodePoints(curr.char)}.png`,
+          // name: `${curr.description}${filteredKeywords.length ? ` [${filteredKeywords.join(', ')}]` : ''} (${curr.category})`
+          name: `${curr.name} - ${curr.category}`
         }
         return acc;
       }, {});
