@@ -53,15 +53,5 @@
 (package! evil-escape :disable t)
 ;; (package! lsp-mode :pin "f9a56b967fb39ec05dcbcaef17692dc01c3e402b")
 (unpin! doom-themes)
-(package! tsc
-  :recipe (:host github
-           :repo "ubolonton/emacs-tree-sitter"
-           :files ("core/*.el")))
-(package! tree-sitter
-  :recipe (:host github
-           :repo "ubolonton/emacs-tree-sitter"
-           :files ("lisp/*.el")))
-(package! tree-sitter-langs
-  :recipe (:host github
-           :repo "ubolonton/emacs-tree-sitter"
-           :files ("langs/*.el" "langs/queries")))
+(package! tree-sitter)
+(package! tree-sitter-langs)
