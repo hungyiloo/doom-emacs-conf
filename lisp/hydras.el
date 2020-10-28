@@ -1,8 +1,26 @@
 ;;; lisp/hydras.el -*- lexical-binding: t; -*-
+(defun my-mc-select-matches ()
+  (interactive)
+  (evil-mc-execute-for-all-cursors
+   (lambda (args)
+     (interactive)
+     (when (thing-at-point-looking-at (caar evil-mc-pattern))
+       (if (alist-get :real args)
+           (progn
+             (goto-char (match-beginning 0))
+             (evil-visual-char)
+             (goto-char (- (match-end 0) 1)))
+         (setq region (evil-mc-create-region
+                       (match-beginning 0)
+                       (match-end 0)
+                       'char)))))))
 
 (defhydra my-mc-hydra (:color pink
                        :hint nil
-                       :pre (evil-mc-pause-cursors))
+                       :pre (evil-mc-pause-cursors)
+                       :post (progn
+                               (evil-mc-resume-cursors)
+                               (when evil-mc-pattern (my-mc-select-matches))))
   "
 ^Match^            ^Line-wise^           ^Manual^
 ^^^^^^----------------------------------------------------
@@ -26,8 +44,8 @@ Current pattern: %`evil-mc-pattern
   ("r" #'+multiple-cursors/evil-mc-undo-cursor)
   ("R" #'evil-mc-undo-all-cursors)
   ("p" #'+multiple-cursors/evil-mc-toggle-cursors)
-  ("q" #'evil-mc-resume-cursors "quit" :color blue)
-  ("<escape>" #'evil-mc-resume-cursors "quit" :color blue))
+  ("q" nil "quit" :color blue)
+  ("<escape>" nil "quit" :color blue))
 
 (defhydra my-sp-hydra (:color amaranth
                        :hint nil)
