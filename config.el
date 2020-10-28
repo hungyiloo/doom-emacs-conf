@@ -222,7 +222,6 @@ This function is called by `org-babel-execute-src-block'."
   ;; (setq evil-escape-delay 0.05)
   (setq evil-snipe-scope 'visible)
   (setq evil-snipe-repeat-keys nil)
-  (evil-set-initial-state 'vterm-mode 'normal)
   (map!
    :i "C-S-SPC" #'hippie-expand
    (:when (featurep! :editor multiple-cursors)
@@ -235,6 +234,19 @@ This function is called by `org-babel-execute-src-block'."
     (evil-define-minor-mode-key 'motion 'visual-line-mode
       "^"  #'evil-first-non-blank-of-visual-line
       "g^" #'evil-first-non-blank)))
+
+(after! dired
+  (defun my-dired-duplicate-marked-files ()
+    (interactive)
+    (dired-do-copy-regexp "\\([^\\.]*\\)\\.\\(.*\\)" "\\1#.\\2"))
+  (map! :after dired
+        :map dired-mode-map
+        :n "|" #'my-dired-duplicate-marked-files))
+
+(use-package! vterm
+  :config
+  ;; Start vterm in normal mode always
+  (evil-set-initial-state 'vterm-mode 'normal))
 
 (use-package! evil-collection
   :config
