@@ -583,6 +583,10 @@ This function is called by `org-babel-execute-src-block'."
   ;; Run it using "node generate-emoji-json.js"
   (setq emojify-emoji-json (concat doom-private-dir "emoji.json")))
 
+(use-package! ispell
+  :config
+  (setq ispell-dictionary "en"))
+
 ;; Include ediff buffers in solaire-mode so they look the same
 ;; as regular editing buffers
 (add-hook! 'ediff-prepare-buffer-hook #'solaire-mode)
