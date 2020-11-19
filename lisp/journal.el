@@ -1,22 +1,33 @@
 ;;; lisp/journal.el -*- lexical-binding: t; -*-
 
-(defun my-journal-time-stamp (&optional timestamp)
+(defun my-journal-date-stamp (&optional timestamp)
   (format-time-string
    "%Y-%m-%d %a"
    (or timestamp (current-time))))
 
-(defun my-journal-goto-heading (heading &optional post-heading-action)
+(defun my-journal-month-stamp (&optional timestamp)
+  (format-time-string
+   "%Y-%m"
+   (or timestamp (current-time))))
+
+(defun my-journal-goto-heading (heading this-month &optional post-heading-action)
   (interactive)
   (find-file "~/Notes/Journal.org")
   (org-remove-occur-highlights)
   (widen)
   (org-set-startup-visibility)
   (goto-char 0)
+  (when this-month
+    (search-forward
+     (concat "* " (my-journal-month-stamp))
+     nil
+     t))
   (search-forward (concat "* " heading) nil t)
   (when post-heading-action (funcall post-heading-action))
   (recenter))
 
-(let ((goto-first-heading (lambda () (interactive) (org-next-visible-heading 1))))
+(let ((goto-first-heading (lambda () (org-next-visible-heading 1))))
+
   (defun my-journal-goto-or-create-today ()
     (interactive)
     (find-file "~/Notes/Journal.org")
@@ -24,7 +35,11 @@
     (widen)
     (org-set-startup-visibility)
     (goto-char 0)
-    (let* ((today (my-journal-time-stamp))
+    (search-forward
+     (concat "* " (my-journal-month-stamp))
+     nil
+     t)
+    (let* ((today (my-journal-date-stamp))
            (today-posn (search-forward (concat "* " today) nil t)))
       (if (and (not today-posn) (search-forward (concat "* Daily Log") nil t))
           (progn
@@ -32,7 +47,7 @@
             (org-next-visible-heading 1)
             (org-insert-heading)
             (org-move-subtree-up)
-            (insert (my-journal-time-stamp))
+            (insert (my-journal-date-stamp))
             (org-insert-subheading nil))
         (funcall goto-first-heading)))
     (recenter))
@@ -41,38 +56,44 @@
     (interactive)
     (my-journal-goto-heading
      "Exercise"
+     t
      (lambda ()
        (interactive)
-       (search-forward (number-to-string (nth 1 (calendar-current-date))) nil t))))
+       (search-forward-regexp (concat "[MTWFS] " (number-to-string (nth 1 (calendar-current-date)))) nil t))))
 
   (defun my-journal-goto-daily-log ()
     (interactive)
     (my-journal-goto-heading
      "Daily Log"
+     t
      goto-first-heading))
 
   (defun my-journal-goto-monthly-log ()
     (interactive)
     (my-journal-goto-heading
      "Monthly Log"
+     t
      goto-first-heading))
 
   (defun my-journal-goto-future-log ()
     (interactive)
     (my-journal-goto-heading
      "Future Log"
+     t
      goto-first-heading))
 
   (defun my-journal-goto-recurring ()
     (interactive)
     (my-journal-goto-heading
      "Recurring"
+     nil
      goto-first-heading))
 
   (defun my-journal-goto-cook-list ()
     (interactive)
     (my-journal-goto-heading
      "Cook List"
+     nil
      goto-first-heading)))
 
 (map! :leader
