@@ -259,7 +259,8 @@ This function is called by `org-babel-execute-src-block'."
     "gj" nil))
 
 (after! evil-goggles
-  (setq evil-goggles-duration 0.2))
+  (setq evil-goggles-duration 0.2)
+  (setq evil-goggles-enable-paste nil))
 
 (after! avy
   ;; Configure avy to use colemak home row
