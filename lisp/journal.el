@@ -12,6 +12,7 @@
 
 (defun my-journal-goto-heading (heading this-month &optional post-heading-action)
   (interactive)
+  (evil-set-jump)
   (find-file "~/Notes/Journal.org")
   (org-remove-occur-highlights)
   (widen)
@@ -30,27 +31,22 @@
 
   (defun my-journal-goto-or-create-today ()
     (interactive)
-    (find-file "~/Notes/Journal.org")
-    (org-remove-occur-highlights)
-    (widen)
-    (org-set-startup-visibility)
-    (goto-char 0)
-    (search-forward
-     (concat "* " (my-journal-month-stamp))
-     nil
-     t)
-    (let* ((today (my-journal-date-stamp))
-           (today-posn (search-forward (concat "* " today) nil t)))
-      (if (and (not today-posn) (search-forward (concat "* Daily Log") nil t))
-          (progn
-            (org-show-subtree)
-            (org-next-visible-heading 1)
-            (org-insert-heading)
-            (org-move-subtree-up)
-            (insert (my-journal-date-stamp))
-            (org-insert-subheading nil))
-        (funcall goto-first-heading)))
-    (recenter))
+    (my-journal-goto-heading
+     "Daily Log"
+     t
+     (lambda ()
+       (interactive)
+       (let* ((today (my-journal-date-stamp))
+              (today-posn (search-forward (concat "* " today) nil t)))
+         (if (not today-posn)
+             (progn
+               (org-show-subtree)
+               (org-next-visible-heading 1)
+               (org-insert-heading)
+               (org-move-subtree-up)
+               (insert (my-journal-date-stamp))
+               (org-insert-subheading nil))
+           (funcall goto-first-heading))))))
 
   (defun my-journal-goto-exercise ()
     (interactive)
