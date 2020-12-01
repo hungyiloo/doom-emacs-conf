@@ -120,6 +120,14 @@
   ;; Also show state changes (such as finished recurring tasks) in agenda
   (setq org-agenda-log-mode-items '(closed clock state))
   ;; Allow large tables to be processed
+
+  ;; Configure some org agenda smarts for schedules/deadlines
+  (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
+  ;; (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
+  (setq org-agenda-skip-scheduled-if-done t)
+  (setq org-agenda-skip-deadline-if-done t)
+  (setq org-agenda-skip-scheduled-delay-if-deadline t)
+
   (setq org-table-convert-region-max-lines 9999)
   ;; When storing links by ID, add them to the normal `org-stored-links' variable
   (defadvice! +org--store-id-link-a (link)
