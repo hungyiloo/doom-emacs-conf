@@ -39,12 +39,15 @@
        (let* ((today (my-journal-date-stamp))
               (today-posn (search-forward (concat "* " today) nil t)))
          (if (not today-posn)
-             (progn
-               (org-show-subtree)
-               (org-next-visible-heading 1)
-               (org-insert-heading)
-               (org-move-subtree-up)
+             (let ((entry-count (length (org-map-entries
+                                         nil
+                                         ;; count the number of direct subheadings at point
+                                         (concat "LEVEL=" (number-to-string (+ (org-outline-level) 1)))
+                                         'tree))))
+               (org-insert-subheading nil)
                (insert (my-journal-date-stamp))
+               ;; move the new entry to the top of all its siblings
+               (when (> entry-count 0) (org-move-subtree-up entry-count))
                (org-insert-subheading nil))
            (funcall goto-first-heading))))))
 
