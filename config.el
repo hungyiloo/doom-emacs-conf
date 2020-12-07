@@ -214,6 +214,7 @@ This function is called by `org-babel-execute-src-block'."
       ;; Use the normal other-window command
       ;; to take advantage of the window-select module
       "w" #'other-window
+      "Q" #'kill-buffer-and-window
       "~" #'ace-swap-window)
 
 ;; (map! :after dired
