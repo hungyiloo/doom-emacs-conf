@@ -127,6 +127,7 @@
   (setq org-agenda-skip-scheduled-if-done t)
   (setq org-agenda-skip-deadline-if-done t)
   (setq org-agenda-skip-scheduled-delay-if-deadline t)
+  (setq org-agenda-todo-ignore-scheduled t)
 
   (setq org-table-convert-region-max-lines 9999)
   ;; When storing links by ID, add them to the normal `org-stored-links' variable
