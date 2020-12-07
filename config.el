@@ -232,6 +232,8 @@ This function is called by `org-babel-execute-src-block'."
   ;; (setq evil-escape-delay 0.05)
   (setq evil-snipe-scope 'visible)
   (setq evil-snipe-repeat-keys nil)
+  (setq evil-undo-function #'undo)
+  (setq evil-want-fine-undo 't)
   (map!
    :i "C-S-SPC" #'hippie-expand
    (:when (featurep! :editor multiple-cursors)
