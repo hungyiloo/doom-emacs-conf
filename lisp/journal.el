@@ -13,7 +13,7 @@
 (defun my-journal-goto-heading (heading this-month &optional post-heading-action)
   (interactive)
   (evil-set-jump)
-  (find-file "~/Notes/Journal.org")
+  (find-file +org-capture-journal-file)
   (org-remove-occur-highlights)
   (widen)
   (org-set-startup-visibility)
@@ -24,12 +24,11 @@
      nil
      t))
   (search-forward (concat "* " heading) nil t)
-  (when post-heading-action (funcall post-heading-action))
-  (recenter))
+  (let ((result (when post-heading-action (funcall post-heading-action))))
+    (recenter)
+    result))
 
-(let ((goto-first-heading (lambda () (org-next-visible-heading 1))))
-
-  (defun my-journal-goto-or-create-today ()
+(defun my-journal-goto-or-create-today ()
     (interactive)
     (my-journal-goto-heading
      "Daily Log"
@@ -45,11 +44,29 @@
                                          (concat "LEVEL=" (number-to-string (+ (org-outline-level) 1)))
                                          'tree))))
                (org-insert-subheading nil)
-               (insert (my-journal-date-stamp))
+               (insert today)
                ;; move the new entry to the top of all its siblings
                (when (> entry-count 0) (org-move-subtree-up entry-count))
-               (org-insert-subheading nil))
-           (funcall goto-first-heading))))))
+               t)
+           nil)))))
+
+(defun my-journal-goto-or-create-today-excursion ()
+  (interactive)
+  (save-window-excursion
+    (my-journal-goto-or-create-today)))
+
+(let ((goto-first-heading (lambda () (org-next-visible-heading 1))))
+
+  (defun my-journal-goto-or-create-today-subheading ()
+    (interactive)
+    (let ((today-was-created (my-journal-goto-or-create-today)))
+      (my-journal-goto-heading
+       (my-journal-date-stamp)
+       t
+       (lambda ()
+         (interactive)
+         (when today-was-created (org-insert-subheading nil))
+         (org-next-visible-heading 1)))))
 
   (defun my-journal-goto-exercise ()
     (interactive)
@@ -95,9 +112,10 @@
      nil
      goto-first-heading)))
 
-(map! :leader
+(map! "<f6>" #'org-capture
+      :leader
       (:prefix-map ("j" . "journal")
-       :desc "Today's Entry" "j" #'my-journal-goto-or-create-today
+       :desc "Today's Entry" "j" #'my-journal-goto-or-create-today-subheading
        :desc "Daily Log"     "d" #'my-journal-goto-daily-log
        :desc "Monthly Log"   "m" #'my-journal-goto-monthly-log
        :desc "Future Log"    "f" #'my-journal-goto-future-log
@@ -113,3 +131,63 @@
 ;;          (last-day-of-month
 ;;             (calendar-last-day-of-month month year)))
 ;;     (= day last-day-of-month)))
+
+(after! org
+  (setq +org-capture-journal-file "~/Notes/Journal.org")
+  (setq org-capture-templates
+        `(("j" "Journal")
+          ("jj" "Journal Today")
+          ("jjt" "Journal Today Todo" entry
+           (file+function +org-capture-journal-file my-journal-goto-or-create-today-excursion)
+           "* TODO %?"
+           :prepend t
+           :kill-buffer t
+           :empty-lines-before 1
+           :empty-lines-after 1)
+          ("jjn" "Journal Today Note" entry
+           (file+function +org-capture-journal-file my-journal-goto-or-create-today-excursion)
+           "* %?"
+           :prepend t
+           :kill-buffer t
+           :empty-lines-before 1
+           :empty-lines-after 1)
+          ("jm" "Journal Monthly")
+          ("jmt" "Journal Monthly Todo" entry
+           (file+headline +org-capture-journal-file "Monthly Log")
+           "* TODO %?"
+           :kill-buffer t
+           :empty-lines-before 1
+           :empty-lines-after 1)
+          ("jmn" "Journal Monthly Note" entry
+           (file+headline +org-capture-journal-file "Monthly Log")
+           "* %?"
+           :kill-buffer t
+           :empty-lines-before 1
+           :empty-lines-after 1)
+          ("jf" "Journal Future")
+          ("jft" "Journal Future Todo" entry
+           (file+headline +org-capture-journal-file "Future Log")
+           "* TODO %?"
+           :kill-buffer t
+           :empty-lines-before 1
+           :empty-lines-after 1)
+          ("jfn" "Journal Future Note" entry
+           (file+headline +org-capture-journal-file "Future Log")
+           "* %?"
+           :kill-buffer t
+           :empty-lines-before 1
+           :empty-lines-after 1)
+          ("jc" "Journal Cook List")
+          ("jct" "Journal Cook List Todo" entry
+           (file+headline +org-capture-journal-file "Cook List")
+           "* TODO %?"
+           :kill-buffer t
+           :empty-lines-before 1
+           :empty-lines-after 1)
+          ("jcn" "Journal Cook List Note" entry
+           (file+headline +org-capture-journal-file "Cook List")
+           "* %?"
+           :kill-buffer t
+           :empty-lines-before 1
+           :empty-lines-after 1)
+          )))

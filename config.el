@@ -25,8 +25,9 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(setq doom-theme 'doom-miramare)
+(setq doom-theme 'doom-nord)
 ;; (load-theme 'doom-miramare t)
+;; (setq doom-theme nil)
 
 ;; Set a custom font
 (setq doom-font (font-spec :family "JetBrains Mono Semi Light" :size 15)
@@ -48,12 +49,20 @@
 (load! "lisp/colors.el")
 
 (use-package! magit
-  :hook (magit-mode . my-magit-fringes)
+  :hook (magit-mode . my-magit-mode-hook)
   :config
   ;; Wider fringe (emacs default) for better magit support
-  (defun my-magit-fringes ()
-    (setq left-fringe-width 20
-          right-fringe-width 0)))
+  ;; source: https://emacs.stackexchange.com/a/47679
+  (defun my-magit-window-config ()
+    "Used in `window-configuration-change-hook' to configure fringes for Magit."
+    (set-window-fringes nil 20 0))
+  (defun my-magit-mode-hook ()
+    "Custom `magit-mode' behaviours."
+    (add-hook 'window-configuration-change-hook
+              'my-magit-window-config nil :local))
+  ;; fix tab key not working in magit-refs-mode
+  (map! :map magit-refs-mode-map
+        :n "<tab>" #'magit-section-toggle))
 
 (use-package! olivetti
   :hook (org-mode . olivetti-mode)
@@ -93,10 +102,15 @@
 ;;             'outline-7
 ;;             'outline-8))
 
+(setq calendar-date-style 'iso)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
+
 (setq org-directory "~/Notes/")
+(setq org-agenda-files '("~/Notes/"))
+;; uncomment the line below to include archive in agenda search
+;; (setq org-agenda-files '("~/Notes/" "~/Notes/Archive/"))
 
 
 (use-package! org
@@ -119,8 +133,6 @@
   (setq org-export-with-section-numbers nil)
   ;; Also show state changes (such as finished recurring tasks) in agenda
   (setq org-agenda-log-mode-items '(closed clock state))
-  ;; Allow large tables to be processed
-
   ;; Configure some org agenda smarts for schedules/deadlines
   (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
   ;; (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
@@ -128,7 +140,12 @@
   (setq org-agenda-skip-deadline-if-done t)
   (setq org-agenda-skip-scheduled-delay-if-deadline t)
   (setq org-agenda-todo-ignore-scheduled t)
+  ;; Tweak priorities so unprioritized items are lowest
+  (setq org-priority-start-cycle-with-default nil)
+  (setq org-lowest-priority 67)
+  (setq org-default-priority 68)
 
+  ;; Allow large tables to be processed
   (setq org-table-convert-region-max-lines 9999)
   ;; When storing links by ID, add them to the normal `org-stored-links' variable
   (defadvice! +org--store-id-link-a (link)
@@ -217,6 +234,9 @@ This function is called by `org-babel-execute-src-block'."
       "Q" #'kill-buffer-and-window
       "~" #'ace-swap-window)
 
+(map! :map global-map
+      "M-u" #'undo-only)
+
 ;; (map! :after dired
 ;;       :map dired-mode-map
 ;;       :n "RET" #'dired-find-alternate-file
@@ -245,7 +265,13 @@ This function is called by `org-babel-execute-src-block'."
   (when evil-respect-visual-line-mode
     (evil-define-minor-mode-key 'motion 'visual-line-mode
       "^"  #'evil-first-non-blank-of-visual-line
-      "g^" #'evil-first-non-blank)))
+      "g^" #'evil-first-non-blank))
+  (defun my-recenter (&rest ignored)
+    (recenter))
+  (advice-add #'evil-ex-search-forward :after #'my-recenter)
+  (advice-add #'evil-ex-search-backward :after #'my-recenter)
+  (advice-add #'evil-ex-search-next :after #'my-recenter)
+  (advice-add #'evil-ex-search-previous :after #'my-recenter))
 
 (after! dired
   (defun my-dired-duplicate-marked-files ()
@@ -279,6 +305,7 @@ This function is called by `org-babel-execute-src-block'."
   (setq avy-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o)))
 
 (after! ace-window
+  (setq aw-scope 'global)
   (setq aw-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o)))
 
 (after! ivy
@@ -325,7 +352,10 @@ This function is called by `org-babel-execute-src-block'."
           "--stdio"))
   (setq lsp-clients-typescript-server-args
         '("--stdio"
-          "--tsserver-path=/home/hungyi/.yarn/bin/tsserver")))
+          "--tsserver-path=/home/hungyi/.yarn/bin/tsserver"))
+  ;; (setq lsp-headerline-breadcrumb-enable t)
+  ;; (setq lsp-headerline-breadcrumb-enable-diagnostics nil)
+  (setq lsp-semantic-tokens-enable t))
 
 (after! flycheck
   (map! :leader
@@ -424,8 +454,9 @@ This function is called by `org-babel-execute-src-block'."
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-  (pushnew! tree-sitter-major-mode-language-alist
-            '(scss-mode . css)))
+  ;; (pushnew! tree-sitter-major-mode-language-alist
+  ;;           '(scss-mode . css))
+  )
 
 (after! scss-mode
   (defun my-scss-mode-setup ()
@@ -437,6 +468,7 @@ This function is called by `org-babel-execute-src-block'."
   :init
   (setq doom-themes-treemacs-enable-variable-pitch nil)
   (setq doom-themes-treemacs-theme "doom-colors")
+  :hook (treemacs-mode . hide-mode-line-mode) ; hide modeline in treemacs
   :config
   (setq treemacs-wrap-around nil))
 
@@ -455,7 +487,7 @@ This function is called by `org-babel-execute-src-block'."
          (other-bg-A (doom-blend color-A bg 0.05))
          (other-bg-B (doom-blend color-B bg 0.05))
          (other-bg-C (doom-blend color-C bg 0.05))
-         (treemacs-face-height 95)
+         (treemacs-face-height 110)
          ;; (clearer-region (doom-blend (doom-color 'base4) (doom-color 'base3) 0.1))
          )
     (custom-set-faces!
@@ -499,7 +531,7 @@ This function is called by `org-babel-execute-src-block'."
       `(tree-sitter-hl-face:punctuation :inherit unspecified)
 
       ;; Treemacs customizations
-      `(treemacs-root-face :height 130 :weight light)
+      `(treemacs-root-face :height 120)
       `(treemacs-file-face :height ,treemacs-face-height)
       `(treemacs-git-modified-face :height ,treemacs-face-height)
       `(treemacs-git-conflict-face :height ,treemacs-face-height)
@@ -578,6 +610,24 @@ This function is called by `org-babel-execute-src-block'."
   (set-fontset-font t ?⨂ (font-spec :family "Free Mono"))
   (set-fontset-font t ?• (font-spec :family "JetBrains Mono")))
 
+;; Set decent default fonts for Japanese and Chinese,
+;; but *only* if in a graphical context.
+;; Set Japanese second so that Japanese glyphs override Chinese
+;; when both charsets cover the same codepoints.
+(when (fboundp #'set-fontset-font)
+  (set-fontset-font t 'chinese-gbk
+                    ;; Noto Sans CJK: https://www.google.com/get/noto/help/cjk/
+                    (font-spec :family "Noto Sans CJK SC"))
+  (set-fontset-font t 'japanese-jisx0213.2004-1
+                    (font-spec :family "Noto Sans CJK JP")))
+(dolist (item '(("Noto Sans CJK JP" . 0.85)
+                ("Noto Sans CJK SC" . 0.85)))
+  (add-to-list 'face-font-rescale-alist item))
+(use-package! pyim
+  :config
+  (require 'pyim-basedict)
+  (pyim-basedict-enable))
+
 ;; Fix some farty prettify-symbols-mode quirks in JavaScript.
 ;; Ligature fonts already handle =>, <= and >=
 ;; so I don't need emacs's prettification for them.
@@ -627,23 +677,17 @@ This function is called by `org-babel-execute-src-block'."
                           ("\\.x?html?\\'" . (lambda (_file link) (my-browse-url-generic-wsl-safe link)))
                           ("\\.pdf\\'" . (lambda (_file link) (my-browse-url-generic-wsl-safe link)))))))
 
-;; Here are some additional functions/macros that could help you configure Doom:
-;;
-;; - `load!' for loading external *.el files relative to this one
-;; - `use-package!' for configuring packages
-;; - `after!' for running code after a package has loaded
-;; - `add-load-path!' for adding directories to the `load-path', relative to
-;;   this file. Emacs searches the `load-path' when you load packages with
-;;   `require' or `use-package'.
-;; - `map!' for binding new keys
-;;
-;; To get information about any of these functions/macros, move the cursor over
-;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
-;; This will open documentation for it, including demos of how they are used.
-;;
-;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
-;; they are implemented.
 
-;; Temporary fixes below
-;; They should be reviewed regularly to see if they are still needed
-
+;; nano-emacs
+;; (require 'disp-table)
+;; (require 'nano-faces)
+;; (require 'nano-colors)
+;; (require 'nano-defaults)
+;; (require 'nano-theme)
+;; (require 'nano-theme-dark)
+;; (require 'nano-help)
+;; (require 'nano-modeline)
+;; (require 'nano-layout)
+;; (nano-faces)
+;; (nano-theme)
+;; (nano-defaults)

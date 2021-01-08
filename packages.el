@@ -52,6 +52,12 @@
 (package! olivetti)
 (package! evil-escape :disable t)
 ;; (package! lsp-mode :pin "f9a56b967fb39ec05dcbcaef17692dc01c3e402b")
+(unpin! lsp-mode)
 (unpin! doom-themes)
 (package! tree-sitter)
 (package! tree-sitter-langs)
+(package! pyim)
+
+;; nano-emacs
+;; (package! nano-emacs
+;;   :recipe (:host github :repo "rougier/nano-emacs"))
