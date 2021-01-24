@@ -43,6 +43,9 @@
 ;; Always revert files automatically
 (global-auto-revert-mode 1)
 
+;; Better buffer names for files of the same name
+(setq uniquify-buffer-name-style 'forward)
+
 ;; Load some external files
 (load! "lisp/hydras.el")
 (load! "lisp/journal.el")
