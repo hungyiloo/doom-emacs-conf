@@ -54,6 +54,7 @@
 ;; (package! lsp-mode :pin "f9a56b967fb39ec05dcbcaef17692dc01c3e402b")
 (unpin! lsp-mode)
 (unpin! doom-themes)
+;; (unpin! evil)
 (package! tree-sitter)
 (package! tree-sitter-langs)
 (package! pyim)
