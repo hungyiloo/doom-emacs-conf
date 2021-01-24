@@ -65,8 +65,9 @@
        t
        (lambda ()
          (interactive)
-         (when today-was-created (org-insert-subheading nil))
-         (org-next-visible-heading 1)))))
+         (if today-was-created
+             (org-insert-subheading nil)
+           (org-next-visible-heading 1))))))
 
   (defun my-journal-goto-exercise ()
     (interactive)
@@ -140,14 +141,12 @@
           ("jjt" "Journal Today Todo" entry
            (file+function +org-capture-journal-file my-journal-goto-or-create-today-excursion)
            "* TODO %?"
-           :prepend t
            :kill-buffer t
            :empty-lines-before 1
            :empty-lines-after 1)
           ("jjn" "Journal Today Note" entry
            (file+function +org-capture-journal-file my-journal-goto-or-create-today-excursion)
            "* %?"
-           :prepend t
            :kill-buffer t
            :empty-lines-before 1
            :empty-lines-after 1)
