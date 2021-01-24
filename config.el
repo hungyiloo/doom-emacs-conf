@@ -179,10 +179,51 @@
             (let ((url (substring text (match-beginning 1) (match-end 1))))
               (kill-new url)
               (message (concat "Copied: " url))))))))
+
   (defun org-babel-execute:html (body _params)
     "Execute a block of HTML code.
 This function is called by `org-babel-execute-src-block'."
     body)
+  (defun org-babel-execute:typescript (body params)
+    "Execute a block of TypeScript code.
+This function is called by `org-babel-execute-src-block'."
+    (let* ((org-babel-ts-cmd (or (cdr (assq :cmd params)) "deno run"))
+           (session (cdr (assq :session params)))
+           (result-type (cdr (assq :result-type params)))
+           (full-body (org-babel-expand-body:generic
+                       body params (org-babel-variable-assignments:js params)))
+           (result (cond
+                    ;; no session specified, external evaluation
+                    ((string= session "none")
+                     (let ((script-file (org-babel-temp-file "ts-script-" ".ts")))
+                       (with-temp-file script-file
+                         (insert
+                          ;; return the value or the output
+                          (if (string= result-type "value")
+                              (format "console.log(JSON.stringify((function(){%s})(), null, 2))" full-body)
+                            full-body)))
+                       (org-babel-eval
+                        (format "%s %s" org-babel-ts-cmd
+                                (org-babel-process-file-name script-file)) "")))
+                    ;; Indium Node REPL.  Separate case because Indium
+                    ;; REPL is not inherited from Comint mode.
+                    ((string= session "*JS REPL*")
+                     (require 'indium-repl)
+                     (unless (get-buffer session)
+                       (indium-run-node org-babel-ts-cmd))
+                     (indium-eval full-body))
+                    ;; session evaluation
+                    (t
+                     (let ((session (org-babel-prep-session:js
+                                     (cdr (assq :session params)) params)))
+                       (nth 1
+                            (org-babel-comint-with-output
+                                (session (format "%S" org-babel-js-eoe) t body)
+                              (dolist (code (list body (format "%S" org-babel-js-eoe)))
+                                (insert (org-babel-chomp code))
+                                (comint-send-input nil t)))))))))
+      (org-babel-result-cond (cdr (assq :result-params params))
+        result (org-babel-js-read result))))
 
   ;; Map `my-org-retrieve-url-from-point' to live with its org link friends
   (map! :map org-mode-map
