@@ -46,6 +46,9 @@
 ;; Better buffer names for files of the same name
 (setq uniquify-buffer-name-style 'forward)
 
+;; More emacs-y clipboard intergration
+(setq save-interprogram-paste-before-kill t)
+
 ;; Load some external files
 (load! "lisp/hydras.el")
 (load! "lisp/journal.el")
