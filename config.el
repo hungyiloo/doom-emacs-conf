@@ -669,6 +669,7 @@ This function is called by `org-babel-execute-src-block'."
 
 (use-package! eyebrowse
   :commands (my-eyebrowse-open-project
+             my-eyebrowse-switch-buffer
              eyebrowse-create-window-config
              eyebrowse-create-named-window-config
              eyebrowse-rename-window-config
@@ -709,11 +710,10 @@ This function is called by `org-babel-execute-src-block'."
    "<tab> `" #'eyebrowse-last-window-config
    "<tab> [" #'eyebrowse-prev-window-config
    "<tab> ]" #'eyebrowse-next-window-config
-   "," #'projectile-switch-to-buffer
+   "," #'my-eyebrowse-switch-buffer
    "<" #'ivy-switch-buffer)
   :config
   (eyebrowse-mode t)
-
   (defun my-eyebrowse-close-workspace ()
     "Closes all buffers in the current project (approximating a workspace)
 and then closes the window config"
@@ -749,7 +749,13 @@ and then closes the window config"
           (counsel-projectile-switch-project)
           (eyebrowse-rename-window-config (eyebrowse--get 'current-slot) (projectile-project-name)))
       (quit (eyebrowse-close-window-config))))
-  )
+
+  (defun my-eyebrowse-switch-buffer ()
+    "Switch buffer depending on project if we're in one"
+    (interactive)
+    (if (projectile-project-p)
+        (projectile-switch-to-buffer)
+      (ivy-switch-buffer))))
 
 ;; Include ediff buffers in solaire-mode so they look the same
 ;; as regular editing buffers
