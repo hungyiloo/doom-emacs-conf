@@ -676,8 +676,8 @@ This function is called by `org-babel-execute-src-block'."
              eyebrowse-switch-to-window-config-9)
   :init
   (map!
-   :n "]w"   #'eyebrowse-prev-window-config
-   :n "[w"   #'eyebrowse-next-window-config
+   :n "[w"   #'eyebrowse-prev-window-config
+   :n "]w"   #'eyebrowse-next-window-config
    :leader
    "<tab> 0" #'eyebrowse-switch-to-window-config-0
    "<tab> 1" #'eyebrowse-switch-to-window-config-1
