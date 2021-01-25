@@ -59,6 +59,7 @@
 (package! tree-sitter-langs)
 (package! pyim)
 (package! eyebrowse)
+(package! ob-typescript)
 
 ;; nano-emacs
 ;; (package! nano-emacs
