@@ -1,8 +1,6 @@
 ;;; lisp/colors.el -*- lexical-binding: t; -*-
 
-(use-package! kurecolor
-  :config
-
+(after! kurecolor
   ;; Redefine this function to specifically detect rgba/hex color "symbols"
   (defun kurecolor-replace-current (fn &rest args)
     "Get the current unspaced string at point. Replace with the return value of the function FN with ARGS."

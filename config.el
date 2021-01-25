@@ -77,33 +77,6 @@
     (setq doom--line-number-style nil)
     (setq display-line-numbers nil)))
 
-;; (use-package! writeroom-mode
-;;   :config
-;;   (setq writeroom-width 50)
-;;   (setq +zen-text-scale 1)
-;;   (setq +zen-window-divider-size 1))
-
-;; (use-package mixed-pitch
-;;   :hook (mixed-pitch-mode . my-mixed-pitch-setup)
-;;   :config
-;;   (defun my-mixed-pitch-setup ()
-;;     (if mixed-pitch-mode
-;;         (progn (set-face-attribute 'org-hide nil :inherit '(fixed-pitch))
-;;                (set-face-attribute 'org-superstar-leading nil :inherit '(fixed-pitch))
-;;                (set-face-attribute 'org-superstar-header-bullet nil :inherit '(fixed-pitch))
-;;                (setq line-spacing 6))
-;;       (progn
-;;         (set-face-attribute 'org-verbatim nil :font (font-spec :family "JetBrains Mono NL"))
-;;         (setq line-spacing nil))))
-;;   (pushnew! mixed-pitch-fixed-pitch-faces
-;;             'outline-1
-;;             'outline-2
-;;             'outline-3
-;;             'outline-4
-;;             'outline-5
-;;             'outline-6
-;;             'outline-7
-;;             'outline-8))
 
 (setq calendar-date-style 'iso)
 
@@ -116,8 +89,7 @@
 ;; (setq org-agenda-files '("~/Notes/" "~/Notes/Archive/"))
 
 
-(use-package! org
-  :init
+(after! org
   ;; Set custom header bullets
   (setq org-superstar-headline-bullets-list '("•"))
   (setq org-superstar-cycle-headline-bullets nil)
@@ -125,7 +97,6 @@
   (setq org-cycle-separator-lines -1)
   ;; Make sure org supports org-id stuff
   (add-to-list 'org-modules 'org-id)
-  :config
   ;; Log CLOSED timestamp when notes are set to DONE state
   (setq org-log-done 'time)
   ;; Always use ID properties to store links
@@ -231,10 +202,8 @@ This function is called by `org-babel-execute-src-block'."
         (:prefix ("l" . "links")
          "y" #'my-org-retrieve-url-from-point)))
 
-(use-package! git-gutter
-  :init
+(after! git-gutter
   (setq git-gutter:disabled-modes '(fundamental-mode image-mode pdf-view-mode org-mode))
-  :config
   (defun my-org-hook-start-without-vc-gutter ()
     "Set up `git-gutter-mode' in the current buffer regardless of `git-gutter:disabled-modes' and leave it off initially."
     (let ((file-name (buffer-file-name (buffer-base-buffer))))
@@ -286,8 +255,7 @@ This function is called by `org-babel-execute-src-block'."
 ;;       :n "RET" #'dired-find-alternate-file
 ;;       :desc "dired-up-directory (alt)" :n "^" (lambda () (interactive) (find-alternate-file "..")))
 
-(use-package! evil
-  :config
+(after! evil
   (setq evil-shift-width 2)
   (setq evil-move-cursor-back t)
   (setq evil-move-beyond-eol t)
@@ -325,13 +293,11 @@ This function is called by `org-babel-execute-src-block'."
         :map dired-mode-map
         :n "|" #'my-dired-duplicate-marked-files))
 
-(use-package! vterm
-  :config
+(after! vterm
   ;; Start vterm in normal mode always
   (evil-set-initial-state 'vterm-mode 'normal))
 
-(use-package! evil-collection
-  :config
+(after! evil-collection
   ;; Fix regular linewise movement in org mode and outline mode.
   ;; Previously they were mapped to `outline-backward-same-level' and `outline-forward-same-level'.
   ;; But in org mode (where this matters) it's available via '[h' and ']h' already.
@@ -359,8 +325,7 @@ This function is called by `org-babel-execute-src-block'."
                                (counsel-search . 3)
                                (t . 3))))
 
-(use-package! swiper
-  :config
+(after! swiper
   ;; Advise `swiper-isearch' to use `rxt-pcre-to-elisp' and `rxt-quote-pcre' so that
   ;; SPC s s and SPC s S correctly deals with regex sensitive
   ;; characters in the selected region or symbol at point
@@ -369,8 +334,7 @@ This function is called by `org-babel-execute-src-block'."
     (apply orig-fun (mapcar (lambda (x) (rxt-pcre-to-elisp (rxt-quote-pcre x))) args)))
   (advice-add #'swiper-isearch :around #'my-rxt-quoted-swiper-isearch))
 
-(use-package! counsel
-  :config
+(after! counsel
   (setq counsel-search-engine 'google)
   ;; Advise `counsel-rg' to use `rxt-pcre-to-elisp' so that
   ;; SPC s p correctly deals with regex sensitive
@@ -407,6 +371,7 @@ This function is called by `org-babel-execute-src-block'."
          "x" flycheck-command-map)))
 
 (use-package! titlecase
+  :commands (titlecase-dwim titlecase-region)
   :load-path "lisp"
   :config
   (setq titlecase-command (concat doom-private-dir "bin/titlecase")))
@@ -438,8 +403,7 @@ This function is called by `org-babel-execute-src-block'."
   (setq tide-completion-ignore-case t))
 
 ;; Use 2-space indentation in web-mode always
-(use-package! web-mode
-  :config
+(after! web-mode
   (setq web-mode-prettify-symbols-alist nil)
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
@@ -469,8 +433,7 @@ This function is called by `org-babel-execute-src-block'."
           (replace-match (concat "<" tag-name))
           )))))
 
-(use-package! editorconfig
-  :config
+(after! editorconfig
   (setcdr (assq 'web-mode editorconfig-indentation-alist)
           '((web-mode-indent-style lambda (size) 2)
             ;; I prefer the web mode attr indent behavior when it's set to nil
@@ -493,8 +456,7 @@ This function is called by `org-babel-execute-src-block'."
 (after! css-mode
   (setq css-indent-offset 2))
 
-(use-package! tree-sitter
-  :config
+(after! tree-sitter
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
@@ -509,10 +471,10 @@ This function is called by `org-babel-execute-src-block'."
   (add-hook! 'scss-mode-hook #'my-scss-mode-setup))
 
 (use-package! treemacs
+  :hook (treemacs-mode . hide-mode-line-mode) ; hide modeline in treemacs
   :init
   (setq doom-themes-treemacs-enable-variable-pitch nil)
   (setq doom-themes-treemacs-theme "doom-colors")
-  :hook (treemacs-mode . hide-mode-line-mode) ; hide modeline in treemacs
   :config
   (setq treemacs-wrap-around nil))
 
@@ -652,22 +614,23 @@ This function is called by `org-babel-execute-src-block'."
   (set-fontset-font t ?∩ (font-spec :family "Free Mono"))
   (set-fontset-font t ?∖ (font-spec :family "Free Mono"))
   (set-fontset-font t ?⨂ (font-spec :family "Free Mono"))
-  (set-fontset-font t ?• (font-spec :family "JetBrains Mono")))
+  (set-fontset-font t ?• (font-spec :family "JetBrains Mono"))
+  ;; Set decent default fonts for Japanese and Chinese,
+  ;; but *only* if in a graphical context.
+  ;; Set Japanese second so that Japanese glyphs override Chinese
+  ;; when both charsets cover the same codepoints.
+  (when (fboundp #'set-fontset-font)
+    (set-fontset-font t 'chinese-gbk
+                      ;; Noto Sans CJK: https://www.google.com/get/noto/help/cjk/
+                      (font-spec :family "Noto Sans CJK SC"))
+    (set-fontset-font t 'japanese-jisx0213.2004-1
+                      (font-spec :family "Noto Sans CJK JP")))
+  (dolist (item '(("Noto Sans CJK JP" . 0.85)
+                  ("Noto Sans CJK SC" . 0.85)))
+    (add-to-list 'face-font-rescale-alist item)))
 
-;; Set decent default fonts for Japanese and Chinese,
-;; but *only* if in a graphical context.
-;; Set Japanese second so that Japanese glyphs override Chinese
-;; when both charsets cover the same codepoints.
-(when (fboundp #'set-fontset-font)
-  (set-fontset-font t 'chinese-gbk
-                    ;; Noto Sans CJK: https://www.google.com/get/noto/help/cjk/
-                    (font-spec :family "Noto Sans CJK SC"))
-  (set-fontset-font t 'japanese-jisx0213.2004-1
-                    (font-spec :family "Noto Sans CJK JP")))
-(dolist (item '(("Noto Sans CJK JP" . 0.85)
-                ("Noto Sans CJK SC" . 0.85)))
-  (add-to-list 'face-font-rescale-alist item))
 (use-package! pyim
+  :commands #'set-input-method
   :config
   (require 'pyim-basedict)
   (pyim-basedict-enable))
@@ -675,11 +638,11 @@ This function is called by `org-babel-execute-src-block'."
 ;; Fix some farty prettify-symbols-mode quirks in JavaScript.
 ;; Ligature fonts already handle =>, <= and >=
 ;; so I don't need emacs's prettification for them.
-(use-package! js
-  :config
+(after! js
   (setq js--prettify-symbols-alist nil))
 
 (use-package! emojify
+  :commands (emojify-mode)
   :config
   ;; I created a folder ~/.doom.d/.local/emojis/twemoji-latest and
   ;; downloaded the PNG assets from https://github.com/twitter/twemoji
@@ -689,15 +652,56 @@ This function is called by `org-babel-execute-src-block'."
   ;; Run it using "node generate-emoji-json.js"
   (setq emojify-emoji-json (concat doom-private-dir "emoji.json")))
 
-(use-package! ispell
-  :config
+(after! ispell
   (setq ispell-dictionary "en"))
 
-(use-package! projectile
-  :config
+(after! projectile
   (setq projectile-kill-buffers-filter 'kill-all))
 
 (use-package! eyebrowse
+  :commands (my-eyebrowse-open-project
+             eyebrowse-create-window-config
+             eyebrowse-create-named-window-config
+             eyebrowse-rename-window-config
+             eyebrowse-switch-to-window-config
+             eyebrowse-switch-to-window-config-0
+             eyebrowse-switch-to-window-config-1
+             eyebrowse-switch-to-window-config-2
+             eyebrowse-switch-to-window-config-3
+             eyebrowse-switch-to-window-config-4
+             eyebrowse-switch-to-window-config-5
+             eyebrowse-switch-to-window-config-6
+             eyebrowse-switch-to-window-config-7
+             eyebrowse-switch-to-window-config-8
+             eyebrowse-switch-to-window-config-9)
+  :init
+  (map!
+   :n "]w"   #'eyebrowse-prev-window-config
+   :n "[w"   #'eyebrowse-next-window-config
+   :leader
+   "<tab> 0" #'eyebrowse-switch-to-window-config-0
+   "<tab> 1" #'eyebrowse-switch-to-window-config-1
+   "<tab> 2" #'eyebrowse-switch-to-window-config-2
+   "<tab> 3" #'eyebrowse-switch-to-window-config-3
+   "<tab> 4" #'eyebrowse-switch-to-window-config-4
+   "<tab> 5" #'eyebrowse-switch-to-window-config-5
+   "<tab> 6" #'eyebrowse-switch-to-window-config-6
+   "<tab> 7" #'eyebrowse-switch-to-window-config-7
+   "<tab> 8" #'eyebrowse-switch-to-window-config-8
+   "<tab> 9" #'eyebrowse-switch-to-window-config-9
+   "<tab> d" #'my-eyebrowse-close-workspace
+   "<tab> D" #'eyebrowse-close-window-config
+   "<tab> p" #'my-eyebrowse-open-project
+   "<tab> r" #'eyebrowse-rename-window-config
+   "<tab> ." #'eyebrowse-switch-to-window-config
+   "<tab> <tab>" #'eyebrowse-switch-to-window-config
+   "<tab> n" #'eyebrowse-create-window-config
+   "<tab> N" #'eyebrowse-create-named-window-config
+   "<tab> `" #'eyebrowse-last-window-config
+   "<tab> [" #'eyebrowse-prev-window-config
+   "<tab> ]" #'eyebrowse-next-window-config
+   "," #'projectile-switch-to-buffer
+   "<" #'ivy-switch-buffer)
   :config
   (eyebrowse-mode t)
 
@@ -736,38 +740,12 @@ and then closes the window config"
           (counsel-projectile-switch-project)
           (eyebrowse-rename-window-config (eyebrowse--get 'current-slot) (projectile-project-name)))
       (quit (eyebrowse-close-window-config))))
-  (map!
-   :n "]w"   #'eyebrowse-prev-window-config
-   :n "[w"   #'eyebrowse-next-window-config
-   :leader
-   "<tab> 0" #'eyebrowse-switch-to-window-config-0
-   "<tab> 1" #'eyebrowse-switch-to-window-config-1
-   "<tab> 2" #'eyebrowse-switch-to-window-config-2
-   "<tab> 3" #'eyebrowse-switch-to-window-config-3
-   "<tab> 4" #'eyebrowse-switch-to-window-config-4
-   "<tab> 5" #'eyebrowse-switch-to-window-config-5
-   "<tab> 6" #'eyebrowse-switch-to-window-config-6
-   "<tab> 7" #'eyebrowse-switch-to-window-config-7
-   "<tab> 8" #'eyebrowse-switch-to-window-config-8
-   "<tab> 9" #'eyebrowse-switch-to-window-config-9
-   "<tab> d" #'my-eyebrowse-close-workspace
-   "<tab> D" #'eyebrowse-close-window-config
-   "<tab> p" #'my-eyebrowse-open-project
-   "<tab> r" #'eyebrowse-rename-window-config
-   "<tab> ." #'eyebrowse-switch-to-window-config
-   "<tab> <tab>" #'eyebrowse-switch-to-window-config
-   "<tab> n" #'eyebrowse-create-window-config
-   "<tab> N" #'eyebrowse-create-named-window-config
-   "<tab> `" #'eyebrowse-last-window-config
-   "<tab> [" #'eyebrowse-prev-window-config
-   "<tab> ]" #'eyebrowse-next-window-config
-   "," #'projectile-switch-to-buffer
-   "<" #'ivy-switch-buffer
-   ))
+  )
 
 ;; Include ediff buffers in solaire-mode so they look the same
 ;; as regular editing buffers
-(add-hook! 'ediff-prepare-buffer-hook #'solaire-mode)
+(after! ediff
+  (add-hook! 'ediff-prepare-buffer-hook #'solaire-mode))
 
 ;; Allow links to be opened outside WSL
 (when (and (eq system-type 'gnu/linux)

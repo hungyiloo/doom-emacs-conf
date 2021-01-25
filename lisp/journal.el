@@ -133,8 +133,11 @@
 ;;             (calendar-last-day-of-month month year)))
 ;;     (= day last-day-of-month)))
 
-(after! org
+(use-package! org
+  :init
   (setq +org-capture-journal-file "~/Notes/Journal.org")
+  :defer t
+  :config
   (setq org-capture-templates
         `(("j" "Journal")
           ("jj" "Journal Today")
