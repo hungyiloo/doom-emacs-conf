@@ -30,7 +30,7 @@
 ;; (setq doom-theme nil)
 
 ;; Set a custom font
-(setq doom-font (font-spec :family "JetBrains Mono Semi Light" :size 15)
+(setq doom-font (font-spec :family "JetBrains Mono Light" :size 15)
       doom-variable-pitch-font (font-spec :family "Segoe UI" :size 15))
 
 ;; Better default window placement on startup
@@ -587,34 +587,6 @@ This function is called by `org-babel-execute-src-block'."
           :tuple         "⨂"
           :pipe          "║"
           :dot           "•"))
-  (set-fontset-font t ?» (font-spec :family "JetBrains Mono"))
-  (set-fontset-font t ?» (font-spec :family "JetBrains Mono"))
-  (set-fontset-font t ?« (font-spec :family "JetBrains Mono"))
-  (set-fontset-font t ?“ (font-spec :family "JetBrains Mono"))
-  (set-fontset-font t ?” (font-spec :family "JetBrains Mono"))
-  (set-fontset-font t ?λ (font-spec :family "JetBrains Mono"))
-  (set-fontset-font t ?ƒ (font-spec :family "JetBrains Mono"))
-  (set-fontset-font t ?∅ (font-spec :family "Fira Code"))
-  (set-fontset-font t ?⊤ (font-spec :family "Fira Code"))
-  (set-fontset-font t ?⊥ (font-spec :family "Fira Code"))
-  (set-fontset-font t ?ℤ (font-spec :family "Fira Code"))
-  (set-fontset-font t ?ℝ (font-spec :family "Fira Code"))
-  (set-fontset-font t ?𝔹 (font-spec :family "Fira Code"))
-  (set-fontset-font t ?ℂ (font-spec :family "Fira Code"))
-  (set-fontset-font t ?𝔹 (font-spec :family "Fira Code"))
-  (set-fontset-font t ?∈ (font-spec :family "JetBrains Mono"))
-  (set-fontset-font t ?∉ (font-spec :family "JetBrains Mono"))
-  (set-fontset-font t ?∧ (font-spec :family "JetBrains Mono"))
-  (set-fontset-font t ?∨ (font-spec :family "JetBrains Mono"))
-  (set-fontset-font t ?∀ (font-spec :family "JetBrains Mono"))
-  (set-fontset-font t ?∃ (font-spec :family "JetBrains Mono"))
-  (set-fontset-font t ?⟼ (font-spec :family "Fira Code"))
-  (set-fontset-font t ?⟻ (font-spec :family "Fira Code"))
-  (set-fontset-font t ?∪ (font-spec :family "Free Mono"))
-  (set-fontset-font t ?∩ (font-spec :family "Free Mono"))
-  (set-fontset-font t ?∖ (font-spec :family "Free Mono"))
-  (set-fontset-font t ?⨂ (font-spec :family "Free Mono"))
-  (set-fontset-font t ?• (font-spec :family "JetBrains Mono"))
   ;; Set decent default fonts for Japanese and Chinese,
   ;; but *only* if in a graphical context.
   ;; Set Japanese second so that Japanese glyphs override Chinese
@@ -627,7 +599,41 @@ This function is called by `org-babel-execute-src-block'."
                       (font-spec :family "Noto Sans CJK JP")))
   (dolist (item '(("Noto Sans CJK JP" . 0.85)
                   ("Noto Sans CJK SC" . 0.85)))
-    (add-to-list 'face-font-rescale-alist item)))
+    (add-to-list 'face-font-rescale-alist item))
+
+  ;; Use as much of JetBrains Mono v2.221 as possible.
+  ;; If a version >2.221 exists, see if new symbols are supported
+  ;; and update below.
+  (set-fontset-font t ?» (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?» (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?« (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?“ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?” (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?λ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?ƒ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?∅ (font-spec :family "Fira Code"))
+  (set-fontset-font t ?⊤ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?⊥ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?ℤ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?ℝ (font-spec :family "Fira Code"))
+  (set-fontset-font t ?𝔹 (font-spec :family "Fira Code"))
+  (set-fontset-font t ?ℂ (font-spec :family "Fira Code"))
+  (set-fontset-font t ?∈ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?∉ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?∧ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?∨ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?∀ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?∃ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?⟼ (font-spec :family "Fira Code"))
+  (set-fontset-font t ?⟻ (font-spec :family "Fira Code"))
+  (set-fontset-font t ?∪ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?∩ (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?∖ (font-spec :family "Free Mono"))
+  (set-fontset-font t ?⨂ (font-spec :family "Free Mono"))
+  (set-fontset-font t ?• (font-spec :family "JetBrains Mono"))
+  (set-fontset-font t ?⅓ (font-spec :family "Fira Code"))
+  (set-fontset-font t ?⅔ (font-spec :family "Fira Code"))
+  )
 
 (use-package! pyim
   :commands #'set-input-method
