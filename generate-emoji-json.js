@@ -25,23 +25,6 @@ function toCodePoints(rawEmoji) {
   return points.join('-');
 }
 
-// Source emoji array: https://raw.githubusercontent.com/github/gemoji/master/db/emoji.json
-// Format for each emoji:
-// {
-//   "emoji": "😀",
-//   "description": "grinning face",
-//   "category": "Smileys & Emotion",
-//   "aliases": [
-//     "grinning"
-//   ],
-//   "tags": [
-//     "smile",
-//     "happy"
-//   ],
-//   "unicode_version": "6.1",
-//   "ios_version": "6.0"
-// }
-//
 // Source emoji.json: https://unpkg.com/emoji.json@13.0.0/emoji.json
 // Format:
 // [
@@ -53,7 +36,25 @@ function toCodePoints(rawEmoji) {
 //   }
 // ]
 
-https.get(
+const emojiKeywordsPromise  = new Promise(resolve => https.get(
+  'https://raw.githubusercontent.com/unicode-org/cldr/master/common/annotations/en.xml',
+  response => {
+    let data = '';
+    response.on('data', chunk => data += chunk);
+    response.on('end', () => {
+      const emojiKeywords = {};
+      const annotationRegex = /<annotation cp="(?<emoji>[^"]+)">(?<keywords>.+)<\/annotation>/;
+      data.split('\n').forEach(line => {
+        const matches = line.match(annotationRegex);
+        if (!matches) return;
+        emojiKeywords[matches.groups.emoji] = matches.groups.keywords.split('|').map(keyword => keyword.trim());
+      })
+      resolve(emojiKeywords);
+    });
+  }
+));
+
+const transformedEmojisPromise = new Promise(resolve => https.get(
   'https://unpkg.com/emoji.json@13.0.0/emoji.json',
   response => {
     let data = '';
@@ -63,24 +64,34 @@ https.get(
       console.log(`${sourceEmojis.length} emojis found`);
 
       const transformedEmojis = sourceEmojis.reduce((acc, curr) => {
-        // const lowerDescription = curr.description.toLowerCase();
-        // const keywords = curr.aliases.concat(curr.tags);
-        // const filteredKeywords = keywords.filter(a => !a.includes('_') && !lowerDescription.includes(a.toLowerCase()));
-        // acc[curr.emoji] = {
         acc[curr.char] = {
           style: 'unicode',
-          // image: `${toCodePoints(curr.emoji)}.png`,
           image: `${toCodePoints(curr.char)}.png`,
-          // name: `${curr.description}${filteredKeywords.length ? ` [${filteredKeywords.join(', ')}]` : ''} (${curr.category})`
-          name: `${curr.name} - ${curr.category}`
+          // name: `${curr.name} - ${curr.category}`
+          name: curr.name
         }
         return acc;
       }, {});
 
-      fs.writeFile('./emoji.json', JSON.stringify(transformedEmojis, null, 2), function (err) {
-        if (err) return console.log(err);
-        console.log('Wrote emoji.json');
-      });
+      resolve(transformedEmojis);
     });
   }
-);
+));
+
+Promise.all([
+  emojiKeywordsPromise,
+  transformedEmojisPromise
+]).then(([emojiKeywords, transformedEmojis]) => {
+  Object.keys(transformedEmojis).forEach(emoji => {
+    const keywords = emojiKeywords[emoji];
+    if (!keywords) return;
+    const existingName = transformedEmojis[emoji].name;
+    const validKeywords = keywords.filter(k => !existingName.includes(k)).join(', ');
+    if (validKeywords.length === 0) return;
+    transformedEmojis[emoji].name = `${existingName} [${keywords.filter(k => !existingName.includes(k)).join(', ')}]`;
+  });
+  fs.writeFile('./emoji.json', JSON.stringify(transformedEmojis, null, 2), function (err) {
+    if (err) return console.log(err);
+    console.log('Wrote emoji.json');
+  });
+})
