@@ -14,17 +14,22 @@
   (interactive)
   (evil-set-jump)
   (find-file +org-capture-journal-file)
-  (org-remove-occur-highlights)
-  (widen)
-  (org-set-startup-visibility)
-  (goto-char 0)
-  (when this-month
-    (search-forward
-     (concat "* " (my-journal-month-stamp))
-     nil
-     t))
-  (search-forward (concat "* " heading) nil t)
-  (let ((result (when post-heading-action (funcall post-heading-action))))
+  (let* ((result nil)
+         (position (save-excursion
+                     (org-remove-occur-highlights)
+                     (widen)
+                     (org-set-startup-visibility)
+                     (goto-char 0)
+                     (when this-month
+                       (search-forward
+                        (concat "* " (my-journal-month-stamp))
+                        nil
+                        t))
+                     (search-forward (concat "* " heading) nil t)
+                     (setq result (when post-heading-action (funcall post-heading-action)))
+                     (point))))
+    ;; (scroll-on-jump (goto-char position))
+    (goto-char position)
     (recenter)
     result))
 

@@ -60,6 +60,9 @@
 (package! pyim)
 (package! eyebrowse)
 (package! ob-typescript)
+(package! scroll-on-jump
+  :recipe (:host gitlab :repo "ideasman42/emacs-scroll-on-jump"))
+(package! command-log-mode)
 
 ;; nano-emacs
 ;; (package! nano-emacs

@@ -193,6 +193,46 @@ This function is called by `org-babel-execute-src-block'."
             (remove-hook 'after-save-hook #'+vc-gutter-init-maybe-h 'local))))))
   (add-hook! 'org-mode-hook #'my-org-hook-start-without-vc-gutter))
 
+(use-package! scroll-on-jump
+  :commands (scroll-on-jump)
+  :init
+  (after! evil
+    (scroll-on-jump-advice-add evil-undo)
+    (scroll-on-jump-advice-add evil-redo)
+    (scroll-on-jump-advice-add evil-jump-item)
+    (scroll-on-jump-advice-add evil-jump-forward)
+    (scroll-on-jump-advice-add evil-jump-backward)
+    ;; (scroll-on-jump-advice-add evil-ex-search-forward)
+    ;; (scroll-on-jump-advice-add evil-ex-search-backward)
+    (scroll-on-jump-advice-add evil-ex-search-next)
+    (scroll-on-jump-advice-add evil-ex-search-previous)
+    (scroll-on-jump-advice-add evil-forward-paragraph)
+    (scroll-on-jump-advice-add evil-backward-paragraph)
+    (scroll-on-jump-advice-add evil-goto-mark)
+    (scroll-on-jump-with-scroll-advice-add evil-scroll-down)
+    (scroll-on-jump-with-scroll-advice-add evil-scroll-up)
+    (scroll-on-jump-with-scroll-advice-add evil-scroll-page-down)
+    (scroll-on-jump-with-scroll-advice-add evil-scroll-page-up)
+    (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-center)
+    (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-top)
+    (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-bottom))
+  (after! git-gutter
+    (scroll-on-jump-advice-add git-gutter:next-diff)
+    (scroll-on-jump-advice-add git-gutter:previous-diff)
+    (scroll-on-jump-advice-add git-gutter:next-hunk)
+    (scroll-on-jump-advice-add git-gutter:previous-hunk))
+  (after! better-jumper
+    (scroll-on-jump-advice-add better-jumper-jump-forward)
+    (scroll-on-jump-advice-add better-jumper-jump-backward))
+  (after! spell-fu
+    (scroll-on-jump-advice-add spell-fu-goto-next-error)
+    (scroll-on-jump-advice-add spell-fu-goto-previous-error))
+  (after! flycheck
+    (scroll-on-jump-advice-add flycheck-next-error)
+    (scroll-on-jump-advice-add flycheck-previous-error))
+  :config
+  (setq scroll-on-jump-smooth nil))
+
 (map! :leader
       "<right>" #'better-jumper-jump-forward
       "<left>" #'better-jumper-jump-backward
@@ -248,9 +288,12 @@ This function is called by `org-babel-execute-src-block'."
   (defun my-recenter (&rest ignored)
     (recenter))
   (advice-add #'evil-ex-search-forward :after #'my-recenter)
-  (advice-add #'evil-ex-search-backward :after #'my-recenter)
-  (advice-add #'evil-ex-search-next :after #'my-recenter)
-  (advice-add #'evil-ex-search-previous :after #'my-recenter))
+  (advice-add #'evil-ex-search-backward :after #'my-recenter))
+
+
+(after! goto-chg
+  (scroll-on-jump-advice-add goto-last-change)
+  (scroll-on-jump-advice-add goto-last-change-reverse))
 
 (after! dired
   (defun my-dired-duplicate-marked-files ()
@@ -600,7 +643,15 @@ This function is called by `org-babel-execute-src-block'."
   (set-fontset-font t ?• (font-spec :family "JetBrains Mono"))
   (set-fontset-font t ?⅓ (font-spec :family "Fira Code"))
   (set-fontset-font t ?⅔ (font-spec :family "Fira Code"))
-  )
+
+  ;; Don't accelerate mouse wheel scrolling
+  (setq mouse-wheel-scroll-amount '(5
+                                    ((shift)
+                                     . hscroll)
+                                    ((meta))
+                                    ((control)
+                                     . text-scale)))
+  (setq mouse-wheel-progressive-speed nil))
 
 (use-package! pyim
   :commands #'set-input-method
@@ -750,17 +801,3 @@ and then closes the window config"
                           ("\\.x?html?\\'" . (lambda (_file link) (my-browse-url-generic-wsl-safe link)))
                           ("\\.pdf\\'" . (lambda (_file link) (my-browse-url-generic-wsl-safe link)))))))
 
-
-;; nano-emacs
-;; (require 'disp-table)
-;; (require 'nano-faces)
-;; (require 'nano-colors)
-;; (require 'nano-defaults)
-;; (require 'nano-theme)
-;; (require 'nano-theme-dark)
-;; (require 'nano-help)
-;; (require 'nano-modeline)
-;; (require 'nano-layout)
-;; (nano-faces)
-;; (nano-theme)
-;; (nano-defaults)
