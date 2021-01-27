@@ -230,6 +230,13 @@ This function is called by `org-babel-execute-src-block'."
   (after! flycheck
     (scroll-on-jump-advice-add flycheck-next-error)
     (scroll-on-jump-advice-add flycheck-previous-error))
+  (after! evil-mc
+    (scroll-on-jump-advice-add evil-mc-make-and-goto-next-match)
+    (scroll-on-jump-advice-add evil-mc-make-and-goto-prev-match)
+    (scroll-on-jump-advice-add evil-mc-skip-and-goto-next-match)
+    (scroll-on-jump-advice-add evil-mc-skip-and-goto-prev-match)
+    (scroll-on-jump-advice-add +multiple-cursors/evil-mc-undo-cursor))
+  (scroll-on-jump-advice-add exchange-point-and-mark)
   :config
   (setq scroll-on-jump-smooth nil))
 
