@@ -565,7 +565,8 @@ This function is called by `org-babel-execute-src-block'."
       `(treemacs-directory-face :height ,treemacs-face-height :weight normal)
       ;; `(doom-themes-treemacs-file-face :height unspecified)
       ;; `(doom-themes-treemacs-root-face :height unspecified :weight unspecified)
-      ))
+
+      `(doom-modeline-alternate-highlight :background ,(doom-color 'red) :foreground ,(doom-color 'base0))))
   (setq +ligatures-extra-symbols
         '(;; org
           :name          "»"
