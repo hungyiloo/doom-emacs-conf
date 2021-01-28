@@ -739,7 +739,7 @@ This function is called by `org-babel-execute-src-block'."
    "<tab> [" #'eyebrowse-prev-window-config
    "<tab> ]" #'eyebrowse-next-window-config
    "," #'my-eyebrowse-switch-buffer
-   "<" #'ivy-switch-buffer)
+   "<" #'consult-buffer)
   :config
   (eyebrowse-mode t)
   (defun my-eyebrowse-close-workspace ()
@@ -783,7 +783,7 @@ and then closes the window config"
     (interactive)
     (if (projectile-project-p)
         (projectile-switch-to-buffer)
-      (ivy-switch-buffer))))
+      (consult-buffer))))
 
 ;; Include ediff buffers in solaire-mode so they look the same
 ;; as regular editing buffers
