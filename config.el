@@ -209,6 +209,8 @@ This function is called by `org-babel-execute-src-block'."
     (scroll-on-jump-advice-add evil-forward-paragraph)
     (scroll-on-jump-advice-add evil-backward-paragraph)
     (scroll-on-jump-advice-add evil-goto-mark)
+    (scroll-on-jump-advice-add evil-goto-first-line)
+    (scroll-on-jump-advice-add evil-goto-line)
     (scroll-on-jump-with-scroll-advice-add evil-scroll-down)
     (scroll-on-jump-with-scroll-advice-add evil-scroll-up)
     (scroll-on-jump-with-scroll-advice-add evil-scroll-page-down)
