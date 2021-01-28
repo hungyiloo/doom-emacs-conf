@@ -216,6 +216,13 @@ This function is called by `org-babel-execute-src-block'."
     (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-center)
     (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-top)
     (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-bottom))
+  (after! evil-snipe
+    (scroll-on-jump-advice-add evil-snipe-f)
+    (scroll-on-jump-advice-add evil-snipe-F)
+    (scroll-on-jump-advice-add evil-snipe-s)
+    (scroll-on-jump-advice-add evil-snipe-S)
+    (scroll-on-jump-advice-add evil-snipe-repeat)
+    (scroll-on-jump-advice-add evil-snipe-repeat-reverse))
   (after! git-gutter
     (scroll-on-jump-advice-add git-gutter:next-diff)
     (scroll-on-jump-advice-add git-gutter:previous-diff)
