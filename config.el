@@ -159,10 +159,6 @@
 This function is called by `org-babel-execute-src-block'."
     body)
 
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((typescript . t)))
-
   ;; Map `my-org-retrieve-url-from-point' to live with its org link friends
   (map! :map org-mode-map
         :localleader
