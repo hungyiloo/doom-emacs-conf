@@ -86,8 +86,10 @@
 
 ;; Optionally add the `consult-flycheck' command.
 (use-package! consult-flycheck
-  :bind (:map flycheck-command-map
-         ("z" . consult-flycheck)))
+  :commands consult-flycheck
+  :init (map!
+         :map flycheck-command-map
+         "z" #'consult-flycheck))
 
 (use-package! marginalia
   :bind (;; :map minibuffer-local-map
