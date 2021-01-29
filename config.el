@@ -726,10 +726,8 @@ If a selection is active, pre-fill the prompt with it."
 and then closes the window config"
     (interactive)
     (if (doom-project-p)
-        (when (yes-or-no-p
-               (format "Are you sure you want to kill %s buffers for '%s'? "
-                       (length (doom-project-buffer-list)) (doom-project-name)))
-          (project-kill-buffers t)
+        (when (yes-or-no-p "Close the project along with the workspace?")
+          (call-interactively #'projectile-kill-buffers)
           (eyebrowse-close-window-config))
       (eyebrowse-close-window-config)))
 
