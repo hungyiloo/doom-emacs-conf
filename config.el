@@ -247,8 +247,8 @@ This function is called by `org-babel-execute-src-block'."
   (setq scroll-on-jump-smooth nil))
 
 (map! :leader
-      "<right>" #'better-jumper-jump-forward
-      "<left>" #'better-jumper-jump-backward
+      "]" #'better-jumper-jump-forward
+      "[" #'better-jumper-jump-backward
       (:prefix-map ("=" . "calc")
        "=" #'calc-dispatch
        "c" #'calc
