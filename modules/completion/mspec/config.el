@@ -50,13 +50,7 @@
   :init
 
 
-  (defun +default/search-buffer ()
-    "Conduct a text search on the current buffer.
-If a selection is active, pre-fill the prompt with it."
-    (interactive)
-    (if (region-active-p)
-        (consult-line (rxt-pcre-to-elisp (rxt-quote-pcre (buffer-substring-no-properties (region-beginning) (region-end)))))
-      (consult-line)))
+
 
   ;; Replace `multi-occur' with `consult-multi-occur', which is a drop-in replacement.
   (fset 'multi-occur #'consult-multi-occur)
