@@ -53,6 +53,7 @@
 (load! "lisp/hydras.el")
 (load! "lisp/journal.el")
 (load! "lisp/colors.el")
+(load! "lisp/emojify-config.el")
 
 (use-package! magit
   :hook (magit-mode . my-magit-mode-hook)
@@ -246,8 +247,8 @@ This function is called by `org-babel-execute-src-block'."
   (setq scroll-on-jump-smooth nil))
 
 (map! :leader
-      "<right>" #'better-jumper-jump-forward
-      "<left>" #'better-jumper-jump-backward
+      "]" #'better-jumper-jump-forward
+      "[" #'better-jumper-jump-backward
       (:prefix-map ("=" . "calc")
        "=" #'calc-dispatch
        "c" #'calc
@@ -267,7 +268,9 @@ This function is called by `org-babel-execute-src-block'."
       "~" #'ace-swap-window)
 
 (map! :map global-map
-      "M-u" #'undo-only)
+      "M-u" #'undo-only
+      "M-[" #'previous-buffer
+      "M-]" #'next-buffer)
 
 ;; (map! :after dired
 ;;       :map dired-mode-map
@@ -677,17 +680,6 @@ This function is called by `org-babel-execute-src-block'."
 ;; so I don't need emacs's prettification for them.
 (after! js
   (setq js--prettify-symbols-alist nil))
-
-(use-package! emojify
-  :commands (emojify-mode)
-  :config
-  ;; I created a folder ~/.doom.d/.local/emojis/twemoji-latest and
-  ;; downloaded the PNG assets from https://github.com/twitter/twemoji
-  (setq emojify-emoji-set "twemoji-latest")
-  (setq emojify-emojis-dir (concat doom-private-dir ".local/emojis/"))
-  ;; This file is generated via ~/.doom.d/generate-emoji-json.js
-  ;; Run it using "node generate-emoji-json.js"
-  (setq emojify-emoji-json (concat doom-private-dir "emoji.json")))
 
 (after! ispell
   (setq ispell-dictionary "en"))
