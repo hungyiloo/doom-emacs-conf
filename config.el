@@ -268,7 +268,9 @@ This function is called by `org-babel-execute-src-block'."
       "~" #'ace-swap-window)
 
 (map! :map global-map
-      "M-u" #'undo-only)
+      "M-u" #'undo-only
+      "M-[" #'previous-buffer
+      "M-]" #'next-buffer)
 
 ;; (map! :after dired
 ;;       :map dired-mode-map
