@@ -349,7 +349,7 @@ This function is called by `org-babel-execute-src-block'."
   :config
   (defun my-consult-project-ripgrep ()
     (interactive)
-    (consult-ripgrep projectile-project-root))
+    (consult-ripgrep (projectile-project-root)))
 
   (map! :leader
         (:prefix-map ("s" . "search")
