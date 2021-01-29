@@ -351,9 +351,21 @@ This function is called by `org-babel-execute-src-block'."
     (interactive)
     (consult-ripgrep (projectile-project-root)))
 
+  (defun +default/search-buffer ()
+    "Conduct a text search on the current buffer.
+If a selection is active, pre-fill the prompt with it."
+    (interactive)
+    (if (region-active-p)
+        (consult-line (rxt-pcre-to-elisp (rxt-quote-pcre (buffer-substring-no-properties (region-beginning) (region-end)))))
+      (consult-line)))
+
   (map! :leader
+        (:prefix-map ("M" . "mode")
+         "M" #'consult-mode-command
+         "N" #'consult-minor-mode-menu)
         (:prefix-map ("s" . "search")
          "i" #'consult-imenu
+         "s" #'+default/search-buffer
          "p" #'my-consult-project-ripgrep)
         (:prefix-map ("f" . "file")
          "r" #'consult-recent-file
@@ -681,6 +693,9 @@ This function is called by `org-babel-execute-src-block'."
    :n "[w"   #'eyebrowse-prev-window-config
    :n "]w"   #'eyebrowse-next-window-config
    :leader
+   "SPC" #'project-find-file
+   (:prefix-map ("p" . "project")
+    "p" #'project-switch-project)
    "<tab> 0" #'eyebrowse-switch-to-window-config-0
    "<tab> 1" #'eyebrowse-switch-to-window-config-1
    "<tab> 2" #'eyebrowse-switch-to-window-config-2
@@ -710,26 +725,12 @@ This function is called by `org-babel-execute-src-block'."
     "Closes all buffers in the current project (approximating a workspace)
 and then closes the window config"
     (interactive)
-    (if (projectile-project-p)
-        (let* ((project (projectile-acquire-root))
-               (project-name (projectile-project-name project))
-               (buffers (projectile-project-buffers project)))
-          (when (yes-or-no-p
-                 (format "Are you sure you want to kill %s buffers for '%s'? "
-                         (length buffers) project-name))
-            (dolist (buffer buffers)
-              (when (and
-                     ;; we take care not to kill indirect buffers directly
-                     ;; as we might encounter them after their base buffers are killed
-                     (not (buffer-base-buffer buffer))
-                     (if (functionp projectile-kill-buffers-filter)
-                         (funcall projectile-kill-buffers-filter buffer)
-                       (pcase projectile-kill-buffers-filter
-                         ('kill-all t)
-                         ('kill-only-files (buffer-file-name buffer))
-                         (_ (user-error "Invalid projectile-kill-buffers-filter value: %S" projectile-kill-buffers-filter)))))
-                (kill-buffer buffer)))
-            (eyebrowse-close-window-config)))
+    (if (doom-project-p)
+        (when (yes-or-no-p
+               (format "Are you sure you want to kill %s buffers for '%s'? "
+                       (length (doom-project-buffer-list)) (doom-project-name)))
+          (project-kill-buffers t)
+          (eyebrowse-close-window-config))
       (eyebrowse-close-window-config)))
 
   (defun my-eyebrowse-open-project ()
@@ -738,16 +739,16 @@ and then closes the window config"
     (eyebrowse-create-window-config)
     (condition-case nil
         (progn
-          (projectile-switch-project)
+          (call-interactively #'project-switch-project)
           (eyebrowse-rename-window-config (eyebrowse--get 'current-slot) (projectile-project-name)))
       (quit (eyebrowse-close-window-config))))
 
   (defun my-eyebrowse-switch-buffer ()
     "Switch buffer depending on project if we're in one"
     (interactive)
-    (if (projectile-project-p)
-        (projectile-switch-to-buffer)
-      (consult-buffer))))
+    (if (doom-project-p)
+        (call-interactively #'project-switch-to-buffer)
+      (call-interactively #'consult-buffer))))
 
 ;; Include ediff buffers in solaire-mode so they look the same
 ;; as regular editing buffers
