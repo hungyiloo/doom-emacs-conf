@@ -1,11 +1,17 @@
 ;;; completion/mspec/config.el -*- lexical-binding: t; -*-
 
-(use-package! selectrum-prescient
+(use-package! selectrum
+  :hook (after-init . selectrum-mode)
   :config
-  (selectrum-mode +1)
-  ;;(use-package sudo-edit)
-  ;;(global-set-key (kbd "M-r") #'selectrum-repeat)
-  )
+  (setq selectrum-extend-current-candidate-highlight t))
+
+;; (use-package! selectrum-prescient
+;;   :config
+;;   ;; (selectrum-mode +1)
+;;   ;;(use-package sudo-edit)
+;;   ;;(global-set-key (kbd "M-r") #'selectrum-repeat)
+;;   )
+
 (use-package! prescient
   :after selectrum
   :config
