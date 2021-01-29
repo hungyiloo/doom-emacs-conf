@@ -46,6 +46,7 @@
 
   :init
   (map! :leader
+        "f r" #'consult-recent-file
         "i u" #'insert-char
         "s s" #'consult-line)
 
