@@ -8,3 +8,4 @@
 (package! marginalia)
 (package! selectrum)
 (package! selectrum-prescient)
+(package! wgrep)
