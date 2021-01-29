@@ -258,7 +258,9 @@ This function is called by `org-babel-execute-src-block'."
        :desc "Git gutter" "v" #'git-gutter-mode
        :desc "Highlight line" "h" #'hl-line-mode)
       (:prefix-map ("p" . "project")
-       "v" #'projectile-run-vterm))
+       "v" #'projectile-run-vterm)
+      (:prefix-map ("i" . "insert")
+       "u" #'insert-char))
 
 (map! :map evil-window-map
       ;; Use the normal other-window command
@@ -343,33 +345,19 @@ This function is called by `org-babel-execute-src-block'."
   (setq aw-scope 'global)
   (setq aw-keys '(?a ?r ?s ?t ?d ?h ?n ?e ?i ?o)))
 
-(after! ivy
-  (setq ivy-read-action-function #'ivy-hydra-read-action)
-  (setq ivy-more-chars-alist '((counsel-grep . 3)
-                               (counsel-rg . 3)
-                               (counsel-search . 3)
-                               (t . 3))))
-
-(after! swiper
-  ;; Advise `swiper-isearch' to use `rxt-pcre-to-elisp' and `rxt-quote-pcre' so that
-  ;; SPC s s and SPC s S correctly deals with regex sensitive
-  ;; characters in the selected region or symbol at point
-  (defun my-rxt-quoted-swiper-isearch (orig-fun &rest args)
+(use-package! consult
+  :config
+  (defun my-consult-project-ripgrep ()
     (interactive)
-    (apply orig-fun (mapcar (lambda (x) (rxt-pcre-to-elisp (rxt-quote-pcre x))) args)))
-  (advice-add #'swiper-isearch :around #'my-rxt-quoted-swiper-isearch))
+    (consult-ripgrep projectile-project-root))
 
-(after! counsel
-  (setq counsel-search-engine 'google)
-  ;; Advise `counsel-rg' to use `rxt-pcre-to-elisp' so that
-  ;; SPC s p correctly deals with regex sensitive
-  ;; characters in the selected region or symbol at point
-  (defun my-rxt-elisp-counsel-rg (orig-fun &rest args)
-    (interactive)
-    (if (> 0 (length args))
-        (apply orig-fun (cons (rxt-pcre-to-elisp (car args)) (cdr args)))
-      (apply orig-fun args)))
-  (advice-add #'counsel-rg :around #'my-rxt-elisp-counsel-rg))
+  (map! :leader
+        (:prefix-map ("s" . "search")
+         "i" #'consult-imenu
+         "p" #'my-consult-project-ripgrep)
+        (:prefix-map ("f" . "file")
+         "r" #'consult-recent-file
+         "R" #'consult-recent-file-other-window)))
 
 (after! lsp-mode
   ;; Setting this disables DOOM's deferred shutdown functionality.
@@ -400,22 +388,6 @@ This function is called by `org-babel-execute-src-block'."
   :load-path "lisp"
   :config
   (setq titlecase-command (concat doom-private-dir "bin/titlecase")))
-
-(use-package! ivy-rich
-  :after ivy
-  :config
-  (let* ((ivy-switch-buffer-plist (plist-get
-                                   ivy-rich-display-transformers-list
-                                   'ivy-switch-buffer))
-         (column-config (plist-get
-                         ivy-switch-buffer-plist
-                         :columns)))
-    (plist-put!
-     ivy-switch-buffer-plist
-     :columns
-     (cons '(ivy-switch-buffer-transformer (:width 60)) (cdr column-config))))
-  (ivy-rich-mode -1)
-  (ivy-rich-mode +1))
 
 (setq display-line-numbers-type t)
 
@@ -766,7 +738,7 @@ and then closes the window config"
     (eyebrowse-create-window-config)
     (condition-case nil
         (progn
-          (counsel-projectile-switch-project)
+          (projectile-switch-project)
           (eyebrowse-rename-window-config (eyebrowse--get 'current-slot) (projectile-project-name)))
       (quit (eyebrowse-close-window-config))))
 

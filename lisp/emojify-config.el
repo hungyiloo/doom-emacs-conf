@@ -9,6 +9,19 @@
   ;; Run it using "node generate-emoji-json.js"
   (setq emojify-emoji-json (concat doom-private-dir "emoji.json"))
 
+  (after! selectrum
+    (defun emojify-ephemeral-buffer-p (buffer)
+      "Determine if BUFFER is an ephemeral/temporary buffer."
+      (and (not (minibufferp))
+           (not (string-match-p selectrum--candidates-buffer (buffer-name buffer)))
+           (string-match-p "^ " (buffer-name buffer))))
+
+    (defun my-emojify-refresh-selectrum-candidates (&rest ignored)
+      (with-current-buffer (get-buffer selectrum--candidates-buffer)
+        (emojify-display-emojis-in-region 1 (buffer-size))))
+
+    (advice-add #'selectrum--insert-candidates :after #'my-emojify-refresh-selectrum-candidates))
+
   ;; Redefine this function to simplify the label on each emoji when inserting
   (defun emojify--get-completing-read-candidates ()
     "Get the candidates to be used for `emojify-completing-read'.

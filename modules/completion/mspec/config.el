@@ -3,14 +3,11 @@
 (use-package! selectrum
   :hook (after-init . selectrum-mode)
   :config
-  (setq selectrum-extend-current-candidate-highlight t))
-
-;; (use-package! selectrum-prescient
-;;   :config
-;;   ;; (selectrum-mode +1)
-;;   ;;(use-package sudo-edit)
-;;   ;;(global-set-key (kbd "M-r") #'selectrum-repeat)
-;;   )
+  (map! :leader
+        "'" #'selectrum-repeat)
+  (setq selectrum-extend-current-candidate-highlight t)
+  (setq selectrum-fix-vertical-window-height t)
+  (setq selectrum-max-window-height 15))
 
 (use-package! prescient
   :after selectrum
@@ -51,10 +48,15 @@
   ;; The :init configuration is always executed (Not lazy!)
 
   :init
-  (map! :leader
-        "f r" #'consult-recent-file
-        "i u" #'insert-char
-        "s s" #'consult-line)
+
+
+  (defun +default/search-buffer ()
+    "Conduct a text search on the current buffer.
+If a selection is active, pre-fill the prompt with it."
+    (interactive)
+    (if (region-active-p)
+        (consult-line (rxt-pcre-to-elisp (rxt-quote-pcre (buffer-substring-no-properties (region-beginning) (region-end)))))
+      (consult-line)))
 
   ;; Replace `multi-occur' with `consult-multi-occur', which is a drop-in replacement.
   (fset 'multi-occur #'consult-multi-occur)
@@ -80,10 +82,6 @@
   ;; Example: https://github.com/minad/bookmark-view/
   ;; (setq consult-view-open-function #'bookmark-jump
   ;;       consult-view-list-function #'bookmark-view-names)
-
-  ;; Optionally enable previews. Note that individual previews can be disabled
-  ;; via customization variables.
-  ;;(consult-preview-mode)
   )
 
 ;; Enable Consult-Selectrum integration.
@@ -95,7 +93,7 @@
 ;; Optionally add the `consult-flycheck' command.
 (use-package! consult-flycheck
   :bind (:map flycheck-command-map
-         ("!" . consult-flycheck)))
+         ("z" . consult-flycheck)))
 
 (use-package! marginalia
   :bind (;; :map minibuffer-local-map
@@ -121,7 +119,7 @@
   ;; By default only the keybinding is shown as annotation.
   ;; Note that there is the command `marginalia-cycle' to
   ;; switch between the annotators.
-  ;; (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
 )
 
 (use-package! embark
@@ -145,10 +143,9 @@
 
   ;; The following is not selectrum specific but included here for convenience.
   ;; If you don't want to use which-key as a key prompter skip the following code.
-
   (setq embark-action-indicator
         (lambda (map) (which-key--show-keymap "Embark" map nil nil 'no-paging)
           #'which-key--hide-popup-ignore-command)
         embark-become-indicator embark-action-indicator)
   :bind
-  ("C-S-a" . embark-act))
+  ("C-S-SPC" . embark-act))
