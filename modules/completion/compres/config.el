@@ -7,7 +7,7 @@
         "'" #'selectrum-repeat)
   (setq selectrum-extend-current-candidate-highlight t)
   ;; (setq selectrum-fix-vertical-window-height t)
-  (setq selectrum-max-window-height 12)
+  (setq selectrum-max-window-height 10)
   (custom-set-faces!
     `(selectrum-current-candidate :background ,(doom-blend (doom-color 'highlight) (doom-color 'bg-alt) 0.175))
     `(selectrum-completion-docsig :foreground ,(doom-color 'base5) :italic nil)
@@ -73,15 +73,17 @@
 
   :init
 
-
-
-
   ;; Replace `multi-occur' with `consult-multi-occur', which is a drop-in replacement.
   (fset 'multi-occur #'consult-multi-occur)
   ;;(fset 'projectile-ripgrep 'consult-ripgrep)
 
   ;; Configure other variables and modes in the :config section, after lazily loading the package
   :config
+
+  ;; Ensure consult-recent-file returns a list of files on startup.
+  ;; Without this, sometimes it can be empty because it hasn't been loaded yet?
+  ;; Not sure how to more elgantly trigger a load.
+  (recentf-load-list)
 
   ;; Optionally configure a function which returns the project root directory
   ;; (autoload 'projectile-project-root "projectile")
@@ -100,6 +102,7 @@
   ;; Example: https://github.com/minad/bookmark-view/
   ;; (setq consult-view-open-function #'bookmark-jump
   ;;       consult-view-list-function #'bookmark-view-names)
+  (setq consult-find-command "fd --color=never --full-path ARG OPTS")
   )
 
 ;; Enable Consult-Selectrum integration.
@@ -140,6 +143,11 @@
   ;; Note that there is the command `marginalia-cycle' to
   ;; switch between the annotators.
   (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+
+  (setq marginalia-command-categories
+        '((imenu . imenu)
+          ;; Classify project file choosers as 'project-file'
+          (project-find-file . project-file)))
 )
 
 (use-package! embark
@@ -168,4 +176,62 @@
           #'which-key--hide-popup-ignore-command)
         embark-become-indicator embark-action-indicator)
   :bind
-  ("C-S-SPC" . embark-act))
+  ("C-S-SPC" . embark-act)
+
+  :config
+
+  ;; Add support for project file actions
+  (add-to-list 'embark-keymap-alist '(project-file . embark-project-file-map))
+  (embark-define-keymap embark-project-file-map
+    "Keymap for Embark project file actions."
+    ("f" +compres/prj-find-file)
+    ("o" +compres/prj-find-file-other-window)
+    ("d" +compres/prj-delete-file)
+    ("r" +compres/prj-rename-file)
+    ("c" +compres/prj-copy-file)
+    ("=" +compres/prj-ediff-files)
+    ("I" +compres/prj-embark-insert-relative-path)
+    ("W" +compres/prj-embark-save-relative-path))
+  (defun +compres/resolve-project-file (file)
+    "Resolve a file using the project path as a prefix, then optionally call PIPE-TO with resolved file"
+    (let* ((project-file (doom-path (concat (project-root (project-current))) file))
+           (target (or (and (file-exists-p project-file)
+                            project-file)
+                       file)))
+      target))
+  (defun +compres/prj-find-file (file)
+    (interactive "FFile:")
+    (find-file (+compres/resolve-project-file file)))
+  (defun +compres/prj-find-file-other-window (file)
+    (interactive "FFile:")
+    (find-file-other-window (+compres/resolve-project-file file)))
+  (defun +compres/prj-delete-file (file)
+    (interactive "FFile:")
+    (delete-file (+compres/resolve-project-file file)))
+  (defun +compres/prj-rename-file (file newname)
+    (interactive
+     (let ((f (read-file-name "File:")))
+       (list f
+             (read-file-name (format "Rename %s to file:" f)
+                             (file-name-directory (+compres/resolve-project-file f))))))
+    (rename-file (+compres/resolve-project-file file) newname))
+  (defun +compres/prj-copy-file (file newname)
+    (interactive
+     (let ((f (read-file-name "File:")))
+       (list f
+             (read-file-name (format "Copy %s to file:" f)
+                             (file-name-directory (+compres/resolve-project-file f))))))
+    (copy-file (+compres/resolve-project-file file) newname))
+  (defun +compres/prj-ediff-files (file-a file-b)
+    (interactive
+     (let ((f (read-file-name "File:")))
+       (list f
+             (read-file-name (format "Compare %s to:" f)
+                             (file-name-directory (+compres/resolve-project-file f))))))
+    (ediff-files (+compres/resolve-project-file file-a) file-b))
+  (defun +compres/prj-embark-insert-relative-path (file)
+    (interactive "FFile:")
+    (embark-insert-relative-path (+compres/resolve-project-file file)))
+  (defun +compres/prj-embark-save-relative-path (file)
+    (interactive "FFile:")
+    (embark-save-relative-path (+compres/resolve-project-file file))))
