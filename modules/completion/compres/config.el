@@ -238,3 +238,12 @@
   (defun +compres/prj-embark-save-relative-path (file)
     (interactive "FFile:")
     (embark-save-relative-path (+compres/resolve-project-file file))))
+
+;; Better xref experience in absence of ivy
+(after! xref
+  (set-popup-rule!
+    "^\\*xref"
+    :size 20
+    :quit t)
+  (custom-set-faces!
+    `(xref-match :foreground ,(doom-color 'magenta) :bold t :background ,(doom-blend (doom-color 'blue) (doom-color 'bg-alt) 0.3))))
