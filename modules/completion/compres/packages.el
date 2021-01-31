@@ -17,4 +17,6 @@
   :recipe (:host github :repo "raxod502/prescient.el"))
 (package! selectrum-prescient
   :recipe (:host github :repo "raxod502/prescient.el"))
+(package! orderless
+  :recipe (:host github :repo "oantolin/orderless"))
 (package! wgrep)

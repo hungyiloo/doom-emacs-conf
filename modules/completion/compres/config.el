@@ -38,11 +38,25 @@
     `(marginalia-file-owner :foreground ,(doom-color 'doc-comments 256))
     `(marginalia-documentation :foreground ,(doom-blend (doom-color 'base6) (doom-color 'base4) 0.4))))
 
+(use-package! orderless
+  :after selectrum
+  :config
+  (custom-set-faces!
+    `(orderless-match-face-0 :foreground ,(doom-color 'magenta) :bold t :background ,(doom-color 'base0))
+    `(orderless-match-face-1 :foreground ,(doom-color 'yellow) :bold t :background ,(doom-color 'base0))
+    `(orderless-match-face-2 :foreground ,(doom-color 'cyan) :bold t :background ,(doom-color 'base0))
+    `(orderless-match-face-3 :foreground ,(doom-color 'green) :bold t :background ,(doom-color 'base0))))
+
 (use-package! prescient
   :after selectrum
   :config
   (selectrum-prescient-mode +1)
-  (prescient-persist-mode +1))
+  (prescient-persist-mode +1)
+  (after! orderless
+    ;; Orderless needs to be set up with selectrum after enabling selectrum-prescient-mode.
+    ;; Doing this lets us use orderless for filtering and prescient for sorting candidates
+    (setq selectrum-refine-candidates-function #'orderless-filter)
+    (setq selectrum-highlight-candidates-function #'orderless-highlight-matches)))
 
 (use-package! consult
   ;; Replace bindings. Lazily loaded due by `use-package'.
