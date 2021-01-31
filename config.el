@@ -36,18 +36,58 @@
 ;; Better default window placement on startup
 (setq initial-frame-alist '((width . 141) (height . 45) (fullscreen . fullheight)))
 
-;; Font adjustments should be more fine
-(setq text-scale-mode-step 1.05)
-(setq-default line-spacing 1)
+(add-hook! 'after-init-hook
+           ;; Font adjustments should be more fine
+           (setq text-scale-mode-step 1.05)
+           (setq-default line-spacing 1)
 
-;; Always revert files automatically
-(global-auto-revert-mode 1)
+           ;; Always revert files automatically
+           (global-auto-revert-mode 1)
 
-;; Better buffer names for files of the same name
-(setq uniquify-buffer-name-style 'forward)
+           ;; Better buffer names for files of the same name
+           (setq uniquify-buffer-name-style 'forward)
 
-;; More emacs-y clipboard intergration
-(setq save-interprogram-paste-before-kill t)
+           ;; More emacs-y clipboard intergration
+           (setq save-interprogram-paste-before-kill t)
+
+           (setq calendar-date-style 'iso)
+
+           ;; If you use `org' and don't want your org files in the default location below,
+           ;; change `org-directory'. It must be set before org loads!
+
+           (setq org-directory "~/Notes/")
+           (setq org-agenda-files '("~/Notes/"))
+           ;; uncomment the line below to include archive in agenda search
+           ;; (setq org-agenda-files '("~/Notes/" "~/Notes/Archive/"))
+
+           ;; Some global keymap adjustments
+           (map! :leader
+                 "]" #'better-jumper-jump-forward
+                 "[" #'better-jumper-jump-backward
+                 (:prefix-map ("=" . "calc")
+                  "=" #'calc-dispatch
+                  "c" #'calc
+                  "q" #'quick-calc
+                  "g" #'calc-grab-region)
+                 (:prefix-map ("t" . "toggle")
+                  :desc "Git gutter" "v" #'git-gutter-mode
+                  :desc "Highlight line" "h" #'hl-line-mode)
+                 (:prefix-map ("p" . "project")
+                  "v" #'projectile-run-vterm)
+                 (:prefix-map ("i" . "insert")
+                  "u" #'insert-char)
+
+                 :map evil-window-map
+                 ;; Use the normal other-window command
+                 ;; to take advantage of the window-select module
+                 "w" #'other-window
+                 "Q" #'kill-buffer-and-window
+                 "~" #'ace-swap-window
+
+                 :map global-map
+                 "M-u" #'undo-only
+                 "M-[" #'previous-buffer
+                 "M-]" #'next-buffer))
 
 ;; Load some external files
 (load! "lisp/hydras.el")
@@ -80,18 +120,6 @@
   (defun my-olivetti-setup ()
     (setq doom--line-number-style nil)
     (setq display-line-numbers nil)))
-
-
-(setq calendar-date-style 'iso)
-
-;; If you use `org' and don't want your org files in the default location below,
-;; change `org-directory'. It must be set before org loads!
-
-(setq org-directory "~/Notes/")
-(setq org-agenda-files '("~/Notes/"))
-;; uncomment the line below to include archive in agenda search
-;; (setq org-agenda-files '("~/Notes/" "~/Notes/Archive/"))
-
 
 (after! org
   ;; Set custom header bullets
@@ -242,42 +270,12 @@ This function is called by `org-babel-execute-src-block'."
     (scroll-on-jump-advice-add evil-mc-skip-and-goto-next-match)
     (scroll-on-jump-advice-add evil-mc-skip-and-goto-prev-match)
     (scroll-on-jump-advice-add +multiple-cursors/evil-mc-undo-cursor))
+  (after! goto-chg
+    (scroll-on-jump-advice-add goto-last-change)
+    (scroll-on-jump-advice-add goto-last-change-reverse))
   (scroll-on-jump-advice-add exchange-point-and-mark)
   :config
   (setq scroll-on-jump-smooth nil))
-
-(map! :leader
-      "]" #'better-jumper-jump-forward
-      "[" #'better-jumper-jump-backward
-      (:prefix-map ("=" . "calc")
-       "=" #'calc-dispatch
-       "c" #'calc
-       "q" #'quick-calc
-       "g" #'calc-grab-region)
-      (:prefix-map ("t" . "toggle")
-       :desc "Git gutter" "v" #'git-gutter-mode
-       :desc "Highlight line" "h" #'hl-line-mode)
-      (:prefix-map ("p" . "project")
-       "v" #'projectile-run-vterm)
-      (:prefix-map ("i" . "insert")
-       "u" #'insert-char))
-
-(map! :map evil-window-map
-      ;; Use the normal other-window command
-      ;; to take advantage of the window-select module
-      "w" #'other-window
-      "Q" #'kill-buffer-and-window
-      "~" #'ace-swap-window)
-
-(map! :map global-map
-      "M-u" #'undo-only
-      "M-[" #'previous-buffer
-      "M-]" #'next-buffer)
-
-;; (map! :after dired
-;;       :map dired-mode-map
-;;       :n "RET" #'dired-find-alternate-file
-;;       :desc "dired-up-directory (alt)" :n "^" (lambda () (interactive) (find-alternate-file "..")))
 
 (after! evil
   (setq evil-shift-width 2)
@@ -292,6 +290,10 @@ This function is called by `org-babel-execute-src-block'."
   (setq evil-want-fine-undo 't)
   (map!
    :i "C-S-SPC" #'hippie-expand
+   :n "C-n" #'next-line
+   :n "C-p" #'previous-line
+   :n "C-S-p" #'evil-paste-pop
+   :n "C-S-n" #'evil-paste-pop-next
    (:when (featurep! :editor multiple-cursors)
     :prefix "g"
     :nv "z" #'my-mc-hydra/body)
@@ -307,18 +309,19 @@ This function is called by `org-babel-execute-src-block'."
   (advice-add #'evil-ex-search-forward :after #'my-recenter)
   (advice-add #'evil-ex-search-backward :after #'my-recenter))
 
-
-(after! goto-chg
-  (scroll-on-jump-advice-add goto-last-change)
-  (scroll-on-jump-advice-add goto-last-change-reverse))
-
 (after! dired
   (defun my-dired-duplicate-marked-files ()
     (interactive)
     (dired-do-copy-regexp "\\([^\\.]*\\)\\.\\(.*\\)" "\\1#.\\2"))
   (map! :after dired
         :map dired-mode-map
-        :n "|" #'my-dired-duplicate-marked-files))
+        :n "|" #'my-dired-duplicate-marked-files)
+  ;; Uncomment this block to prevent dired creating
+  ;; lots of buffers when navigating through files/dirs
+  ;; (map! :map dired-mode-map
+  ;;       :n "RET" #'dired-find-alternate-file
+  ;;       :desc "dired-up-directory (alt)" :n "^" (lambda () (interactive) (find-alternate-file "..")))
+  )
 
 (after! vterm
   ;; Start vterm in normal mode always
@@ -359,12 +362,14 @@ If a selection is active, pre-fill the prompt with it."
         (consult-line (rxt-pcre-to-elisp (rxt-quote-pcre (buffer-substring-no-properties (region-beginning) (region-end)))))
       (consult-line)))
 
+  ;; Adjust some keybindings to use consult equivalents
   (map! :leader
         (:prefix-map ("M" . "mode")
          "M" #'consult-mode-command
          "N" #'consult-minor-mode-menu)
         (:prefix-map ("s" . "search")
          "i" #'consult-imenu
+         "I" #'consult-outline
          "s" #'+default/search-buffer
          "p" #'my-consult-project-ripgrep)
         (:prefix-map ("f" . "file")
@@ -403,17 +408,18 @@ If a selection is active, pre-fill the prompt with it."
 
 (setq display-line-numbers-type t)
 
-;; Fix some edge case javascript indenting
 (after! js2-mode
+  ;; Fix some edge case javascript indenting
   (setq js-indent-level 2))
+
 (after! typescript-mode
   (setq typescript-indent-level 2)
   (setq tide-native-json-parsing t)
   (setq tide-completion-ignore-case t))
 
-;; Use 2-space indentation in web-mode always
 (after! web-mode
   (setq web-mode-prettify-symbols-alist nil)
+  ;; Use 2-space indentation in web-mode always
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
@@ -461,22 +467,26 @@ If a selection is active, pre-fill the prompt with it."
             web-mode-script-padding
             web-mode-style-padding)))
 
-;;Use 2-space indentation in css
 (after! css-mode
+  ;;Use 2-space indentation in css
   (setq css-indent-offset 2))
 
 (after! tree-sitter
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+  ;; Uncomment this section to use CSS tree-sitter highlighting for scss.
+  ;; It works OK, but doesn't work for regular double slash comments.
   ;; (pushnew! tree-sitter-major-mode-language-alist
   ;;           '(scss-mode . css))
   )
 
 (after! scss-mode
   (defun my-scss-mode-setup ()
-    (setq comment-start "/* "
-          comment-end " */"))
+    ;; Uncomment this section to use asterisk style comments in SCSS
+    ;; (setq comment-start "/* "
+    ;;       comment-end " */")
+    )
   (add-hook! 'scss-mode-hook #'my-scss-mode-setup))
 
 (use-package! treemacs
@@ -487,6 +497,135 @@ If a selection is active, pre-fill the prompt with it."
   :config
   (setq treemacs-wrap-around nil))
 
+
+
+(use-package! pyim
+  :commands #'set-input-method
+  :config
+  (require 'pyim-basedict)
+  (pyim-basedict-enable))
+
+;; Fix some farty prettify-symbols-mode quirks in JavaScript.
+;; Ligature fonts already handle =>, <= and >=
+;; so I don't need emacs's prettification for them.
+(after! js
+  (setq js--prettify-symbols-alist nil))
+
+(after! ispell
+  (setq ispell-dictionary "en"))
+
+(after! projectile
+  (setq projectile-kill-buffers-filter 'kill-all))
+
+(use-package! eyebrowse
+  :commands (my-eyebrowse-open-project
+             my-eyebrowse-switch-buffer
+             eyebrowse-create-window-config
+             eyebrowse-create-named-window-config
+             eyebrowse-rename-window-config
+             eyebrowse-switch-to-window-config
+             eyebrowse-switch-to-window-config-0
+             eyebrowse-switch-to-window-config-1
+             eyebrowse-switch-to-window-config-2
+             eyebrowse-switch-to-window-config-3
+             eyebrowse-switch-to-window-config-4
+             eyebrowse-switch-to-window-config-5
+             eyebrowse-switch-to-window-config-6
+             eyebrowse-switch-to-window-config-7
+             eyebrowse-switch-to-window-config-8
+             eyebrowse-switch-to-window-config-9)
+  :init
+  (map!
+   :n "[w"   #'eyebrowse-prev-window-config
+   :n "]w"   #'eyebrowse-next-window-config
+   :leader
+   "SPC" #'project-find-file
+   (:prefix-map ("p" . "project")
+    "p" #'project-switch-project)
+   "<tab> 0" #'eyebrowse-switch-to-window-config-0
+   "<tab> 1" #'eyebrowse-switch-to-window-config-1
+   "<tab> 2" #'eyebrowse-switch-to-window-config-2
+   "<tab> 3" #'eyebrowse-switch-to-window-config-3
+   "<tab> 4" #'eyebrowse-switch-to-window-config-4
+   "<tab> 5" #'eyebrowse-switch-to-window-config-5
+   "<tab> 6" #'eyebrowse-switch-to-window-config-6
+   "<tab> 7" #'eyebrowse-switch-to-window-config-7
+   "<tab> 8" #'eyebrowse-switch-to-window-config-8
+   "<tab> 9" #'eyebrowse-switch-to-window-config-9
+   "<tab> d" #'my-eyebrowse-close-workspace
+   "<tab> D" #'eyebrowse-close-window-config
+   "<tab> p" #'my-eyebrowse-open-project
+   "<tab> r" #'eyebrowse-rename-window-config
+   "<tab> ." #'eyebrowse-switch-to-window-config
+   "<tab> <tab>" #'eyebrowse-switch-to-window-config
+   "<tab> n" #'eyebrowse-create-window-config
+   "<tab> N" #'eyebrowse-create-named-window-config
+   "<tab> `" #'eyebrowse-last-window-config
+   "<tab> [" #'eyebrowse-prev-window-config
+   "<tab> ]" #'eyebrowse-next-window-config
+   "," #'my-eyebrowse-switch-buffer
+   "<" #'consult-buffer)
+  :config
+  (eyebrowse-mode t)
+  (defun my-eyebrowse-close-workspace ()
+    "Closes all buffers in the current project (approximating a workspace)
+and then closes the window config"
+    (interactive)
+    (if (doom-project-p)
+        (when (yes-or-no-p "Close the project along with the workspace?")
+          (call-interactively #'projectile-kill-buffers)
+          (eyebrowse-close-window-config))
+      (eyebrowse-close-window-config)))
+
+  (defun my-eyebrowse-open-project ()
+    "Creates a window config, open a project and name the eyebrowse slot to match the project name"
+    (interactive)
+    (eyebrowse-create-window-config)
+    (condition-case nil
+        (progn
+          (call-interactively #'project-switch-project)
+          (eyebrowse-rename-window-config (eyebrowse--get 'current-slot) (projectile-project-name)))
+      (quit (eyebrowse-close-window-config))))
+
+  (defun my-eyebrowse-switch-buffer ()
+    "Switch buffer depending on project if we're in one"
+    (interactive)
+    (if (doom-project-p)
+        (call-interactively #'project-switch-to-buffer)
+      (call-interactively #'consult-buffer))))
+
+;; Include ediff buffers in solaire-mode so they look the same
+;; as regular editing buffers
+(after! ediff
+  (add-hook! 'ediff-prepare-buffer-hook #'solaire-mode))
+
+;; Allow links to be opened outside WSL
+(when (and (eq system-type 'gnu/linux)
+           (string-match "Linux.*Microsoft.*Linux" (shell-command-to-string "uname -a")))
+  (defun my-browse-url-generic-wsl-safe (url &optional new-window)
+    (interactive)
+    (let ((parsed-url (thread-last
+                          url
+                        (replace-regexp-in-string "file://" "file://wsl%24/Ubuntu")
+                        (replace-regexp-in-string "\\(wsl%24/Ubuntu\\)?/mnt/c/" "C:/")
+                        (url-encode-url))))
+      (message "%s" (concat "Browsing to: " parsed-url))
+      (apply #'browse-url-generic (list parsed-url new-window))))
+  (setq
+   browse-url-generic-program  "/mnt/c/Windows/System32/cmd.exe"
+   browse-url-generic-args     '("/c" "start")
+   browse-url-browser-function #'my-browse-url-generic-wsl-safe)
+  (after! org
+    ;; Make sure org export opens things in the right directory
+    (setq org-file-apps '((auto-mode . emacs)
+                          (directory . emacs)
+                          ("\\.mm\\'" . default)
+                          ("\\.x?html?\\'" . (lambda (_file link) (my-browse-url-generic-wsl-safe link)))
+                          ("\\.pdf\\'" . (lambda (_file link) (my-browse-url-generic-wsl-safe link)))))))
+
+;; This section is for UI and visual tweaks.
+;; Not sure if there's a better place to put most of this stuff.
+;; For now, this can be a catch all until I figure out how to defer them better.
 (add-hook! 'doom-load-theme-hook
   (let* ((bg (doom-color 'bg))
          (darker-bg (doom-darken bg 0.7))
@@ -651,129 +790,9 @@ If a selection is active, pre-fill the prompt with it."
                                     ((meta))
                                     ((control)
                                      . text-scale)))
-  (setq mouse-wheel-progressive-speed nil))
+  (setq mouse-wheel-progressive-speed nil)
 
-(use-package! pyim
-  :commands #'set-input-method
-  :config
-  (require 'pyim-basedict)
-  (pyim-basedict-enable))
-
-;; Fix some farty prettify-symbols-mode quirks in JavaScript.
-;; Ligature fonts already handle =>, <= and >=
-;; so I don't need emacs's prettification for them.
-(after! js
-  (setq js--prettify-symbols-alist nil))
-
-(after! ispell
-  (setq ispell-dictionary "en"))
-
-(after! projectile
-  (setq projectile-kill-buffers-filter 'kill-all))
-
-(use-package! eyebrowse
-  :commands (my-eyebrowse-open-project
-             my-eyebrowse-switch-buffer
-             eyebrowse-create-window-config
-             eyebrowse-create-named-window-config
-             eyebrowse-rename-window-config
-             eyebrowse-switch-to-window-config
-             eyebrowse-switch-to-window-config-0
-             eyebrowse-switch-to-window-config-1
-             eyebrowse-switch-to-window-config-2
-             eyebrowse-switch-to-window-config-3
-             eyebrowse-switch-to-window-config-4
-             eyebrowse-switch-to-window-config-5
-             eyebrowse-switch-to-window-config-6
-             eyebrowse-switch-to-window-config-7
-             eyebrowse-switch-to-window-config-8
-             eyebrowse-switch-to-window-config-9)
-  :init
-  (map!
-   :n "[w"   #'eyebrowse-prev-window-config
-   :n "]w"   #'eyebrowse-next-window-config
-   :leader
-   "SPC" #'project-find-file
-   (:prefix-map ("p" . "project")
-    "p" #'project-switch-project)
-   "<tab> 0" #'eyebrowse-switch-to-window-config-0
-   "<tab> 1" #'eyebrowse-switch-to-window-config-1
-   "<tab> 2" #'eyebrowse-switch-to-window-config-2
-   "<tab> 3" #'eyebrowse-switch-to-window-config-3
-   "<tab> 4" #'eyebrowse-switch-to-window-config-4
-   "<tab> 5" #'eyebrowse-switch-to-window-config-5
-   "<tab> 6" #'eyebrowse-switch-to-window-config-6
-   "<tab> 7" #'eyebrowse-switch-to-window-config-7
-   "<tab> 8" #'eyebrowse-switch-to-window-config-8
-   "<tab> 9" #'eyebrowse-switch-to-window-config-9
-   "<tab> d" #'my-eyebrowse-close-workspace
-   "<tab> D" #'eyebrowse-close-window-config
-   "<tab> p" #'my-eyebrowse-open-project
-   "<tab> r" #'eyebrowse-rename-window-config
-   "<tab> ." #'eyebrowse-switch-to-window-config
-   "<tab> <tab>" #'eyebrowse-switch-to-window-config
-   "<tab> n" #'eyebrowse-create-window-config
-   "<tab> N" #'eyebrowse-create-named-window-config
-   "<tab> `" #'eyebrowse-last-window-config
-   "<tab> [" #'eyebrowse-prev-window-config
-   "<tab> ]" #'eyebrowse-next-window-config
-   "," #'my-eyebrowse-switch-buffer
-   "<" #'consult-buffer)
-  :config
-  (eyebrowse-mode t)
-  (defun my-eyebrowse-close-workspace ()
-    "Closes all buffers in the current project (approximating a workspace)
-and then closes the window config"
-    (interactive)
-    (if (doom-project-p)
-        (when (yes-or-no-p "Close the project along with the workspace?")
-          (call-interactively #'projectile-kill-buffers)
-          (eyebrowse-close-window-config))
-      (eyebrowse-close-window-config)))
-
-  (defun my-eyebrowse-open-project ()
-    "Creates a window config, open a project and name the eyebrowse slot to match the project name"
-    (interactive)
-    (eyebrowse-create-window-config)
-    (condition-case nil
-        (progn
-          (call-interactively #'project-switch-project)
-          (eyebrowse-rename-window-config (eyebrowse--get 'current-slot) (projectile-project-name)))
-      (quit (eyebrowse-close-window-config))))
-
-  (defun my-eyebrowse-switch-buffer ()
-    "Switch buffer depending on project if we're in one"
-    (interactive)
-    (if (doom-project-p)
-        (call-interactively #'project-switch-to-buffer)
-      (call-interactively #'consult-buffer))))
-
-;; Include ediff buffers in solaire-mode so they look the same
-;; as regular editing buffers
-(after! ediff
-  (add-hook! 'ediff-prepare-buffer-hook #'solaire-mode))
-
-;; Allow links to be opened outside WSL
-(when (and (eq system-type 'gnu/linux)
-           (string-match "Linux.*Microsoft.*Linux" (shell-command-to-string "uname -a")))
-  (defun my-browse-url-generic-wsl-safe (url &optional new-window)
-    (interactive)
-    (let ((parsed-url (thread-last
-                          url
-                        (replace-regexp-in-string "file://" "file://wsl%24/Ubuntu")
-                        (replace-regexp-in-string "\\(wsl%24/Ubuntu\\)?/mnt/c/" "C:/")
-                        (url-encode-url))))
-      (message "%s" (concat "Browsing to: " parsed-url))
-      (apply #'browse-url-generic (list parsed-url new-window))))
-  (setq
-   browse-url-generic-program  "/mnt/c/Windows/System32/cmd.exe"
-   browse-url-generic-args     '("/c" "start")
-   browse-url-browser-function #'my-browse-url-generic-wsl-safe)
-  (after! org
-    ;; Make sure org export opens things in the right directory
-    (setq org-file-apps '((auto-mode . emacs)
-                          (directory . emacs)
-                          ("\\.mm\\'" . default)
-                          ("\\.x?html?\\'" . (lambda (_file link) (my-browse-url-generic-wsl-safe link)))
-                          ("\\.pdf\\'" . (lambda (_file link) (my-browse-url-generic-wsl-safe link)))))))
-
+  ;; Tweak help popups
+  (set-popup-rule!
+    "^\\*helpful function"
+    :side 'bottom :height 20 :width 40 :quit t :select t :ttl 5))
