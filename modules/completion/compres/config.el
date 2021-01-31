@@ -1,4 +1,4 @@
-;;; completion/mspec/config.el -*- lexical-binding: t; -*-
+;;; completion/compres/config.el -*- lexical-binding: t; -*-
 
 (use-package! selectrum
   :hook (after-init . selectrum-mode)
@@ -102,8 +102,7 @@
   ;; Example: https://github.com/minad/bookmark-view/
   ;; (setq consult-view-open-function #'bookmark-jump
   ;;       consult-view-list-function #'bookmark-view-names)
-  (setq consult-find-command "fd --color=never --full-path ARG OPTS")
-  )
+  (setq consult-find-command "fd --color=never --full-path ARG OPTS"))
 
 ;; Enable Consult-Selectrum integration.
 ;; This package should be installed if Selectrum is used.
@@ -178,10 +177,6 @@
         (lambda (map) (which-key--show-keymap "Embark" map nil nil 'no-paging)
           #'which-key--hide-popup-ignore-command)
         embark-become-indicator embark-action-indicator)
-  :bind
-  ("C-S-SPC" . embark-act)
-
-  :config
 
   ;; Add support for project file actions
   (add-to-list 'embark-keymap-alist '(project-file . embark-project-file-map))
