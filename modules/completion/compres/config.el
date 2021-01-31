@@ -151,6 +151,9 @@
 )
 
 (use-package! embark
+  :bind
+  ("C-M-?" . embark-act)
+
   :config
   (add-hook 'embark-target-finders
             (defun current-candidate+category ()
