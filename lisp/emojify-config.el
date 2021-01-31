@@ -22,6 +22,23 @@
 
     (advice-add #'selectrum--insert-candidates :after #'my-emojify-refresh-selectrum-candidates))
 
+  (after! consult
+    ;; Fix emojify display issues after using consult.
+    ;; `consult-line' and `consult-outline' in particular seems to mess with the buffer's
+    ;; emojify region, so the following setup resets the global mode after use.
+    (defun my-emojify-reset-global-mode (orig-fun &rest args)
+      (condition-case nil
+          (progn
+            (apply orig-fun args)
+            (global-emojify-mode -1)
+            (global-emojify-mode +1))
+        (quit (progn (global-emojify-mode -1)
+                     (global-emojify-mode +1)))))
+    (add-hook! 'consult-after-jump-hook
+               #'emojify-redisplay-emojis-in-region)
+    (advice-add #'consult-line :around #'my-emojify-reset-global-mode)
+    (advice-add #'consult-outline :around #'my-emojify-reset-global-mode))
+
   ;; Redefine this function to simplify the label on each emoji when inserting
   (defun emojify--get-completing-read-candidates ()
     "Get the candidates to be used for `emojify-completing-read'.
@@ -63,22 +80,14 @@ selection
                          (lambda (display-string)
                            (s-suffix? display-string \"(github)\")))
 
-This function sets up `ido', `icicles', `helm', `ivy' and vanilla Emacs
+This function sets up `selectrum', `ivy' and vanilla Emacs
 completion UI to display properly emojis."
     (emojify-create-emojify-emojis)
     (let* ((emojify-minibuffer-reading-emojis-p t)
            (completion-ignore-case t)
            (candidates (emojify--get-completing-read-candidates))
-           ;; Vanilla Emacs completion and Icicles use the completion list mode to display candidates
-           ;; the following makes sure emojify is enabled in the completion list
-           (completion-list-mode-hook (cons #'emojify--completing-read-minibuffer-setup-hook
-                                            completion-list-mode-hook))
-           ;; (Vertical) Ido and Ivy displays candidates in minibuffer this makes sure candidates are emojified
-           ;; when Ido or Ivy are used
            (minibuffer-setup-hook (cons #'emojify--completing-read-minibuffer-setup-hook
-                                        minibuffer-setup-hook))
-           (helm-after-initialize-hook (cons #'emojify--completing-read-helm-hook
-                                             (bound-and-true-p helm-after-initialize-hook))))
+                                        minibuffer-setup-hook)))
       (car (split-string (funcall emojify-completing-read-function
                                   prompt
                                   candidates
