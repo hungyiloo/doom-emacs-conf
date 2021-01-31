@@ -183,7 +183,8 @@
   ;;         #'which-key--hide-popup-ignore-command)
   ;;       embark-become-indicator embark-action-indicator)
 
-  ;; TODO: Ensure selectrum candidates are refreshed after embark act without exit (using C-u)
+  ;; FIXME: Ensure selectrum candidates are refreshed after embark act without exit (using C-u)
+  ;; (add-hook! #'embark-post-action-hook #'consult-selectrum--refresh)
 
   ;; Add support for project file actions
   (add-to-list 'embark-keymap-alist '(project-file . embark-project-file-map))
