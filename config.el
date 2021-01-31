@@ -75,16 +75,17 @@
                  (:prefix-map ("p" . "project")
                   "v" #'projectile-run-vterm)
                  (:prefix-map ("i" . "insert")
-                  "u" #'insert-char)
+                  "u" #'insert-char))
 
-                 :map evil-window-map
+           (map! :map evil-window-map
                  ;; Use the normal other-window command
                  ;; to take advantage of the window-select module
                  "w" #'other-window
                  "Q" #'kill-buffer-and-window
-                 "~" #'ace-swap-window
+                 "~" #'ace-swap-window)
 
-                 :map global-map
+           (map! :map global-map
+                 "<f12>" #'universal-argument
                  "M-u" #'undo-only
                  "M-[" #'previous-buffer
                  "M-]" #'next-buffer))
@@ -273,6 +274,8 @@ This function is called by `org-babel-execute-src-block'."
   (after! goto-chg
     (scroll-on-jump-advice-add goto-last-change)
     (scroll-on-jump-advice-add goto-last-change-reverse))
+  (after! lookup
+    (scroll-on-jump-advice-add +lookup/definition))
   (scroll-on-jump-advice-add exchange-point-and-mark)
   :config
   (setq scroll-on-jump-smooth nil))
@@ -288,6 +291,7 @@ This function is called by `org-babel-execute-src-block'."
   (setq evil-snipe-repeat-keys nil)
   (setq evil-undo-function #'undo)
   (setq evil-want-fine-undo 't)
+  (setq evil-want-C-u-delete nil)
   (map!
    :i "C-S-SPC" #'hippie-expand
    :n "C-n" #'next-line
@@ -350,11 +354,7 @@ This function is called by `org-babel-execute-src-block'."
 
 (use-package! consult
   :config
-  (defun my-consult-project-ripgrep ()
-    (interactive)
-    (consult-ripgrep (projectile-project-root)))
-
-  (defun +default/search-buffer ()
+  (defun my-consult-line-dwim ()
     "Conduct a text search on the current buffer.
 If a selection is active, pre-fill the prompt with it."
     (interactive)
@@ -370,8 +370,8 @@ If a selection is active, pre-fill the prompt with it."
         (:prefix-map ("s" . "search")
          "i" #'consult-imenu
          "I" #'consult-outline
-         "s" #'+default/search-buffer
-         "p" #'my-consult-project-ripgrep)
+         "s" #'my-consult-line-dwim
+         "p" #'consult-ripgrep)
         (:prefix-map ("f" . "file")
          "r" #'consult-recent-file
          "R" #'consult-recent-file-other-window)))
@@ -537,34 +537,34 @@ If a selection is active, pre-fill the prompt with it."
   :init
   (map!
    :n "[w"   #'eyebrowse-prev-window-config
-   :n "]w"   #'eyebrowse-next-window-config
-   :leader
-   "SPC" #'project-find-file
-   (:prefix-map ("p" . "project")
-    "p" #'project-switch-project)
-   "<tab> 0" #'eyebrowse-switch-to-window-config-0
-   "<tab> 1" #'eyebrowse-switch-to-window-config-1
-   "<tab> 2" #'eyebrowse-switch-to-window-config-2
-   "<tab> 3" #'eyebrowse-switch-to-window-config-3
-   "<tab> 4" #'eyebrowse-switch-to-window-config-4
-   "<tab> 5" #'eyebrowse-switch-to-window-config-5
-   "<tab> 6" #'eyebrowse-switch-to-window-config-6
-   "<tab> 7" #'eyebrowse-switch-to-window-config-7
-   "<tab> 8" #'eyebrowse-switch-to-window-config-8
-   "<tab> 9" #'eyebrowse-switch-to-window-config-9
-   "<tab> d" #'my-eyebrowse-close-workspace
-   "<tab> D" #'eyebrowse-close-window-config
-   "<tab> p" #'my-eyebrowse-open-project
-   "<tab> r" #'eyebrowse-rename-window-config
-   "<tab> ." #'eyebrowse-switch-to-window-config
-   "<tab> <tab>" #'eyebrowse-switch-to-window-config
-   "<tab> n" #'eyebrowse-create-window-config
-   "<tab> N" #'eyebrowse-create-named-window-config
-   "<tab> `" #'eyebrowse-last-window-config
-   "<tab> [" #'eyebrowse-prev-window-config
-   "<tab> ]" #'eyebrowse-next-window-config
-   "," #'my-eyebrowse-switch-buffer
-   "<" #'consult-buffer)
+   :n "]w"   #'eyebrowse-next-window-config)
+  (map! :leader
+        "SPC" #'project-find-file
+        (:prefix-map ("p" . "project")
+         "p" #'project-switch-project)
+        "<tab> 0" #'eyebrowse-switch-to-window-config-0
+        "<tab> 1" #'eyebrowse-switch-to-window-config-1
+        "<tab> 2" #'eyebrowse-switch-to-window-config-2
+        "<tab> 3" #'eyebrowse-switch-to-window-config-3
+        "<tab> 4" #'eyebrowse-switch-to-window-config-4
+        "<tab> 5" #'eyebrowse-switch-to-window-config-5
+        "<tab> 6" #'eyebrowse-switch-to-window-config-6
+        "<tab> 7" #'eyebrowse-switch-to-window-config-7
+        "<tab> 8" #'eyebrowse-switch-to-window-config-8
+        "<tab> 9" #'eyebrowse-switch-to-window-config-9
+        "<tab> d" #'my-eyebrowse-close-workspace
+        "<tab> D" #'eyebrowse-close-window-config
+        "<tab> p" #'my-eyebrowse-open-project
+        "<tab> r" #'eyebrowse-rename-window-config
+        "<tab> ." #'eyebrowse-switch-to-window-config
+        "<tab> <tab>" #'eyebrowse-switch-to-window-config
+        "<tab> n" #'eyebrowse-create-window-config
+        "<tab> N" #'eyebrowse-create-named-window-config
+        "<tab> `" #'eyebrowse-last-window-config
+        "<tab> [" #'eyebrowse-prev-window-config
+        "<tab> ]" #'eyebrowse-next-window-config
+        "," #'consult-buffer
+        "<" #'project-switch-to-buffer)
   :config
   (eyebrowse-mode t)
   (defun my-eyebrowse-close-workspace ()

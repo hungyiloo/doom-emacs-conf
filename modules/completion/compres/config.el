@@ -91,8 +91,10 @@
   (recentf-load-list)
 
   ;; Optionally configure a function which returns the project root directory
-  ;; (autoload 'projectile-project-root "projectile")
-  ;; (setq consult-project-root-function #'projectile-project-root)
+  (setq consult-project-root-function
+        (defun +compres/get-project-root ()
+          (when (fboundp #'project-root)
+              (project-root (project-current)))))
 
   ;; Optionally configure narrowing key.
   ;; Both < and C-+ work reasonably well.
@@ -156,32 +158,32 @@
 
 (use-package! embark
   :bind
-  ("C-M-?" . embark-act)
+  ("<f5>" . embark-act)
 
   :config
-  (add-hook 'embark-target-finders
-            (defun current-candidate+category ()
-              (when selectrum-active-p
-                (cons (selectrum--get-meta 'category)
-                      (selectrum-get-current-candidate)))))
 
-  (add-hook 'embark-candidate-collectors
-            (defun current-candidates+category ()
-              (when selectrum-active-p
-                (cons (selectrum--get-meta 'category)
-                      (selectrum-get-current-candidates
-                       ;; Pass relative file names for dired.
-                       minibuffer-completing-file-name)))))
+  ;; (add-hook! 'embark-target-finders
+  ;;   (defun current-candidate+category ()
+  ;;     (when (bound-and-true-p selectrum-active-p)
+  ;;       (cons (selectrum--get-meta 'category)
+  ;;             (selectrum-get-current-candidate)))))
 
-  ;; No unnecessary computation delay after injection.
-  (add-hook 'embark-setup-hook 'selectrum-set-selected-candidate)
+  ;; (add-hook! 'embark-candidate-collectors
+  ;;   (defun current-candidates+category ()
+  ;;     (when (bound-and-true-p selectrum-active-p)
+  ;;       (cons (selectrum--get-meta 'category)
+  ;;             (selectrum-get-current-candidates
+  ;;              ;; Pass relative file names for dired.
+  ;;              minibuffer-completing-file-name)))))
 
   ;; The following is not selectrum specific but included here for convenience.
   ;; If you don't want to use which-key as a key prompter skip the following code.
-  (setq embark-action-indicator
-        (lambda (map) (which-key--show-keymap "Embark" map nil nil 'no-paging)
-          #'which-key--hide-popup-ignore-command)
-        embark-become-indicator embark-action-indicator)
+  ;; (setq embark-action-indicator
+  ;;       (lambda (map) (which-key--show-keymap "Embark" map nil nil 'no-paging)
+  ;;         #'which-key--hide-popup-ignore-command)
+  ;;       embark-become-indicator embark-action-indicator)
+
+  ;; TODO: Ensure selectrum candidates are refreshed after embark act without exit (using C-u)
 
   ;; Add support for project file actions
   (add-to-list 'embark-keymap-alist '(project-file . embark-project-file-map))
@@ -238,6 +240,9 @@
   (defun +compres/prj-embark-save-relative-path (file)
     (interactive "FFile:")
     (embark-save-relative-path (+compres/resolve-project-file file))))
+
+(use-package! embark-consult
+  :after (embark consult))
 
 ;; Better xref experience in absence of ivy
 (after! xref
