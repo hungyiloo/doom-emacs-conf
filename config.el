@@ -361,6 +361,8 @@ If a selection is active, pre-fill the prompt with it."
     (if (region-active-p)
         (consult-line (rxt-pcre-to-elisp (rxt-quote-pcre (buffer-substring-no-properties (region-beginning) (region-end)))))
       (consult-line)))
+  (after! evil
+    (evil-set-command-property #'my-consult-line-dwim :jump t))
 
   ;; Adjust some keybindings to use consult equivalents
   (map! :leader
