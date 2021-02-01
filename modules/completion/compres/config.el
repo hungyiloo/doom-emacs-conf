@@ -131,7 +131,7 @@
   (setq consult-project-root-function
         (defun +compres/get-project-root ()
           (when (fboundp #'project-root)
-              (expand-file-name (project-root (project-current))))))
+            (expand-file-name (project-root (project-current))))))
 
   ;; Optionally configure narrowing key.
   ;; Both < and C-+ work reasonably well.
@@ -146,7 +146,55 @@
   ;; Example: https://github.com/minad/bookmark-view/
   ;; (setq consult-view-open-function #'bookmark-jump
   ;;       consult-view-list-function #'bookmark-view-names)
-  (setq consult-find-command "fd --color=never --full-path ARG OPTS"))
+  (setq consult-find-command "fd --color=never --full-path ARG OPTS")
+
+  (setq consult--source-project-buffer
+        `(:name      "Project Buffer"
+          :narrow    (?p . "Project")
+          :category  buffer
+          :face      consult-buffer
+          :history   buffer-name-history
+          :open      ,#'consult--open-buffer
+          :predicate ,(lambda () consult-project-root-function)
+          :items
+          ,(lambda ()
+             (when-let (root (funcall consult-project-root-function))
+               (mapcar #'buffer-name
+                       (seq-filter (lambda (x)
+                                     (when-let (file (buffer-file-name x))
+                                       (string-prefix-p root file)))
+                                   (consult--cached-buffers)))))))
+
+  ;; Use expanded file name to compare with project root
+  (setq consult--source-project-file
+        `(:name      "Project Recent File"
+          :narrow    (?p . "Project")
+          :category  file
+          :face      consult-file
+          :history   file-name-history
+          :open      ,#'consult--open-file
+          :predicate ,(lambda () consult-project-root-function)
+          :items
+          ,(lambda ()
+             (when-let (root (funcall consult-project-root-function))
+               (let ((len (length root))
+                     (inv-root (propertize root 'invisible t))
+                     (ht (consult--cached-buffer-file-hash)))
+                 (mapcar (lambda (x)
+                           (concat inv-root (substring x len)))
+                         (seq-filter (lambda (x)
+                                       (and (not (gethash x ht))
+                                            (string-prefix-p root x)))
+                                     (mapcar #'expand-file-name recentf-list))))))))
+
+  ;; Integrate with evil jumping
+  (after! evil
+    (evil-set-command-property 'consult-imenu :jump t)
+    (evil-set-command-property 'consult-outline :jump t)
+    (evil-set-command-property 'consult-mark :jump t)
+    (evil-set-command-property 'consult-line :jump t)
+    (evil-set-command-property 'consult-line-symbol-at-point :jump t)
+    (evil-set-command-property 'consult-line-from-isearch :jump t)))
 
 ;; Enable Consult-Selectrum integration.
 ;; This package should be installed if Selectrum is used.
