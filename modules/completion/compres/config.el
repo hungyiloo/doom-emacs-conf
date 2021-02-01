@@ -121,6 +121,18 @@
   ;; Without this, there seems to be no way to widen after filtering `consult-buffer'
   (setq consult-narrow-key (kbd "C-="))
 
+  ;; Fix `consult-imenu' narrowing and add a few more values
+  (setq consult-imenu-narrow
+        '((emacs-lisp-mode . ((?f . "Functions")
+                              (?m . "Macros")
+                              (?p . "Package") ; Singular "Package" is what works for me
+                              (?t . "Types")
+                              (?v . "Variables")
+                              ;; These are added by me
+                              (?a . "Advice")
+                              (?S . "Section") ; If the key is set as ?s, it doesn't display in which-key properly. Why?
+                              ))))
+
   ;; Don't use SPC as the narrowing key for hidden buffers.
   ;; It's a little too easy to accidentally get into, and it
   ;; breaks the SPC widening default behavior.
