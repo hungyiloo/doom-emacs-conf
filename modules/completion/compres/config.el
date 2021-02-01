@@ -273,6 +273,21 @@
   ;; FIXME: Ensure selectrum candidates are refreshed after embark act without exit (using C-u)
   ;; (add-hook! #'embark-post-action-hook #'consult-selectrum--refresh)
 
+  ;; Allow `embark-export' on project-file category
+  (add-to-list 'embark-exporters-alist '(project-file . +compres/embark-export-prj-dired))
+  (defun +compres/embark-export-prj-dired (files)
+    "Create a dired buffer listing FILES in the current project root."
+    (setq files (mapcar #'directory-file-name files))
+    (when (dired-check-switches dired-listing-switches "A" "almost-all")
+      (setq files (cl-remove-if-not
+                   (lambda (path)
+                     (let ((file (file-name-nondirectory path)))
+                       (unless (or (string= file ".") (string= file ".."))
+                         path)))
+                   files)))
+    (dired (cons (+compres/get-project-root) files))
+    (rename-buffer (format "*Embark Export Project Dired %s*" default-directory)))
+
   ;; Add support for project file actions
   (add-to-list 'embark-keymap-alist '(project-file . embark-project-file-map))
   (embark-define-keymap embark-project-file-map
