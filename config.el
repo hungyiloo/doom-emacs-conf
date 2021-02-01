@@ -567,6 +567,11 @@ If a selection is active, pre-fill the prompt with it."
         "<" #'project-switch-to-buffer)
   :config
   (eyebrowse-mode t)
+
+  (after! marginalia
+    ;; Opening projects has a category type of "file", not "project-file"
+    (add-to-list 'marginalia-command-categories '(my-eyebrowse-open-project . file)))
+
   (defun my-eyebrowse-close-workspace ()
     "Closes all buffers in the current project (approximating a workspace)
 and then closes the window config"

@@ -167,7 +167,9 @@
   (setq marginalia-command-categories
         '((imenu . imenu)
           ;; Classify project file choosers as 'project-file'
-          (project-find-file . project-file)))
+          (project-find-file . project-file)
+          ;; But switching projects are just regular files/dirs
+          (project-switch-project . file)))
 )
 
 (use-package! embark
