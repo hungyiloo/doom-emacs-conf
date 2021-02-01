@@ -36,7 +36,27 @@
     `(marginalia-installed :foreground ,(doom-color 'green))
     `(marginalia-file-modes :foreground ,(doom-color 'dark-blue))
     `(marginalia-file-owner :foreground ,(doom-color 'doc-comments 256))
-    `(marginalia-documentation :foreground ,(doom-blend (doom-color 'base6) (doom-color 'base4) 0.4))))
+    `(marginalia-documentation :foreground ,(doom-blend (doom-color 'base6) (doom-color 'base4) 0.4)))
+
+  (after! org
+    ;; Better selectrum integration with `org-set-tags-command'
+    (defun +compres/org-set-tags-command-multiple (orig &optional arg)
+      (cl-letf (((symbol-function #'completing-read)
+                 (lambda (prompt collection &optional predicate require-match initial-input
+                            hist def inherit-input-method)
+                   (when initial-input
+                     (setq initial-input
+                           (replace-regexp-in-string
+                            ":" ","
+                            (replace-regexp-in-string
+                             "\\`:" "" initial-input))))
+                   (let ((res (completing-read-multiple
+                               prompt collection predicate require-match initial-input
+                               hist def inherit-input-method)))
+                     (mapconcat #'identity res ":")))))
+        (let ((current-prefix-arg arg))
+          (call-interactively orig))))
+    (advice-add #'org-set-tags-command :around #'+compres/org-set-tags-command-multiple)))
 
 (use-package! orderless
   :after selectrum
