@@ -106,13 +106,6 @@
   ;; Optionally configure a function which returns the project root directory
   (setq consult-project-root-function #'doom-project-root)
 
-  ;; Optionally configure narrowing key.
-  ;; Both < and C-+ work reasonably well.
-  ;; (setq consult-narrow-key "<") ;; (kbd "C-+")
-  ;; Optionally make narrowing help available in the minibuffer.
-  ;; Probably not needed if you are using which-key.
-  ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
-
   ;; Optional configure a view library to be used by `consult-buffer'.
   ;; The view library must provide two functions, one to open the view by name,
   ;; and one function which must return a list of views as strings.
@@ -123,22 +116,28 @@
   ;; use fd instead of find
   (setq consult-find-command "fd --color=never --full-path ARG OPTS")
 
-  (setq consult--source-project-buffer
-        `(:name      "Project Buffer"
-          :narrow    (?p . "Project")
-          :category  buffer
-          :face      consult-buffer
-          :history   buffer-name-history
-          :open      ,#'consult--open-buffer
-          :predicate ,(lambda () consult-project-root-function)
+  ;; Bind a key for narrowing in consult.
+  ;; Mainly this is to access the SPC combination to clear the filters.
+  ;; Without this, there seems to be no way to widen after filtering `consult-buffer'
+  (setq consult-narrow-key (kbd "C-="))
+
+  ;; Don't use SPC as the narrowing key for hidden buffers.
+  ;; It's a little too easy to accidentally get into, and it
+  ;; breaks the SPC widening default behavior.
+  ;;
+  ;; See `consult-widen-key' help for more info.
+  (setq consult--source-hidden-buffer
+        `(:name     "Hidden Buffer"
+          :narrow   (?* . "Hidden Buffer")
+          :category buffer
+          :face     consult-buffer
+          :history  buffer-name-history
+          :open     ,#'consult--open-buffer
           :items
           ,(lambda ()
-             (when-let (root (funcall consult-project-root-function))
-               (mapcar #'buffer-name
-                       (seq-filter (lambda (x)
-                                     (when-let (file (buffer-file-name x))
-                                       (string-prefix-p root file)))
-                                   (consult--cached-buffers)))))))
+             (let ((filter (consult--regexp-filter consult-buffer-filter)))
+               (seq-filter (lambda (x) (string-match-p filter x))
+                           (consult--cached-buffer-names))))))
 
   ;; Use expanded file name to compare with project root
   (setq consult--source-project-file

@@ -501,8 +501,6 @@ If a selection is active, pre-fill the prompt with it."
   :config
   (setq treemacs-wrap-around nil))
 
-
-
 (use-package! pyim
   :commands #'set-input-method
   :config
