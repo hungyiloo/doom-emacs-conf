@@ -276,6 +276,8 @@ This function is called by `org-babel-execute-src-block'."
     (scroll-on-jump-advice-add goto-last-change-reverse))
   (after! lookup
     (scroll-on-jump-advice-add +lookup/definition))
+  (after! consult
+    (scroll-on-jump-advice-add consult--jump-1))
   (scroll-on-jump-advice-add exchange-point-and-mark)
   :config
   (setq scroll-on-jump-smooth nil))
