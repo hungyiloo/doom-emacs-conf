@@ -108,7 +108,7 @@
   (setq consult-project-root-function
         (defun +compres/get-project-root ()
           (when (fboundp #'project-root)
-              (project-root (project-current)))))
+              (expand-file-name (project-root (project-current))))))
 
   ;; Optionally configure narrowing key.
   ;; Both < and C-+ work reasonably well.
