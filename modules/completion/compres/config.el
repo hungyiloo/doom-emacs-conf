@@ -99,6 +99,9 @@
   ;; Configure other variables and modes in the :config section, after lazily loading the package
   :config
 
+  ;; Don't be so aggresive with previews
+  (setq consult-preview-key (kbd "C-."))
+
   ;; Ensure consult-recent-file returns a list of files on startup.
   ;; Without this, sometimes it can be empty because it hasn't been loaded yet?
   ;; Not sure how to more elgantly trigger a load.
