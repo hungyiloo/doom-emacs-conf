@@ -59,7 +59,7 @@
     (advice-add #'org-set-tags-command :around #'+compres/org-set-tags-command-multiple)))
 
 (use-package! orderless
-  :after selectrum
+  :defer t
   :config
   (custom-set-faces!
     `(orderless-match-face-0 :foreground ,(doom-color 'magenta) :bold t :background ,(doom-color 'base0))
@@ -72,60 +72,36 @@
   :config
   (selectrum-prescient-mode +1)
   (prescient-persist-mode +1)
-  (after! orderless
-    ;; Orderless needs to be set up with selectrum after enabling selectrum-prescient-mode.
-    ;; Doing this lets us use orderless for filtering and prescient for sorting candidates
-    (setq selectrum-refine-candidates-function #'orderless-filter)
-    (setq selectrum-highlight-candidates-function #'orderless-highlight-matches)))
+  (setq selectrum-refine-candidates-function #'orderless-filter)
+  (setq selectrum-highlight-candidates-function #'orderless-highlight-matches))
 
 (use-package! consult
-  ;; Replace bindings. Lazily loaded due by `use-package'.
-  ;; :bind (("C-x M-:" . consult-complex-command)
-  ;;        ("C-c h" . consult-history)
-  ;;        ("C-c m" . consult-mode-command)
-  ;;        ("C-x b" . consult-buffer)
-  ;;        ("C-x 4 b" . consult-buffer-other-window)
-  ;;        ("C-x 5 b" . consult-buffer-other-frame)
-  ;;        ("C-x r x" . consult-register)
-  ;;        ("C-x r b" . consult-bookmark)
-  ;;        ("M-g g" . consult-goto-line)
-  ;;        ("M-g M-g" . consult-goto-line)
-  ;;        ("M-g o" . consult-outline)       ;; "M-s o" is a good alternative.
-  ;;        ("M-g l" . consult-line)          ;; "M-s l" is a good alternative.
-  ;;        ("M-g m" . consult-mark)          ;; I recommend to bind Consult navigation
-  ;;        ("M-g k" . consult-global-mark)   ;; commands under the "M-g" prefix.
-  ;;        ("M-g r" . consult-ripgrep)      ;; or consult-grep, consult-ripgrep
-  ;;        ("M-g f" . consult-find)          ;; or consult-fdfind, consult-locate
-  ;;        ("M-g i" . consult-project-imenu) ;; or consult-imenu
-  ;;        ("M-g e" . consult-error)
-  ;;        ("M-s m" . consult-multi-occur)
-  ;;        ("M-y" . consult-yank-pop)
-
-  ;;        ("<f3>" . consult-ripgrep)
-  ;;        ("C-s" . consult-line)
-
-  ;;        ("<help> a" . consult-apropos))
-
   :defer t
-
-  ;; The :init configuration is always executed (Not lazy!)
-
   :init
-
   ;; Replace `multi-occur' with `consult-multi-occur', which is a drop-in replacement.
   (fset 'multi-occur #'consult-multi-occur)
-  ;;(fset 'projectile-ripgrep 'consult-ripgrep)
 
-  ;; Configure other variables and modes in the :config section, after lazily loading the package
+  (define-key!
+    [remap apropos] #'consult-apropos
+    [remap goto-line] #'consult-goto-line
+    [remap imenu] #'consult-imenu
+    [remap switch-to-buffer] #'consult-buffer
+    [remap switch-to-buffer-other-window] #'consult-buffer-other-window
+    [remap switch-to-buffer-other-frame] #'consult-buffer-other-frame
+    [remap man] #'consult-man
+    [remap yank-pop] #'consult-yank-pop
+    [remap locate] #'consult-locate
+    [remap load-theme] #'consult-theme
+    [remap recentf-open-files] #'consult-recent-file)
+
   :config
-
   ;; Don't be so aggresive with previews
   (setq consult-preview-key (kbd "C-."))
 
   ;; Ensure consult-recent-file returns a list of files on startup.
-  ;; Without this, sometimes it can be empty because it hasn't been loaded yet?
+  ;; Without this, sometimes it can be empty on startup because it hasn't been loaded yet?
   ;; Not sure how to more elgantly trigger a load.
-  (recentf-load-list)
+  ;; (recentf-load-list)
 
   ;; Optionally configure a function which returns the project root directory
   (setq consult-project-root-function #'doom-project-root)
@@ -143,6 +119,8 @@
   ;; Example: https://github.com/minad/bookmark-view/
   ;; (setq consult-view-open-function #'bookmark-jump
   ;;       consult-view-list-function #'bookmark-view-names)
+
+  ;; use fd instead of find
   (setq consult-find-command "fd --color=never --full-path ARG OPTS")
 
   (setq consult--source-project-buffer
@@ -212,7 +190,7 @@
          ;; When using the Embark package, you can bind `marginalia-cycle' as an Embark action!
          ;;:map embark-general-map
          ;;    ("A" . marginalia-cycle)
-        )
+         )
 
   ;; The :init configuration is always executed (Not lazy!)
   :init
@@ -238,34 +216,19 @@
           (project-find-file . project-file)
           ;; But switching projects are just regular files/dirs
           (project-switch-project . file)))
-)
+  )
 
 (use-package! embark
   :bind
   ("<f5>" . embark-act)
 
   :config
-
-  ;; (add-hook! 'embark-target-finders
-  ;;   (defun current-candidate+category ()
-  ;;     (when (bound-and-true-p selectrum-active-p)
-  ;;       (cons (selectrum--get-meta 'category)
-  ;;             (selectrum-get-current-candidate)))))
-
-  ;; (add-hook! 'embark-candidate-collectors
-  ;;   (defun current-candidates+category ()
-  ;;     (when (bound-and-true-p selectrum-active-p)
-  ;;       (cons (selectrum--get-meta 'category)
-  ;;             (selectrum-get-current-candidates
-  ;;              ;; Pass relative file names for dired.
-  ;;              minibuffer-completing-file-name)))))
-
   ;; The following is not selectrum specific but included here for convenience.
   ;; If you don't want to use which-key as a key prompter skip the following code.
-  ;; (setq embark-action-indicator
-  ;;       (lambda (map) (which-key--show-keymap "Embark" map nil nil 'no-paging)
-  ;;         #'which-key--hide-popup-ignore-command)
-  ;;       embark-become-indicator embark-action-indicator)
+  (setq embark-action-indicator
+        (lambda (map) (which-key--show-keymap "Embark" map nil nil 'no-paging)
+          #'which-key--hide-popup-ignore-command)
+        embark-become-indicator embark-action-indicator)
 
   ;; FIXME: Ensure selectrum candidates are refreshed after embark act without exit (using C-u)
   ;; (add-hook! #'embark-post-action-hook #'consult-selectrum--refresh)
@@ -288,15 +251,15 @@
   ;; Add support for project file actions
   (add-to-list 'embark-keymap-alist '(project-file . embark-project-file-map))
   (embark-define-keymap embark-project-file-map
-    "Keymap for Embark project file actions."
-    ("f" +compres/prj-find-file)
-    ("o" +compres/prj-find-file-other-window)
-    ("d" +compres/prj-delete-file)
-    ("r" +compres/prj-rename-file)
-    ("c" +compres/prj-copy-file)
-    ("=" +compres/prj-ediff-files)
-    ("I" +compres/prj-embark-insert-relative-path)
-    ("W" +compres/prj-embark-save-relative-path))
+                        "Keymap for Embark project file actions."
+                        ("f" +compres/prj-find-file)
+                        ("o" +compres/prj-find-file-other-window)
+                        ("d" +compres/prj-delete-file)
+                        ("r" +compres/prj-rename-file)
+                        ("c" +compres/prj-copy-file)
+                        ("=" +compres/prj-ediff-files)
+                        ("I" +compres/prj-embark-insert-relative-path)
+                        ("W" +compres/prj-embark-save-relative-path))
   (defun +compres/resolve-project-file (file)
     "Resolve a file using the project path as a prefix"
     (let* ((project-file (doom-path (doom-project-root) file))
