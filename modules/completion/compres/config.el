@@ -238,7 +238,7 @@
     ("I" +compres/prj-embark-insert-relative-path)
     ("W" +compres/prj-embark-save-relative-path))
   (defun +compres/resolve-project-file (file)
-    "Resolve a file using the project path as a prefix, then optionally call PIPE-TO with resolved file"
+    "Resolve a file using the project path as a prefix"
     (let* ((project-file (doom-path (concat (project-root (project-current))) file))
            (target (or (and (file-exists-p project-file)
                             project-file)
