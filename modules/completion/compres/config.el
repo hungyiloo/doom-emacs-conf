@@ -128,10 +128,7 @@
   (recentf-load-list)
 
   ;; Optionally configure a function which returns the project root directory
-  (setq consult-project-root-function
-        (defun +compres/get-project-root ()
-          (when (fboundp #'project-root)
-            (expand-file-name (project-root (project-current))))))
+  (setq consult-project-root-function #'doom-project-root)
 
   ;; Optionally configure narrowing key.
   ;; Both < and C-+ work reasonably well.
@@ -285,7 +282,7 @@
                        (unless (or (string= file ".") (string= file ".."))
                          path)))
                    files)))
-    (dired (cons (+compres/get-project-root) files))
+    (dired (cons (doom-project-root) files))
     (rename-buffer (format "*Embark Export Project Dired %s*" default-directory)))
 
   ;; Add support for project file actions
@@ -302,7 +299,7 @@
     ("W" +compres/prj-embark-save-relative-path))
   (defun +compres/resolve-project-file (file)
     "Resolve a file using the project path as a prefix"
-    (let* ((project-file (doom-path (concat (project-root (project-current))) file))
+    (let* ((project-file (doom-path (doom-project-root) file))
            (target (or (and (file-exists-p project-file)
                             project-file)
                        file)))
