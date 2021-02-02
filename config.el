@@ -377,8 +377,7 @@ If a selection is active, pre-fill the prompt with it."
          "s" #'my-consult-line-dwim
          "p" #'consult-ripgrep)
         (:prefix-map ("f" . "file")
-         "r" #'consult-recent-file
-         "R" #'consult-recent-file-other-window)))
+         "r" #'consult-recent-file)))
 
 (after! lsp-mode
   ;; Setting this disables DOOM's deferred shutdown functionality.
