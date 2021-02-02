@@ -322,7 +322,16 @@
 (after! xref
   (set-popup-rule!
     "^\\*xref"
-    :size 20
+    :height 20
     :quit t)
+
+  ;; Close the xref popup after going to the xref
+  (advice-add #'xref-goto-xref
+              :around
+              (defun +compres/close-popup-on-goto-xref (orig-fun &rest args)
+                (let ((orig-window (selected-window)))
+                  (apply orig-fun args)
+                  (+popup/close orig-window))))
+
   (custom-set-faces!
     `(xref-match :foreground ,(doom-color 'magenta) :bold t :background ,(doom-blend (doom-color 'blue) (doom-color 'bg-alt) 0.3))))
