@@ -119,7 +119,7 @@
   ;; Bind a key for narrowing in consult.
   ;; Mainly this is to access the SPC combination to clear the filters.
   ;; Without this, there seems to be no way to widen after filtering `consult-buffer'
-  (setq consult-narrow-key (kbd "C-="))
+  (setq consult-narrow-key (kbd "C->"))
 
   ;; Fix `consult-imenu' narrowing and add a few more values
   (setq consult-imenu-narrow
@@ -132,24 +132,6 @@
                               (?a . "Advice")
                               (?S . "Section") ; If the key is set as ?s, it doesn't display in which-key properly. Why?
                               ))))
-
-  ;; Don't use SPC as the narrowing key for hidden buffers.
-  ;; It's a little too easy to accidentally get into, and it
-  ;; breaks the SPC widening default behavior.
-  ;;
-  ;; See `consult-widen-key' help for more info.
-  (setq consult--source-hidden-buffer
-        `(:name     "Hidden Buffer"
-          :narrow   (?* . "Hidden Buffer")
-          :category buffer
-          :face     consult-buffer
-          :history  buffer-name-history
-          :open     ,#'consult--open-buffer
-          :items
-          ,(lambda ()
-             (let ((filter (consult--regexp-filter consult-buffer-filter)))
-               (seq-filter (lambda (x) (string-match-p filter x))
-                           (consult--cached-buffer-names))))))
 
   ;; Use expanded file name to compare with project root
   (setq consult--source-project-file
@@ -321,7 +303,14 @@
     (embark-insert-relative-path (+compres/resolve-project-file file)))
   (defun +compres/prj-embark-save-relative-path (file)
     (interactive "FFile:")
-    (embark-save-relative-path (+compres/resolve-project-file file))))
+    (embark-save-relative-path (+compres/resolve-project-file file)))
+
+  ;; Make embark export occur buffers less overwhelming by putting them in popups
+  ;; (set-popup-rule!
+  ;;   "^\\*Embark Export Occur"
+  ;;   :height 0.4
+  ;;   :quit t)
+  )
 
 (use-package! embark-consult
   :after (embark consult))
