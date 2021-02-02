@@ -226,6 +226,17 @@
   ;; But switching projects are just regular files/dirs
   (add-to-list 'marginalia-command-categories '(project-switch-project . file))
 
+  ;; Speed up marginalia project resolution
+  (add-hook! 'minibuffer-setup-hook
+             ;; Cache the project root when the minibuffer is set up
+             (setq +compres--marginalia-cached-project-root (doom-project-root)))
+  (advice-add #'marginalia-annotate-project-file
+              :around
+              (defun +compres/marginalia-fast-annotate-project-file (ignored cand)
+                ;; Find the cached project root, use it to annotate the file
+                ;; instead of relying on the old `marginalia-annotate-project-file' root determination
+                (marginalia-annotate-file (expand-file-name cand +compres--marginalia-cached-project-root)))))
+
 (use-package! embark
   :bind
   ("<f5>" . embark-act)
