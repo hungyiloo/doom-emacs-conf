@@ -221,13 +221,10 @@
   ;; switch between the annotators.
   (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
 
-  (setq marginalia-command-categories
-        '((imenu . imenu)
-          ;; Classify project file choosers as 'project-file'
-          (project-find-file . project-file)
-          ;; But switching projects are just regular files/dirs
-          (project-switch-project . file)))
-  )
+  ;; Classify project file choosers as 'project-file'
+  (add-to-list 'marginalia-command-categories '(project-find-file . project-file))
+  ;; But switching projects are just regular files/dirs
+  (add-to-list 'marginalia-command-categories '(project-switch-project . file))
 
 (use-package! embark
   :bind
