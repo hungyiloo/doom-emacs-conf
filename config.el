@@ -1,35 +1,14 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
-;; Place your private configuration here! Remember, you do not need to run 'doom
-;; sync' after modifying this file!
-
-
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
 (setq user-full-name "Hung-Yi Loo"
       user-mail-address "hungyi.loo@gmail.com")
 
-;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
-;; are the three important ones:
-;;
-;; + `doom-font'
-;; + `doom-variable-pitch-font'
-;; + `doom-big-font' -- used for `doom-big-font-mode'; use this for
-;;   presentations or streaming.
-;;
-;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
-;; font string. You generally only need these two:
-;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
-;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
-
-;; There are two ways to load a theme. Both assume the theme is installed and
-;; available. You can either set `doom-theme' or manually load a theme with the
-;; `load-theme' function. This is the default:
+;; I just keep coming back to Nord...
 (setq doom-theme 'doom-nord)
-;; (load-theme 'doom-miramare t)
-;; (setq doom-theme nil)
 
-;; Set a custom font
+;; Set a custom font. Font choice can be important for performance.
 (setq doom-font (font-spec :family "JetBrains Mono Light" :size 15)
       doom-variable-pitch-font (font-spec :family "Segoe UI" :size 15))
 
@@ -88,7 +67,54 @@
                  "<f12>" #'universal-argument
                  "M-u" #'undo-only
                  "M-[" #'previous-buffer
-                 "M-]" #'next-buffer))
+                 "M-]" #'next-buffer)
+
+           (setq +doom-dashboard-ascii-banner-fn
+                 (defun my-doom-dashboard-draw-ascii-banner-fn ()
+                   (let* ((banner
+                           '("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+                             "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+                             "░░░░██╗░░██╗░██╗░░░██╗░░░░░░███████╗░███╗░░░███╗░░█████╗░░░█████╗░░░██████╗░░░░"
+                             "░░░░██║░░██║░╚██╗░██╔╝░░░░░░██╔════╝░████╗░████║░██╔══██╗░██╔══██╗░██╔════╝░░░░"
+                             "░░░░███████║░░╚████╔╝░░██╗░░█████╗░░░██╔████╔██║░███████║░██║░░╚═╝░╚█████╗░░░░░"
+                             "░░░░██╔══██║░░░╚██╔╝░░░╚═╝░░██╔══╝░░░██║╚██╔╝██║░██╔══██║░██║░░██╗░░╚═══██╗░░░░"
+                             "░░░░██║░░██║░░░░██║░░░░░░░░░███████╗░██║░╚═╝░██║░██║░░██║░╚█████╔╝░██████╔╝░░░░"
+                             "░░░░╚═╝░░╚═╝░░░░╚═╝░░░░░░░░░╚══════╝░╚═╝░░░░░╚═╝░╚═╝░░╚═╝░░╚════╝░░╚═════╝░░░░░"
+                             "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+                             "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+                             "                                                                               "))
+                          (longest-line (apply #'max (mapcar #'length banner))))
+                     (put-text-property
+                      (point)
+                      (dolist (line banner (point))
+                        (insert (+doom-dashboard--center
+                                 +doom-dashboard--width
+                                 (concat
+                                  line (make-string (max 0 (- longest-line (length line)))
+                                                    32)))
+                                "\n"))
+                      'face 'doom-dashboard-banner))))
+
+           (setq +doom-dashboard-menu-sections
+                 '(("Open org-agenda" :icon
+                    (all-the-icons-octicon "calendar" :face 'doom-dashboard-menu-title)
+                    :when
+                    (fboundp 'org-agenda)
+                    :action org-agenda)
+                   ("Recently opened files" :icon
+                    (all-the-icons-octicon "file-text" :face 'doom-dashboard-menu-title)
+                    :action recentf-open-files)
+                   ("Open project" :icon
+                    (all-the-icons-octicon "briefcase" :face 'doom-dashboard-menu-title)
+                    :action project-switch-project)
+                   ("Jump to bookmark" :icon
+                    (all-the-icons-octicon "bookmark" :face 'doom-dashboard-menu-title)
+                    :action bookmark-jump)
+                   ("Open private configuration" :icon
+                    (all-the-icons-octicon "tools" :face 'doom-dashboard-menu-title)
+                    :when
+                    (file-directory-p doom-private-dir)
+                    :action doom/open-private-config))))
 
 ;; Load some external files
 (load! "lisp/hydras.el")
@@ -802,3 +828,4 @@ and then closes the window config"
   (set-popup-rule!
     "^\\*helpful function"
     :side 'bottom :height 20 :width 40 :quit t :select t :ttl 5))
+
