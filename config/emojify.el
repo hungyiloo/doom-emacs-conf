@@ -3,6 +3,7 @@
   :config
   ;; I created a folder ~/.doom.d/.local/emojis/twemoji-latest and
   ;; downloaded the PNG assets from https://github.com/twitter/twemoji
+  (setq emojify-download-emojis-p nil)
   (setq emojify-emoji-set "twemoji-latest")
   (setq emojify-emojis-dir (concat doom-private-dir ".local/emojis/"))
   ;; This file is generated via ~/.doom.d/generate-emoji-json.js
