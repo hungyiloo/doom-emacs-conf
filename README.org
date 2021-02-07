@@ -5,11 +5,23 @@
 ** TODO Document how to download emojis into the correct directory
 
 ** STRT Typescript Language Server for LSP
+Ensure that Node and Yarn are installed, then install the language server packages:
 #+begin_src bash
 sudo apt install nodejs
 sudo npm install -g yarn
 yarn global add typescript-language-server typescript
 #+end_src
+
+It would be good to also add the yarn bin to the PATH in =~/.profile=:
+#+begin_src bash
+PATH="$HOME/.yarn/bin:$PATH"
+#+end_src
+
+** TODO Other Language Servers
+- HTML
+- Angular
+- CSS
+- C#
 
 ** STRT VTerm
 #+begin_src bash
