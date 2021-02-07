@@ -1,0 +1,31 @@
+#+TITLE: Hung-Yi's Doom Emacs Configuration
+
+* STRT External Dependencies
+
+** TODO Document how to download emojis into the correct directory
+
+** STRT Typescript Language Server for LSP
+#+begin_src bash
+sudo apt install nodejs
+sudo npm install -g yarn
+yarn global add typescript-language-server typescript
+#+end_src
+
+** STRT VTerm
+#+begin_src bash
+wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
+
+# 18.04
+sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
+
+sudo apt update
+sudo apt install libtool-bin cmake
+#+end_src
+
+** STRT JetBrains Mono Font
+#+begin_src bash
+wget https://download.jetbrains.com/fonts/JetBrainsMono-2.225.zip
+unzip JetBrainsMono-2.225.zip
+# manually look for the TTF files in the extracted file structure
+mv *.ttf ~/.local/share/fonts/
+#+end_src
