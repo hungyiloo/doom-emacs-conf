@@ -12,7 +12,7 @@
 (setq doom-font (font-spec :family "JetBrains Mono Light" :size 15))
 
 ;; Better default window placement on startup
-(setq initial-frame-alist '((width . 141) (height . 45) (fullscreen . fullheight)))
+;; (setq initial-frame-alist '((width . 141) (height . 45) (fullscreen . fullheight)))
 
 (add-hook! 'after-init-hook
            ;; Font adjustments should be more fine
