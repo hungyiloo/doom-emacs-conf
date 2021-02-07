@@ -33,8 +33,8 @@
         "<tab> 7" #'eyebrowse-switch-to-window-config-7
         "<tab> 8" #'eyebrowse-switch-to-window-config-8
         "<tab> 9" #'eyebrowse-switch-to-window-config-9
-        "<tab> d" #'my-eyebrowse-close-workspace
-        "<tab> D" #'eyebrowse-close-window-config
+        "<tab> D" #'my-eyebrowse-close-workspace
+        "<tab> d" #'eyebrowse-close-window-config
         "<tab> p" #'my-eyebrowse-open-project
         "<tab> r" #'eyebrowse-rename-window-config
         "<tab> ." #'eyebrowse-switch-to-window-config
