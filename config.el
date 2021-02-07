@@ -9,8 +9,7 @@
 (setq doom-theme 'doom-nord)
 
 ;; Set a custom font. Font choice can be important for performance.
-(setq doom-font (font-spec :family "JetBrains Mono Light" :size 15)
-      doom-variable-pitch-font (font-spec :family "Segoe UI" :size 15))
+(setq doom-font (font-spec :family "JetBrains Mono Light" :size 15))
 
 ;; Better default window placement on startup
 (setq initial-frame-alist '((width . 141) (height . 45) (fullscreen . fullheight)))
