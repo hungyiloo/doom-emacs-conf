@@ -1,3 +1,5 @@
+;;; config/tree-sitter.el -*- lexical-binding: t; -*-
+
 (after! tree-sitter
   (require 'tree-sitter-langs)
   (global-tree-sitter-mode)

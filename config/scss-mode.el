@@ -1,3 +1,5 @@
+;;; config/scss-mode.el -*- lexical-binding: t; -*-
+
 (after! scss-mode
   (defun my-scss-mode-setup ()
     ;; Uncomment this section to use asterisk style comments in SCSS

@@ -1,3 +1,5 @@
+;;; config/git-gutter.el -*- lexical-binding: t; -*-
+
 (after! git-gutter
   (setq git-gutter:disabled-modes '(fundamental-mode image-mode pdf-view-mode org-mode))
   (defun my-org-hook-start-without-vc-gutter ()

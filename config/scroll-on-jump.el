@@ -1,3 +1,5 @@
+;;; config/scroll-on-jump.el -*- lexical-binding: t; -*-
+
 (use-package! scroll-on-jump
   :commands (scroll-on-jump)
   :init

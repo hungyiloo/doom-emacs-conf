@@ -1,3 +1,5 @@
+;;; config/olivetti.el -*- lexical-binding: t; -*-
+
 (use-package! olivetti
   :hook (org-mode . olivetti-mode)
   :hook (markdown-mode . olivetti-mode)

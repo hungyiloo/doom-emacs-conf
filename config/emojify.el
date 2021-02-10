@@ -1,3 +1,5 @@
+;;; config/emojify.el -*- lexical-binding: t; -*-
+
 (use-package! emojify
   :commands (emojify-mode)
   :config

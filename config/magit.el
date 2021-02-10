@@ -1,3 +1,5 @@
+;;; config/magit.el -*- lexical-binding: t; -*-
+
 (use-package! magit
   :hook (magit-mode . my-magit-mode-hook)
   :config

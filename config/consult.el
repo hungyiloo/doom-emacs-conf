@@ -1,3 +1,5 @@
+;;; config/consult.el -*- lexical-binding: t; -*-
+
 (use-package! consult
   :config
   (defun my-consult-line-dwim ()

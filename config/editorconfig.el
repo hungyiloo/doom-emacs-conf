@@ -1,3 +1,5 @@
+;;; config/editorconfig.el -*- lexical-binding: t; -*-
+
 (after! editorconfig
   (setcdr (assq 'web-mode editorconfig-indentation-alist)
           '((web-mode-indent-style lambda (size) 2)

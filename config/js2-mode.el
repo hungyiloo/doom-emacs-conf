@@ -1,3 +1,5 @@
+;;; config/js2-mode.el -*- lexical-binding: t; -*-
+
 (after! js2-mode
   ;; Fix some edge case javascript indenting
   (setq js-indent-level 2)

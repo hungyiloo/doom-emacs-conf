@@ -1,3 +1,5 @@
+;;; config/eyebrowse.el -*- lexical-binding: t; -*-
+
 (use-package! eyebrowse
   :commands (my-eyebrowse-open-project
              my-eyebrowse-switch-buffer

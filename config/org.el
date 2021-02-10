@@ -1,3 +1,5 @@
+;;; config/org.el -*- lexical-binding: t; -*-
+
 (after! org
   ;; Set custom header bullets
   (setq org-superstar-headline-bullets-list '("•"))

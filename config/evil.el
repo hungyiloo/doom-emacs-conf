@@ -1,3 +1,5 @@
+;;; config/evil.el -*- lexical-binding: t; -*-
+
 (after! evil
   (setq evil-shift-width 2)
   (setq evil-move-cursor-back t)

@@ -1,3 +1,5 @@
+;;; config/lsp-mode.el -*- lexical-binding: t; -*-
+
 (after! lsp-mode
   ;; Setting this disables DOOM's deferred shutdown functionality.
   (setq +lsp-defer-shutdown nil)

@@ -1,3 +1,5 @@
+;;; config/dired.el -*- lexical-binding: t; -*-
+
 (after! dired
   (defun my-dired-duplicate-marked-files ()
     (interactive)

@@ -1,3 +1,5 @@
+;;; config/web-mode.el -*- lexical-binding: t; -*-
+
 (after! web-mode
   (setq web-mode-prettify-symbols-alist nil)
   ;; Use 2-space indentation in web-mode always

@@ -1,3 +1,5 @@
+;;; config/treemacs.el -*- lexical-binding: t; -*-
+
 (use-package! treemacs
   :hook (treemacs-mode . hide-mode-line-mode) ; hide modeline in treemacs
   :init

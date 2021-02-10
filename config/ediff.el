@@ -1,3 +1,5 @@
+;;; config/ediff.el -*- lexical-binding: t; -*-
+
 (after! ediff
   ;; Include ediff buffers in solaire-mode so they look the same
   ;; as regular editing buffers

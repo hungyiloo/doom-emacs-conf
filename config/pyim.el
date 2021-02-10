@@ -1,3 +1,5 @@
+;;; config/pyim.el -*- lexical-binding: t; -*-
+
 (use-package! pyim
   :commands #'set-input-method
   :config
