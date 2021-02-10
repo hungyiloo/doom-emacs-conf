@@ -1,64 +1,81 @@
 ;;; config/scroll-on-jump.el -*- lexical-binding: t; -*-
 
 (use-package! scroll-on-jump
-  :commands (scroll-on-jump)
+  :commands (scroll-on-jump my-global-smooth-scroll-mode)
   :init
-  (after! evil
-    (scroll-on-jump-advice-add evil-undo)
-    (scroll-on-jump-advice-add evil-redo)
-    (scroll-on-jump-advice-add evil-jump-item)
-    (scroll-on-jump-advice-add evil-jump-forward)
-    (scroll-on-jump-advice-add evil-jump-backward)
-    ;; (scroll-on-jump-advice-add evil-ex-search-forward)
-    ;; (scroll-on-jump-advice-add evil-ex-search-backward)
-    (scroll-on-jump-advice-add evil-ex-search-next)
-    (scroll-on-jump-advice-add evil-ex-search-previous)
-    (scroll-on-jump-advice-add evil-forward-paragraph)
-    (scroll-on-jump-advice-add evil-backward-paragraph)
-    (scroll-on-jump-advice-add evil-goto-mark)
-    (scroll-on-jump-advice-add evil-goto-first-line)
-    (scroll-on-jump-advice-add evil-goto-line)
-    (scroll-on-jump-with-scroll-advice-add evil-scroll-down)
-    (scroll-on-jump-with-scroll-advice-add evil-scroll-up)
-    (scroll-on-jump-with-scroll-advice-add evil-scroll-page-down)
-    (scroll-on-jump-with-scroll-advice-add evil-scroll-page-up)
-    (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-center)
-    (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-top)
-    (scroll-on-jump-with-scroll-advice-add evil-scroll-line-to-bottom))
-  (after! evil-snipe
-    (scroll-on-jump-advice-add evil-snipe-f)
-    (scroll-on-jump-advice-add evil-snipe-F)
-    (scroll-on-jump-advice-add evil-snipe-s)
-    (scroll-on-jump-advice-add evil-snipe-S)
-    (scroll-on-jump-advice-add evil-snipe-repeat)
-    (scroll-on-jump-advice-add evil-snipe-repeat-reverse))
-  (after! git-gutter
-    (scroll-on-jump-advice-add git-gutter:next-diff)
-    (scroll-on-jump-advice-add git-gutter:previous-diff)
-    (scroll-on-jump-advice-add git-gutter:next-hunk)
-    (scroll-on-jump-advice-add git-gutter:previous-hunk))
-  (after! better-jumper
-    (scroll-on-jump-advice-add better-jumper-jump-forward)
-    (scroll-on-jump-advice-add better-jumper-jump-backward))
-  (after! spell-fu
-    (scroll-on-jump-advice-add spell-fu-goto-next-error)
-    (scroll-on-jump-advice-add spell-fu-goto-previous-error))
-  (after! flycheck
-    (scroll-on-jump-advice-add flycheck-next-error)
-    (scroll-on-jump-advice-add flycheck-previous-error))
-  (after! evil-mc
-    (scroll-on-jump-advice-add evil-mc-make-and-goto-next-match)
-    (scroll-on-jump-advice-add evil-mc-make-and-goto-prev-match)
-    (scroll-on-jump-advice-add evil-mc-skip-and-goto-next-match)
-    (scroll-on-jump-advice-add evil-mc-skip-and-goto-prev-match)
-    (scroll-on-jump-advice-add +multiple-cursors/evil-mc-undo-cursor))
-  (after! goto-chg
-    (scroll-on-jump-advice-add goto-last-change)
-    (scroll-on-jump-advice-add goto-last-change-reverse))
-  (after! lookup
-    (scroll-on-jump-advice-add +lookup/definition))
-  (after! consult
-    (scroll-on-jump-advice-add consult--jump-1))
-  (scroll-on-jump-advice-add exchange-point-and-mark)
+  (define-minor-mode my-global-smooth-scroll-mode
+    "Smooth scrolling on jumping on common navigation commands"
+    :lighter " smooth"
+    :global t
+    (let ((jump-action (if my-global-smooth-scroll-mode
+                           (lambda (fn)
+                             (require 'scroll-on-jump)
+                             (advice-add fn :around #'scroll-on-jump-advice--wrapper))
+                         (lambda (fn) (advice-remove fn #'scroll-on-jump-advice--wrapper))))
+          (jump-with-scroll-action (if my-global-smooth-scroll-mode
+                                       (lambda (fn)
+                                         (require 'scroll-on-jump)
+                                         (advice-add fn :around #'scroll-on-jump-advice--with-scroll-wrapper))
+                                     (lambda (fn) (advice-remove fn #'scroll-on-jump-advice--with-scroll-wrapper)))))
+      (after! evil
+        (funcall jump-action #'evil-undo)
+        (funcall jump-action #'evil-redo)
+        (funcall jump-action #'evil-jump-item)
+        (funcall jump-action #'evil-jump-forward)
+        (funcall jump-action #'evil-jump-backward)
+        ;; (funcall jump-action #'evil-ex-search-forward)
+        ;; (funcall jump-action #'evil-ex-search-backward)
+        (funcall jump-action #'evil-ex-search-next)
+        (funcall jump-action #'evil-ex-search-previous)
+        (funcall jump-action #'evil-forward-paragraph)
+        (funcall jump-action #'evil-backward-paragraph)
+        (funcall jump-action #'evil-goto-mark)
+        (funcall jump-action #'evil-goto-first-line)
+        (funcall jump-action #'evil-goto-line)
+        (funcall jump-with-scroll-action #'evil-scroll-down)
+        (funcall jump-with-scroll-action #'evil-scroll-up)
+        (funcall jump-with-scroll-action #'evil-scroll-page-down)
+        (funcall jump-with-scroll-action #'evil-scroll-page-up)
+        (funcall jump-with-scroll-action #'evil-scroll-line-to-center)
+        (funcall jump-with-scroll-action #'evil-scroll-line-to-top)
+        (funcall jump-with-scroll-action #'evil-scroll-line-to-bottom))
+      (after! evil-snipe
+        (funcall jump-action #'evil-snipe-f)
+        (funcall jump-action #'evil-snipe-F)
+        (funcall jump-action #'evil-snipe-s)
+        (funcall jump-action #'evil-snipe-S)
+        (funcall jump-action #'evil-snipe-repeat)
+        (funcall jump-action #'evil-snipe-repeat-reverse))
+      (after! git-gutter
+        (funcall jump-action #'git-gutter:next-diff)
+        (funcall jump-action #'git-gutter:previous-diff)
+        (funcall jump-action #'git-gutter:next-hunk)
+        (funcall jump-action #'git-gutter:previous-hunk))
+      (after! better-jumper
+        (funcall jump-action #'better-jumper-jump-forward)
+        (funcall jump-action #'better-jumper-jump-backward))
+      (after! spell-fu
+        (funcall jump-action #'spell-fu-goto-next-error)
+        (funcall jump-action #'spell-fu-goto-previous-error))
+      (after! flycheck
+        (funcall jump-action #'flycheck-next-error)
+        (funcall jump-action #'flycheck-previous-error))
+      (after! evil-mc
+        (funcall jump-action #'evil-mc-make-and-goto-next-match)
+        (funcall jump-action #'evil-mc-make-and-goto-prev-match)
+        (funcall jump-action #'evil-mc-skip-and-goto-next-match)
+        (funcall jump-action #'evil-mc-skip-and-goto-prev-match)
+        (funcall jump-action #'+multiple-cursors/evil-mc-undo-cursor))
+      (after! goto-chg
+        (funcall jump-action #'goto-last-change)
+        (funcall jump-action #'goto-last-change-reverse))
+      (after! lookup
+        (funcall jump-action #'+lookup/definition))
+      (after! consult
+        (funcall jump-action #'consult--jump-1))
+      (funcall jump-action #'exchange-point-and-mark)))
   :config
   (setq scroll-on-jump-smooth nil))
+
+(add-hook! 'doom-first-buffer-hook
+           (my-global-smooth-scroll-mode +1))
