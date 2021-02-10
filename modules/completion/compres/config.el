@@ -221,7 +221,7 @@
 
 (use-package! embark
   :bind
-  ("<f5>" . embark-act)
+  ("C-S-a" . embark-act)
 
   :config
   ;; The following is not selectrum specific but included here for convenience.

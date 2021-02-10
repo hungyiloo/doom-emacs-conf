@@ -63,10 +63,12 @@
                  "~" #'ace-swap-window)
 
            (map! :map global-map
-                 "<f12>" #'universal-argument
                  "M-u" #'undo-only
                  "M-[" #'previous-buffer
                  "M-]" #'next-buffer)
+
+           (map! :map minibuffer-local-map
+                 "C-S-u" #'universal-argument)
 
            (setq +doom-dashboard-ascii-banner-fn
                  (defun my-doom-dashboard-draw-ascii-banner-fn ()
