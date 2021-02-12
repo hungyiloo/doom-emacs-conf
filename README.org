@@ -4,6 +4,21 @@
 
 ** TODO Document how to download emojis into the correct directory
 
+** TODO Font setup
+- JetBrains Mono
+- Fira Code
+- Noto Sans CJK
+
+Might have to symlink =.ttc= files from =/usr/share/fonts/opentype/= to =~/.local/share/fonts/=.
+
+*** STRT JetBrains Mono Font
+#+begin_src bash
+wget https://download.jetbrains.com/fonts/JetBrainsMono-2.225.zip
+unzip JetBrainsMono-2.225.zip
+# manually look for the TTF files in the extracted file structure
+mv *.ttf ~/.local/share/fonts/
+#+end_src
+
 ** STRT Typescript Language Server for LSP
 Ensure that Node and Yarn are installed, then install the language server packages:
 #+begin_src bash
@@ -34,10 +49,4 @@ sudo apt update
 sudo apt install libtool-bin cmake
 #+end_src
 
-** STRT JetBrains Mono Font
-#+begin_src bash
-wget https://download.jetbrains.com/fonts/JetBrainsMono-2.225.zip
-unzip JetBrainsMono-2.225.zip
-# manually look for the TTF files in the extracted file structure
-mv *.ttf ~/.local/share/fonts/
-#+end_src
+** TODO Why is there a permissions error with sudo?
