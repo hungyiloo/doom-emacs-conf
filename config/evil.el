@@ -45,3 +45,11 @@
 (after! evil-goggles
   (setq evil-goggles-duration 0.2)
   (setq evil-goggles-enable-paste nil))
+
+(after! evil-mc
+  ;; Prevents evil-mc from clearing registers when multiple cursors are created
+  ;; NOTE: This might break named register yanking and pasting *during* evil-mc-mode
+  (setq evil-mc-cursor-variables (mapcar
+                                  (lambda (s)
+                                    (remove 'register-alist (remove 'evil-markers-alist s)))
+                                  evil-mc-cursor-variables)))
