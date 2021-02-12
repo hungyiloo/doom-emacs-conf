@@ -74,6 +74,9 @@
       (after! consult
         (funcall jump-action #'consult--jump-1))
       (funcall jump-action #'exchange-point-and-mark)))
+  (map! :leader
+        (:prefix-map ("t" . "toggle")
+         :desc "Smooth Scroll" "m" #'my-global-smooth-scroll-mode ))
   :config
   (setq scroll-on-jump-smooth nil))
 
