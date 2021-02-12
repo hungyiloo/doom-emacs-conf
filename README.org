@@ -49,4 +49,14 @@ sudo apt update
 sudo apt install libtool-bin cmake
 #+end_src
 
-** TODO Why is there a permissions error with sudo?
+*** TODO Why is there a permissions error with sudo?
+
+** TODO Auxiliary apps
+- ripgrep
+- fd
+
+** TODO WSL-specific setup
+- xdg-open workarounds
+- pinentry-wsl-ps1.sh for HTTPS authenticated git repos that need a password store
+  + pass
+  + gpg
