@@ -5,12 +5,12 @@
   (setq +lsp-defer-shutdown nil)
   (setq lsp-enable-symbol-highlighting nil)
   (setq lsp-clients-angular-language-server-command
-        '("node"
-          (doom-path (getenv "HOME") ".config/yarn/global/node_modules/@angular/language-server")
+        `("node"
+          ,(doom-path (getenv "HOME") ".config/yarn/global/node_modules/@angular/language-server")
           "--ngProbeLocations"
-          (doom-path (getenv "HOME") ".config/yarn/global/node_modules")
+          ,(doom-path (getenv "HOME") ".config/yarn/global/node_modules")
           "--tsProbeLocations"
-          (doom-path (getenv "HOME") ".config/yarn/global/node_modules")
+          ,(doom-path (getenv "HOME") ".config/yarn/global/node_modules")
           "--stdio"))
   (setq lsp-clients-typescript-server-args
         `("--stdio"
