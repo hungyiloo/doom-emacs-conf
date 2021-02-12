@@ -52,9 +52,6 @@
 (package! olivetti)
 (package! evil-escape :disable t)
 ;; (package! lsp-mode :pin "f9a56b967fb39ec05dcbcaef17692dc01c3e402b")
-(unpin! lsp-mode)
-(unpin! doom-themes)
-;; (unpin! evil)
 (package! tree-sitter)
 (package! tree-sitter-langs)
 (package! pyim)
@@ -64,3 +61,8 @@
   :recipe (:host gitlab :repo "ideasman42/emacs-scroll-on-jump"))
 (package! command-log-mode)
 (package! csv-mode)
+
+(unpin! evil)
+(unpin! evil-mc)
+(unpin! lsp-mode)
+(unpin! doom-themes)
