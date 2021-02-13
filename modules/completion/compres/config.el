@@ -101,7 +101,7 @@
   ;; Ensure consult-recent-file returns a list of files on startup.
   ;; Without this, sometimes it can be empty on startup because it hasn't been loaded yet?
   ;; Not sure how to more elgantly trigger a load.
-  ;; (recentf-load-list)
+  (recentf-load-list)
 
   ;; Optionally configure a function which returns the project root directory
   (setq consult-project-root-function #'doom-project-root)
