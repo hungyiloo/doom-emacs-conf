@@ -78,6 +78,7 @@
         (:prefix-map ("t" . "toggle")
          :desc "Smooth Scroll" "m" #'my-global-smooth-scroll-mode ))
   :config
+  ;; This improves performance slightly for long jumps
   (setq scroll-on-jump-smooth nil))
 
 (add-hook! 'doom-first-buffer-hook
