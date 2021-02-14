@@ -135,6 +135,8 @@ _k_: move up         ___: decrease height   _[_: previous window
 _l_: move right      _>_: increase width    _}_: next window any frame
 _h_: move left       _<_: decrease width    _{_: previous window any frame
 _u_: undo            _r_: rotate downwards  _R_: rotate upwards
+_t_: transpose       _F_: flip (vertical)   _f_: flop (horizontal)
+_o_: other window
 
 _M-w_: evil-window-map
 
@@ -156,6 +158,7 @@ _M-w_: evil-window-map
   ("=" #'balance-windows)
   ("s" #'evil-window-split)
   ("v" #'evil-window-vsplit)
+  ("t" #'transpose-frame)
   ("T" #'tear-off-window)
   ("+" #'evil-window-increase-height)
   ("_" #'evil-window-decrease-height)
@@ -169,6 +172,9 @@ _M-w_: evil-window-map
   ("r" #'evil-window-rotate-downwards)
   ("R" #'evil-window-rotate-upwards)
   ("u" #'winner-undo)
+  ("F" #'flip-frame)
+  ("f" #'flop-frame)
+  ("o" #'other-window :color blue)
   ("M-w" #'my-evil-window-map-launcher :color blue)
   ("C-g" nil "quit" :color blue)
   ("q" nil "quit" :color blue)
@@ -176,4 +182,4 @@ _M-w_: evil-window-map
 
 (defun my-evil-window-map-launcher ()
   (interactive)
-  (run-at-time 0.5 nil #'execute-kbd-macro (kbd "SPC W")))
+  (run-at-time 0.1 nil #'execute-kbd-macro (kbd "SPC W")))
