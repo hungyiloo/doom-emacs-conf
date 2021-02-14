@@ -60,9 +60,25 @@
 and then closes the window config"
     (interactive)
     (if (doom-project-p)
-        (when (yes-or-no-p "Close the project along with the workspace?")
-          (call-interactively #'projectile-kill-buffers)
-          (eyebrowse-close-window-config))
+        (let* ((project (projectile-acquire-root))
+               (project-name (projectile-project-name project))
+               (buffers (projectile-project-buffers project)))
+          (when (yes-or-no-p
+                 (format "Are you sure you want to kill %s buffers for '%s'? "
+                         (length buffers) project-name))
+            (dolist (buffer buffers)
+              (when (and
+                     ;; we take care not to kill indirect buffers directly
+                     ;; as we might encounter them after their base buffers are killed
+                     (not (buffer-base-buffer buffer))
+                     (if (functionp projectile-kill-buffers-filter)
+                         (funcall projectile-kill-buffers-filter buffer)
+                       (pcase projectile-kill-buffers-filter
+                         ('kill-all t)
+                         ('kill-only-files (buffer-file-name buffer))
+                         (_ (user-error "Invalid projectile-kill-buffers-filter value: %S" projectile-kill-buffers-filter)))))
+                (kill-buffer buffer)))
+            (eyebrowse-close-window-config)))
       (eyebrowse-close-window-config)))
 
   (defun my-eyebrowse-open-project ()
