@@ -134,6 +134,7 @@ _J_: move down       _+_: increase height   _]_: next window
 _k_: move up         ___: decrease height   _[_: previous window
 _l_: move right      _>_: increase width    _}_: next window any frame
 _h_: move left       _<_: decrease width    _{_: previous window any frame
+_u_: undo            _r_: rotate downwards  _R_: rotate upwards
 
 _M-w_: evil-window-map
 
@@ -165,6 +166,9 @@ _M-w_: evil-window-map
   ("V" #'doom/window-maximize-vertically)
   ("d" #'delete-window)
   ("D" #'kill-buffer-and-window)
+  ("r" #'evil-window-rotate-downwards)
+  ("R" #'evil-window-rotate-upwards)
+  ("u" #'winner-undo)
   ("M-w" #'my-evil-window-map-launcher :color blue)
   ("C-g" nil "quit" :color blue)
   ("q" nil "quit" :color blue)
