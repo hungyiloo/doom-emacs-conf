@@ -55,6 +55,10 @@
                  (:prefix-map ("i" . "insert")
                   "u" #'insert-char))
 
+           (map! :leader
+                 :desc "window hydra" "w" #'my-window-hydra/body
+                 :desc "window" "W" evil-window-map)
+
            (map! :map evil-window-map
                  ;; Use the normal other-window command
                  ;; to take advantage of the window-select module
@@ -117,7 +121,7 @@
                     (file-directory-p doom-private-dir)
                     :action doom/open-private-config))))
 
-(after! 'doom-first-buffer-hook
+(add-hook! 'doom-first-buffer-hook
   (setq display-line-numbers-type t))
 
 ;; Allow links to be opened outside WSL
@@ -168,14 +172,6 @@
     (custom-set-faces!
       ;; Make tab bar background transparent so that it matches the theme
       ;; '(tab-line :inherit variable-pitch :foreground "black" :height 0.9)
-
-      ;; Customize material cursor color to not be so garish
-      ;; Also so that it doesn't conflict with the mc/multiedit cursors
-      ;; `(cursor :background ,(doom-color 'dark-cyan))
-
-      ;; These might make comments clearer in miramare?
-      ;; `(font-lock-comment-face :foreground ,(doom-color 'base5))
-      ;; `(magit-hash :foreground ,(doom-color 'base5))
 
       ;; More visible region background faces
       ;; `(region :background ,clearer-region)
