@@ -88,7 +88,8 @@ and then closes the window config"
     (condition-case nil
         (progn
           (call-interactively #'project-switch-project)
-          (eyebrowse-rename-window-config (eyebrowse--get 'current-slot) (projectile-project-name)))
+          (eyebrowse-rename-window-config (eyebrowse--get 'current-slot) (projectile-project-name))
+          (call-interactively #'doom/window-maximize-buffer))
       (quit (eyebrowse-close-window-config))))
 
   (defun my-eyebrowse-switch-buffer ()
