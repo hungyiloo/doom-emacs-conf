@@ -1,33 +1,63 @@
 ;;; config/evil.el -*- lexical-binding: t; -*-
 
 (after! evil
+  ;; I'm a dirty javascripter, so I like 2-space indentation
   (setq evil-shift-width 2)
-  (setq evil-move-cursor-back t)
+
+  ;; A lot of non-evil emacs packages expect the point
+  ;; to be able to move past the last character of something.
+  ;; I got tired of adding whitespace at the end of a file to
+  ;; fix these edge cases.
   (setq evil-move-beyond-eol t)
-  ;; (setq evil-escape-key-sequence "hl")
-  ;; (setq evil-escape-unordered-key-sequence t)
-  ;; (setq evil-escape-delay 0.05)
+
+  ;; Often I want to jump more than just within the line
   (setq evil-snipe-scope 'visible)
+
+  ;; Repeat keys (a.k.a. smart f) was annoying me
+  ;; I just use ; and , to go between snipe instances.
   (setq evil-snipe-repeat-keys nil)
+
+  ;; Allow emacs's tree-like undo system
   (setq evil-undo-function #'undo)
+
+  ;; This lets me undo things within an insert "session"
   (setq evil-want-fine-undo 't)
+
+  ;; I think C-u is more useful as the universal prefix in insert mode.
+  ;; If I really want to delete back to indentation exactly this way,
+  ;; just d^
   (setq evil-want-C-u-delete nil)
+
+  ;; This isn't "vimmy" but it does seem to fix some edge cases with evil-mc
+  (setq evil-move-cursor-back nil)
+
   (map!
-   :i "C-S-SPC" #'hippie-expand
+   ;; A convenient binding for the psychic hippie-expand
+   :i "C-?" #'hippie-expand
+
+   ;; I actually end up using C-n and C-p for up/down line navigation a lot.
    :n "C-n" #'next-line
    :n "C-p" #'previous-line
    :n "C-S-p" #'evil-paste-pop
    :n "C-S-n" #'evil-paste-pop-next
+
+   ;; TODO: The evil-mc hydra I wrote should really be in *this* file, or an evil-mc config file.
    (:when (featurep! :editor multiple-cursors)
     :prefix "g"
     :nv "z" #'my-mc-hydra/body)
+
+   ;; TODO: This should really be in its own smartparens config file
    :prefix "gs"
    :nv "p" #'my-sp-hydra/body)
-  ;; Fix ^ movement to also respect visual line mode
+
+  ;; Fix ^ movement to also respect visual line mode.
+  ;; It works for 0 and $ so why not ^?
   (when evil-respect-visual-line-mode
     (evil-define-minor-mode-key 'motion 'visual-line-mode
       "^"  #'evil-first-non-blank-of-visual-line
       "g^" #'evil-first-non-blank))
+
+  ;; I like having evil search matches be in the middle of the screen
   (defun my-recenter (&rest ignored)
     (recenter))
   (advice-add #'evil-ex-search-forward :after #'my-recenter)
