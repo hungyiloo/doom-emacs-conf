@@ -54,6 +54,50 @@
     ;; Skip trailing newline omitted by titlecase
     (buffer-substring (point-min) (1- (point-max)))))
 
+(defun titlecase-string-new (str)
+  "Convert string STR to title case and return the resulting string."
+  (let ((case-fold-search nil)
+        (segment nil)
+        (result nil)
+        (index 0)
+        (first-word-p t)
+        (word-boundary-chars '(? ?-))
+        (prefixes-not-to-upcase '(?' ?\" ?\( ?\[ ?‘ ?“))
+        (small-words (split-string
+                      "a an and as at but by en for if in of on or the to v v. vs vs. via"
+                      " ")))
+    (mapc (lambda (char)
+            (let* ((end-p (eq index (1- (length str))))
+                   (pop-p (or end-p
+                              (member char word-boundary-chars)))
+                   (downcase-p (and (not end-p)
+                                    (not first-word-p)
+                                    (member (downcase (apply #'string segment)) small-words)))
+                   (pass-p (or (string-match-p "[A-Z]" (apply #'string segment))
+                               (member ?@ segment))))
+              (setq segment (append segment (list char)))
+              (when pop-p
+                (setq
+                 segment
+                 (mapcar
+                  (lambda (x)
+                    (if (or pass-p
+                            (member x prefixes-not-to-upcase))
+                        x
+                      (if downcase-p
+                          (downcase x)
+                        (progn
+                          (setq downcase-p t)
+                          (upcase x)))))
+                  segment))
+                (setq result
+                      (append result segment))
+                (setq segment nil)
+                (setq first-word-p nil)))
+            (setq index (1+ index)))
+          str)
+    (apply #'string result)))
+
 (defun titlecase-region (begin end)
   "Convert text in region from BEGIN to END to title case."
   (interactive "*r")
@@ -69,6 +113,22 @@ the region to title case.  Otherwise, work on the current line."
   (if (and transient-mark-mode mark-active)
       (titlecase-region (region-beginning) (region-end))
     (titlecase-region (point-at-bol) (point-at-eol))))
+
+(defun titlecase-test ()
+  (interactive)
+  (dolist (case '(("the quick brown fox jumps over the lazy dog" "The Quick Brown Fox Jumps Over the Lazy Dog")
+                  ("'the great gatsby'" "'The Great Gatsby'")
+                  ("small word at the end is nothing to be afraid of" "Small Word at the End Is Nothing to Be Afraid Of")
+                  ("for step-by-step directions email someone@gmail.com" "For Step-by-Step Directions Email someone@gmail.com")
+                  ("2lmc spool: 'gruber on OmniFocus and vapo(u)rware" "2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware")))
+    (let ((actual (titlecase-string-new (car case)))
+          (expected (cadr case)))
+      (message "%s | %s %s"
+               expected
+               actual
+               (if (string-equal expected actual)
+                   "✅"
+                 "❌")))))
 
 (provide 'titlecase)
 
