@@ -125,20 +125,19 @@ _u_: undo  _C-r_: redo  _C-SPC_: set mark _s_: toggle strict
 (defhydra my-window-hydra (:color amaranth
                            :hint nil)
   "
-_w_: ace window      _~_: swap              _m_: maximize
-_j_: down            _=_: balance           _S_: maximize horizontal
-_k_: up              _s_: split horizontal  _V_: maximize vertical
-_l_: right           _v_: split vertical    _d_: delete window
-_h_: left            _T_: tear off          _D_: quit and kill buffer
-_J_: move down       _+_: increase height   _]_: next window
-_k_: move up         ___: decrease height   _[_: previous window
-_l_: move right      _>_: increase width    _}_: next window any frame
-_h_: move left       _<_: decrease width    _{_: previous window any frame
-_u_: undo            _r_: rotate downwards  _R_: rotate upwards
-_t_: transpose       _F_: flip (vertical)   _f_: flop (horizontal)
-_o_: other window
+_w_: ace window       _~_: swap              _m_: maximize
+_j_: down             _=_: balance           _S_: maximize horizontal
+_k_: up               _s_: split horizontal  _V_: maximize vertical
+_l_: right            _v_: split vertical    _d_: delete window
+_h_: left             _T_: tear off          _D_: quit and kill buffer
+_J_: move down        _+_: increase height   _]_: next window
+_k_: move up          ___: decrease height   _[_: previous window
+_l_: move right       _>_: increase width    _}_: next window any frame
+_h_: move left        _<_: decrease width    _{_: previous window any frame
+_u_: undo             _r_: rotate downwards  _R_: rotate upwards
+_t_: transpose        _F_: flip (vertical)   _f_: flop (horizontal)
 
-_M-w_: evil-window-map
+_M-w_: evil-window-map  _SPC_: quick next window
 
 "
   ("w" #'ace-window)
@@ -174,8 +173,8 @@ _M-w_: evil-window-map
   ("u" #'winner-undo)
   ("F" #'flip-frame)
   ("f" #'flop-frame)
-  ("o" #'other-window :color blue)
   ("M-w" #'my-evil-window-map-launcher :color blue)
+  ("SPC" #'evil-window-next :color blue)
   ("C-g" nil "quit" :color blue)
   ("q" nil "quit" :color blue)
   ("<escape>" nil "quit" :color blue))
