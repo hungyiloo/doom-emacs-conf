@@ -84,13 +84,15 @@ and then closes the window config"
   (defun my-eyebrowse-open-project ()
     "Creates a window config, open a project and name the eyebrowse slot to match the project name"
     (interactive)
-    (eyebrowse-create-window-config)
-    (condition-case nil
-        (progn
-          (call-interactively #'project-switch-project)
-          (eyebrowse-rename-window-config (eyebrowse--get 'current-slot) (projectile-project-name))
-          (call-interactively #'doom/window-maximize-buffer))
-      (quit (eyebrowse-close-window-config))))
+    (let ((saved-slot (eyebrowse--get 'current-slot)))
+      (eyebrowse-create-window-config)
+      (condition-case nil
+          (progn
+            (call-interactively #'project-switch-project)
+            (eyebrowse-rename-window-config (eyebrowse--get 'current-slot) (projectile-project-name))
+            (call-interactively #'doom/window-maximize-buffer))
+        (quit (eyebrowse-close-window-config)
+              (eyebrowse-switch-to-window-config saved-slot)))))
 
   (defun my-eyebrowse-switch-buffer ()
     "Switch buffer depending on project if we're in one"
