@@ -1,82 +1,44 @@
 ;;; titlecase.el --- convert text to title case -*- lexical-binding: t; -*-
 
-;;; Copyright (C) 2013 Jason R. Blevins <jrblevin@sdf.org>
-;; All rights reserved.
-
-;; Redistribution and use in source and binary forms, with or without
-;; modification, are permitted provided that the following conditions are met:
-;; 1. Redistributions of source code must retain the above copyright
-;;    notice, this list of conditions and the following disclaimer.
-;; 2. Redistributions in binary form must reproduce the above copyright
-;;    notice, this list of conditions and the following disclaimer in the
-;;    documentation  and/or other materials provided with the distribution.
-;; 3. Neither the names of the copyright holders nor the names of any
-;;    contributors may be used to endorse or promote products derived from
-;;    this software without specific prior written permission.
-
-;; THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-;; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-;; IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-;; ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
-;; LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-;; CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-;; SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-;; INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-;; CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-;; ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-;; POSSIBILITY OF SUCH DAMAGE.
-
-;;; Version: 1.1
-;;; Author: Jason R. Blevins <jrblevin@sdf.org>
-;;; Keywords: title case, capitalization, writing.
-
-;; This file is not part of GNU Emacs.
-
-;;; Commentary:
-
-;; Currently, this is simply a wrapper for the `titlecase` Perl script
-;; written by John Gruber and Aristotle Pagaltzis.  This script can be
-;; found at <https://github.com/ap/titlecase>.  If `titlecase` is not
-;; in your path, you must change the value of `titlecase-command'
-;; accordingly.
-
-;;; Code:
-
-(defvar titlecase-command "titlecase")
-
-(defconst titlecase-buffer "*titlecase output*")
-
 (defun titlecase-string (str)
-  "Convert string STR to title case and return the resulting string."
-  (with-temp-buffer
-    (insert str)
-    (call-process-region (point-min) (point-max) titlecase-command t t nil)
-    ;; Skip trailing newline omitted by titlecase
-    (buffer-substring (point-min) (1- (point-max)))))
-
-(defun titlecase-string-new (str)
   "Convert string STR to title case and return the resulting string."
   (let ((case-fold-search nil)
         (segment nil)
         (result nil)
-        (index 0)
         (first-word-p t)
-        (word-boundary-chars '(? ?-))
-        (prefixes-not-to-upcase '(?' ?\" ?\( ?\[ ?‘ ?“))
+        (index 0)
+        (word-boundary-chars '(?  ?- ?‑ ?/))
+        (prefixes-not-to-upcase '(?' ?\" ?\( ?\[ ?‘ ?“ ?’ ?” ?_))
+        (new-phrase-markers '(?:))
         (small-words (split-string
                       "a an and as at but by en for if in of on or the to v v. vs vs. via"
-                      " ")))
+                      " "))
+        (in-path-p nil))
     (mapc (lambda (char)
             (let* ((end-p (eq index (1- (length str))))
                    (pop-p (or end-p
-                              (member char word-boundary-chars)))
-                   (downcase-p (and (not end-p)
-                                    (not first-word-p)
-                                    (member (downcase (apply #'string segment)) small-words)))
-                   (pass-p (or (string-match-p "[A-Z]" (apply #'string segment))
+                              (and (or (eq char ? ) (not in-path-p))
+                                   (member char word-boundary-chars))))
+                   (segment-string (apply #'string (reverse segment)))
+                   (downcase-rest-p (and (not end-p)
+                                         (not first-word-p)
+                                         (member (downcase segment-string) small-words)))
+                   (pass-p (or in-path-p
+                               (string-match-p "\\w\\.\\w" segment-string)
+                               (string-match-p "[A-Z]" segment-string)
+                               (string-match-p "^https?:" segment-string)
+                               (string-match-p "^[A-Za-z]:\\\\" segment-string)
                                (member ?@ segment))))
-              (setq segment (append segment (list char)))
               (when pop-p
+                (setq first-word-p (member (car segment) new-phrase-markers)))
+              (setq segment (cons char segment))
+              (when (eq char ? )
+                (setq in-path-p nil))
+              (when pop-p
+                (when (and (eq char ?/)
+                           (or (eq (length segment) 1)
+                               (member (cadr segment) '(?. ?~))))
+                  (setq in-path-p t))
                 (setq
                  segment
                  (mapcar
@@ -84,18 +46,19 @@
                     (if (or pass-p
                             (member x prefixes-not-to-upcase))
                         x
-                      (if downcase-p
+                      (if downcase-rest-p
                           (downcase x)
                         (progn
-                          (setq downcase-p t)
+                          (setq downcase-rest-p t)
                           (upcase x)))))
-                  segment))
+                  (reverse segment)))
                 (setq result
                       (append result segment))
-                (setq segment nil)
-                (setq first-word-p nil)))
+                (setq segment nil)))
             (setq index (1+ index)))
-          str)
+          (if (string-match-p "[a-z]" str)
+              str
+            (downcase str)))
     (apply #'string result)))
 
 (defun titlecase-region (begin end)
@@ -114,22 +77,60 @@ the region to title case.  Otherwise, work on the current line."
       (titlecase-region (region-beginning) (region-end))
     (titlecase-region (point-at-bol) (point-at-eol))))
 
-(defun titlecase-test ()
-  (interactive)
-  (dolist (case '(("the quick brown fox jumps over the lazy dog" "The Quick Brown Fox Jumps Over the Lazy Dog")
-                  ("'the great gatsby'" "'The Great Gatsby'")
-                  ("small word at the end is nothing to be afraid of" "Small Word at the End Is Nothing to Be Afraid Of")
-                  ("for step-by-step directions email someone@gmail.com" "For Step-by-Step Directions Email someone@gmail.com")
-                  ("2lmc spool: 'gruber on OmniFocus and vapo(u)rware" "2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware")))
-    (let ((actual (titlecase-string-new (car case)))
-          (expected (cadr case)))
-      (message "%s | %s %s"
-               expected
-               actual
-               (if (string-equal expected actual)
-                   "✅"
-                 "❌")))))
+;; (defun titlecase-test ()
+;;   (interactive)
+;;   (message
+;;    "\n%s\n"
+;;    (string-join
+;;     (mapcar (lambda (case)
+;;               (let ((actual (titlecase-string (car case)))
+;;                     (expected (cadr case)))
+;;                 (format "%s %s | %s"
+;;                         (if (string-equal expected actual)
+;;                             "✅"
+;;                           "❌")
+;;                         expected
+;;                         actual)))
+;;             '(("the quick brown fox jumps over the lazy dog" "The Quick Brown Fox Jumps Over the Lazy Dog")
+;;               ("'the great gatsby'" "'The Great Gatsby'")
+;;               ("small word at the end is nothing to be afraid of" "Small Word at the End Is Nothing to Be Afraid Of")
+;;               ("for step-by-step directions email someone@gmail.com" "For Step-by-Step Directions Email someone@gmail.com")
+;;               ("2lmc spool: 'gruber on OmniFocus and vapo(u)rware" "2lmc Spool: 'Gruber on OmniFocus and Vapo(u)rware")
+;;               ("Have you read “The Lottery”?" "Have You Read “The Lottery”?")
+;;               ("Have you read “the lottery”?" "Have You Read “The Lottery”?")
+;;               ("Have you read \"the lottery\"?" "Have You Read \"The Lottery\"?")
+;;               ("your hair[cut] looks (nice)" "Your Hair[cut] Looks (Nice)")
+;;               ("People probably won't put http://foo.com/bar/ in titles" "People Probably Won't Put http://foo.com/bar/ in Titles")
+;;               ("Scott Moritz and TheStreet.com’s million iPhone la‑la land" "Scott Moritz and TheStreet.com’s Million iPhone La‑La Land")
+;;               ("Scott Moritz and thestreet.com’s million iPhone la‑la land" "Scott Moritz and thestreet.com’s Million iPhone La‑La Land")
+;;               ("BlackBerry vs. iPhone" "BlackBerry vs. iPhone")
+;;               ("Notes and observations regarding Apple’s announcements from ‘The Beat Goes On’ special event" "Notes and Observations Regarding Apple’s Announcements From ‘The Beat Goes On’ Special Event")
+;;               ("Read markdown_rules.txt to find out how _underscores around words_ will be interpretted" "Read markdown_rules.txt to Find Out How _Underscores Around Words_ Will Be Interpretted")
+;;               ("Q&A with Steve Jobs: 'That's what happens in technology'" "Q&A With Steve Jobs: 'That's What Happens in Technology'")
+;;               ("What is AT&T's problem?" "What Is AT&T's Problem?")
+;;               ("Apple deal with AT&T falls through" "Apple Deal With AT&T Falls Through")
+;;               ("this v that" "This v That")
+;;               ("this vs that" "This vs That")
+;;               ("this v. that" "This v. That")
+;;               ("this vs. that" "This vs. That")
+;;               ("The SEC's Apple probe: what you need to know" "The SEC's Apple Probe: What You Need to Know")
+;;               ("'by the way, small word at the start but within quotes.'" "'By the Way, Small Word at the Start but Within Quotes.'")
+;;               ("Starting sub-phrase with a small word: a trick, perhaps?" "Starting Sub-Phrase With a Small Word: A Trick, Perhaps?")
+;;               ("Sub-phrase with a small word in quotes: 'a trick, perhaps?'" "Sub-Phrase With a Small Word in Quotes: 'A Trick, Perhaps?'")
+;;               ("Sub-phrase with a small word in quotes: \"a trick, perhaps?\"" "Sub-Phrase With a Small Word in Quotes: \"A Trick, Perhaps?\"")
+;;               ("\"Nothing to Be Afraid of?\"" "\"Nothing to Be Afraid Of?\"")
+;;               ("a thing" "A Thing")
+;;               ("Dr. Strangelove (or: how I Learned to Stop Worrying and Love the Bomb)" "Dr. Strangelove (Or: How I Learned to Stop Worrying and Love the Bomb)")
+;;               ("  this is trimming" "  This Is Trimming")
+;;               ("IF IT’S ALL CAPS, FIX IT" "If It’s All Caps, Fix It")
+;;               ("___if emphasized, keep that way___" "___If Emphasized, Keep That Way___")
+;;               ("What could/should be done about slashes?" "What Could/Should Be Done About Slashes?")
+;;               ("Never touch paths like /var/run before/after /boot" "Never Touch Paths Like /var/run Before/After /boot")
+;;               ("What about relative paths like ./profile and ~/downloads/music?" "What About Relative Paths Like ./profile and ~/downloads/music?")
+;;               ("And windows paths like c:\\temp\\scratch too" "And Windows Paths Like c:\\temp\\scratch Too")
+;;               ("There are 100's of buyer's guides" "There Are 100's of Buyer's Guides"))
+;;             )
+;;     "\n")))
 
 (provide 'titlecase)
 
-;;; titlecase.el ends here
