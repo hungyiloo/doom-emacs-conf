@@ -2,63 +2,113 @@
 
 (defun titlecase-string (str)
   "Convert string STR to title case and return the resulting string."
-  (let ((case-fold-search nil)
+  (let (;; Case-sensitive search is really important in this application
+        (case-fold-search nil)
+
+        ;; A place to hold the current working "segment" of the title
+        ;; that we are working with and deciding what parts to upcase
         (segment nil)
+
+        ;; The resulting list of characters, to be collected later in this function
         (result nil)
+
+        ;; Is this a "first word" scenario, that should always be capitalized?
         (first-word-p t)
-        (index 0)
+
+        ;; Are we currently in the middle of a filesystem path pattern?
+        (in-path-p nil)
+
+        ;; The total length of the input string
+        (str-length (length str))
+
+        ;; A list of characters that indicate "word boundaries"
+        ;; and are used to split the title into processable segments
         (word-boundary-chars '(?  ?- ?‑ ?/))
+
+        ;; A list of characters that defers upcasing until the next character
         (prefixes-not-to-upcase '(?' ?\" ?\( ?\[ ?‘ ?“ ?’ ?” ?_))
+
+        ;; A list of markers that indicate a "title within a title"
+        ;; e.g. "The Lonely Reindeer: A Christmas Story"
         (new-phrase-markers '(?:))
+
+        ;; A list of small words that should not be capitalized (in the right conditions)
         (small-words (split-string
                       "a an and as at but by en for if in of on or the to v v. vs vs. via"
-                      " "))
-        (in-path-p nil))
+                      " ")))
     (mapc (lambda (char)
-            (let* ((end-p (eq index (1- (length str))))
+            (let* (;; Indicates if we're at the end of the input string
+                   (end-p (eq (+ (length result) (length segment) 1) str-length))
+
+                   ;; Indicates that we're ready to pop this segment onto the result
                    (pop-p (or end-p
                               (and (or (eq char ? ) (not in-path-p))
                                    (member char word-boundary-chars))))
+
+                   ;; The string form of the current segment, for use
+                   ;; with regexes
                    (segment-string (apply #'string (reverse segment)))
-                   (downcase-rest-p (and (not end-p)
-                                         (not first-word-p)
-                                         (member (downcase segment-string) small-words)))
+
+                   ;; If true, lowercase the remainder of the segment
+                   (lowercase-rest-p (and (not end-p)
+                                          (not first-word-p)
+                                          (member (downcase segment-string) small-words)))
+
+                   ;; If true, skip processing segment
                    (pass-p (or in-path-p
                                (string-match-p "\\w\\.\\w" segment-string)
                                (string-match-p "[A-Z]" segment-string)
                                (string-match-p "^https?:" segment-string)
                                (string-match-p "^[A-Za-z]:\\\\" segment-string)
                                (member ?@ segment))))
-              (when pop-p
-                (setq first-word-p (member (car segment) new-phrase-markers)))
-              (setq segment (cons char segment))
+              ;; A space always terminates a filesystem path pattern
               (when (eq char ? )
                 (setq in-path-p nil))
+
+              ;; If the current character is a slash and the previous
+              ;; character was also a "word boundary" (therefore segment is empty)
+              ;; OR the previous character was a valid path starter (like . or ~)
+              ;; then this should be the start of a path.
+              ;;
+              ;; We need this convoluted logic to differentiate it from the normal
+              ;; slash "word boundary" scenario. There's probably a better way to handle it,
+              ;; but I'm tired and the segment popping approach is already working well.
+              (when (and (eq char ?/)
+                         (or (not segment)
+                             (member (car segment) '(?. ?~))))
+                (setq in-path-p t))
+
+              ;; Pretend we're at the beginning of the title again
+              ;; if we are *about* to pop a segment and the end of it
+              ;; has a new phrase marker, like a colon
               (when pop-p
-                (when (and (eq char ?/)
-                           (or (eq (length segment) 1)
-                               (member (cadr segment) '(?. ?~))))
-                  (setq in-path-p t))
+                (setq first-word-p (member (car segment) new-phrase-markers)))
+
+              ;; Add the current character to the working segment
+              (setq segment (cons char segment))
+
+              ;; If we're ready to pop this segment, loop through it and
+              ;; do capilization if required.
+              (when pop-p
                 (setq
                  segment
                  (mapcar
                   (lambda (x)
-                    (if (or pass-p
-                            (member x prefixes-not-to-upcase))
-                        x
-                      (if downcase-rest-p
-                          (downcase x)
-                        (progn
-                          (setq downcase-rest-p t)
-                          (upcase x)))))
+                    (cond (pass-p x)                              ; skip this segment
+                          ((member x prefixes-not-to-upcase) x)   ; start char of segment needs to be ignored
+                          (lowercase-rest-p (downcase x))         ; already capitalized start of segment
+                          (t (setq lowercase-rest-p t)            ; upcase the first char & flag that it's done
+                             (upcase x))))
                   (reverse segment)))
-                (setq result
-                      (append result segment))
-                (setq segment nil)))
-            (setq index (1+ index)))
+                (setq result (append result segment))
+                (setq segment nil))))
+
+          ;; Handle the "FIX IF ALL CAPS" case
           (if (string-match-p "[a-z]" str)
               str
             (downcase str)))
+
+    ;; Reconstruct the result from list of characters to a string
     (apply #'string result)))
 
 (defun titlecase-region (begin end)
