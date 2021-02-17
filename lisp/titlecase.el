@@ -23,7 +23,7 @@
 
         ;; A list of characters that indicate "word boundaries"
         ;; and are used to split the title into processable segments
-        (word-boundary-chars '(?  ?- ?‑ ?/))
+        (word-boundary-chars '(?  ?– ?— ?- ?‑ ?/))
 
         ;; A list of characters that defers upcasing until the next character
         (prefixes-not-to-upcase '(?' ?\" ?\( ?\[ ?‘ ?“ ?’ ?” ?_))
@@ -94,10 +94,10 @@
                  segment
                  (mapcar
                   (lambda (x)
-                    (cond (pass-p x)                              ; skip this segment
-                          ((member x prefixes-not-to-upcase) x)   ; start char of segment needs to be ignored
-                          (lowercase-rest-p (downcase x))         ; already capitalized start of segment
-                          (t (setq lowercase-rest-p t)            ; upcase the first char & flag that it's done
+                    (cond (pass-p x)                            ; skip this char coz we're skipping this segment
+                          ((member x prefixes-not-to-upcase) x) ; start char of segment needs to be ignored
+                          (lowercase-rest-p (downcase x))       ; already upcased start of segment, so lowercase the rest
+                          (t (setq lowercase-rest-p t)          ; upcase the first char & flag that it's been done
                              (upcase x))))
                   (reverse segment)))
                 (setq result (append result segment))

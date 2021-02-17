@@ -34,7 +34,7 @@ _N_: skip & prev
 Current pattern: %`evil-mc-pattern
 
 "
-  ("z" #'evil-mc-make-all-cursors :color blue)
+  ("z" #'evil-mc-make-all-cursors)
   ("m" #'evil-mc-make-and-goto-next-match)
   ("M" #'evil-mc-make-and-goto-prev-match)
   ("n" #'evil-mc-skip-and-goto-next-match)
@@ -125,22 +125,23 @@ _u_: undo  _C-r_: redo  _C-SPC_: set mark _s_: toggle strict
 (defhydra my-window-hydra (:color amaranth
                            :hint nil)
   "
-_w_: ace window       _~_: swap              _m_: maximize
+_SPC_: ace window     _~_: swap              _m_: maximize
 _j_: down             _=_: balance           _S_: maximize horizontal
 _k_: up               _s_: split horizontal  _V_: maximize vertical
 _l_: right            _v_: split vertical    _d_: delete window
-_h_: left             _T_: tear off          _D_: quit and kill buffer
+_h_: left             _T_: tear off          _D_: ace delete
 _J_: move down        _+_: increase height   _]_: next window
 _k_: move up          ___: decrease height   _[_: previous window
 _l_: move right       _>_: increase width    _}_: next window any frame
 _h_: move left        _<_: decrease width    _{_: previous window any frame
 _u_: undo             _r_: rotate downwards  _R_: rotate upwards
 _t_: transpose        _F_: flip (vertical)   _f_: flop (horizontal)
+_x_: quit and kill buffer
 
-_M-w_: evil-window-map  _SPC_: quick next window
+_M-w_: evil-window-map  _w_: quick next window
 
 "
-  ("w" #'ace-window)
+  ("SPC" #'ace-window)
   ("]" #'evil-window-next)
   ("[" #'evil-window-prev)
   ("}" #'next-window-any-frame)
@@ -167,14 +168,15 @@ _M-w_: evil-window-map  _SPC_: quick next window
   ("S" #'doom/window-maximize-horizontally)
   ("V" #'doom/window-maximize-vertically)
   ("d" #'delete-window)
-  ("D" #'kill-buffer-and-window)
+  ("D" #'ace-delete-window)
+  ("x" #'kill-buffer-and-window)
   ("r" #'evil-window-rotate-downwards)
   ("R" #'evil-window-rotate-upwards)
   ("u" #'winner-undo)
   ("F" #'flip-frame)
   ("f" #'flop-frame)
   ("M-w" #'my-evil-window-map-launcher :color blue)
-  ("SPC" #'evil-window-next :color blue)
+  ("w" #'evil-window-next :color blue)
   ("C-g" nil "quit" :color blue)
   ("q" nil "quit" :color blue)
   ("<escape>" nil "quit" :color blue))

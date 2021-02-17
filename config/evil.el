@@ -28,8 +28,11 @@
   ;; just d^
   (setq evil-want-C-u-delete nil)
 
-  ;; This isn't "vimmy" but it does seem to fix some edge cases with evil-mc
-  (setq evil-move-cursor-back nil)
+  ;; Setting this to nil fixes small edge cases in evil-mc
+  ;; but setting it to t fixes LARGE edge cases in evil-mc
+  ;; TODO: Look into evil-mc single character visual selection to see
+  ;; if it can be fixed when this flag is still set to true.
+  (setq evil-move-cursor-back t)
 
   (map!
    ;; A convenient binding for the psychic hippie-expand
