@@ -1,6 +1,6 @@
 ;;; titlecase.el --- convert text to title case -*- lexical-binding: t; -*-
 
-(require 'cl)
+(require 'cl-lib)
 
 (defun titlecase-string (str)
   "Convert string STR to title case and return the resulting string."
