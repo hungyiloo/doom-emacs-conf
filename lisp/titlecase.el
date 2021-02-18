@@ -13,7 +13,7 @@
          (prefixes-not-to-upcase '(?' ?\" ?\( ?\[ ?‘ ?“ ?’ ?” ?_))
          ;; A list of markers that indicate a "title within a title"
          ;; e.g. "The Lonely Reindeer: A Christmas Story"
-         (new-phrase-markers '(?:))
+         (new-phrase-markers '(?: ?. ?? ?\;))
          ;; A list of small words that should not be capitalized (in the right conditions)
          (small-words (split-string
                        "a an and as at but by en for if in of on or the to v v. vs vs. via"
@@ -141,7 +141,10 @@ the region to title case.  Otherwise, work on the current line."
 ;;               ("Never touch paths like /var/run before/after /boot" "Never Touch Paths Like /var/run Before/After /boot")
 ;;               ("What about relative paths like ./profile and ~/downloads/music?" "What About Relative Paths Like ./profile and ~/downloads/music?")
 ;;               ("And windows paths like c:\\temp\\scratch too" "And Windows Paths Like c:\\temp\\scratch Too")
-;;               ("There are 100's of buyer's guides" "There Are 100's of Buyer's Guides"))
+;;               ("There are 100's of buyer's guides" "There Are 100's of Buyer's Guides")
+;;               ("a trick perhaps? or not really." "A Trick Perhaps? Or Not Really.")
+;;               ("this. is. good." "This. Is. Good.")
+;;               ("some cats are fun; the others aren't" "Some Cats Are Fun; The Others Aren't"))
 ;;             )
 ;;     "\n")))
 
