@@ -1,6 +1,7 @@
 ;;; titlecase.el --- convert text to title case -*- lexical-binding: t; -*-
 
 (require 'cl-lib)
+(require 'subr-x)
 
 (defun titlecase-string (str)
   "Convert string STR to title case and return the resulting string."
@@ -72,7 +73,10 @@
                        (first-word-p . t)    ; is it the first word of a phrase?
                        (in-path-p . nil))))) ; are we inside of a filesystem path?
     ;; Reconstruct the string from the result of the exit state of the machine
-    (apply #'string (reverse (alist-get 'result final-state)))))
+    (thread-last final-state
+      (alist-get 'result)
+      (reverse)
+      (apply #'string))))
 
 (defun titlecase-region (begin end)
   "Convert text in region from BEGIN to END to title case."
