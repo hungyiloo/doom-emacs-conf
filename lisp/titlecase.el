@@ -24,11 +24,11 @@
                                (downcase str)))
          ;; Reduce over a state machine to titlecase the string
          (final-state
-          (cl-reduce (lambda (acc char)
-                       (let* ((segment          (alist-get 'segment acc))
-                              (result           (alist-get 'result acc))
-                              (in-path-p        (alist-get 'in-path-p acc))
-                              (first-word-p     (alist-get 'first-word-p acc))
+          (cl-reduce (lambda (state char)
+                       (let* ((segment          (alist-get 'segment state))
+                              (result           (alist-get 'result state))
+                              (in-path-p        (alist-get 'in-path-p state))
+                              (first-word-p     (alist-get 'first-word-p state))
                               (end-p            (eq (+ (length result) (length segment) 1) str-length))
                               (pop-p            (or end-p
                                                     (and (or (eq char ? ) (not in-path-p))
