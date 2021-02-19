@@ -15,20 +15,20 @@
   (after! selectrum
     (advice-add #'emojify-ephemeral-buffer-p
                 :around
-                (defun my-emojify-ephemeral-buffer-p (orig-fun buffer)
+                (defun my/emojify-ephemeral-buffer-p (orig-fun buffer)
                   (or (string-match-p selectrum--candidates-buffer (buffer-name buffer))
                       (apply orig-fun (list buffer)))))
-    (defun my-emojify-refresh-selectrum-candidates (&rest ignored)
+    (defun my/emojify-refresh-selectrum-candidates (&rest ignored)
       (with-current-buffer (get-buffer selectrum--candidates-buffer)
         (emojify-display-emojis-in-region 1 (buffer-size))))
 
-    (advice-add #'selectrum--insert-candidates :after #'my-emojify-refresh-selectrum-candidates))
+    (advice-add #'selectrum--insert-candidates :after #'my/emojify-refresh-selectrum-candidates))
 
   (after! consult
     ;; Fix emojify display issues after using consult.
     ;; `consult-line' and `consult-outline' in particular seems to mess with the buffer's
     ;; emojify region, so the following setup resets the global mode after use.
-    (defun my-emojify-reset-global-mode (orig-fun &rest args)
+    (defun my/emojify-reset-global-mode (orig-fun &rest args)
       (condition-case nil
           (progn
             (apply orig-fun args)
@@ -38,8 +38,8 @@
                      (global-emojify-mode +1)))))
     (add-hook! 'consult-after-jump-hook
                #'emojify-redisplay-emojis-in-region)
-    (advice-add #'consult-line :around #'my-emojify-reset-global-mode)
-    (advice-add #'consult-outline :around #'my-emojify-reset-global-mode))
+    (advice-add #'consult-line :around #'my/emojify-reset-global-mode)
+    (advice-add #'consult-outline :around #'my/emojify-reset-global-mode))
 
   ;; Redefine this function to simplify the label on each emoji when inserting
   (defun emojify--get-completing-read-candidates ()

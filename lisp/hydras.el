@@ -1,6 +1,6 @@
 ;;; lisp/hydras.el -*- lexical-binding: t; -*-
 
-(defun my-mc-select-matches ()
+(defun my/mc-select-matches ()
   (interactive)
   (evil-mc-execute-for-all-cursors
    (lambda (args)
@@ -16,12 +16,12 @@
                        (match-end 0)
                        'char)))))))
 
-(defhydra my-mc-hydra (:color pink
+(defhydra my/mc-hydra (:color pink
                        :hint nil
                        :pre (evil-mc-pause-cursors)
                        :post (progn
                                (evil-mc-resume-cursors)
-                               (when evil-mc-pattern (my-mc-select-matches))))
+                               (when evil-mc-pattern (my/mc-select-matches))))
   "
 ^Match^            ^Line-wise^           ^Manual^
 ^^^^^^----------------------------------------------------
@@ -50,7 +50,7 @@ Current pattern: %`evil-mc-pattern
   ("q" nil "quit" :color blue)
   ("<escape>" nil "quit" :color blue))
 
-(defhydra my-sp-hydra (:color amaranth
+(defhydra my/sp-hydra (:color amaranth
                        :hint nil)
   "
 ^Navigation^               ^Editing^
@@ -122,7 +122,7 @@ _u_: undo  _C-r_: redo  _C-SPC_: set mark _s_: toggle strict
   ("C-g" nil "quit" :color blue)
   ("<escape>" nil "quit" :color blue))
 
-(defhydra my-window-hydra (:color amaranth
+(defhydra my/window-hydra (:color amaranth
                            :hint nil)
   "
 _SPC_: ace window     _~_: swap              _m_: maximize
@@ -175,12 +175,12 @@ _M-w_: evil-window-map  _w_: quick next window
   ("u" #'winner-undo)
   ("F" #'flip-frame)
   ("f" #'flop-frame)
-  ("M-w" #'my-evil-window-map-launcher :color blue)
+  ("M-w" #'my/evil-window-map-launcher :color blue)
   ("w" #'evil-window-next :color blue)
   ("C-g" nil "quit" :color blue)
   ("q" nil "quit" :color blue)
   ("<escape>" nil "quit" :color blue))
 
-(defun my-evil-window-map-launcher ()
+(defun my/evil-window-map-launcher ()
   (interactive)
   (run-at-time 0.1 nil #'execute-kbd-macro (kbd "SPC W")))

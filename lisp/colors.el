@@ -77,7 +77,7 @@ Accepts universal argument (X)."
      'kurecolor-adjust-alpha
      (/ (* (* -1 x) kurecolor-color-adjust-brightness-step) 100.0)))
 
-  (defhydra my-kurecolor-hydra
+  (defhydra my/kurecolor-hydra
     (:color pink
      :hint nil
      :pre (progn
@@ -101,4 +101,4 @@ Inc/Dec      _w_/_W_ brightness      _d_/_D_ saturation      _e_/_E_ hue      _a
         :localleader
         (:prefix ("c" . "colors")
          "c" #'css-cycle-color-format
-         "k" #'my-kurecolor-hydra/body)))
+         "k" #'my/kurecolor-hydra/body)))

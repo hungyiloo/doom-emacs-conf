@@ -1,18 +1,18 @@
 ;;; config/scroll-on-jump.el -*- lexical-binding: t; -*-
 
 (use-package! scroll-on-jump
-  :commands (scroll-on-jump my-global-smooth-scroll-mode)
+  :commands (scroll-on-jump my/global-smooth-scroll-mode)
   :init
-  (define-minor-mode my-global-smooth-scroll-mode
+  (define-minor-mode my/global-smooth-scroll-mode
     "Smooth scrolling on jumping on common navigation commands"
     :lighter " smooth"
     :global t
-    (let ((jump-action (if my-global-smooth-scroll-mode
+    (let ((jump-action (if my/global-smooth-scroll-mode
                            (lambda (fn)
                              (require 'scroll-on-jump)
                              (advice-add fn :around #'scroll-on-jump-advice--wrapper))
                          (lambda (fn) (advice-remove fn #'scroll-on-jump-advice--wrapper))))
-          (jump-with-scroll-action (if my-global-smooth-scroll-mode
+          (jump-with-scroll-action (if my/global-smooth-scroll-mode
                                        (lambda (fn)
                                          (require 'scroll-on-jump)
                                          (advice-add fn :around #'scroll-on-jump-advice--with-scroll-wrapper))
@@ -76,10 +76,10 @@
       (funcall jump-action #'exchange-point-and-mark)))
   (map! :leader
         (:prefix-map ("t" . "toggle")
-         :desc "Smooth Scroll" "m" #'my-global-smooth-scroll-mode ))
+         :desc "Smooth Scroll" "m" #'my/global-smooth-scroll-mode ))
   :config
   ;; This improves performance slightly for long jumps
   (setq scroll-on-jump-smooth nil))
 
 (add-hook! 'doom-first-buffer-hook
-           (my-global-smooth-scroll-mode +1))
+           (my/global-smooth-scroll-mode +1))

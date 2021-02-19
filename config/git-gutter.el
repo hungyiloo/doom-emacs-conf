@@ -2,7 +2,7 @@
 
 (after! git-gutter
   (setq git-gutter:disabled-modes '(fundamental-mode image-mode pdf-view-mode org-mode))
-  (defun my-org-hook-start-without-vc-gutter ()
+  (defun my/org-hook-start-without-vc-gutter ()
     "Set up `git-gutter-mode' in the current buffer regardless of `git-gutter:disabled-modes' and leave it off initially."
     (let ((file-name (buffer-file-name (buffer-base-buffer))))
       (when (or +vc-gutter-in-remote-files
@@ -22,4 +22,4 @@
                           git-gutter:window-width 1))
             (git-gutter-mode -1)
             (remove-hook 'after-save-hook #'+vc-gutter-init-maybe-h 'local))))))
-  (add-hook! 'org-mode-hook #'my-org-hook-start-without-vc-gutter))
+  (add-hook! 'org-mode-hook #'my/org-hook-start-without-vc-gutter))

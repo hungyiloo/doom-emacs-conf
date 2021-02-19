@@ -1,8 +1,8 @@
 ;;; config/eyebrowse.el -*- lexical-binding: t; -*-
 
 (use-package! eyebrowse
-  :commands (my-eyebrowse-open-project
-             my-eyebrowse-switch-buffer
+  :commands (my/eyebrowse-open-project
+             my/eyebrowse-switch-buffer
              eyebrowse-create-window-config
              eyebrowse-create-named-window-config
              eyebrowse-rename-window-config
@@ -35,9 +35,9 @@
         "<tab> 7" #'eyebrowse-switch-to-window-config-7
         "<tab> 8" #'eyebrowse-switch-to-window-config-8
         "<tab> 9" #'eyebrowse-switch-to-window-config-9
-        "<tab> D" #'my-eyebrowse-close-workspace
+        "<tab> D" #'my/eyebrowse-close-workspace
         "<tab> d" #'eyebrowse-close-window-config
-        "<tab> p" #'my-eyebrowse-open-project
+        "<tab> p" #'my/eyebrowse-open-project
         "<tab> r" #'eyebrowse-rename-window-config
         "<tab> ." #'eyebrowse-switch-to-window-config
         "<tab> <tab>" #'eyebrowse-switch-to-window-config
@@ -53,9 +53,9 @@
 
   (after! marginalia
     ;; Opening projects has a category type of "file", not "project-file"
-    (add-to-list 'marginalia-command-categories '(my-eyebrowse-open-project . file)))
+    (add-to-list 'marginalia-command-categories '(my/eyebrowse-open-project . file)))
 
-  (defun my-eyebrowse-close-workspace ()
+  (defun my/eyebrowse-close-workspace ()
     "Closes all buffers in the current project (approximating a workspace)
 and then closes the window config"
     (interactive)
@@ -81,7 +81,7 @@ and then closes the window config"
             (eyebrowse-close-window-config)))
       (eyebrowse-close-window-config)))
 
-  (defun my-eyebrowse-open-project ()
+  (defun my/eyebrowse-open-project ()
     "Creates a window config, open a project and name the eyebrowse slot to match the project name"
     (interactive)
     (let ((saved-slot (eyebrowse--get 'current-slot)))
@@ -94,7 +94,7 @@ and then closes the window config"
         (quit (eyebrowse-close-window-config)
               (eyebrowse-switch-to-window-config saved-slot)))))
 
-  (defun my-eyebrowse-switch-buffer ()
+  (defun my/eyebrowse-switch-buffer ()
     "Switch buffer depending on project if we're in one"
     (interactive)
     (if (doom-project-p)

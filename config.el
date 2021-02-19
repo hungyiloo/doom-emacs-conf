@@ -56,7 +56,7 @@
                   "u" #'insert-char))
 
            (map! :leader
-                 :desc "window hydra" "w" #'my-window-hydra/body
+                 :desc "window hydra" "w" #'my/window-hydra/body
                  :desc "window" "W" evil-window-map)
 
            (map! :map evil-window-map
@@ -75,7 +75,7 @@
                  "C-S-u" #'universal-argument)
 
            (setq +doom-dashboard-ascii-banner-fn
-                 (defun my-doom-dashboard-draw-ascii-banner-fn ()
+                 (defun my/doom-dashboard-draw-ascii-banner-fn ()
                    (let* ((banner
                            '("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
                              "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -127,7 +127,7 @@
 ;; Allow links to be opened outside WSL
 (when (and (eq system-type 'gnu/linux)
            (string-match "Linux.*Microsoft.*Linux" (shell-command-to-string "uname -a")))
-  (defun my-browse-url-generic-wsl-safe (url &optional new-window)
+  (defun my/browse-url-generic-wsl-safe (url &optional new-window)
     (interactive)
     (let ((parsed-url (thread-last
                           url
@@ -139,14 +139,14 @@
   (setq
    browse-url-generic-program  "/mnt/c/Windows/System32/cmd.exe"
    browse-url-generic-args     '("/c" "start")
-   browse-url-browser-function #'my-browse-url-generic-wsl-safe)
+   browse-url-browser-function #'my/browse-url-generic-wsl-safe)
   (after! org
     ;; Make sure org export opens things in the right directory
     (setq org-file-apps '((auto-mode . emacs)
                           (directory . emacs)
                           ("\\.mm\\'" . default)
-                          ("\\.x?html?\\'" . (lambda (_file link) (my-browse-url-generic-wsl-safe link)))
-                          ("\\.pdf\\'" . (lambda (_file link) (my-browse-url-generic-wsl-safe link)))))))
+                          ("\\.x?html?\\'" . (lambda (_file link) (my/browse-url-generic-wsl-safe link)))
+                          ("\\.pdf\\'" . (lambda (_file link) (my/browse-url-generic-wsl-safe link)))))))
 
 ;; This section is for UI and visual tweaks.
 ;; Not sure if there's a better place to put most of this stuff.

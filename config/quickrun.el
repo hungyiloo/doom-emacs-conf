@@ -4,22 +4,22 @@
   :init
   (map! :leader
         (:prefix-map ("c" . "code")
-         :desc "Replace region quickrun" "q" #'my-replace-region-quickrun
-         :desc "Replace region elisp" "E" #'my-replace-region-elisp))
+         :desc "Replace region quickrun" "q" #'my/replace-region-quickrun
+         :desc "Replace region elisp" "E" #'my/replace-region-elisp))
 
   :commands (quickrun
              quickrun-region
              quickrun-replace-region
-             my-replace-region-elisp
-             my-replace-region-quickrun)
+             my/replace-region-elisp
+             my/replace-region-quickrun)
 
   :config
   ;; doom's advice for `quickrun--outputter-replace-region' always gave me
   ;; nil errors for region boundaries, so I've disabled it and written my
-  ;; own functions below. See `my-replace-region-quickrun' and `my-replace-region-elisp'
+  ;; own functions below. See `my/replace-region-quickrun' and `my/replace-region-elisp'
   (advice-remove #'quickrun--outputter-replace-region #'+eval--quickrun-fix-evil-visual-region-a)
 
-  (evil-define-operator my-replace-region-elisp (beg end)
+  (evil-define-operator my/replace-region-elisp (beg end)
     "Evaluate selection as elisp and replace it with its result.
 
 Often even if I'm not in emacs-lisp-mode, I still want to evaluate
@@ -34,7 +34,7 @@ of quickrun. This function lets me do it quickly."
       (error (message "Invalid expression")
              (insert (current-kill 0)))))
 
-  (evil-define-operator my-replace-region-quickrun (beg end)
+  (evil-define-operator my/replace-region-quickrun (beg end)
     "Evaluate selection using quickrun and replace it with its result.
 
 This seems to work better for me than doom's provided `+eval:replace-region'"
@@ -69,7 +69,7 @@ This seems to work better for me than doom's provided `+eval:replace-region'"
   (advice-add
    #'+eval-display-results-in-overlay
    :around
-   (defun my-eval-display-results-in-overlay-killed-buffer-safe (orig-fun output &optional source-buffer)
+   (defun my/eval-display-results-in-overlay-killed-buffer-safe (orig-fun output &optional source-buffer)
      "Don't apply any overlays if SOURCE-BUFFER is provided but it's already killed."
      (when (or (not source-buffer)
                (buffer-live-p source-buffer))

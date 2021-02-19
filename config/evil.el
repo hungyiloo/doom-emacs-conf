@@ -47,11 +47,11 @@
    ;; TODO: The evil-mc hydra I wrote should really be in *this* file, or an evil-mc config file.
    (:when (featurep! :editor multiple-cursors)
     :prefix "g"
-    :nv "z" #'my-mc-hydra/body)
+    :nv "z" #'my/mc-hydra/body)
 
    ;; TODO: This should really be in its own smartparens config file
    :prefix "gs"
-   :nv "p" #'my-sp-hydra/body)
+   :nv "p" #'my/sp-hydra/body)
 
   ;; Fix ^ movement to also respect visual line mode.
   ;; It works for 0 and $ so why not ^?
@@ -61,10 +61,10 @@
       "g^" #'evil-first-non-blank))
 
   ;; I like having evil search matches be in the middle of the screen
-  (defun my-recenter (&rest ignored)
+  (defun my/recenter (&rest ignored)
     (recenter))
-  (advice-add #'evil-ex-search-forward :after #'my-recenter)
-  (advice-add #'evil-ex-search-backward :after #'my-recenter))
+  (advice-add #'evil-ex-search-forward :after #'my/recenter)
+  (advice-add #'evil-ex-search-backward :after #'my/recenter))
 
 (after! evil-collection
   ;; Fix regular linewise movement in org mode and outline mode.

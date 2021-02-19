@@ -41,7 +41,7 @@
                          (plist-get org-store-link-plist :description))))
     link)
   ;; A function to copy the URL from an org mode link
-  (defun my-org-retrieve-url-from-point ()
+  (defun my/org-retrieve-url-from-point ()
     "Copies the URL from an org link at the point"
     (interactive)
     (let ((plain-url (url-get-url-at-point)))
@@ -67,8 +67,8 @@
 This function is called by `org-babel-execute-src-block'."
     body)
 
-  ;; Map `my-org-retrieve-url-from-point' to live with its org link friends
+  ;; Map `my/org-retrieve-url-from-point' to live with its org link friends
   (map! :map org-mode-map
         :localleader
         (:prefix ("l" . "links")
-         "y" #'my-org-retrieve-url-from-point)))
+         "y" #'my/org-retrieve-url-from-point)))

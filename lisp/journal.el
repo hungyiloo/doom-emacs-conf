@@ -1,16 +1,16 @@
 ;;; lisp/journal.el -*- lexical-binding: t; -*-
 
-(defun my-journal-date-stamp (&optional timestamp)
+(defun my/journal-date-stamp (&optional timestamp)
   (format-time-string
    "%Y-%m-%d %a"
    (or timestamp (current-time))))
 
-(defun my-journal-month-stamp (&optional timestamp)
+(defun my/journal-month-stamp (&optional timestamp)
   (format-time-string
    "%Y-%m"
    (or timestamp (current-time))))
 
-(defun my-journal-goto-heading (heading this-month &optional post-heading-action)
+(defun my/journal-goto-heading (heading this-month &optional post-heading-action)
   (interactive)
   (evil-set-jump)
   (find-file +org-capture-journal-file)
@@ -22,7 +22,7 @@
                      (goto-char 0)
                      (when this-month
                        (search-forward
-                        (concat "* " (my-journal-month-stamp))
+                        (concat "* " (my/journal-month-stamp))
                         nil
                         t))
                      (search-forward (concat "* " heading) nil t)
@@ -33,14 +33,14 @@
     (recenter)
     result))
 
-(defun my-journal-goto-or-create-today ()
+(defun my/journal-goto-or-create-today ()
     (interactive)
-    (my-journal-goto-heading
+    (my/journal-goto-heading
      "Daily Log"
      t
      (lambda ()
        (interactive)
-       (let* ((today (my-journal-date-stamp))
+       (let* ((today (my/journal-date-stamp))
               (today-posn (search-forward (concat "* " today) nil t)))
          (if (not today-posn)
              (let ((entry-count (length (org-map-entries
@@ -55,18 +55,18 @@
                t)
            nil)))))
 
-(defun my-journal-goto-or-create-today-excursion ()
+(defun my/journal-goto-or-create-today-excursion ()
   (interactive)
   (save-window-excursion
-    (my-journal-goto-or-create-today)))
+    (my/journal-goto-or-create-today)))
 
 (let ((goto-first-heading (lambda () (org-next-visible-heading 1))))
 
-  (defun my-journal-goto-or-create-today-subheading ()
+  (defun my/journal-goto-or-create-today-subheading ()
     (interactive)
-    (let ((today-was-created (my-journal-goto-or-create-today)))
-      (my-journal-goto-heading
-       (my-journal-date-stamp)
+    (let ((today-was-created (my/journal-goto-or-create-today)))
+      (my/journal-goto-heading
+       (my/journal-date-stamp)
        t
        (lambda ()
          (interactive)
@@ -74,46 +74,46 @@
              (org-insert-subheading nil)
            (org-next-visible-heading 1))))))
 
-  (defun my-journal-goto-exercise ()
+  (defun my/journal-goto-exercise ()
     (interactive)
-    (my-journal-goto-heading
+    (my/journal-goto-heading
      "Exercise"
      t
      (lambda ()
        (interactive)
        (search-forward-regexp (concat "[MTWFS] " (number-to-string (nth 1 (calendar-current-date)))) nil t))))
 
-  (defun my-journal-goto-daily-log ()
+  (defun my/journal-goto-daily-log ()
     (interactive)
-    (my-journal-goto-heading
+    (my/journal-goto-heading
      "Daily Log"
      t
      goto-first-heading))
 
-  (defun my-journal-goto-monthly-log ()
+  (defun my/journal-goto-monthly-log ()
     (interactive)
-    (my-journal-goto-heading
+    (my/journal-goto-heading
      "Monthly Log"
      t
      goto-first-heading))
 
-  (defun my-journal-goto-future-log ()
+  (defun my/journal-goto-future-log ()
     (interactive)
-    (my-journal-goto-heading
+    (my/journal-goto-heading
      "Future Log"
      t
      goto-first-heading))
 
-  (defun my-journal-goto-recurring ()
+  (defun my/journal-goto-recurring ()
     (interactive)
-    (my-journal-goto-heading
+    (my/journal-goto-heading
      "Recurring"
      nil
      goto-first-heading))
 
-  (defun my-journal-goto-cook-list ()
+  (defun my/journal-goto-cook-list ()
     (interactive)
-    (my-journal-goto-heading
+    (my/journal-goto-heading
      "Cook List"
      nil
      goto-first-heading)))
@@ -121,13 +121,13 @@
 (map! "<f6>" #'org-capture
       :leader
       (:prefix-map ("j" . "journal")
-       :desc "Today's Entry" "j" #'my-journal-goto-or-create-today-subheading
-       :desc "Daily Log"     "d" #'my-journal-goto-daily-log
-       :desc "Monthly Log"   "m" #'my-journal-goto-monthly-log
-       :desc "Future Log"    "f" #'my-journal-goto-future-log
-       :desc "Exercise"      "x" #'my-journal-goto-exercise
-       :desc "Cook List"     "c" #'my-journal-goto-cook-list
-       :desc "Recurring"     "r" #'my-journal-goto-recurring))
+       :desc "Today's Entry" "j" #'my/journal-goto-or-create-today-subheading
+       :desc "Daily Log"     "d" #'my/journal-goto-daily-log
+       :desc "Monthly Log"   "m" #'my/journal-goto-monthly-log
+       :desc "Future Log"    "f" #'my/journal-goto-future-log
+       :desc "Exercise"      "x" #'my/journal-goto-exercise
+       :desc "Cook List"     "c" #'my/journal-goto-cook-list
+       :desc "Recurring"     "r" #'my/journal-goto-recurring))
 
 ;; (defun diary-last-day-of-month (date)
 ;; "Return `t` if DATE is the last day of the month."
@@ -147,13 +147,13 @@
         `(("j" "Journal")
           ("jj" "Journal Today")
           ("jjt" "Journal Today Todo" entry
-           (file+function +org-capture-journal-file my-journal-goto-or-create-today-excursion)
+           (file+function +org-capture-journal-file my/journal-goto-or-create-today-excursion)
            "* TODO %?"
            :kill-buffer t
            :empty-lines-before 1
            :empty-lines-after 1)
           ("jjn" "Journal Today Note" entry
-           (file+function +org-capture-journal-file my-journal-goto-or-create-today-excursion)
+           (file+function +org-capture-journal-file my/journal-goto-or-create-today-excursion)
            "* %?"
            :kill-buffer t
            :empty-lines-before 1
