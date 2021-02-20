@@ -157,7 +157,7 @@ the region to title case.  Otherwise, work on the current line."
 ;;               ("And windows paths like c:\\temp\\scratch too" "And Windows Paths Like c:\\temp\\scratch Too")
 ;;               ("There are 100's of buyer's guides" "There Are 100's of Buyer's Guides")
 ;;               ("a trick perhaps? or not really." "A Trick Perhaps? Or Not Really.")
-;;               ("this. is. good." "This. Is. Good.")
+;;               ("drop. the. ball." "Drop. The. Ball.")
 ;;               ("some cats are fun; the others aren't" "Some Cats Are Fun; The Others Aren't")
 ;;               ("roses are red\nviolets are blue" "Roses Are Red\nViolets Are Blue")
 ;;               ("roses are red\nand violets are blue" "Roses Are Red\nAnd Violets Are Blue")))
