@@ -10,71 +10,75 @@
          ;; A list of characters that indicate "word boundaries"
          ;; and are used to split the title into processable segments
          (word-boundary-chars '(?  ?– ?— ?- ?‑ ?/))
-         ;; A list of characters that defers upcasing until the next character
-         (prefixes-not-to-upcase '(?' ?\" ?\( ?\[ ?‘ ?“ ?’ ?” ?_))
          ;; A list of markers that indicate a "title within a title"
          ;; e.g. "The Lonely Reindeer: A Christmas Story"
          (new-phrase-markers '(?: ?. ?? ?\;))
          ;; A list of small words that should not be capitalized (in the right conditions)
-         (small-words (split-string
-                       "a an and as at but by en for if in of on or the to v v. vs vs. via"
-                       " "))
-         (fixed-all-caps-str (if (string-match-p "[a-z]" str)
-                                 str
-                               (downcase str)))
+         (small-words (split-string "a an and as at but by en for if in of on or the to v v. vs vs. via"
+                                    " "))
+         ;; Fix if str is ALL CAPS
+         (str (if (string-match-p "[a-z]" str) str (downcase str)))
          ;; Reduce over a state machine to titlecase the string
-         (final-state
-          (cl-reduce (lambda (state char)
-                       (let* ((segment          (alist-get 'segment state))
-                              (result           (alist-get 'result state))
-                              (in-path-p        (alist-get 'in-path-p state))
-                              (first-word-p     (alist-get 'first-word-p state))
-                              (end-p            (eq (+ (length result) (length segment) 1) str-length))
-                              (pop-p            (or end-p
-                                                    (and (or (eq char ? ) (not in-path-p))
-                                                         (member char word-boundary-chars))))
-                              (segment-string   (apply #'string (reverse segment)))
-                              (lowercase-rest-p (and (not end-p)
-                                                     (not first-word-p)
-                                                     (member (downcase segment-string) small-words)))
-                              (pass-p           (or in-path-p
-                                                    (string-match-p "\\w\\.\\w" segment-string)
-                                                    (string-match-p "[A-Z]" segment-string)
-                                                    (string-match-p "^https?:" segment-string)
-                                                    (string-match-p "^[A-Za-z]:\\\\" segment-string)
-                                                    (member ?@ segment))))
-                         `((in-path-p .         ,(cond ((and (eq char ?/)
-                                                             (or (not segment) (member (car segment) '(?. ?~))))
-                                                        t)
-                                                       ((eq char ? ) nil)
-                                                       (t in-path-p)))
-                           (first-word-p .      ,(if pop-p
-                                                     (member (car segment) new-phrase-markers)
-                                                   first-word-p))
-                           (segment .           ,(unless pop-p (cons char segment)))
-                           (result .            ,(if pop-p
-                                                     ;; If we're ready to pop this segment, loop through it and do capilization if required.
-                                                     (cl-reduce
-                                                      (lambda (acc x)
-                                                        (cons
-                                                         (cond (pass-p x)                            ; skip this char coz we're skipping this segment
-                                                               ((member x prefixes-not-to-upcase) x) ; start char of segment needs to be ignored
-                                                               (lowercase-rest-p (downcase x))       ; already upcased start of segment, so lowercase the rest
-                                                               (t (setq lowercase-rest-p t)          ; upcase the first char & flag that it's been done
-                                                                  (upcase x)))
-                                                         acc))
-                                                      (reverse (cons char segment))
-                                                      :initial-value result)
-                                                   result)))))
-                     fixed-all-caps-str
-                     :initial-value
-                     '((segment . nil)       ; current working segment
-                       (result . nil)        ; result stack
-                       (first-word-p . t)    ; is it the first word of a phrase?
-                       (in-path-p . nil))))) ; are we inside of a filesystem path?
-    ;; Reconstruct the string from the result of the exit state of the machine
+         (final-state (cl-reduce
+                       (lambda (state char)
+                         (let* ((last-segment        (alist-get 'segment state))
+                                (result              (alist-get 'result state))
+                                (in-path-p           (alist-get 'in-path-p state))
+                                (first-word-p        (alist-get 'first-word-p state))
+                                (end-p               (eq (+ (length result) (length last-segment) 1)
+                                                         str-length))                                        ; are we at the end of the input string?
+                                (pop-p               (or end-p
+                                                         (and (or (eq char ? ) (not in-path-p))
+                                                              (member char word-boundary-chars))))           ; do we need to pop a segment onto the output result?
+                                (segment             (cons char last-segment))                               ; add the current char to the current segment
+                                (segment-string      (apply #'string (reverse segment)))                     ; the readable version of the segment
+                                (last-segment-string (apply #'string (reverse last-segment)))                ; the readable version of the previous segment
+                                (small-word-p        (member (downcase last-segment-string) small-words))    ; was the last segment a small word?
+                                (capitalize-p        (or end-p
+                                                         first-word-p
+                                                         (not small-word-p)))                                ; do we need to capitalized this segment or lowercase it?
+                                (ignore-segment-p    (or in-path-p
+                                                         (string-match-p "\\w\\.\\w" segment-string)         ; ignore hostnames and namespaces.like.this
+                                                         (string-match-p "[A-Z]" segment-string)             ; ignore explicitly capitalized segments
+                                                         (string-match-p "^https?:" segment-string)          ; ignore URLs
+                                                         (string-match-p "^[A-Za-z]:\\\\" segment-string)    ; ignore windows paths
+                                                         (member ?@ segment))))                              ; ignore email addresses and user handles with @ symbol
+                           `((in-path-p .         ,(or (and (eq char ?/)
+                                                            (or (not last-segment) (member (car last-segment) '(?. ?~))))
+                                                       (and (not (eq char ? )) in-path-p)))
+                             (first-word-p .      ,(if pop-p
+                                                       (member (car last-segment) new-phrase-markers)
+                                                     first-word-p))
+                             (segment .           ,(unless pop-p segment))
+                             (result .            ,(if pop-p
+                                                       ;; If we're ready to pop this segment, loop through it and do capilization if required.
+                                                       (concat result (if ignore-segment-p
+                                                                          segment-string
+                                                                        (titlecase--segment segment-string capitalize-p)))
+                                                     result)))))
+                       str
+                       :initial-value
+                       '((segment . nil)       ; current working segment
+                         (result . nil)        ; result stack
+                         (first-word-p . t)    ; is it the first word of a phrase?
+                         (in-path-p . nil))))) ; are we inside of a filesystem path?
+    (alist-get 'result final-state)))
+
+(defun titlecase--segment (segment capitalize-p)
+  "Convert a title's inner SEGMENT to capitlized or lower case depending on CAPITALIZE-P, then return the result."
+  (let* ((case-fold-search nil)
+         (defer-chars '(?' ?\" ?\( ?\[ ?‘ ?“ ?’ ?” ?_))
+         (final-state (cl-reduce
+                       (lambda (state char)
+                         (let ((result (car state))
+                               (downcase-p (cadr state)))
+                           (cond (downcase-p (list (cons (downcase char) result) t)) ; already upcased start of segment, so lowercase the rest
+                                 ((member char defer-chars) (list (cons char result) downcase-p)) ; start char of segment needs to be ignored
+                                 (t (list (cons (upcase char) result) t))))) ; haven't upcased yet,
+                       segment
+                       :initial-value (list nil (not capitalize-p)))))
     (thread-last final-state
-      (alist-get 'result)
+      (car)
       (reverse)
       (apply #'string))))
 
@@ -153,4 +157,3 @@ the region to title case.  Otherwise, work on the current line."
 ;;     "\n")))
 
 (provide 'titlecase)
-
