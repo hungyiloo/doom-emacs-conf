@@ -69,7 +69,7 @@
     (aref final-state 0)))
 
 (defun titlecase--segment (segment capitalize-p)
-  "Convert a title's inner SEGMENT to capitlized or lower case depending on CAPITALIZE-P, then return the result."
+  "Convert a title's inner SEGMENT to capitalized or lower case depending on CAPITALIZE-P, then return the result."
   (let* ((case-fold-search nil)
          (ignore-chars '(?' ?\" ?\( ?\[ ?‘ ?“ ?’ ?” ?_))
          (final-state (cl-reduce
