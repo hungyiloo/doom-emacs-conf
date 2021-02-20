@@ -7,18 +7,16 @@
   "Convert string STR to title case and return the resulting string."
   (let* ((case-fold-search nil)
          (str-length (length str))
-         ;; A list of markers that indicate a "title within a title"
-         ;; e.g. "The Lonely Reindeer: A Christmas Story"
+         ;; A list of markers that indicate start of a new phrase within the title, e.g. "The Lonely Reindeer: A Christmas Story"
          (new-phrase-chars '(?: ?. ?? ?\; ?\n ?\r)) ; must be followed by one of  word-boundary-chars
          (immediate-new-phrase-chars '(?\n ?\r))    ; immediately triggers new phrase behavior without waiting for word boundary
-         ;; A list of characters that indicate "word boundaries"
-         ;; and are used to split the title into processable segments
+         ;; A list of characters that indicate "word boundaries"; used to split the title into processable segments
          (word-boundary-chars (append '(?  ?– ?— ?- ?‑ ?/) immediate-new-phrase-chars))
          ;; A list of small words that should not be capitalized (in the right conditions)
          (small-words (split-string "a an and as at but by en for if in of on or the to v v. vs vs. via" " "))
          ;; Fix if str is ALL CAPS
          (str (if (string-match-p "[a-z]" str) str (downcase str)))
-         ;; Reduce over a state machine to titlecase the string
+         ;; Reduce over a state machine to do title casing
          (final-state (cl-reduce
                        (lambda (state char)
                          (let* ((result              (aref state 0))
@@ -73,15 +71,15 @@
 (defun titlecase--segment (segment capitalize-p)
   "Convert a title's inner SEGMENT to capitlized or lower case depending on CAPITALIZE-P, then return the result."
   (let* ((case-fold-search nil)
-         (defer-chars '(?' ?\" ?\( ?\[ ?‘ ?“ ?’ ?” ?_))
+         (ignore-chars '(?' ?\" ?\( ?\[ ?‘ ?“ ?’ ?” ?_))
          (final-state (cl-reduce
                        (lambda (state char)
                          (let ((result (aref state 0))
                                (downcase-p (aref state 1)))
                            (cond
-                            (downcase-p                (vector (cons (downcase char) result) t))  ; already upcased start of segment, so lowercase the rest
-                            ((member char defer-chars) (vector (cons char result) downcase-p))    ; start char of segment needs to be ignored
-                            (t                         (vector (cons (upcase char) result) t))))) ; haven't upcased yet, and we can, so do it
+                            (downcase-p                 (vector (cons (downcase char) result) t))  ; already upcased start of segment, so lowercase the rest
+                            ((member char ignore-chars) (vector (cons char result) downcase-p))    ; check if start char of segment needs to be ignored
+                            (t                          (vector (cons (upcase char) result) t))))) ; haven't upcased yet, and we can, so do it
                        segment
                        :initial-value (vector nil (not capitalize-p)))))
     (thread-last (aref final-state 0)
