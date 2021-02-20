@@ -7,12 +7,13 @@
   "Convert string STR to title case and return the resulting string."
   (let* ((case-fold-search nil)
          (str-length (length str))
-         ;; A list of characters that indicate "word boundaries"
-         ;; and are used to split the title into processable segments
-         (word-boundary-chars '(?  ?– ?— ?- ?‑ ?/))
          ;; A list of markers that indicate a "title within a title"
          ;; e.g. "The Lonely Reindeer: A Christmas Story"
-         (new-phrase-markers '(?: ?. ?? ?\;))
+         (new-phrase-chars '(?: ?. ?? ?\; ?\n ?\r)) ; must be followed by one of  word-boundary-chars
+         (immediate-new-phrase-chars '(?\n ?\r))    ; immediately triggers new phrase behavior without waiting for word boundary
+         ;; A list of characters that indicate "word boundaries"
+         ;; and are used to split the title into processable segments
+         (word-boundary-chars (append '(?  ?– ?— ?- ?‑ ?/) immediate-new-phrase-chars))
          ;; A list of small words that should not be capitalized (in the right conditions)
          (small-words (split-string "a an and as at but by en for if in of on or the to v v. vs vs. via" " "))
          ;; Fix if str is ALL CAPS
@@ -25,27 +26,26 @@
                                 (first-word-p        (aref state 2))
                                 (in-path-p           (aref state 3))
                                 (end-p               (eq (+ (length result) (length last-segment) 1)
-                                                         str-length))                                        ; are we at the end of the input string?
+                                                         str-length))                                     ; are we at the end of the input string?
                                 (pop-p               (or end-p (and (or (eq char ? ) (not in-path-p))
-                                                                    (member char word-boundary-chars))))     ; do we need to pop a segment onto the output result?
-                                (segment             (cons char last-segment))                               ; add the current char to the current segment
-                                (segment-string      (apply #'string (reverse segment)))                     ; the readable version of the segment
-                                (last-segment-string (apply #'string (reverse last-segment)))                ; the readable version of the previous segment
-                                (small-word-p        (member (downcase last-segment-string) small-words))    ; was the last segment a small word?
-                                (capitalize-p        (or end-p first-word-p (not small-word-p)))             ; do we need to capitalized this segment or lowercase it?
+                                                                    (member char word-boundary-chars))))  ; do we need to pop a segment onto the output result?
+                                (segment             (cons char last-segment))                            ; add the current char to the current segment
+                                (segment-string      (apply #'string (reverse segment)))                  ; the readable version of the segment
+                                (last-segment-string (apply #'string (reverse last-segment)))             ; the readable version of the previous segment
+                                (small-word-p        (member (downcase last-segment-string) small-words)) ; was the last segment a small word?
+                                (capitalize-p        (or end-p first-word-p (not small-word-p)))          ; do we need to capitalized this segment or lowercase it?
                                 (ignore-segment-p    (or in-path-p
-                                                         (string-match-p "\\w\\.\\w" segment-string)         ; ignore hostnames and namespaces.like.this
-                                                         (string-match-p "[A-Z]" segment-string)             ; ignore explicitly capitalized segments
-                                                         (string-match-p "^https?:" segment-string)          ; ignore URLs
-                                                         (string-match-p "^[A-Za-z]:\\\\" segment-string)    ; ignore windows paths
-                                                         (member ?@ segment))))                              ; ignore email addresses and user handles with @ symbol
+                                                         (string-match-p "\\w\\.\\w" segment-string)      ; ignore hostnames and namespaces.like.this
+                                                         (string-match-p "[A-Z]" segment-string)          ; ignore explicitly capitalized segments
+                                                         (string-match-p "^https?:" segment-string)       ; ignore URLs
+                                                         (string-match-p "^[A-Za-z]:\\\\" segment-string) ; ignore windows paths
+                                                         (member ?@ segment))))                           ; ignore email addresses and user handles with @ symbol
                            (vector
                             ;; result
                             (if pop-p
-                                ;; If we're ready to pop this segment, loop through it and do capilization if required.
                                 (concat result (if ignore-segment-p
-                                                   segment-string
-                                                 (titlecase--segment segment-string capitalize-p)))
+                                                   segment-string                                   ; put pop onto the result without processing
+                                                 (titlecase--segment segment-string capitalize-p))) ; titlecase the segment before popping onto result
                               result)
 
                             ;; next segment
@@ -53,7 +53,9 @@
 
                             ;; is first word
                             (if pop-p
-                                (member (car last-segment) new-phrase-markers)
+                                (or (not last-segment)
+                                    (member (car last-segment) new-phrase-chars)
+                                    (member (car segment) immediate-new-phrase-chars))
                               first-word-p)
 
                             ;; in a path
@@ -62,10 +64,10 @@
                                 (and (not (eq char ? )) in-path-p)))))
                        str
                        :initial-value
-                       (vector nil     ; result stack
-                               nil     ; current working segment
-                               t       ; is it the first word of a phrase?
-                               nil)))) ; are we inside of a filesystem path?
+                       (vector nil      ; result stack
+                               nil      ; current working segment
+                               t        ; is it the first word of a phrase?
+                               nil))))  ; are we inside of a filesystem path?
     (aref final-state 0)))
 
 (defun titlecase--segment (segment capitalize-p)
@@ -156,8 +158,9 @@ the region to title case.  Otherwise, work on the current line."
 ;;               ("There are 100's of buyer's guides" "There Are 100's of Buyer's Guides")
 ;;               ("a trick perhaps? or not really." "A Trick Perhaps? Or Not Really.")
 ;;               ("this. is. good." "This. Is. Good.")
-;;               ("some cats are fun; the others aren't" "Some Cats Are Fun; The Others Aren't"))
-;;             )
+;;               ("some cats are fun; the others aren't" "Some Cats Are Fun; The Others Aren't")
+;;               ("roses are red\nviolets are blue" "Roses Are Red\nViolets Are Blue")
+;;               ("roses are red\nand violets are blue" "Roses Are Red\nAnd Violets Are Blue")))
 ;;     "\n")))
 
 (provide 'titlecase)
