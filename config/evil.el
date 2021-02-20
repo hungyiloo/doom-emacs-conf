@@ -34,6 +34,11 @@
   ;; if it can be fixed when this flag is still set to true.
   (setq evil-move-cursor-back t)
 
+  ;; Use emacs-style regexp everywhere to prevent confusion and
+  ;; "unmatched" errors with curly braces when using evil-ex and evil-search
+  ;; Might be related to this: https://github.com/emacs-evil/evil/issues/347
+  (setq evil-ex-search-vim-style-regexp nil)
+
   (map!
    ;; A convenient binding for the psychic hippie-expand
    :i "C-?" #'hippie-expand
