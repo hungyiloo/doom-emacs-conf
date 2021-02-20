@@ -86,8 +86,21 @@
 
 (after! evil-mc
   ;; Prevents evil-mc from clearing registers when multiple cursors are created
-  ;; NOTE: This might break named register yanking and pasting *during* evil-mc-mode
+  ;; NOTE: This might break named register jumping, yanking and pasting *during* evil-mc-mode
   (setq evil-mc-cursor-variables (mapcar
                                   (lambda (s)
                                     (remove 'register-alist (remove 'evil-markers-alist s)))
-                                  evil-mc-cursor-variables)))
+                                  evil-mc-cursor-variables))
+
+  ;; Redefine this function to fix cursor misalignment issues.
+  ;; e.g. With multiple cursors, visually select one character and change.
+  ;;      With the original `evil-mc-execute-evil-change' the fake cursors would jump one
+  ;;      character to the left, incorrectly.
+  (defun evil-mc-execute-evil-change ()
+    "Execute an `evil-change' comand."
+    (let ((point (point)))
+      (evil-with-state normal
+        (unless (eq point (point-at-bol))
+          (evil-forward-char 1 nil t)) ; Perhaps this behavior depends on `evil-move-cursor-back'?
+        (evil-mc-execute-with-region-or-macro 'evil-change)
+        (evil-maybe-remove-spaces nil)))))
