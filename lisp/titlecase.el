@@ -72,9 +72,10 @@
                        (lambda (state char)
                          (let ((result (car state))
                                (downcase-p (cadr state)))
-                           (cond (downcase-p (list (cons (downcase char) result) t)) ; already upcased start of segment, so lowercase the rest
-                                 ((member char defer-chars) (list (cons char result) downcase-p)) ; start char of segment needs to be ignored
-                                 (t (list (cons (upcase char) result) t))))) ; haven't upcased yet,
+                           (cond
+                            (downcase-p                (list (cons (downcase char) result) t))  ; already upcased start of segment, so lowercase the rest
+                            ((member char defer-chars) (list (cons char result) downcase-p))    ; start char of segment needs to be ignored
+                            (t                         (list (cons (upcase char) result) t))))) ; haven't upcased yet, and we can, so do it
                        segment
                        :initial-value (list nil (not capitalize-p)))))
     (thread-last final-state
