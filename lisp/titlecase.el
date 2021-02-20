@@ -21,10 +21,10 @@
          ;; Reduce over a state machine to titlecase the string
          (final-state (cl-reduce
                        (lambda (state char)
-                         (let* ((last-segment        (alist-get 'segment state))
-                                (result              (alist-get 'result state))
-                                (in-path-p           (alist-get 'in-path-p state))
-                                (first-word-p        (alist-get 'first-word-p state))
+                         (let* ((result              (aref state 0))
+                                (last-segment        (aref state 1))
+                                (first-word-p        (aref state 2))
+                                (in-path-p           (aref state 3))
                                 (end-p               (eq (+ (length result) (length last-segment) 1)
                                                          str-length))                                        ; are we at the end of the input string?
                                 (pop-p               (or end-p
@@ -43,26 +43,26 @@
                                                          (string-match-p "^https?:" segment-string)          ; ignore URLs
                                                          (string-match-p "^[A-Za-z]:\\\\" segment-string)    ; ignore windows paths
                                                          (member ?@ segment))))                              ; ignore email addresses and user handles with @ symbol
-                           `((in-path-p .         ,(or (and (eq char ?/)
-                                                            (or (not last-segment) (member (car last-segment) '(?. ?~))))
-                                                       (and (not (eq char ? )) in-path-p)))
-                             (first-word-p .      ,(if pop-p
-                                                       (member (car last-segment) new-phrase-markers)
-                                                     first-word-p))
-                             (segment .           ,(unless pop-p segment))
-                             (result .            ,(if pop-p
-                                                       ;; If we're ready to pop this segment, loop through it and do capilization if required.
-                                                       (concat result (if ignore-segment-p
-                                                                          segment-string
-                                                                        (titlecase--segment segment-string capitalize-p)))
-                                                     result)))))
+                           (vector (if pop-p
+                                       ;; If we're ready to pop this segment, loop through it and do capilization if required.
+                                       (concat result (if ignore-segment-p
+                                                          segment-string
+                                                        (titlecase--segment segment-string capitalize-p)))
+                                     result)
+                                   (unless pop-p segment)
+                                   (if pop-p
+                                       (member (car last-segment) new-phrase-markers)
+                                     first-word-p)
+                                   (or (and (eq char ?/)
+                                            (or (not last-segment) (member (car last-segment) '(?. ?~))))
+                                       (and (not (eq char ? )) in-path-p)))))
                        str
                        :initial-value
-                       '((segment . nil)       ; current working segment
-                         (result . nil)        ; result stack
-                         (first-word-p . t)    ; is it the first word of a phrase?
-                         (in-path-p . nil))))) ; are we inside of a filesystem path?
-    (alist-get 'result final-state)))
+                       (vector nil     ; result stack
+                               nil     ; current working segment
+                               t       ; is it the first word of a phrase?
+                               nil)))) ; are we inside of a filesystem path?
+    (aref final-state 0)))
 
 (defun titlecase--segment (segment capitalize-p)
   "Convert a title's inner SEGMENT to capitlized or lower case depending on CAPITALIZE-P, then return the result."
@@ -70,16 +70,15 @@
          (defer-chars '(?' ?\" ?\( ?\[ ?‘ ?“ ?’ ?” ?_))
          (final-state (cl-reduce
                        (lambda (state char)
-                         (let ((result (car state))
-                               (downcase-p (cadr state)))
+                         (let ((result (aref state 0))
+                               (downcase-p (aref state 1)))
                            (cond
-                            (downcase-p                (list (cons (downcase char) result) t))  ; already upcased start of segment, so lowercase the rest
-                            ((member char defer-chars) (list (cons char result) downcase-p))    ; start char of segment needs to be ignored
-                            (t                         (list (cons (upcase char) result) t))))) ; haven't upcased yet, and we can, so do it
+                            (downcase-p                (vector (cons (downcase char) result) t))  ; already upcased start of segment, so lowercase the rest
+                            ((member char defer-chars) (vector (cons char result) downcase-p))    ; start char of segment needs to be ignored
+                            (t                         (vector (cons (upcase char) result) t))))) ; haven't upcased yet, and we can, so do it
                        segment
-                       :initial-value (list nil (not capitalize-p)))))
-    (thread-last final-state
-      (car)
+                       :initial-value (vector nil (not capitalize-p)))))
+    (thread-last (aref final-state 0)
       (reverse)
       (apply #'string))))
 
