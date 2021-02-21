@@ -30,25 +30,25 @@
                                                                (not (or (eq char ? )
                                                                         (member char immediate-new-phrase-chars))))))
                                 (end-p                (eq (+ (length result) (length last-segment) 1)
-                                                          str-length))                                     ; are we at the end of the input string?
+                                                          str-length))                                          ; are we at the end of the input string?
                                 (pop-p                (or end-p (and (not in-path-p)
-                                                                     (member char word-boundary-chars))))  ; do we need to pop a segment onto the output result?
-                                (segment              (cons char last-segment))                            ; add the current char to the current segment
-                                (segment-string       (apply #'string (reverse segment)))                  ; the readable version of the segment
+                                                                     (member char word-boundary-chars))))       ; do we need to pop a segment onto the output result?
+                                (segment              (cons char last-segment))                                 ; add the current char to the current segment
+                                (segment-string       (apply #'string (reverse segment)))                       ; the readable version of the segment
                                 (small-word-p         (member (downcase (substring segment-string 0 -1))
-                                                              small-words))                                ; was the last segment a small word?
-                                (capitalize-p         (or end-p first-word-p (not small-word-p)))          ; do we need to capitalized this segment or lowercase it?
-                                (ignore-segment-p     (or (string-match-p "[A-Z]" segment-string)          ; ignore explicitly capitalized segments
-                                                          (string-match-p "^https?:" segment-string)       ; ignore URLs
-                                                          (string-match-p "\\w\\.\\w" segment-string)      ; ignore hostnames and namespaces.like.this
-                                                          (string-match-p "^[A-Za-z]:\\\\" segment-string) ; ignore windows filesystem paths
-                                                          was-in-path-p                                    ; ignore unix filesystem paths
-                                                          (member ?@ segment)))                            ; ignore email addresses and user handles with @ symbol
+                                                              small-words))                                     ; was the last segment a small word?
+                                (capitalize-p         (or end-p first-word-p (not small-word-p)))               ; do we need to capitalized this segment or lowercase it?
+                                (ignore-segment-p     (or (string-match-p "[A-Z]" segment-string)               ; ignore explicitly capitalized segments
+                                                          (string-match-p "^https?:" segment-string)            ; ignore URLs
+                                                          (string-match-p "\\w\\.\\w" segment-string)           ; ignore hostnames and namespaces.like.this
+                                                          (string-match-p "^[A-Za-z]:\\\\" segment-string)      ; ignore windows filesystem paths
+                                                          was-in-path-p                                         ; ignore unix filesystem paths
+                                                          (member ?@ segment)))                                 ; ignore email addresses and user handles with @ symbol
                                 (next-result          (if pop-p
                                                           (concat
                                                            result
                                                            (if ignore-segment-p
-                                                               segment-string                                   ; put pop onto the result without processing
+                                                               segment-string                                   ; pop segment onto the result without processing
                                                              (titlecase--segment segment-string capitalize-p))) ; titlecase the segment before popping onto result
                                                         result))
                                 (next-segment         (unless pop-p segment))
