@@ -38,7 +38,7 @@
                                 (small-word-p         (member (downcase (substring segment-string 0 -1))
                                                               small-words))                                     ; was the last segment a small word?
                                 (capitalize-p         (or end-p first-word-p (not small-word-p)))               ; do we need to capitalized this segment or lowercase it?
-                                (ignore-segment-p     (or (string-match-p "[A-Z]" segment-string)               ; ignore explicitly capitalized segments
+                                (ignore-segment-p     (or (string-match-p "[a-zA-Z].*[A-Z]" segment-string)     ; ignore explicitly capitalized segments
                                                           (string-match-p "^https?:" segment-string)            ; ignore URLs
                                                           (string-match-p "\\w\\.\\w" segment-string)           ; ignore hostnames and namespaces.like.this
                                                           (string-match-p "^[A-Za-z]:\\\\" segment-string)      ; ignore windows filesystem paths
