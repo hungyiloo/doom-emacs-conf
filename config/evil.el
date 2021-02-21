@@ -103,4 +103,13 @@
         (unless (eq point (point-at-bol))
           (evil-forward-char 1 nil t)) ; Perhaps this behavior depends on `evil-move-cursor-back'?
         (evil-mc-execute-with-region-or-macro 'evil-change)
-        (evil-maybe-remove-spaces nil)))))
+        (evil-maybe-remove-spaces nil))))
+
+  ;; FIXME: This advice doesn't move the point like intended. Why?
+  ;; (advice-add #'evil-mc-set-pattern
+  ;;             :before
+  ;;             (defun my/evil-mc-linewise-set-pattern-shim (&rest ignored)
+  ;;               (when (and (evil-visual-state-p)
+  ;;                          (eq (evil-visual-type) 'line))
+  ;;                 (call-interactively #'move-end-of-line))))
+  )
