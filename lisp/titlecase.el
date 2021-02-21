@@ -19,47 +19,45 @@
          ;; Reduce over a state machine to do title casing
          (final-state (cl-reduce
                        (lambda (state char)
-                         (let* ((result              (aref state 0))
-                                (last-segment        (aref state 1))
-                                (first-word-p        (aref state 2))
-                                (in-path-p           (aref state 3))
-                                (end-p               (eq (+ (length result) (length last-segment) 1)
-                                                         str-length))                                     ; are we at the end of the input string?
-                                (pop-p               (or end-p (and (or (eq char ? ) (not in-path-p))
-                                                                    (member char word-boundary-chars))))  ; do we need to pop a segment onto the output result?
-                                (segment             (cons char last-segment))                            ; add the current char to the current segment
-                                (segment-string      (apply #'string (reverse segment)))                  ; the readable version of the segment
-                                (last-segment-string (apply #'string (reverse last-segment)))             ; the readable version of the previous segment
-                                (small-word-p        (member (downcase last-segment-string) small-words)) ; was the last segment a small word?
-                                (capitalize-p        (or end-p first-word-p (not small-word-p)))          ; do we need to capitalized this segment or lowercase it?
-                                (ignore-segment-p    (or in-path-p
-                                                         (string-match-p "\\w\\.\\w" segment-string)      ; ignore hostnames and namespaces.like.this
-                                                         (string-match-p "[A-Z]" segment-string)          ; ignore explicitly capitalized segments
-                                                         (string-match-p "^https?:" segment-string)       ; ignore URLs
-                                                         (string-match-p "^[A-Za-z]:\\\\" segment-string) ; ignore windows paths
-                                                         (member ?@ segment))))                           ; ignore email addresses and user handles with @ symbol
-                           (vector
-                            ;; result
-                            (if pop-p
-                                (concat result (if ignore-segment-p
-                                                   segment-string                                   ; put pop onto the result without processing
-                                                 (titlecase--segment segment-string capitalize-p))) ; titlecase the segment before popping onto result
-                              result)
-
-                            ;; next segment
-                            (unless pop-p segment)
-
-                            ;; is first word
-                            (if pop-p
-                                (or (not last-segment)
-                                    (member (car last-segment) new-phrase-chars)
-                                    (member (car segment) immediate-new-phrase-chars))
-                              first-word-p)
-
-                            ;; in a path
-                            (or (and (eq char ?/)
-                                     (or (not last-segment) (member (car last-segment) '(?. ?~))))
-                                (and (not (eq char ? )) in-path-p)))))
+                         (let* ((result               (aref state 0))
+                                (last-segment         (aref state 1))
+                                (first-word-p         (aref state 2))
+                                (was-in-path-p        (aref state 3))
+                                (last-char            (car last-segment))
+                                (in-path-p            (or (and (eq char ?/)
+                                                               (or (not last-segment) (member last-char '(?. ?~))))
+                                                          (and was-in-path-p
+                                                               (not (or (eq char ? )
+                                                                        (member char immediate-new-phrase-chars))))))
+                                (end-p                (eq (+ (length result) (length last-segment) 1)
+                                                          str-length))                                     ; are we at the end of the input string?
+                                (pop-p                (or end-p (and (not in-path-p)
+                                                                     (member char word-boundary-chars))))  ; do we need to pop a segment onto the output result?
+                                (segment              (cons char last-segment))                            ; add the current char to the current segment
+                                (segment-string       (apply #'string (reverse segment)))                  ; the readable version of the segment
+                                (small-word-p         (member (downcase (substring segment-string 0 -1))
+                                                              small-words))                                ; was the last segment a small word?
+                                (capitalize-p         (or end-p first-word-p (not small-word-p)))          ; do we need to capitalized this segment or lowercase it?
+                                (ignore-segment-p     (or (string-match-p "[A-Z]" segment-string)          ; ignore explicitly capitalized segments
+                                                          (string-match-p "^https?:" segment-string)       ; ignore URLs
+                                                          (string-match-p "\\w\\.\\w" segment-string)      ; ignore hostnames and namespaces.like.this
+                                                          (string-match-p "^[A-Za-z]:\\\\" segment-string) ; ignore windows filesystem paths
+                                                          was-in-path-p                                    ; ignore unix filesystem paths
+                                                          (member ?@ segment)))                            ; ignore email addresses and user handles with @ symbol
+                                (next-result          (if pop-p
+                                                          (concat
+                                                           result
+                                                           (if ignore-segment-p
+                                                               segment-string                                   ; put pop onto the result without processing
+                                                             (titlecase--segment segment-string capitalize-p))) ; titlecase the segment before popping onto result
+                                                        result))
+                                (next-segment         (unless pop-p segment))
+                                (will-be-first-word-p (if pop-p
+                                                          (or (not last-segment)
+                                                              (member last-char new-phrase-chars)
+                                                              (member char immediate-new-phrase-chars))
+                                                        first-word-p)))
+                           (vector next-result next-segment will-be-first-word-p in-path-p)))
                        str
                        :initial-value
                        (vector nil      ; result stack
@@ -158,7 +156,8 @@ the region to title case.  Otherwise, work on the current line."
 ;;               ("drop. the. ball." "Drop. The. Ball.")
 ;;               ("some cats are fun; the others aren't" "Some Cats Are Fun; The Others Aren't")
 ;;               ("roses are red\nviolets are blue" "Roses Are Red\nViolets Are Blue")
-;;               ("roses are red\nand violets are blue" "Roses Are Red\nAnd Violets Are Blue")))
+;;               ("roses are red\nand violets are blue" "Roses Are Red\nAnd Violets Are Blue")
+;;               ("the home directory is /home/username\nbut the root's home is /root" "The Home Directory Is /home/username\nBut the Root's Home Is /root")))
 ;;     "\n")))
 
 (provide 'titlecase)
