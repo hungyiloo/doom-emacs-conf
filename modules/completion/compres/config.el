@@ -38,25 +38,27 @@
     `(marginalia-file-owner :foreground ,(doom-color 'doc-comments 256))
     `(marginalia-documentation :foreground ,(doom-blend (doom-color 'base6) (doom-color 'base4) 0.4)))
 
-  (after! org
-    ;; Better selectrum integration with `org-set-tags-command'
-    (defun +compres/org-set-tags-command-multiple (orig &optional arg)
-      (cl-letf (((symbol-function #'completing-read)
-                 (lambda (prompt collection &optional predicate require-match initial-input
-                            hist def inherit-input-method)
-                   (when initial-input
-                     (setq initial-input
-                           (replace-regexp-in-string
-                            ":" ","
-                            (replace-regexp-in-string
-                             "\\`:" "" initial-input))))
-                   (let ((res (completing-read-multiple
-                               prompt collection predicate require-match initial-input
-                               hist def inherit-input-method)))
-                     (mapconcat #'identity res ":")))))
-        (let ((current-prefix-arg arg))
-          (call-interactively orig))))
-    (advice-add #'org-set-tags-command :around #'+compres/org-set-tags-command-multiple)))
+  ;; (after! org
+  ;;   ;; Better selectrum integration with `org-set-tags-command'
+  ;;   ;; but the replacement command `my/consult-org-set-tags' below might be better
+  ;;   (defun +compres/org-set-tags-command-multiple (orig &optional arg)
+  ;;     (cl-letf (((symbol-function #'completing-read)
+  ;;                (lambda (prompt collection &optional predicate require-match initial-input
+  ;;                           hist def inherit-input-method)
+  ;;                  (when initial-input
+  ;;                    (setq initial-input
+  ;;                          (replace-regexp-in-string
+  ;;                           ":" ","
+  ;;                           (replace-regexp-in-string
+  ;;                            "\\`:" "" initial-input))))
+  ;;                  (let ((res (completing-read-multiple
+  ;;                              prompt collection predicate require-match initial-input
+  ;;                              hist def inherit-input-method)))
+  ;;                    (mapconcat #'identity res ":")))))
+  ;;       (let ((current-prefix-arg arg))
+  ;;         (call-interactively orig))))
+  ;;   (advice-add #'org-set-tags-command :around #'+compres/org-set-tags-command-multiple))
+  )
 
 (use-package! orderless
   :defer t
@@ -162,7 +164,24 @@
     (evil-set-command-property 'consult-mark :jump t)
     (evil-set-command-property 'consult-line :jump t)
     (evil-set-command-property 'consult-line-symbol-at-point :jump t)
-    (evil-set-command-property 'consult-line-from-isearch :jump t)))
+    (evil-set-command-property 'consult-line-from-isearch :jump t))
+
+  ;; Better than `org-set-tags-command'
+  (after! org
+      (defun my/consult-org-set-tags ()
+        "Select tags to add to or remove from a headline.
+  Choose one or more tags. Chosen tags that are already on the current headline will
+  be removed. Chosen tags which are not, will be added."
+        (interactive)
+        (require 'org)
+        (unless (org-at-heading-p) (user-error "Not a headline."))
+        (let* ((current (org-get-tags (point)))
+               (selected (thread-last (org-get-buffer-tags)
+                           (completing-read-multiple "Select org tag(s): "))))
+          (org-set-tags
+           (seq-uniq (append (seq-difference current selected)
+                             (seq-difference selected current))))))
+      (defalias #'org-set-tags-command #'my/consult-org-set-tags)))
 
 ;; Enable Consult-Selectrum integration.
 ;; This package should be installed if Selectrum is used.
@@ -252,15 +271,15 @@
   ;; Add support for project file actions
   (add-to-list 'embark-keymap-alist '(project-file . embark-project-file-map))
   (embark-define-keymap embark-project-file-map
-                        "Keymap for Embark project file actions."
-                        ("f" +compres/prj-find-file)
-                        ("o" +compres/prj-find-file-other-window)
-                        ("d" +compres/prj-delete-file)
-                        ("r" +compres/prj-rename-file)
-                        ("c" +compres/prj-copy-file)
-                        ("=" +compres/prj-ediff-files)
-                        ("I" +compres/prj-embark-insert-relative-path)
-                        ("W" +compres/prj-embark-save-relative-path))
+    "Keymap for Embark project file actions."
+    ("f" +compres/prj-find-file)
+    ("o" +compres/prj-find-file-other-window)
+    ("d" +compres/prj-delete-file)
+    ("r" +compres/prj-rename-file)
+    ("c" +compres/prj-copy-file)
+    ("=" +compres/prj-ediff-files)
+    ("I" +compres/prj-embark-insert-relative-path)
+    ("W" +compres/prj-embark-save-relative-path))
   (defun +compres/resolve-project-file (file)
     "Resolve a file using the project path as a prefix"
     (let* ((project-file (doom-path (doom-project-root) file))
