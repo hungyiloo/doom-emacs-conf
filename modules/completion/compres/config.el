@@ -63,6 +63,7 @@
 (use-package! orderless
   :defer t
   :config
+  (setq orderless-component-separator #'orderless-escapable-split-on-space)
   (custom-set-faces!
     `(orderless-match-face-0 :foreground ,(doom-color 'magenta) :bold t :background ,(doom-color 'base0))
     `(orderless-match-face-1 :foreground ,(doom-color 'yellow) :bold t :background ,(doom-color 'base0))
