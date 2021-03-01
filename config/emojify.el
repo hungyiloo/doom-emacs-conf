@@ -13,16 +13,10 @@
   (setq emojify-emoji-json (concat doom-private-dir "emoji.json"))
 
   (after! selectrum
-    (advice-add #'emojify-ephemeral-buffer-p
+    (advice-add #'selectrum--candidates-display-strings
                 :around
-                (defun my/emojify-ephemeral-buffer-p (orig-fun buffer)
-                  (or (string-match-p selectrum--display-action-buffer (buffer-name buffer))
-                      (apply orig-fun (list buffer)))))
-    (defun my/emojify-refresh-selectrum-candidates (&rest ignored)
-      (with-current-buffer (get-buffer selectrum--display-action-buffer)
-        (emojify-display-emojis-in-region 1 (buffer-size))))
-
-    (advice-add #'selectrum--insert-candidates :after #'my/emojify-refresh-selectrum-candidates))
+                (defun my/emojify-selectrum-candidates (orig-fun &rest args)
+                  (mapcar #'emojify-string (apply orig-fun args)))))
 
   (after! consult
     ;; Fix emojify display issues after using consult.
