@@ -90,7 +90,7 @@
       "Outer text object for all Javascript functions."
       (my/evil-select-outer-javascript-function type nil))
     (let* ((fn-detect-pattern "\\b[[:alnum:]]+(.*?) *?\\(:[^()]*?\\)? *?{")
-           (lambda-detect-pattern "\\((.*?)\\|\\b[[:alnum:]]+\\) *?\\(:[^()]+?\\)? *?=> *?{")
+           (lambda-detect-pattern "\\((.*?)\\|\\b[[:alnum:]]+\\) *?\\(:[^()]+?\\)? *?=> *?{?")
            (pattern (concat "\\(" fn-detect-pattern "\\|" lambda-detect-pattern "\\)")))
       (defun my/evil-select-inner-javascript-function (type visual-p)
         (save-window-excursion
@@ -102,24 +102,22 @@
                                  (point)))
                  (beg (progn
                         (goto-char function-beg)
-                        (search-forward "{")
-                        (when visual-p
-                          (search-forward-regexp "[^ ]"))
+                        (search-forward-regexp pattern)
+                        (when (member (char-after) '(?\n ?\t ? ))
+                          (search-forward-regexp "[^ ]")
+                          (backward-char))
+                        (when (eq ?{ (char-after))
+                          (forward-char))
                         (point)))
                  (end (progn
                         (goto-char beg)
-                        (search-backward "{")
-                        (forward-sexp)
-                        (backward-char)
-                        (when visual-p
-                          (backward-char)
-                          (search-backward-regexp "[^ ]"))
-                        (point))))
-            (if (<= function-beg origin end)
-                (evil-range beg end type)
-              (progn
-                (message "Not within a function definition")
-                (evil-range origin origin type))))))
+                        (sp-end-of-sexp)
+                        (when (eq ?} (char-before))
+                          (backward-char))
+                        (if visual-p
+                            (1- (point))
+                          (point)))))
+            (evil-range beg end type))))
       (defun my/evil-select-outer-javascript-function (type visual-p)
         (save-window-excursion
           (when (and (region-active-p)
@@ -140,20 +138,20 @@
                         (search-backward "export" (line-beginning-position) t)
                         (point)))
                  (end (progn
-                        (goto-char beg)
-                        (cond ((search-forward-regexp "([^)]" (line-end-position) t) (progn (backward-char) (forward-sexp) (backward-char)))
-                              (t (search-forward "=>" (line-end-position) t)))
-                        (search-forward "{")
-                        (backward-char)
-                        (forward-sexp)
+                        (goto-char function-beg)
+                        (search-forward-regexp pattern)
+                        (when (member (char-after) '(?\n ?\t ? ))
+                          (search-forward-regexp "[^ ]")
+                          (backward-char))
+                        (when (eq ?{ (char-after))
+                          (sp-down-sexp))
+                        (sp-end-of-sexp)
+                        (when (eq ?} (char-after))
+                          (forward-char))
                         (when visual-p
                           (backward-char))
                         (point))))
-            (if (<= function-beg origin end)
-                (evil-range beg end type)
-              (progn
-                (message "Not within a function definition")
-                (evil-range origin origin type)))))))
+            (evil-range beg end type)))))
     (map! :map evil-operator-state-local-map
           "af" #'evil-outer-javascript-function
           "if" #'evil-inner-javascript-function
