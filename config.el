@@ -319,5 +319,5 @@
   (dolist (file (directory-files
                  (doom-path doom-private-dir dir)
                  t
-                 ".+\\.el"))
+                 ".+\\.el$"))
     (load! file)))
