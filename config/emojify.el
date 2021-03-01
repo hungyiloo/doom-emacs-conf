@@ -16,10 +16,10 @@
     (advice-add #'emojify-ephemeral-buffer-p
                 :around
                 (defun my/emojify-ephemeral-buffer-p (orig-fun buffer)
-                  (or (string-match-p selectrum--candidates-buffer (buffer-name buffer))
+                  (or (string-match-p selectrum--display-action-buffer (buffer-name buffer))
                       (apply orig-fun (list buffer)))))
     (defun my/emojify-refresh-selectrum-candidates (&rest ignored)
-      (with-current-buffer (get-buffer selectrum--candidates-buffer)
+      (with-current-buffer (get-buffer selectrum--display-action-buffer)
         (emojify-display-emojis-in-region 1 (buffer-size))))
 
     (advice-add #'selectrum--insert-candidates :after #'my/emojify-refresh-selectrum-candidates))
