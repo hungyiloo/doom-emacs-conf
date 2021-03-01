@@ -182,7 +182,9 @@
           (org-set-tags
            (seq-uniq (append (seq-difference current selected)
                              (seq-difference selected current))))))
-      (defalias #'org-set-tags-command #'my/consult-org-set-tags)))
+      (defalias #'org-set-tags-command #'my/consult-org-set-tags))
+
+  (setq consult-ripgrep-command "rg --null --line-buffered --color=ansi --max-columns=250 --no-heading --line-number . -e ARG OPTS -S"))
 
 ;; Enable Consult-Selectrum integration.
 ;; This package should be installed if Selectrum is used.
