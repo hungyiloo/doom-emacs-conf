@@ -247,7 +247,8 @@
   ;; The following is not selectrum specific but included here for convenience.
   ;; If you don't want to use which-key as a key prompter skip the following code.
   (setq embark-action-indicator
-        (lambda (map) (which-key--show-keymap "Embark" map nil nil 'no-paging)
+        (lambda (map _target)
+          (which-key--show-keymap "Embark" map nil nil 'no-paging)
           #'which-key--hide-popup-ignore-command)
         embark-become-indicator embark-action-indicator)
 
