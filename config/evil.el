@@ -69,7 +69,97 @@
   (defun my/recenter (&rest ignored)
     (recenter))
   (advice-add #'evil-ex-search-forward :after #'my/recenter)
-  (advice-add #'evil-ex-search-backward :after #'my/recenter))
+  (advice-add #'evil-ex-search-backward :after #'my/recenter)
+
+  ;; FIXME: these text objects for functions need work. Not working consistently in ts/js
+  (add-hook! (javascript-mode js-mode js2-mode typescript-mode)
+    (evil-define-text-object
+      evil-visual-inner-javascript-function (count &optional beg end type)
+      "Visual inner text object for all Javascript functions."
+      (my/evil-select-inner-javascript-function type t))
+    (evil-define-text-object
+      evil-inner-javascript-function (count &optional beg end type)
+      "Inner text object for all Javascript functions."
+      (my/evil-select-inner-javascript-function type nil))
+    (evil-define-text-object
+      evil-visual-outer-javascript-function (count &optional beg end type)
+      "Visual outer text object for all Javascript functions."
+      (my/evil-select-outer-javascript-function type t))
+    (evil-define-text-object
+      evil-outer-javascript-function (count &optional beg end type)
+      "Outer text object for all Javascript functions."
+      (my/evil-select-outer-javascript-function type nil))
+    (let* ((fn-detect-pattern "\\b[[:alnum:]]+(.*?) *?\\(:[^()]*?\\)? *?{")
+           (lambda-detect-pattern "\\((.*?)\\|\\b[[:alnum:]]+\\) *?\\(:[^()]+?\\)? *?=> *?{")
+           (pattern (concat "\\(" fn-detect-pattern "\\|" lambda-detect-pattern "\\)")))
+      (defun my/evil-select-inner-javascript-function (type visual-p)
+        (save-window-excursion
+          (let* ((origin (point))
+                 (function-beg (progn
+                                 (end-of-line)
+                                 (forward-char)
+                                 (search-backward-regexp pattern)
+                                 (point)))
+                 (beg (progn
+                        (goto-char function-beg)
+                        (search-forward "{")
+                        (when visual-p
+                          (search-forward-regexp "[^ ]"))
+                        (point)))
+                 (end (progn
+                        (goto-char beg)
+                        (search-backward "{")
+                        (forward-sexp)
+                        (backward-char)
+                        (when visual-p
+                          (backward-char)
+                          (search-backward-regexp "[^ ]"))
+                        (point))))
+            (if (<= function-beg origin end)
+                (evil-range beg end type)
+              (progn
+                (message "Not within a function definition")
+                (evil-range origin origin type))))))
+      (defun my/evil-select-outer-javascript-function (type visual-p)
+        (save-window-excursion
+          (when (and (region-active-p)
+                     (> (point) (mark)))
+            (let ((prev-point (point))
+                  (prev-mark (mark)))
+              (set-mark prev-point)
+              (goto-char prev-mark)))
+          (let* ((origin (point))
+                 (function-beg (progn
+                                 (end-of-line)
+                                 (forward-char)
+                                 (search-backward-regexp pattern)
+                                 (point)))
+                 (beg (progn
+                        (goto-char function-beg)
+                        (search-backward "function" (line-beginning-position) t)
+                        (search-backward "export" (line-beginning-position) t)
+                        (point)))
+                 (end (progn
+                        (goto-char beg)
+                        (cond ((search-forward-regexp "([^)]" (line-end-position) t) (progn (backward-char) (forward-sexp) (backward-char)))
+                              (t (search-forward "=>" (line-end-position) t)))
+                        (search-forward "{")
+                        (backward-char)
+                        (forward-sexp)
+                        (when visual-p
+                          (backward-char))
+                        (point))))
+            (if (<= function-beg origin end)
+                (evil-range beg end type)
+              (progn
+                (message "Not within a function definition")
+                (evil-range origin origin type)))))))
+    (map! :map evil-operator-state-local-map
+          "af" #'evil-outer-javascript-function
+          "if" #'evil-inner-javascript-function
+          :map evil-visual-state-local-map
+          "af" #'evil-visual-outer-javascript-function
+          "if" #'evil-visual-inner-javascript-function)))
 
 (after! evil-collection
   ;; Fix regular linewise movement in org mode and outline mode.
