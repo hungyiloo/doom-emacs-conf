@@ -17,4 +17,10 @@
   ;;                 (if company-candidates
   ;;                     (company-cancel)
   ;;                   (apply orig-fun args)))))
-  )
+
+  (advice-add #'company-complete-common-or-cycle
+              :around
+              (defun my/yas-expand-before-company-complete (orig-fun &rest args)
+                "Attempts to yas-expand before falling back to the ORIG-FUN from company"
+                (unless (yas-expand-from-trigger-key)
+                  (apply orig-fun args)))))
