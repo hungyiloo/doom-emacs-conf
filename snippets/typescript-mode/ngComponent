@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: @Component({ ... }) export class Component { ... }
+# name: @Component({ ... }) class Component { ... }
 # uuid: ng-component
 # key: ngComponent
 # condition: t
