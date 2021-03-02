@@ -1,0 +1,23 @@
+# -*- mode: snippet -*-
+# name: @Component({ ... }) export class Component { ... }
+# uuid: ng-component
+# key: ngComponent
+# condition: t
+# --
+import { Component, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+
+@Component({
+  selector: 'app-${1:foo-bar}',
+  templateUrl: './$1.component.html',
+  styleUrls: ['./$1.component.scss']
+})
+export class ${1:$(s-upper-camel-case yas-text)}Component implements OnDestroy {
+  readonly destroyed$ = new Subject();
+
+  $0
+
+  ngOnDestroy() {
+    this.destroyed$.next();
+  }
+}

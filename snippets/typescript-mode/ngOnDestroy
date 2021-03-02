@@ -1,0 +1,9 @@
+# key: ngOnDestroy
+# name: ngOnDestroy() { ... }
+# uuid: ng-on-destroy
+# condition: t
+# --
+${1:readonly destroyed$ = new Subject();}
+ngOnDestroy() {
+  ${2:this.destroyed$.next();}$0
+}

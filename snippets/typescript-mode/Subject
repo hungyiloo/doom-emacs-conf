@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Subject
+# uuid: rxjs-subject
+# key: rxsubj
+# condition: t
+# --
+${1:readonly} ${2:stream}\$ = new Subject$3();$0

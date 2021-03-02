@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: BehaviorSubject
+# uuid: rxjs-behavior-subject
+# key: rxbsubj
+# condition: t
+# --
+${1:readonly} ${2:stream}\$ = new BehaviorSubject<${3:any}>(${4:null});$0
