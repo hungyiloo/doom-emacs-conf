@@ -7,13 +7,33 @@
 If a selection is active, pre-fill the prompt with it."
     (interactive)
     (if (region-active-p)
-        (consult-line (rxt-pcre-to-elisp (rxt-quote-pcre (buffer-substring-no-properties (region-beginning) (region-end)))))
+        (consult-line (regexp-quote (buffer-substring-no-properties (region-beginning) (region-end))))
       (consult-line)))
+
+  (defun my/consult-line-symbol-at-point ()
+    "Conduct a text search on the current buffer for the symbol at point."
+    (interactive)
+    (consult-line (thing-at-point 'symbol)))
+
+  (defun my/consult-ripgrep-dwim ()
+    "Conduct a text search on in the current (project) directory.
+If a selection is active, pre-fill the prompt with it."
+    (interactive)
+    (if (region-active-p)
+        (consult-ripgrep nil (regexp-quote (buffer-substring-no-properties (region-beginning) (region-end))))
+      (consult-ripgrep)))
+
+  (defun my/consult-ripgrep-symbol-at-point ()
+    "Conduct a text search on in the current (project) directory for the symbol at point."
+    (interactive)
+    (consult-ripgrep nil (thing-at-point 'symbol)))
+
   (after! evil
     (evil-set-command-property #'my/consult-line-dwim :jump t))
 
   ;; Adjust some keybindings to use consult equivalents
   (map! :leader
+        "*" #'my/consult-ripgrep-symbol-at-point
         (:prefix-map ("M" . "mode")
          "M" #'consult-mode-command
          "N" #'consult-minor-mode-menu)
@@ -21,6 +41,8 @@ If a selection is active, pre-fill the prompt with it."
          "i" #'consult-imenu
          "I" #'consult-outline
          "s" #'my/consult-line-dwim
-         "p" #'consult-ripgrep)
+         "S" #'my/consult-line-thing-at-point
+         "b" #'my/consult-line-dwim
+         "p" #'my/consult-ripgrep-dwim)
         (:prefix-map ("f" . "file")
          "r" #'consult-recent-file)))
