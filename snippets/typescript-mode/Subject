@@ -4,4 +4,4 @@
 # key: rxsubj
 # condition: t
 # --
-${1:readonly} ${2:stream}\$ = new Subject$3();$0
+${1:readonly} ${2:stream}\$ = new Subject${3:<${4:any}>}();$0
