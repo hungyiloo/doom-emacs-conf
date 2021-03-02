@@ -71,24 +71,9 @@
   (advice-add #'evil-ex-search-forward :after #'my/recenter)
   (advice-add #'evil-ex-search-backward :after #'my/recenter)
 
-  ;; FIXME: these text objects for functions need work. Not working consistently in ts/js
-  (add-hook! (javascript-mode js-mode js2-mode typescript-mode)
-    (evil-define-text-object
-      evil-visual-inner-javascript-function (count &optional beg end type)
-      "Visual inner text object for all Javascript functions."
-      (my/evil-select-inner-javascript-function type t))
-    (evil-define-text-object
-      evil-inner-javascript-function (count &optional beg end type)
-      "Inner text object for all Javascript functions."
-      (my/evil-select-inner-javascript-function type nil))
-    (evil-define-text-object
-      evil-visual-outer-javascript-function (count &optional beg end type)
-      "Visual outer text object for all Javascript functions."
-      (my/evil-select-outer-javascript-function type t))
-    (evil-define-text-object
-      evil-outer-javascript-function (count &optional beg end type)
-      "Outer text object for all Javascript functions."
-      (my/evil-select-outer-javascript-function type nil))
+  ;; JS/TS specific evil setup
+  (after! (:or typescript-mode js2-mode)
+    ;; Functions for JS/TS function text objects
     (let* ((fn-detect-pattern "\\b[[:alnum:]]+(.*?) *?\\(:[^()]*?\\)? *?{")
            (lambda-detect-pattern "\\((.*?)\\|\\b[[:alnum:]]+\\) *?\\(:[^()]+?\\)? *?=> *?{?")
            (pattern (concat "\\(" fn-detect-pattern "\\|" lambda-detect-pattern "\\)")))
@@ -152,12 +137,30 @@
                           (backward-char))
                         (point))))
             (evil-range beg end type)))))
-    (map! :map evil-operator-state-local-map
-          "af" #'evil-outer-javascript-function
-          "if" #'evil-inner-javascript-function
-          :map evil-visual-state-local-map
-          "af" #'evil-visual-outer-javascript-function
-          "if" #'evil-visual-inner-javascript-function)))
+    (evil-define-text-object
+      evil-visual-inner-javascript-function (count &optional beg end type)
+      "Visual inner text object for all Javascript functions."
+      (my/evil-select-inner-javascript-function type t))
+    (evil-define-text-object
+      evil-inner-javascript-function (count &optional beg end type)
+      "Inner text object for all Javascript functions."
+      (my/evil-select-inner-javascript-function type nil))
+    (evil-define-text-object
+      evil-visual-outer-javascript-function (count &optional beg end type)
+      "Visual outer text object for all Javascript functions."
+      (my/evil-select-outer-javascript-function type t))
+    (evil-define-text-object
+      evil-outer-javascript-function (count &optional beg end type)
+      "Outer text object for all Javascript functions."
+      (my/evil-select-outer-javascript-function type nil))
+    ;; Hook to install the above functions
+    (add-hook! (javascript-mode js-mode js2-mode typescript-mode)
+      (map! :map evil-operator-state-local-map
+            "af" #'evil-outer-javascript-function
+            "if" #'evil-inner-javascript-function
+            :map evil-visual-state-local-map
+            "af" #'evil-visual-outer-javascript-function
+            "if" #'evil-visual-inner-javascript-function))))
 
 (after! evil-collection
   ;; Fix regular linewise movement in org mode and outline mode.
