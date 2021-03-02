@@ -29,4 +29,20 @@
                 )))
           (goto-char pos)
           (replace-match (concat "<" tag-name))
-          )))))
+          ))))
+
+  ;; evil-mc doesn't deal well with "auto" web-mode behaviors so temporarily
+  ;; disable them while we have multiple cursors in flight.
+  (after! evil-mc
+    (add-hook! 'evil-mc-before-cursors-created
+      (when (eq major-mode 'web-mode)
+        (setq web-mode-enable-auto-closing nil)
+        (setq web-mode-enable-auto-opening nil)
+        (setq web-mode-enable-auto-pairing nil)
+        (setq web-mode-enable-auto-indentation nil)))
+    (add-hook! 'evil-mc-after-cursors-deleted
+      (when (eq major-mode 'web-mode)
+        (setq web-mode-enable-auto-closing t)
+        (setq web-mode-enable-auto-opening t)
+        (setq web-mode-enable-auto-pairing t)
+        (setq web-mode-enable-auto-indentation t)))))
