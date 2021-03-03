@@ -77,6 +77,7 @@
     (let* ((fn-detect-pattern "\\b[[:alnum:]]+(.*?) *?\\(:[^()]*?\\)? *?{")
            (lambda-detect-pattern "\\((.*?)\\|\\b[[:alnum:]]+\\) *?\\(:[^()]+?\\)? *?=> *?{?")
            (pattern (concat "\\(" fn-detect-pattern "\\|" lambda-detect-pattern "\\)")))
+      (require 'smartparens)
       (defun my/evil-select-inner-javascript-function (type visual-p)
         (save-window-excursion
           (let* ((origin (point))
