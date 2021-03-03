@@ -15,18 +15,18 @@ If a selection is active, pre-fill the prompt with it."
     (interactive)
     (consult-line (thing-at-point 'symbol)))
 
-  (defun my/consult-ripgrep-dwim ()
+  (defun my/consult-ripgrep-dwim (dir)
     "Conduct a text search on in the current (project) directory.
 If a selection is active, pre-fill the prompt with it."
-    (interactive)
+    (interactive "P")
     (if (region-active-p)
-        (consult-ripgrep nil (regexp-quote (buffer-substring-no-properties (region-beginning) (region-end))))
-      (consult-ripgrep)))
+        (consult-ripgrep dir (regexp-quote (buffer-substring-no-properties (region-beginning) (region-end))))
+      (consult-ripgrep dir)))
 
-  (defun my/consult-ripgrep-symbol-at-point ()
+  (defun my/consult-ripgrep-symbol-at-point (dir)
     "Conduct a text search on in the current (project) directory for the symbol at point."
-    (interactive)
-    (consult-ripgrep nil (thing-at-point 'symbol)))
+    (interactive "P")
+    (consult-ripgrep dir (thing-at-point 'symbol)))
 
   (after! evil
     (evil-set-command-property #'my/consult-line-dwim :jump t))
