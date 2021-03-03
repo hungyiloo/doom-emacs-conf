@@ -120,9 +120,9 @@ _j_: ↓  _J_: ⬇  _]_: next window              _~_: swap                  _m_
 _k_: ↑  _K_: ⬆  _[_: previous window          _=_: balance               _S_: max horizontal    ___: decrease height
 _l_: →  _L_: ➡  _}_: next win any frame       _s_: split horizontal      _V_: max vertical      _>_: increase width
 _h_: ←  _H_: ⬅  _{_: previous win any frame   _v_: split vertical        _t_: transpose         _<_: decrease width
-_T_: tear   ^^^  _d_: delete win               _x_: quit and kill buffer  _r_: rotate downwards  _R_: rotate upwards   _F_: flip (vertical)  _f_: flop (horizontal)
+_T_: tear   ^^^  _d_: delete win               _D_: delete and kill       _r_: rotate downwards  _R_: rotate upwards   _F_: flip (vertical)  _f_: flop (horizontal)
 
-_SPC_: ace window  _D_: ace delete  _M-w_: evil-window-map  _w_: quick next window  "
+_SPC_: ace window  _x_: ace delete  _M-w_: evil-window-map  _w_: quick next window  "
   ("SPC" #'ace-window :color blue)
   ("]" #'evil-window-next)
   ("[" #'evil-window-prev)
@@ -150,8 +150,8 @@ _SPC_: ace window  _D_: ace delete  _M-w_: evil-window-map  _w_: quick next wind
   ("S" #'doom/window-maximize-horizontally)
   ("V" #'doom/window-maximize-vertically)
   ("d" #'delete-window)
-  ("D" #'ace-delete-window :color blue)
-  ("x" #'kill-buffer-and-window :color blue)
+  ("x" #'ace-delete-window :color blue)
+  ("D" #'kill-buffer-and-window :color blue)
   ("r" #'evil-window-rotate-downwards)
   ("R" #'evil-window-rotate-upwards)
   ("u" #'winner-undo)
@@ -165,4 +165,4 @@ _SPC_: ace window  _D_: ace delete  _M-w_: evil-window-map  _w_: quick next wind
 
 (defun my/evil-window-map-launcher ()
   (interactive)
-  (run-at-time 0.1 nil #'execute-kbd-macro (kbd "SPC W")))
+  (run-at-time 0 nil #'execute-kbd-macro (kbd "SPC W")))
