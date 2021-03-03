@@ -23,17 +23,13 @@
                                (evil-mc-resume-cursors)
                                (when evil-mc-pattern (my/mc-select-matches))))
   "
-^Match^            ^Line-wise^           ^Manual^
-^^^^^^----------------------------------------------------
 _z_: match all     _J_: make & go down   _._: toggle here
 _m_: make & next   _K_: make & go up     _r_: remove last
 _M_: make & prev   _I_: make visual beg  _R_: remove all
 _n_: skip & next   _A_: make visual end  _p_: pause/resume
 _N_: skip & prev
 
-Current pattern: %`evil-mc-pattern
-
-"
+Current pattern: %`evil-mc-pattern  "
   ("z" #'evil-mc-make-all-cursors)
   ("m" #'evil-mc-make-and-goto-next-match)
   ("M" #'evil-mc-make-and-goto-prev-match)
@@ -51,24 +47,18 @@ Current pattern: %`evil-mc-pattern
   ("<escape>" nil "quit" :color blue))
 
 (defhydra my/sp-hydra (:color amaranth
-                       :hint nil)
+                       :hint nil
+                       :pre (recenter)
+                       :post (recenter))
   "
-^Navigation^               ^Editing^
-^^^^-----------------------------------------------------------------------------------
-_e_: forward sexp          _x_: kill region       _~_: transpose
-_b_: backward sexp         _d_: kill sexp         _!_: raise
-_w_: next sexp             _D_: kill whole line   _+_: join
-_E_: sexp end              _c_: comment           _|_: split
-_B_: sexp beginning        _<_: barf backward     _=_: clone
-_RET_: down sexp           _>_: barf forward      _%_: convolute
-_S-<return>_: up sexp      _,_: slurp backward    ___: splice
-_v_: select sexp           _._: slurp forward     _<delete>_: splice kill forward
-_V_: clear selection       _)_: wrap round        _<backspace>_: splice kill backward
-_y_: yank selection        _]_: wrap square       _p_: paste after
-_Y_: yank sexp             _}_: wrap curly        _P_: paste before
+_e_: forward sexp     _RET_: down sexp        _x_: kill region      _,_: slurp backward ^^^^^^^^^^  _~_: transpose   ___: splice
+_b_: backward sexp    _S-<return>_: up sexp   _d_: kill sexp        _._: slurp forward  ^^^^^^^^^^  _!_: raise       _<delete>_: splice kill forward
+_w_: next sexp        _v_: select sexp        _D_: kill whole line  _<_: barf backward  ^^^^^^^^^^  _+_: join        _<backspace>_: splice kill backward
+_E_: sexp end         _V_: clear selection    _c_: comment          _>_: barf forward   ^^^^^^^^^^  _|_: split
+_B_: sexp beginning   _y_: yank selection     _p_: paste after      ^ ^                 ^^^^^^^^^^  _=_: clone
+_RET_: down sexp      _Y_: yank sexp          _P_: paste before     _{__[__(__)__]__}_: wrap        _%_: convolute
 
-_u_: undo  _C-r_: redo  _C-SPC_: set mark _s_: toggle strict
-"
+_u_: undo  _C-r_: redo  _C-SPC_: set mark  _s_: toggle strict"
   ("0" #'evil-beginning-of-line)
   ("$" #'evil-end-of-line)
   ("^" #'evil-first-non-blank)
@@ -123,25 +113,17 @@ _u_: undo  _C-r_: redo  _C-SPC_: set mark _s_: toggle strict
   ("<escape>" nil "quit" :color blue))
 
 (defhydra my/window-hydra (:color amaranth
-                           :hint nil)
+                           :hint nil
+                           :idle 1.0)
   "
-_SPC_: ace window     _~_: swap              _m_: maximize
-_j_: down             _=_: balance           _S_: maximize horizontal
-_k_: up               _s_: split horizontal  _V_: maximize vertical
-_l_: right            _v_: split vertical    _d_: delete window
-_h_: left             _T_: tear off          _D_: ace delete
-_J_: move down        _+_: increase height   _]_: next window
-_k_: move up          ___: decrease height   _[_: previous window
-_l_: move right       _>_: increase width    _}_: next window any frame
-_h_: move left        _<_: decrease width    _{_: previous window any frame
-_u_: undo             _r_: rotate downwards  _R_: rotate upwards
-_t_: transpose        _F_: flip (vertical)   _f_: flop (horizontal)
-_x_: quit and kill buffer
+_j_: ↓  _J_: ⬇  _]_: next window              _~_: swap                  _m_: maximize          _+_: increase height  _u_: undo
+_k_: ↑  _K_: ⬆  _[_: previous window          _=_: balance               _S_: max horizontal    ___: decrease height
+_l_: →  _L_: ➡  _}_: next win any frame       _s_: split horizontal      _V_: max vertical      _>_: increase width
+_h_: ←  _H_: ⬅  _{_: previous win any frame   _v_: split vertical        _t_: transpose         _<_: decrease width
+_T_: tear   ^^^  _d_: delete win               _x_: quit and kill buffer  _r_: rotate downwards  _R_: rotate upwards   _F_: flip (vertical)  _f_: flop (horizontal)
 
-_M-w_: evil-window-map  _w_: quick next window
-
-"
-  ("SPC" #'ace-window)
+_SPC_: ace window  _D_: ace delete  _M-w_: evil-window-map  _w_: quick next window  "
+  ("SPC" #'ace-window :color blue)
   ("]" #'evil-window-next)
   ("[" #'evil-window-prev)
   ("}" #'next-window-any-frame)
@@ -159,17 +141,17 @@ _M-w_: evil-window-map  _w_: quick next window
   ("s" #'evil-window-split)
   ("v" #'evil-window-vsplit)
   ("t" #'transpose-frame)
-  ("T" #'tear-off-window)
+  ("T" #'tear-off-window :color blue)
   ("+" #'evil-window-increase-height)
   ("_" #'evil-window-decrease-height)
   (">" #'evil-window-increase-width)
   ("<" #'evil-window-decrease-width)
-  ("m" #'doom/window-maximize-buffer)
+  ("m" #'doom/window-maximize-buffer :color blue)
   ("S" #'doom/window-maximize-horizontally)
   ("V" #'doom/window-maximize-vertically)
   ("d" #'delete-window)
-  ("D" #'ace-delete-window)
-  ("x" #'kill-buffer-and-window)
+  ("D" #'ace-delete-window :color blue)
+  ("x" #'kill-buffer-and-window :color blue)
   ("r" #'evil-window-rotate-downwards)
   ("R" #'evil-window-rotate-upwards)
   ("u" #'winner-undo)
