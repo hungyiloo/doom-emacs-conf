@@ -135,6 +135,17 @@
                               (?a . "Advice")
                               (?S . "Section") ; If the key is set as ?s, it doesn't display in which-key properly. Why?
                               ))))
+  ;; Fix `consult-imenu' grouping, should be in line with the narrowing config above
+  (setq consult-imenu-config
+        '((emacs-lisp-mode :toplevel "Functions" :types
+                           ((?f "Functions" font-lock-function-name-face)
+                            (?m "Macros" font-lock-function-name-face)
+                            (?p "Package" font-lock-constant-face) ; Singular Package is what works for me
+                            (?t "Types" font-lock-type-face)
+                            (?v "Variables" font-lock-variable-name-face)
+                            ;; These are added by me
+                            (?a "Advice" font-lock-function-name-face)
+                            (?S "Section" font-lock-constant-face)))))
 
   ;; Use expanded file name to compare with project root
   (setq consult--source-project-file
