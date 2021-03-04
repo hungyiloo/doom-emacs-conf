@@ -74,17 +74,43 @@
   ;; JS/TS specific evil setup
   (after! (:or typescript-mode js2-mode)
     ;; Functions for JS/TS function text objects
-    (let* ((fn-detect-pattern "\\b[[:alnum:]]+(.*?) *?\\(:[^()]*?\\)? *?{")
-           (lambda-detect-pattern "\\((.*?)\\|\\b[[:alnum:]]+\\) *?\\(:[^()]+?\\)? *?=> *?{?")
-           (pattern (concat "\\(" fn-detect-pattern "\\|" lambda-detect-pattern "\\)")))
+    (let* ((fn-detect-pattern "[[:space:]\r\n]\\b[[:alnum:]]+?[[:space:]]*?(\\(.\\|[\n\r]\\)*?)\\([ \n\r]*?:\\(.\\|[\n\r]\\)*?\\)?[[:space:]]*?{")
+           (lambda-detect-pattern "\\((.*?)\\|\\b[[:alnum:]]+?\\)\\([ \n\r]*?:\\(.\\|[\n\r]\\)*?\\)?[[:space:]\r\n]=>[[:space:]\r\n]*?{?")
+           (pattern (concat "\\(" fn-detect-pattern "\\|" lambda-detect-pattern "\\)"))
+           (keywords '("break" "as" "any" "switch"
+                       "case" "if" "throw" "else"
+                       "var" "number" "string" "get"
+                       "module" "type" "instanceof" "typeof"
+                       "public" "private" "enum" "export"
+                       "finally" "for" "while" "void"
+                       "null" "super" "this" "new"
+                       "in" "return" "true" "false"
+                       "any" "extends" "static" "let"
+                       "package" "implements" "interface" "function"
+                       "new" "try" "yield" "const"
+                       "continue" "do" "catch")))
       (require 'smartparens)
       (defun my/evil-select-inner-javascript-function (type visual-p)
         (save-window-excursion
-          (let* ((origin (point))
-                 (function-beg (progn
-                                 (end-of-line)
-                                 (forward-char)
+          (when (and (region-active-p)
+                     (> (point) (mark)))
+            (let ((prev-point (point))
+                  (prev-mark (mark)))
+              (set-mark prev-point)
+              (goto-char prev-mark)))
+          (let* ((function-beg (progn
+                                 (if (region-active-p)
+                                     (progn
+                                       (backward-char)
+                                       (search-backward-regexp "[^ \n\r=>]"))
+                                   (progn
+                                     (search-forward "=>" (line-end-position) t)
+                                     (search-forward "{" (line-end-position) t)))
                                  (search-backward-regexp pattern)
+                                 (while (save-excursion
+                                          (forward-char)
+                                          (member (thing-at-point 'symbol t) keywords))
+                                   (search-backward-regexp pattern))
                                  (point)))
                  (beg (progn
                         (goto-char function-beg)
@@ -112,15 +138,22 @@
                   (prev-mark (mark)))
               (set-mark prev-point)
               (goto-char prev-mark)))
-          (let* ((origin (point))
-                 (function-beg (progn
-                                 (end-of-line)
-                                 (forward-char)
+          (let* ((function-beg (progn
+                                 (unless (region-active-p)
+                                   (search-forward "=>" (line-end-position) t)
+                                   (search-forward "{" (line-end-position) t))
                                  (search-backward-regexp pattern)
+                                 (while (save-excursion
+                                          (forward-char)
+                                          (member (thing-at-point 'symbol t) keywords))
+                                   (search-backward-regexp pattern))
                                  (point)))
                  (beg (progn
                         (goto-char function-beg)
+                        (when (member (char-after) '(? ?\t ?\r ?\n))
+                          (forward-char))
                         (search-backward "function" (line-beginning-position) t)
+                        (search-backward-regexp "\\(private\\|public\\)" (line-beginning-position) t)
                         (search-backward "export" (line-beginning-position) t)
                         (point)))
                  (end (progn
