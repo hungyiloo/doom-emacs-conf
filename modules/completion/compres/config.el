@@ -7,12 +7,6 @@
         "'" #'selectrum-repeat)
   (setq selectrum-extend-current-candidate-highlight t)
 
-  ;; These values fix issues with selectrum candidates being cut off
-  ;; REVIEW: See when this is fixed properly upstream and remove?
-  (setq selectrum-fix-vertical-window-height t)
-  (setq selectrum-max-window-height 13) ; one more than the desired number of candidates
-  (setq selectrum-num-candidates-displayed 12)
-
   (custom-set-faces!
     `(selectrum-current-candidate :background ,(doom-blend (doom-color 'highlight) (doom-color 'bg-alt) 0.175))
     `(selectrum-completion-docsig :foreground ,(doom-color 'base5) :italic nil)
