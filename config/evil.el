@@ -23,11 +23,6 @@
   ;; This lets me undo things within an insert "session"
   (setq evil-want-fine-undo 't)
 
-  ;; I think C-u is more useful as the universal prefix in insert mode.
-  ;; If I really want to delete back to indentation exactly this way,
-  ;; just d^
-  (setq evil-want-C-u-delete nil)
-
   ;; Setting this to nil fixes small edge cases in evil-mc
   ;; but setting it to t fixes LARGE edge cases in evil-mc
   ;; TODO: Look into evil-mc single character visual selection to see
