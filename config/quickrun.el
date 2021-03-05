@@ -4,12 +4,16 @@
   :init
   (map! :leader
         (:prefix-map ("c" . "code")
-         :desc "Replace region quickrun" "q" #'my/replace-region-quickrun
+         :desc "Replace region quickrun" "Q" #'my/replace-region-quickrun
+         :desc "Eval region quickrun" "q" #'my/eval-region-quickrun
+         :desc "Eval region elisp" "e"  #'my/eval-region-elisp
          :desc "Replace region elisp" "E" #'my/replace-region-elisp))
 
   :commands (quickrun
              quickrun-region
              quickrun-replace-region
+             my/eval-region-elisp
+             my/eval-region-quickrun
              my/replace-region-elisp
              my/replace-region-quickrun)
 
@@ -34,6 +38,16 @@ of quickrun. This function lets me do it quickly."
       (error (message "Invalid expression")
              (insert (current-kill 0)))))
 
+  (evil-define-operator my/eval-region-elisp (beg end)
+    "Evaluate selection as elisp and replace it with its result.
+
+Often even if I'm not in emacs-lisp-mode, I still want to evaluate
+short expressions as elisp quickly, without having to deal with the quirks
+of quickrun. This function lets me do it quickly."
+    :move-point nil
+    (interactive "<r>")
+    (+emacs-lisp-eval beg end))
+
   (evil-define-operator my/replace-region-quickrun (beg end)
     "Evaluate selection using quickrun and replace it with its result.
 
@@ -47,6 +61,20 @@ This seems to work better for me than doom's provided `+eval:replace-region'"
     (activate-mark)
     ;; Now the mark is set and activated, hand off to quickrun
     (quickrun-replace-region beg end))
+
+  (evil-define-operator my/eval-region-quickrun (beg end)
+    "Evaluate selection using quickrun and replace it with its result.
+
+This seems to work better for me than doom's provided `+eval:replace-region'"
+    :move-point nil
+    (interactive "<r>")
+    ;; Setting the mark manually using evil's provided region beg/end
+    ;; allows quickrun to work as if evil didn't exist
+    (set-mark beg)
+    (goto-char end)
+    (activate-mark)
+    ;; Now the mark is set and activated, hand off to quickrun
+    (+eval/region beg end))
 
   (defun quickrun--outputter-replace-region ()
     "Replace region with quickrun output, and truncate the last character if it's a newline"
@@ -62,7 +90,7 @@ This seems to work better for me than doom's provided `+eval:replace-region'"
                        eob)))))
       (with-current-buffer quickrun--original-buffer
         (delete-region (region-beginning) (region-end))
-        (insert output)
+        (insert (ansi-color-filter-apply output))
         (setq quickrun-option-outputter quickrun--original-outputter))))
 
   ;; Fix "selecting deleted buffer" errors for doom's quickrun overlay smarts
@@ -73,4 +101,21 @@ This seems to work better for me than doom's provided `+eval:replace-region'"
      "Don't apply any overlays if SOURCE-BUFFER is provided but it's already killed."
      (when (or (not source-buffer)
                (buffer-live-p source-buffer))
-       (funcall orig-fun output source-buffer)))))
+       (funcall orig-fun output source-buffer))))
+
+  (advice-add
+   #'+eval-display-results
+   :around
+   (defun my/eval-display-results-strip-ansi-before (orig-fun output &optional source-buffer)
+     (funcall orig-fun
+              (ansi-color-filter-apply output)
+              source-buffer)))
+
+  ;; Fix typescript quickrunning by simplfiying using deno
+  ;; NOTE: Deno must be externally installed within the environment for this to work
+  (add-to-list 'quickrun--language-alist
+               '("typescript"
+                 (:command . "deno run")
+                 (:exec . ("cp %n %n.ts" "%c --quiet %n.ts"))
+                 (:remove . ("%n.ts"))
+                 (:description . "Run Typescript file with deno"))))
