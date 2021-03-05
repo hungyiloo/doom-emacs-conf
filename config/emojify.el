@@ -13,12 +13,10 @@
   (setq emojify-emoji-json (concat doom-private-dir "emoji.json"))
 
   (after! selectrum
-   (advice-add #'selectrum--format-candidates
-               :around
-               (defun my/emojify-selectrum-candidates (orig-fun &rest args)
-                 (mapcar
-                  (lambda (cand) (cons (emojify-string (car cand)) (cdr cand)))
-                  (apply orig-fun args)))))
+    (advice-add #'selectrum--format-candidates
+                :around
+                (defun my/emojify-selectrum-candidates (orig-fun &rest args)
+                  (mapcar #'emojify-string (apply orig-fun args)))))
 
   (after! consult
     ;; Fix emojify display issues after using consult.
