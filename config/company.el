@@ -2,7 +2,7 @@
 
 (after! company
   ;; More responsive company autocompletion
-  (setq company-idle-delay 0.15)
+  (setq company-idle-delay 0.2)
 
   ;; REVIEW: This doesn't really feel good to me. Maybe I've gotten used to the
   ;; C-g way to cancel company already
