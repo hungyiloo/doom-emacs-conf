@@ -57,6 +57,21 @@
         (goto-char (1+ end-pos))
         (unless (eq ?\n (char-after))
           (newline-and-indent)))))
+  (defun my/web-mode-tag-split-to-lines ()
+    "Splits the tag into multiple lines by attributes."
+    (interactive)
+    (save-excursion
+      (web-mode-tag-beginning)
+      (let ((beg-pos (web-mode-tag-beginning-position))
+            (end-pos (web-mode-tag-end-position)))
+        (web-mode-attribute-next)
+        (web-mode-attribute-next)
+        (while (< (point) end-pos)
+          (when (save-excursion (search-backward-regexp "[^ ]" (line-beginning-position) t))
+            (newline-and-indent)
+            (setq end-pos (web-mode-tag-end-position)))
+          (or (web-mode-attribute-next)
+              (goto-char (1+ end-pos)))))))
 
   ;; evil-mc doesn't deal well with "auto" web-mode behaviors so temporarily
   ;; disable them while we have multiple cursors in flight.
@@ -76,4 +91,5 @@
 
   (map! :map web-mode-map
         :nv "SPC m e `" #'web-mode-navigate
-        :nv "SPC m e RET" #'my/web-mode-element-split-to-lines))
+        :nv "SPC m e RET" #'my/web-mode-element-split-to-lines
+        :nv "SPC m t RET" #'my/web-mode-tag-split-to-lines))
