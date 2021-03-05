@@ -81,7 +81,7 @@
                        "null" "super" "this" "new"
                        "in" "return" "true" "false"
                        "any" "extends" "static" "let"
-                       "package" "implements" "interface" "function"
+                       "package" "implements" "interface"
                        "new" "try" "yield" "const"
                        "continue" "do" "catch")))
       (require 'smartparens)
