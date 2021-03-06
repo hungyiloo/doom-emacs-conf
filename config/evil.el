@@ -44,6 +44,8 @@
    :n "C-S-p" #'evil-paste-pop
    :n "C-S-n" #'evil-paste-pop-next
 
+   :nvi "M-y" #'consult-yank-pop
+
    ;; TODO: The evil-mc hydra I wrote should really be in *this* file, or an evil-mc config file.
    (:when (featurep! :editor multiple-cursors)
     :prefix "g"
