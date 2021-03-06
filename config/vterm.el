@@ -20,4 +20,4 @@
         (consult-yank-pop arg)))
 
     (map! :map 'vterm-mode-map
-          :nvi "M-y" #'my/vterm-consult-yank-pop)))
+          [remap yank-pop] #'my/vterm-consult-yank-pop)))

@@ -41,10 +41,7 @@
    ;; I actually end up using C-n and C-p for up/down line navigation a lot.
    :n "C-n" #'next-line
    :n "C-p" #'previous-line
-   :n "C-S-p" #'evil-paste-pop
-   :n "C-S-n" #'evil-paste-pop-next
-
-   :nvi "M-y" #'consult-yank-pop
+   :n "C-M-y" #'evil-paste-pop-next
 
    ;; TODO: The evil-mc hydra I wrote should really be in *this* file, or an evil-mc config file.
    (:when (featurep! :editor multiple-cursors)
