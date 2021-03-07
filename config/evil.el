@@ -86,14 +86,14 @@
       (require 'smartparens)
       (defun my/evil-select-inner-javascript-function (type visual-p)
         (save-window-excursion
-          (when (and (region-active-p)
+          (when (and (doom-region-active-p)
                      (> (point) (mark)))
             (let ((prev-point (point))
                   (prev-mark (mark)))
               (set-mark prev-point)
               (goto-char prev-mark)))
           (let* ((function-beg (progn
-                                 (if (region-active-p)
+                                 (if (doom-region-active-p)
                                      (progn
                                        (backward-char)
                                        (search-backward-regexp "[^ \n\r=>]"))
@@ -128,14 +128,14 @@
             (evil-range beg end type))))
       (defun my/evil-select-outer-javascript-function (type visual-p)
         (save-window-excursion
-          (when (and (region-active-p)
+          (when (and (doom-region-active-p)
                      (> (point) (mark)))
             (let ((prev-point (point))
                   (prev-mark (mark)))
               (set-mark prev-point)
               (goto-char prev-mark)))
           (let* ((function-beg (progn
-                                 (unless (region-active-p)
+                                 (unless (doom-region-active-p)
                                    (search-forward "=>" (line-end-position) t)
                                    (search-forward "{" (line-end-position) t))
                                  (search-backward-regexp pattern)

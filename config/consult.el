@@ -6,7 +6,7 @@
     "Conduct a text search on the current buffer.
 If a selection is active, pre-fill the prompt with it."
     (interactive)
-    (if (region-active-p)
+    (if (doom-region-active-p)
         (consult-line (regexp-quote (buffer-substring-no-properties (region-beginning) (region-end))))
       (consult-line)))
 
@@ -19,7 +19,7 @@ If a selection is active, pre-fill the prompt with it."
     "Conduct a text search on in the current (project) directory.
 If a selection is active, pre-fill the prompt with it."
     (interactive "P")
-    (if (region-active-p)
+    (if (doom-region-active-p)
         (consult-ripgrep dir (regexp-quote (buffer-substring-no-properties (region-beginning) (region-end))))
       (consult-ripgrep dir)))
 
