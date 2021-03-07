@@ -28,21 +28,28 @@ If a selection is active, pre-fill the prompt with it."
     (interactive "P")
     (consult-ripgrep dir (thing-at-point 'symbol)))
 
+  (add-to-list 'consult-config `(my/consult-ripgrep-dwim :preview-key ,(kbd "C-.")))
+  (add-to-list 'consult-config `(my/consult-ripgrep-symbol-at-point :preview-key ,(kbd "C-.")))
+
   (after! evil
     (evil-set-command-property #'my/consult-line-dwim :jump t))
 
   ;; Adjust some keybindings to use consult equivalents
   (map! :leader
+        "," #'+compres/consult-project-buffer
+        "<" #'consult-buffer
         "*" #'my/consult-ripgrep-symbol-at-point
         (:prefix-map ("M" . "mode")
          "M" #'consult-mode-command
          "N" #'consult-minor-mode-menu)
         (:prefix-map ("s" . "search")
          "i" #'consult-imenu
-         "I" #'consult-outline
+         "I" #'consult-project-imenu
          "s" #'my/consult-line-dwim
          "S" #'my/consult-line-thing-at-point
          "b" #'my/consult-line-dwim
-         "p" #'my/consult-ripgrep-dwim)
+         "p" #'my/consult-ripgrep-dwim
+         :desc "Search for file" "f" #'consult-find
+         :desc "Locate file" "F" #'consult-locate)
         (:prefix-map ("f" . "file")
          "r" #'consult-recent-file)))

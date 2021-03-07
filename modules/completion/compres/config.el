@@ -80,6 +80,7 @@
 
   (define-key!
     [remap apropos] #'consult-apropos
+    [remap bookmark-jump] #'consult-bookmark
     [remap goto-line] #'consult-goto-line
     [remap imenu] #'consult-imenu
     [remap switch-to-buffer] #'consult-buffer
@@ -89,11 +90,19 @@
     [remap yank-pop] #'consult-yank-pop
     [remap locate] #'consult-locate
     [remap load-theme] #'consult-theme
-    [remap recentf-open-files] #'consult-recent-file)
+    [remap recentf-open-files] #'consult-recent-file
+    [remap isearch-edit-string] #'consult-isearch
+    [remap repeat-complex-command] #'consult-complex-command
+    [remap project-switch-to-buffer] #'+compres/consult-project-buffer)
 
   :config
   ;; Don't be so aggresive with previews
-  (setq consult-preview-key (kbd "C-."))
+  (setq consult-config `((consult-buffer :preview-key ,(kbd "C-."))
+                         (+compres/consult-project-buffer :preview-key ,(kbd "C-."))
+                         (consult-bookmark :preview-key ,(kbd "C-."))
+                         (consult-grep :preview-key ,(kbd "C-."))
+                         (consult-ripgrep :preview-key ,(kbd "C-."))
+                         (consult-recent-file :preview-key ,(kbd "C-."))))
 
   ;; Ensure consult-recent-file returns a list of files on startup.
   ;; Without this, sometimes it can be empty on startup because it hasn't been loaded yet?
@@ -165,6 +174,11 @@
                                             (string-prefix-p root x)))
                                      (mapcar #'expand-file-name recentf-list))))))))
 
+  (defun +compres/consult-project-buffer ()
+    (interactive)
+    (run-at-time 0 nil #'execute-kbd-macro (kbd "p SPC")) ; this feels DIRTY but it works
+    (consult-buffer))
+
   ;; Integrate with evil jumping
   (after! evil
     (evil-set-command-property 'consult-imenu :jump t)
@@ -176,20 +190,20 @@
 
   ;; Better than `org-set-tags-command'
   (after! org
-      (defun my/consult-org-set-tags ()
-        "Select tags to add to or remove from a headline.
+    (defun my/consult-org-set-tags ()
+      "Select tags to add to or remove from a headline.
   Choose one or more tags. Chosen tags that are already on the current headline will
   be removed. Chosen tags which are not, will be added."
-        (interactive)
-        (require 'org)
-        (unless (org-at-heading-p) (user-error "Not a headline."))
-        (let* ((current (org-get-tags (point)))
-               (selected (thread-last (org-get-buffer-tags)
-                           (completing-read-multiple "Select org tag(s): "))))
-          (org-set-tags
-           (seq-uniq (append (seq-difference current selected)
-                             (seq-difference selected current))))))
-      (defalias #'org-set-tags-command #'my/consult-org-set-tags))
+      (interactive)
+      (require 'org)
+      (unless (org-at-heading-p) (user-error "Not a headline."))
+      (let* ((current (org-get-tags (point)))
+             (selected (thread-last (org-get-buffer-tags)
+                         (completing-read-multiple "Select org tag(s): "))))
+        (org-set-tags
+         (seq-uniq (append (seq-difference current selected)
+                           (seq-difference selected current))))))
+    (defalias #'org-set-tags-command #'my/consult-org-set-tags))
 
   (setq consult-ripgrep-command "rg --null --line-buffered --color=ansi --max-columns=250 --no-heading --line-number . -e ARG OPTS -S"))
 
