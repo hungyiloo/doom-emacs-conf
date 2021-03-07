@@ -39,6 +39,7 @@ If a selection is active, pre-fill the prompt with it."
         "," #'+compres/consult-project-buffer
         "<" #'consult-buffer
         "*" #'my/consult-ripgrep-symbol-at-point
+        "/" #'my/consult-ripgrep-dwim
         (:prefix-map ("M" . "mode")
          "M" #'consult-mode-command
          "N" #'consult-minor-mode-menu)
