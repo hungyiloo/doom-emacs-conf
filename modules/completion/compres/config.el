@@ -87,6 +87,7 @@
     [remap switch-to-buffer-other-window] #'consult-buffer-other-window
     [remap switch-to-buffer-other-frame] #'consult-buffer-other-frame
     [remap man] #'consult-man
+    [remap +default/yank-pop] #'consult-yank-pop
     [remap yank-pop] #'consult-yank-pop
     [remap locate] #'consult-locate
     [remap load-theme] #'consult-theme
