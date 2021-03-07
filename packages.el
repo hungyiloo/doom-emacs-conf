@@ -23,7 +23,8 @@
 
 ;; smooth scrolling when jump-navigating
 (package! scroll-on-jump
-  :recipe (:host gitlab :repo "ideasman42/emacs-scroll-on-jump"))
+  :recipe (:host gitlab :repo "ideasman42/emacs-scroll-on-jump")
+  :pin "69c86542")
 
 ;; figure out what mysterious commands are being run
 (package! command-log-mode)
@@ -34,8 +35,7 @@
 ;; window positioning sorcery
 (package! transpose-frame)
 
-;; I always want the latest updates from these doom-included packages
-(unpin! evil)
-(unpin! evil-mc)
-(unpin! lsp-mode)
-(unpin! doom-themes)
+;; (package! evil :pin "f5ab7ff")
+;; (package! evil-mc :pin "f04fb17")
+;; (package! lsp-mode :pin "d5c7f7e")
+;; (package! doom-themes :pin "55f01ed")
