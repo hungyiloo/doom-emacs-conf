@@ -52,7 +52,11 @@
   ;;       (let ((current-prefix-arg arg))
   ;;         (call-interactively orig))))
   ;;   (advice-add #'org-set-tags-command :around #'+compres/org-set-tags-command-multiple))
-  )
+
+  (map! :map selectrum-minibuffer-map
+       "C-d" #'selectrum-next-page
+       "C-u" #'selectrum-previous-page
+       "C-k" #'kill-line))
 
 (use-package! orderless
   :defer t
@@ -223,20 +227,14 @@
          "z" #'consult-flycheck))
 
 (use-package! marginalia
-  :bind (;; :map minibuffer-local-map
-         ;;      ("C-M-a" . marginalia-cycle)
-         ;; When using the Embark package, you can bind `marginalia-cycle' as an Embark action!
-         ;;:map embark-general-map
-         ;;    ("A" . marginalia-cycle)
-         )
+  :hook (after-init . marginalia-mode)
+  :config
+  (map! :map minibuffer-local-map
+        "C-M-a" #'marginalia-cycle)
 
-  ;; The :init configuration is always executed (Not lazy!)
-  :init
-
-  ;; Must be in the :init section of use-package such that the mode gets
-  ;; enabled right away. Note that this forces loading the package.
-  (marginalia-mode)
-
+  (after! embark
+    (map! :map embark-general-map
+        "A" #'marginalia-cycle))
   ;; When using Selectrum, ensure that Selectrum is refreshed when cycling annotations.
   (advice-add #'marginalia-cycle :after
               (lambda () (when (bound-and-true-p selectrum-mode) (selectrum-exhibit))))
