@@ -143,13 +143,15 @@
 
   ;; Use expanded file name to compare with project root
   (setq consult--source-project-file
-        `(:name      "Project Recent File"
+        `(:name      "Project File"
           :narrow    (?p . "Project")
+          :hidden    t
           :category  file
           :face      consult-file
           :history   file-name-history
-          :open      ,#'consult--open-file
-          :predicate ,(lambda () consult-project-root-function)
+          :action    ,#'consult--file-action
+          :enabled   ,(lambda () (and consult-project-root-function
+                                 recentf-mode))
           :items
           ,(lambda ()
              (when-let (root (funcall consult-project-root-function))
