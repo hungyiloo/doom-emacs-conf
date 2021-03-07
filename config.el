@@ -49,7 +49,8 @@
                   "g" #'calc-grab-region)
                  (:prefix-map ("t" . "toggle")
                   :desc "Git gutter" "v" #'git-gutter-mode
-                  :desc "Highlight line" "h" #'hl-line-mode)
+                  :desc "Highlight line" "h" #'hl-line-mode
+                  :desc "Debug on error" "d" #'toggle-debug-on-error)
                  (:prefix-map ("p" . "project")
                   "v" #'projectile-run-vterm)
                  (:prefix-map ("i" . "insert")
