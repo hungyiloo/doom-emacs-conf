@@ -170,7 +170,8 @@
                  (mapcar (lambda (x)
                            (concat inv-root (substring x len)))
                          (seq-filter (lambda (x)
-                                       (and (not (gethash x ht))
+                                       (and (> (length x) len)
+                                            (not (gethash x ht))
                                             (string-prefix-p root x)))
                                      (mapcar #'expand-file-name recentf-list))))))))
 
