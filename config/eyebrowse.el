@@ -45,9 +45,7 @@
         "<tab> N" #'eyebrowse-create-named-window-config
         "<tab> `" #'eyebrowse-last-window-config
         "<tab> [" #'eyebrowse-prev-window-config
-        "<tab> ]" #'eyebrowse-next-window-config
-        "," #'consult-buffer
-        "<" #'project-switch-to-buffer)
+        "<tab> ]" #'eyebrowse-next-window-config)
   :config
   (eyebrowse-mode t)
 
