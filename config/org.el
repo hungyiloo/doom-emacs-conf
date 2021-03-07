@@ -70,5 +70,6 @@ This function is called by `org-babel-execute-src-block'."
   ;; Map `my/org-retrieve-url-from-point' to live with its org link friends
   (map! :map org-mode-map
         :localleader
+        "O" #'consult-outline
         (:prefix ("l" . "links")
          "y" #'my/org-retrieve-url-from-point)))
