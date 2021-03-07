@@ -5,6 +5,10 @@
   (setq +lsp-defer-shutdown nil)
   (setq lsp-enable-symbol-highlighting nil)
   (setq lsp-enable-file-watchers nil)
+
+  ;; NOTE: Angular/TS language servers might perform better if we have this
+  ;; (setenv "TSC_NONPOLLING_WATCHER" "1")
+
   (setq lsp-clients-angular-language-server-command
         `("node"
           ,(doom-path (getenv "HOME") ".config/yarn/global/node_modules/@angular/language-server")
