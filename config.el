@@ -54,7 +54,8 @@
                  (:prefix-map ("p" . "project")
                   "v" #'projectile-run-vterm)
                  (:prefix-map ("i" . "insert")
-                  "u" #'insert-char))
+                  "u" #'insert-char
+                  "i" #'all-the-icons-insert))
 
            (map! :leader
                  :desc "window hydra" "w" #'my/window-hydra/body
