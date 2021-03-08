@@ -116,10 +116,10 @@ _u_: undo  _C-r_: redo  _C-SPC_: set mark  _s_: toggle strict"
                            :hint nil
                            :idle 1.0)
   "
-_j_ ⬇️    _J_ ⤵    _]_ ⏭️    _~_ 🔀     🪓 → _s_   🎈 _m_ → _S_    ^ _+_ ^  ▪▪_F_ 🔃    _d_ 🗡
-_k_ ⬆️    _K_ ⤴    _[_ ⏮    _=_ ☯️     ^↓^ ▪     ▪ ^↓^   ^ ^▪_<_ 🪟 _>_     _f_ 🔁    _D_ 💥
-_l_ ➡️    _L_ ↪    _}_ ⏩    _T_ 🪚     _v_ ▪     ▪ _V_   ^ ^    ^ ___ ^  ▪▪^ ^ ▪    _u_ 💩
-_h_ ⬅️    _H_ ↩    _{_ ⏪    _t_ 🪄     ^ ^ ▪     ▪ ^ ^   ^ ^
+_j_ ⬇️ _J_    _]_ ⏭️    _~_ 🔀     🪓 → _v_   🎈 _m_ → _V_    ^ _+_ ^  ▪▪_F_ 🔃    _d_ 🗡
+_k_ ⬆️ _K_    _[_ ⏮    _=_ ☯️     ^↓^ ▪     ▪ ^↓^   ^ ^▪_<_ 🪟 _>_     _f_ 🔁    _D_ 💥
+_l_ ➡️ _L_    _}_ ⏩    _T_ 🪚     _s_ ▪     ▪ _S_   ^ ^    ^ ___ ^  ▪▪^ ^ ▪    _u_ 💩
+_h_ ⬅️ _H_    _{_ ⏪    _t_ 🪄     ^ ^ ▪     ▪ ^ ^   ^ ^
 
 _SPC_ 🎯    _x_ 🔫    _M-w_ ⌨️    _w_ 👟    "
   ("SPC" #'ace-window :color blue)
@@ -146,8 +146,8 @@ _SPC_ 🎯    _x_ 🔫    _M-w_ ⌨️    _w_ 👟    "
   (">" #'evil-window-increase-width)
   ("<" #'evil-window-decrease-width)
   ("m" #'doom/window-maximize-buffer :color blue)
-  ("S" #'doom/window-maximize-horizontally)
-  ("V" #'doom/window-maximize-vertically)
+  ("V" #'doom/window-maximize-horizontally)
+  ("S" #'doom/window-maximize-vertically)
   ("d" #'delete-window)
   ("x" #'ace-delete-window :color blue)
   ("D" #'kill-buffer-and-window :color blue)
