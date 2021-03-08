@@ -116,13 +116,12 @@ _u_: undo  _C-r_: redo  _C-SPC_: set mark  _s_: toggle strict"
                            :hint nil
                            :idle 1.0)
   "
-_j_: ↓  _J_: ⬇  _]_: next window              _~_: swap                  _m_: maximize          _+_: increase height  _u_: undo
-_k_: ↑  _K_: ⬆  _[_: previous window          _=_: balance               _S_: max horizontal    ___: decrease height
-_l_: →  _L_: ➡  _}_: next win any frame       _s_: split horizontal      _V_: max vertical      _>_: increase width
-_h_: ←  _H_: ⬅  _{_: previous win any frame   _v_: split vertical        _t_: transpose         _<_: decrease width
-_T_: tear   ^^^  _d_: delete win               _D_: delete and kill       _r_: rotate downwards  _R_: rotate upwards   _F_: flip (vertical)  _f_: flop (horizontal)
+_j_ ⬇️    _J_ ⤵    _]_ ⏭️    _~_ 🔀     🪓 → _s_   🎈 _m_ → _S_    ^ _+_ ^  ▪▪_F_ 🔃    _d_ 🗡
+_k_ ⬆️    _K_ ⤴    _[_ ⏮    _=_ ☯️     ^↓^ ▪     ▪ ^↓^   ^ ^▪_<_ 🪟 _>_     _f_ 🔁    _D_ 💥
+_l_ ➡️    _L_ ↪    _}_ ⏩    _T_ 🪚     _v_ ▪     ▪ _V_   ^ ^    ^ ___ ^  ▪▪^ ^ ▪    _u_ 💩
+_h_ ⬅️    _H_ ↩    _{_ ⏪    _t_ 🪄     ^ ^ ▪     ▪ ^ ^   ^ ^
 
-_SPC_: ace window  _x_: ace delete  _M-w_: evil-window-map  _w_: quick next window  "
+_SPC_ 🎯    _x_ 🔫    _M-w_ ⌨️    _w_ 👟    "
   ("SPC" #'ace-window :color blue)
   ("]" #'evil-window-next)
   ("[" #'evil-window-prev)
@@ -152,8 +151,8 @@ _SPC_: ace window  _x_: ace delete  _M-w_: evil-window-map  _w_: quick next wind
   ("d" #'delete-window)
   ("x" #'ace-delete-window :color blue)
   ("D" #'kill-buffer-and-window :color blue)
-  ("r" #'evil-window-rotate-downwards)
-  ("R" #'evil-window-rotate-upwards)
+  ;; ("r" #'evil-window-rotate-downwards) ; Don't actually understand what these do!
+  ;; ("R" #'evil-window-rotate-upwards)
   ("u" #'winner-undo)
   ("F" #'flip-frame)
   ("f" #'flop-frame)
