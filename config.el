@@ -70,10 +70,11 @@
            (map! :map global-map
                  "M-u" #'undo-only
                  "M-[" #'previous-buffer
-                 "M-]" #'next-buffer)
-
-           (map! :map minibuffer-local-map
+                 "M-]" #'next-buffer
                  "C-S-u" #'universal-argument)
+
+           (map! :map universal-argument-map
+                 "C-S-u" #'universal-argument-more)
 
            (setq +doom-dashboard-ascii-banner-fn
                  (defun my/doom-dashboard-draw-ascii-banner-fn ()
