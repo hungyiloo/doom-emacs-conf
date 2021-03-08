@@ -18,6 +18,14 @@
                 (defun my/emojify-selectrum-candidate (orig-fun &rest args)
                   (emojify-string (apply orig-fun args)))))
 
+  (after! hydra
+    (advice-remove #'hydra--format-1 #'my/emojify-hydra-hint)
+    (advice-add #'hydra--format-1
+                :around
+                (defun my/emojify-hydra-hint (orig-fun &rest args)
+                  (let ((output (apply orig-fun args)))
+                    `(emojify-string ,output)))))
+
   (after! consult
     ;; Fix emojify display issues after using consult.
     ;; `consult-line' and `consult-outline' in particular seems to mess with the buffer's
