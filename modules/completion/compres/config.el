@@ -397,3 +397,63 @@
 
   (custom-set-faces!
     `(xref-match :foreground ,(doom-color 'magenta) :bold t :background ,(doom-blend (doom-color 'blue) (doom-color 'bg-alt) 0.3))))
+
+(after! ispell
+  (defun +spell/correct ()
+    "Correct spelling of word at point."
+    (interactive)
+    ;; spell-fu fails to initialize correctly if it can't find aspell or a similar
+    ;; program. We want to signal the error, not tell the user that every word is
+    ;; spelled correctly.
+    (unless (;; This is what spell-fu uses to check for the aspell executable
+             or (and ispell-really-aspell ispell-program-name)
+             (executable-find "aspell"))
+      (user-error "Aspell is required for spell checking"))
+
+    (ispell-set-spellchecker-params)
+    (save-current-buffer
+      (ispell-accept-buffer-local-defs))
+    (cl-destructuring-bind (start . end)
+        (or (bounds-of-thing-at-point 'word)
+            (user-error "No word at point"))
+      (let ((word (thing-at-point 'word t))
+            (orig-pt (point))
+            poss ispell-filter)
+        (ispell-send-string "%\n")
+        (ispell-send-string (concat "^" word "\n"))
+        (while (progn (accept-process-output ispell-process)
+                      (not (string= "" (car ispell-filter)))))
+        ;; Remove leading empty element
+        (setq ispell-filter (cdr ispell-filter))
+        ;; ispell process should return something after word is sent. Tag word as
+        ;; valid (i.e., skip) otherwise
+        (unless ispell-filter
+          (setq ispell-filter '(*)))
+        (when (consp ispell-filter)
+          (setq poss (ispell-parse-output (car ispell-filter))))
+        (cond
+         ((or (eq poss t) (stringp poss))
+          ;; don't correct word
+          (message "%s is correct" (funcall ispell-format-word-function word))
+          t)
+         ((null poss)
+          ;; ispell error
+          (error "Ispell: error in Ispell process"))
+         (t
+          ;; The word is incorrect, we have to propose a replacement.
+          (setq res (funcall +spell-correct-interface (nth 2 poss) word))
+          ;; Some interfaces actually eat 'C-g' so it's impossible to stop rapid
+          ;; mode. So when interface returns nil we treat it as a stop.
+          (unless res (setq res (cons 'break word)))
+          (cond
+           ((stringp res)
+            (+spell--correct res poss word orig-pt start end))
+           ((let ((cmd (car res))
+                  (wrd (cdr res)))
+              (unless (or (eq cmd 'skip)
+                          (eq cmd 'break)
+                          (eq cmd 'stop))
+                (+spell--correct cmd poss wrd orig-pt start end)
+                (unless (string-equal wrd word)
+                  (+spell--correct wrd poss word orig-pt start end))))))
+          (ispell-pdict-save t)))))))
