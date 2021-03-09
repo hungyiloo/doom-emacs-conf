@@ -53,15 +53,33 @@
   ;;         (call-interactively orig))))
   ;;   (advice-add #'org-set-tags-command :around #'+compres/org-set-tags-command-multiple))
 
+  ;; Better minibuffer prepopulation using M-n
+  (setq minibuffer-default-add-function
+        (defun +compres/minibuffer-default-add-function ()
+          (autoload 'ffap-guesser "ffap")
+          (with-selected-window (minibuffer-selected-window)
+            (delete-dups
+             (delq nil
+                   (list (thing-at-point 'symbol)
+                         (thing-at-point 'list)
+                         (ffap-guesser)
+                         (thing-at-point-url-at-point)))))))
+
+
   (map! :map selectrum-minibuffer-map
        "C-d" #'selectrum-next-page
        "C-u" #'selectrum-previous-page
-       "C-k" #'kill-line))
+       "C-k" #'kill-line)
+
+  (after! magit
+    ;; Without setting this, magit completing-read candidates won't be sorted with prescient
+    (setq magit-completing-read-function #'selectrum-completing-read)))
 
 (use-package! orderless
   :defer t
   :config
   (setq orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq orderless-skip-highlighting (lambda () selectrum-is-active))
   (custom-set-faces!
     `(orderless-match-face-0 :foreground ,(doom-color 'magenta) :bold t :background ,(doom-color 'base0))
     `(orderless-match-face-1 :foreground ,(doom-color 'yellow) :bold t :background ,(doom-color 'base0))
@@ -71,6 +89,7 @@
 (use-package! prescient
   :after selectrum
   :config
+  (setq selectrum-prescient-enable-filtering nil)
   (selectrum-prescient-mode +1)
   (prescient-persist-mode +1)
   (setq selectrum-refine-candidates-function #'orderless-filter)
@@ -202,13 +221,15 @@
   be removed. Chosen tags which are not, will be added."
       (interactive)
       (require 'org)
-      (unless (org-at-heading-p) (user-error "Not a headline."))
-      (let* ((current (org-get-tags (point)))
-             (selected (thread-last (org-get-buffer-tags)
-                         (completing-read-multiple "Select org tag(s): "))))
-        (org-set-tags
-         (seq-uniq (append (seq-difference current selected)
-                           (seq-difference selected current))))))
+      (when (org-before-first-heading-p) (user-error "Not a headline."))
+      (save-excursion
+        (org-back-to-heading)
+        (let* ((current (org-get-tags (point)))
+               (selected (thread-last (org-get-buffer-tags)
+                           (completing-read-multiple "Select org tag(s): "))))
+          (org-set-tags
+           (seq-uniq (append (seq-difference current selected)
+                             (seq-difference selected current)))))))
     (defalias #'org-set-tags-command #'my/consult-org-set-tags))
 
   (setq consult-ripgrep-command "rg --null --line-buffered --color=ansi --max-columns=250 --no-heading --line-number . -e ARG OPTS -S"))
