@@ -135,6 +135,8 @@ If a selection is active, pre-fill the prompt with it."
     (interactive "P")
     (consult-ripgrep dir (thing-at-point 'symbol)))
 
+  ;; FIXME: Why is this necessary to prevent errors on init?
+  (setq consult-config nil)
   (add-to-list 'consult-config `(+compres/consult-ripgrep-dwim :preview-key ,(kbd "C-.")))
   (add-to-list 'consult-config `(+compres/consult-ripgrep-symbol-at-point :preview-key ,(kbd "C-.")))
   (add-to-list 'consult-config `(+compres/consult-ripgrep-cwd :preview-key ,(kbd "C-.")))
