@@ -34,7 +34,7 @@
 
   ;; (after! org
   ;;   ;; Better selectrum integration with `org-set-tags-command'
-  ;;   ;; but the replacement command `my/consult-org-set-tags' below might be better
+  ;;   ;; but the replacement command `+compres/consult-org-set-tags' below might be better
   ;;   (defun +compres/org-set-tags-command-multiple (orig &optional arg)
   ;;     (cl-letf (((symbol-function #'completing-read)
   ;;                (lambda (prompt collection &optional predicate require-match initial-input
@@ -101,6 +101,53 @@
   ;; Replace `multi-occur' with `consult-multi-occur', which is a drop-in replacement.
   (fset 'multi-occur #'consult-multi-occur)
 
+  (defun +compres/consult-line-dwim ()
+    "Conduct a text search on the current buffer.
+If a selection is active, pre-fill the prompt with it."
+    (interactive)
+    (if (doom-region-active-p)
+        (consult-line (regexp-quote (buffer-substring-no-properties (region-beginning) (region-end))))
+      (consult-line)))
+
+  (defun +compres/consult-line-symbol-at-point ()
+    "Conduct a text search on the current buffer for the symbol at point."
+    (interactive)
+    (consult-line (thing-at-point 'symbol)))
+
+  (defun +compres/consult-ripgrep-dwim (dir)
+    "Conduct a text search on in the current (project) directory.
+If a selection is active, pre-fill the prompt with it."
+    (interactive "P")
+    (if (doom-region-active-p)
+        (consult-ripgrep dir (regexp-quote (buffer-substring-no-properties (region-beginning) (region-end))))
+      (consult-ripgrep dir)))
+
+  (defun +compres/consult-ripgrep-cwd ()
+    (interactive)
+    (consult-ripgrep default-directory))
+
+  (defun +compres/consult-ripgrep-other-cwd ()
+    (interactive)
+    (consult-ripgrep t))
+
+  (defun +compres/consult-ripgrep-symbol-at-point (dir)
+    "Conduct a text search on in the current (project) directory for the symbol at point."
+    (interactive "P")
+    (consult-ripgrep dir (thing-at-point 'symbol)))
+
+  (add-to-list 'consult-config `(+compres/consult-ripgrep-dwim :preview-key ,(kbd "C-.")))
+  (add-to-list 'consult-config `(+compres/consult-ripgrep-symbol-at-point :preview-key ,(kbd "C-.")))
+  (add-to-list 'consult-config `(+compres/consult-ripgrep-cwd :preview-key ,(kbd "C-.")))
+  (add-to-list 'consult-config `(+compres/consult-ripgrep-other-cwd :preview-key ,(kbd "C-.")))
+
+  (after! evil
+    (evil-set-command-property #'+compres/consult-ripgrep-cwd :jump t)
+    (evil-set-command-property #'+compres/consult-ripgrep-dwim :jump t)
+    (evil-set-command-property #'+compres/consult-ripgrep-other-cwd :jump t)
+    (evil-set-command-property #'+compres/consult-ripgrep-symbol-at-point :jump t)
+    (evil-set-command-property #'+compres/consult-line-dwim :jump t)
+    (evil-set-command-property #'+compres/consult-line-symbol-at-point :jump t))
+
   (define-key!
     [remap apropos] #'consult-apropos
     [remap bookmark-jump] #'consult-bookmark
@@ -117,7 +164,12 @@
     [remap recentf-open-files] #'consult-recent-file
     [remap isearch-edit-string] #'consult-isearch
     [remap repeat-complex-command] #'consult-complex-command
-    [remap project-switch-to-buffer] #'+compres/consult-project-buffer)
+    [remap project-switch-to-buffer] #'+compres/consult-project-buffer
+    [remap +default/search-cwd] #'+compres/consult-ripgrep-cwd
+    [remap +default/search-other-cwd] #'+compres/consult-ripgrep-other-cwd
+    [remap +default/search-project] #'+compres/consult-ripgrep-dwim
+    [remap +default/search-project-for-symbol-at-point] #'+compres/consult-ripgrep-symbol-at-point
+    [remap +default/search-buffer] #'+compres/consult-line-dwim)
 
   :config
   ;; Don't be so aggresive with previews
@@ -184,7 +236,7 @@
           :history   file-name-history
           :action    ,#'consult--file-action
           :enabled   ,(lambda () (and consult-project-root-function
-                                 recentf-mode))
+                                      recentf-mode))
           :items
           ,(lambda ()
              (when-let (root (funcall consult-project-root-function))
@@ -215,7 +267,7 @@
 
   ;; Better than `org-set-tags-command'
   (after! org
-    (defun my/consult-org-set-tags ()
+    (defun +compres/consult-org-set-tags ()
       "Select tags to add to or remove from a headline.
   Choose one or more tags. Chosen tags that are already on the current headline will
   be removed. Chosen tags which are not, will be added."
@@ -230,7 +282,7 @@
           (org-set-tags
            (seq-uniq (append (seq-difference current selected)
                              (seq-difference selected current)))))))
-    (defalias #'org-set-tags-command #'my/consult-org-set-tags))
+    (defalias #'org-set-tags-command #'+compres/consult-org-set-tags))
 
   (setq consult-ripgrep-command "rg --null --line-buffered --color=ansi --max-columns=250 --no-heading --line-number . -e ARG OPTS -S"))
 
