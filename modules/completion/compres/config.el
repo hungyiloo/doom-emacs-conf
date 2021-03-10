@@ -156,7 +156,6 @@ If a selection is active, pre-fill the prompt with it."
                 (completing-read "Search project: " projects nil t)
               (user-error "There are no known projects")))
           (this-command #'+compres/consult-ripgrep-other-project-dwim))
-      (message "%s" this-command)
       (if (doom-region-active-p)
           (consult-ripgrep dir (regexp-quote (buffer-substring-no-properties (region-beginning) (region-end))))
         (consult-ripgrep dir))))

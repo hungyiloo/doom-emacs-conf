@@ -14,4 +14,17 @@
               'my/magit-window-config nil :local))
   ;; fix tab key not working in magit-refs-mode
   (map! :map magit-refs-mode-map
-        :n "<tab>" #'magit-section-toggle))
+        :n "<tab>" #'magit-section-toggle)
+
+  (map! :leader
+        (:prefix-map ("g" . "git")
+         "p" #'my/magit-other-project))
+
+  (defun my/magit-other-project ()
+    "Opens magit for another project of user's selection."
+    (interactive)
+    (let ((default-directory
+            (if-let (projects (projectile-relevant-known-projects))
+                (completing-read "Search project: " projects nil t)
+              (user-error "There are no known projects"))))
+      (magit))))
