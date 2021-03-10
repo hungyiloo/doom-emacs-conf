@@ -101,55 +101,6 @@
   ;; Replace `multi-occur' with `consult-multi-occur', which is a drop-in replacement.
   (fset 'multi-occur #'consult-multi-occur)
 
-  (defun +compres/consult-line-dwim ()
-    "Conduct a text search on the current buffer.
-If a selection is active, pre-fill the prompt with it."
-    (interactive)
-    (if (doom-region-active-p)
-        (consult-line (regexp-quote (buffer-substring-no-properties (region-beginning) (region-end))))
-      (consult-line)))
-
-  (defun +compres/consult-line-symbol-at-point ()
-    "Conduct a text search on the current buffer for the symbol at point."
-    (interactive)
-    (consult-line (thing-at-point 'symbol)))
-
-  (defun +compres/consult-ripgrep-dwim (dir)
-    "Conduct a text search on in the current (project) directory.
-If a selection is active, pre-fill the prompt with it."
-    (interactive "P")
-    (if (doom-region-active-p)
-        (consult-ripgrep dir (regexp-quote (buffer-substring-no-properties (region-beginning) (region-end))))
-      (consult-ripgrep dir)))
-
-  (defun +compres/consult-ripgrep-cwd ()
-    (interactive)
-    (consult-ripgrep default-directory))
-
-  (defun +compres/consult-ripgrep-other-cwd ()
-    (interactive)
-    (consult-ripgrep t))
-
-  (defun +compres/consult-ripgrep-symbol-at-point (dir)
-    "Conduct a text search on in the current (project) directory for the symbol at point."
-    (interactive "P")
-    (consult-ripgrep dir (thing-at-point 'symbol)))
-
-  ;; FIXME: Why is this necessary to prevent errors on init?
-  (setq consult-config nil)
-  (add-to-list 'consult-config `(+compres/consult-ripgrep-dwim :preview-key ,(kbd "C-.")))
-  (add-to-list 'consult-config `(+compres/consult-ripgrep-symbol-at-point :preview-key ,(kbd "C-.")))
-  (add-to-list 'consult-config `(+compres/consult-ripgrep-cwd :preview-key ,(kbd "C-.")))
-  (add-to-list 'consult-config `(+compres/consult-ripgrep-other-cwd :preview-key ,(kbd "C-.")))
-
-  (after! evil
-    (evil-set-command-property #'+compres/consult-ripgrep-cwd :jump t)
-    (evil-set-command-property #'+compres/consult-ripgrep-dwim :jump t)
-    (evil-set-command-property #'+compres/consult-ripgrep-other-cwd :jump t)
-    (evil-set-command-property #'+compres/consult-ripgrep-symbol-at-point :jump t)
-    (evil-set-command-property #'+compres/consult-line-dwim :jump t)
-    (evil-set-command-property #'+compres/consult-line-symbol-at-point :jump t))
-
   (define-key!
     [remap apropos] #'consult-apropos
     [remap bookmark-jump] #'consult-bookmark
@@ -171,16 +122,76 @@ If a selection is active, pre-fill the prompt with it."
     [remap +default/search-other-cwd] #'+compres/consult-ripgrep-other-cwd
     [remap +default/search-project] #'+compres/consult-ripgrep-dwim
     [remap +default/search-project-for-symbol-at-point] #'+compres/consult-ripgrep-symbol-at-point
-    [remap +default/search-buffer] #'+compres/consult-line-dwim)
+    [remap +default/search-buffer] #'+compres/consult-line-dwim
+    [remap +default/search-other-project] #'+compres/consult-ripgrep-other-project-dwim)
 
   :config
+  (defun +compres/consult-line-dwim ()
+    "Conduct a text search on the current buffer.
+If a selection is active, pre-fill the prompt with it."
+    (interactive)
+    (if (doom-region-active-p)
+        (consult-line (regexp-quote (buffer-substring-no-properties (region-beginning) (region-end))))
+      (consult-line)))
+
+  (defun +compres/consult-line-symbol-at-point ()
+    "Conduct a text search on the current buffer for the symbol at point."
+    (interactive)
+    (consult-line (thing-at-point 'symbol)))
+
+  (defun +compres/consult-ripgrep-dwim (dir)
+    "Conduct a text search on in the current (project) directory.
+If a selection is active, pre-fill the prompt with it."
+    (interactive "P")
+    (if (doom-region-active-p)
+        (consult-ripgrep dir (regexp-quote (buffer-substring-no-properties (region-beginning) (region-end))))
+      (consult-ripgrep dir)))
+
+  (defun +compres/consult-ripgrep-other-project-dwim (dir)
+    "Conduct a text search on in the current (project) directory.
+If a selection is active, pre-fill the prompt with it."
+    (interactive "P")
+    (let ((default-directory
+            (if-let (projects (projectile-relevant-known-projects))
+                (completing-read "Search project: " projects nil t)
+              (user-error "There are no known projects")))
+          (this-command #'+compres/consult-ripgrep-other-project-dwim))
+      (message "%s" this-command)
+      (if (doom-region-active-p)
+          (consult-ripgrep dir (regexp-quote (buffer-substring-no-properties (region-beginning) (region-end))))
+        (consult-ripgrep dir))))
+
+  (defun +compres/consult-ripgrep-cwd ()
+    (interactive)
+    (consult-ripgrep default-directory))
+
+  (defun +compres/consult-ripgrep-other-cwd ()
+    (interactive)
+    (consult-ripgrep t))
+
+  (defun +compres/consult-ripgrep-symbol-at-point (dir)
+    "Conduct a text search on in the current (project) directory for the symbol at point."
+    (interactive "P")
+    (consult-ripgrep dir (thing-at-point 'symbol)))
+
+  (defun +compres/consult-project-buffer ()
+    (interactive)
+    (when (doom-project-p)
+      (run-at-time 0 nil #'execute-kbd-macro (kbd "p SPC"))) ; this feels DIRTY but it works
+    (consult-buffer))
+
   ;; Don't be so aggresive with previews
   (setq consult-config `((consult-buffer :preview-key ,(kbd "C-."))
-                         (+compres/consult-project-buffer :preview-key ,(kbd "C-."))
                          (consult-bookmark :preview-key ,(kbd "C-."))
                          (consult-grep :preview-key ,(kbd "C-."))
                          (consult-ripgrep :preview-key ,(kbd "C-."))
-                         (consult-recent-file :preview-key ,(kbd "C-."))))
+                         (consult-recent-file :preview-key ,(kbd "C-."))
+                         (+compres/consult-project-buffer :preview-key ,(kbd "C-."))
+                         (+compres/consult-ripgrep-dwim :preview-key ,(kbd "C-."))
+                         (+compres/consult-ripgrep-symbol-at-point :preview-key ,(kbd "C-."))
+                         (+compres/consult-ripgrep-cwd :preview-key ,(kbd "C-."))
+                         (+compres/consult-ripgrep-other-cwd :preview-key ,(kbd "C-."))
+                         (+compres/consult-ripgrep-other-project-dwim :preview-key ,(kbd "C-."))))
 
   ;; Ensure consult-recent-file returns a list of files on startup.
   ;; Without this, sometimes it can be empty on startup because it hasn't been loaded yet?
@@ -238,7 +249,7 @@ If a selection is active, pre-fill the prompt with it."
           :history   file-name-history
           :action    ,#'consult--file-action
           :enabled   ,(lambda () (and consult-project-root-function
-                                      recentf-mode))
+                                 recentf-mode))
           :items
           ,(lambda ()
              (when-let (root (funcall consult-project-root-function))
@@ -253,19 +264,21 @@ If a selection is active, pre-fill the prompt with it."
                                             (string-prefix-p root x)))
                                      (mapcar #'expand-file-name recentf-list))))))))
 
-  (defun +compres/consult-project-buffer ()
-    (interactive)
-    (run-at-time 0 nil #'execute-kbd-macro (kbd "p SPC")) ; this feels DIRTY but it works
-    (consult-buffer))
+
 
   ;; Integrate with evil jumping
   (after! evil
-    (evil-set-command-property 'consult-imenu :jump t)
-    (evil-set-command-property 'consult-outline :jump t)
-    (evil-set-command-property 'consult-mark :jump t)
-    (evil-set-command-property 'consult-line :jump t)
-    (evil-set-command-property 'consult-line-symbol-at-point :jump t)
-    (evil-set-command-property 'consult-line-from-isearch :jump t))
+    (evil-set-command-property #'consult-imenu :jump t)
+    (evil-set-command-property #'consult-outline :jump t)
+    (evil-set-command-property #'consult-mark :jump t)
+    (evil-set-command-property #'consult-line :jump t)
+    (evil-set-command-property #'+compres/consult-ripgrep-cwd :jump t)
+    (evil-set-command-property #'+compres/consult-ripgrep-dwim :jump t)
+    (evil-set-command-property #'+compres/consult-ripgrep-other-cwd :jump t)
+    (evil-set-command-property #'+compres/consult-ripgrep-symbol-at-point :jump t)
+    (evil-set-command-property #'+compres/consult-ripgrep-other-project-dwim :jump t)
+    (evil-set-command-property #'+compres/consult-line-dwim :jump t)
+    (evil-set-command-property #'+compres/consult-line-symbol-at-point :jump t))
 
   ;; Better than `org-set-tags-command'
   (after! org
