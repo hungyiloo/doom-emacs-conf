@@ -1,7 +1,18 @@
 ;;; config/emojify.el -*- lexical-binding: t; -*-
 
 (use-package! emojify
-  :commands (emojify-mode)
+  :commands (emojify-mode emojify-string)
+  :init
+  (after! hydra
+    (advice-add #'hydra-show-hint
+                :around
+                (defun my/emojify-hydra-hint (orig-fun hint caller)
+                  (funcall
+                   orig-fun
+                   (cons (car hint)
+                         (cons (emojify-string (cadr hint))
+                               (cddr hint)))
+                   caller))))
   :config
   ;; I created a folder ~/.doom.d/.local/emojis/twemoji-latest and
   ;; downloaded the PNG assets from https://github.com/twitter/twemoji
@@ -17,14 +28,6 @@
                 :around
                 (defun my/emojify-selectrum-candidate (orig-fun &rest args)
                   (emojify-string (apply orig-fun args)))))
-
-  (after! hydra
-    (advice-remove #'hydra--format-1 #'my/emojify-hydra-hint)
-    (advice-add #'hydra--format-1
-                :around
-                (defun my/emojify-hydra-hint (orig-fun &rest args)
-                  (let ((output (apply orig-fun args)))
-                    `(emojify-string ,output)))))
 
   (after! consult
     ;; Fix emojify display issues after using consult.
