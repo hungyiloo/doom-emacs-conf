@@ -11,9 +11,7 @@
          "N" #'consult-minor-mode-menu)
         (:prefix-map ("s" . "search")
          "I" #'consult-project-imenu
-         "S" #'+compres/consult-line-symbol-at-point
-         :desc "Search for file" "f" #'consult-find
-         :desc "Locate file" "F" #'consult-locate))
+         "S" #'+compres/consult-line-symbol-at-point))
 
   ;; Make occur mode (with consult) act more similarly
   ;; to wgrep mode

@@ -123,7 +123,11 @@
     [remap +default/search-project] #'+compres/consult-ripgrep-dwim
     [remap +default/search-project-for-symbol-at-point] #'+compres/consult-ripgrep-symbol-at-point
     [remap +default/search-buffer] #'+compres/consult-line-dwim
-    [remap +default/search-other-project] #'+compres/consult-ripgrep-other-project-dwim)
+    [remap +default/search-other-project] #'+compres/consult-ripgrep-other-project-dwim
+    [remap +default/find-in-notes] #'+compres/consult-ripgrep-notes
+    [remap +default/find-file-under-here] #'+compres/consult-find-under-here
+    [remap +default/org-notes-search] #'+compres/consult-ripgrep-notes
+    [remap +default/search-notes-for-symbol-at-point] #'+compres/consult-ripgrep-notes-symbol-at-point)
 
   :config
   (defun +compres/consult-line-dwim ()
@@ -169,16 +173,33 @@ If a selection is active, pre-fill the prompt with it."
     (interactive)
     (consult-ripgrep t))
 
+  (defun +compres/consult-ripgrep-notes ()
+    (interactive)
+    (unless (bound-and-true-p org-directory)
+      (require 'org))
+    (consult-ripgrep org-directory))
+
   (defun +compres/consult-ripgrep-symbol-at-point (dir)
     "Conduct a text search on in the current (project) directory for the symbol at point."
     (interactive "P")
     (consult-ripgrep dir (thing-at-point 'symbol)))
+
+  (defun +compres/consult-ripgrep-notes-symbol-at-point (dir)
+    "Conduct a text search on in the current (project) directory for the symbol at point."
+    (interactive "P")
+    (unless (bound-and-true-p org-directory)
+      (require 'org))
+    (consult-ripgrep org-directory (thing-at-point 'symbol)))
 
   (defun +compres/consult-project-buffer ()
     (interactive)
     (when (doom-project-p)
       (run-at-time 0 nil #'execute-kbd-macro (kbd "p SPC"))) ; this feels DIRTY but it works
     (consult-buffer))
+
+  (defun +compres/consult-find-under-here (dir)
+    (interactive "P")
+    (consult-find (or dir default-directory)))
 
   ;; Don't be so aggresive with previews
   (setq consult-config `((consult-buffer :preview-key ,(kbd "C-."))
@@ -191,7 +212,8 @@ If a selection is active, pre-fill the prompt with it."
                          (+compres/consult-ripgrep-symbol-at-point :preview-key ,(kbd "C-."))
                          (+compres/consult-ripgrep-cwd :preview-key ,(kbd "C-."))
                          (+compres/consult-ripgrep-other-cwd :preview-key ,(kbd "C-."))
-                         (+compres/consult-ripgrep-other-project-dwim :preview-key ,(kbd "C-."))))
+                         (+compres/consult-ripgrep-other-project-dwim :preview-key ,(kbd "C-."))
+                         (+compres/consult-find-under-here :preview-key ,(kbd "C-."))))
 
   ;; Ensure consult-recent-file returns a list of files on startup.
   ;; Without this, sometimes it can be empty on startup because it hasn't been loaded yet?
@@ -277,8 +299,11 @@ If a selection is active, pre-fill the prompt with it."
     (evil-set-command-property #'+compres/consult-ripgrep-other-cwd :jump t)
     (evil-set-command-property #'+compres/consult-ripgrep-symbol-at-point :jump t)
     (evil-set-command-property #'+compres/consult-ripgrep-other-project-dwim :jump t)
+    (evil-set-command-property #'+compres/consult-ripgrep-notes :jump t)
     (evil-set-command-property #'+compres/consult-line-dwim :jump t)
-    (evil-set-command-property #'+compres/consult-line-symbol-at-point :jump t))
+    (evil-set-command-property #'+compres/consult-line-symbol-at-point :jump t)
+    (evil-set-command-property #'+compres/consult-file-under-here :jump t)
+    (evil-set-command-property #'+compres/consult-ripgrep-notes-symbol-at-point :jump t))
 
   ;; Better than `org-set-tags-command'
   (after! org
