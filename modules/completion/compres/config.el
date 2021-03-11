@@ -489,7 +489,7 @@ If a selection is active, pre-fill the prompt with it."
   (custom-set-faces!
     `(xref-match :foreground ,(doom-color 'magenta) :bold t :background ,(doom-blend (doom-color 'blue) (doom-color 'bg-alt) 0.3))))
 
-(after! ispell
+(after! spell-fu
   (defun +spell/correct ()
     "Correct spelling of word at point."
     (interactive)
@@ -532,7 +532,7 @@ If a selection is active, pre-fill the prompt with it."
           (error "Ispell: error in Ispell process"))
          (t
           ;; The word is incorrect, we have to propose a replacement.
-          (setq res (funcall +spell-correct-interface (nth 2 poss) word))
+          (setq res (completing-read (format "Corrections for %S: " word) (nth 2 poss)))
           ;; Some interfaces actually eat 'C-g' so it's impossible to stop rapid
           ;; mode. So when interface returns nil we treat it as a stop.
           (unless res (setq res (cons 'break word)))
