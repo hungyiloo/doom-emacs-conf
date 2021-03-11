@@ -25,6 +25,6 @@
     (interactive)
     (let ((default-directory
             (if-let (projects (projectile-relevant-known-projects))
-                (completing-read "Search project: " projects nil t)
+                (completing-read "Select project to open magit for: " projects nil t)
               (user-error "There are no known projects"))))
       (magit))))
