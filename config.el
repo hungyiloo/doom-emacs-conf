@@ -136,6 +136,7 @@
                           url
                         (replace-regexp-in-string "file://" "file://wsl%24/Ubuntu")
                         (replace-regexp-in-string "\\(wsl%24/Ubuntu\\)?/mnt/c/" "C:/")
+                        (replace-regexp-in-string "^/" "file://wsl%24/Ubuntu/")
                         (url-encode-url))))
       (message "%s" (concat "Browsing to: " parsed-url))
       (apply #'browse-url-generic (list parsed-url new-window))))
