@@ -63,7 +63,26 @@
   (defun my/recenter (&rest ignored)
     (recenter))
   (advice-add #'evil-ex-search-forward :after #'my/recenter)
-  (advice-add #'evil-ex-search-backward :after #'my/recenter))
+  (advice-add #'evil-ex-search-backward :after #'my/recenter)
+
+  ;; Evil text objects for inner/outer line selection
+  (defun my/evil-select-line (type inner-p)
+    (evil-range (save-excursion
+                  (if inner-p (beginning-of-line-text) (beginning-of-line))
+                  (point))
+                (line-end-position)
+                type))
+  (evil-define-text-object
+    evil-inner-line (count &optional beg end type)
+    "Inner text object for line."
+    (my/evil-select-line type t))
+  (evil-define-text-object
+    evil-outer-line (count &optional beg end type)
+    "Outer text object for line."
+    (my/evil-select-line type nil))
+
+  (map! :map evil-inner-text-objects-map "l" #'evil-inner-line)
+  (map! :map evil-outer-text-objects-map "l" #'evil-outer-line))
 
 (after! evil-collection
   ;; Fix regular linewise movement in org mode and outline mode.
