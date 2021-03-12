@@ -25,7 +25,7 @@
       (condition-case nil
           (let ((current-node (tree-sitter-node-at-point)))
             (while (or (null current-node)
-                       (not (memq (tsc-node-type current-node) '(function_declaration arrow_function method_definition))))
+                       (not (memq (tsc-node-type current-node) '(function_declaration generator_function arrow_function method_definition))))
               (setq current-node (tsc-get-parent current-node)))
             (when inner-p
               (setq current-node (tsc-get-child-by-field current-node :body)))
