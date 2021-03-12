@@ -5,8 +5,8 @@
   :config
   (require 'tree-sitter-langs)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-  ;; Uncomment this section to use CSS tree-sitter highlighting for scss.
-  ;; It works OK, but doesn't work for regular double slash comments.
-  ;; (pushnew! tree-sitter-major-mode-language-alist
-  ;;           '(scss-mode . css))
+
+  ;; NOTE: need tree-sitter-cli for this to work
+  ;; install via "yarn global add tree-sitter-cli"
+  ;; (setq tree-sitter-langs-git-dir (doom-path (getenv "HOME") ".config/emacs/.local/straight/repos/tree-sitter-langs/"))
   )
