@@ -5,6 +5,9 @@
 ;; I don't use it anyway, and my muscle memory always goes for the ESC key.
 (package! evil-escape :disable t)
 
+;; Kurecolor doesn't work well for me
+(package! kurecolor :disable t)
+
 ;; simpler than doom's zen
 (package! olivetti)
 
