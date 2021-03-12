@@ -39,27 +39,27 @@
         (error (error "No surrounding function found")))))
 
   (evil-define-text-object
-    evil-visual-inner-javascript-function (count &optional beg end type)
+    evil-visual-inner-js-function (count &optional beg end type)
     "Visual inner text object for all Javascript functions."
     (my/evil-select-js-function type t t))
   (evil-define-text-object
-    evil-inner-javascript-function (count &optional beg end type)
+    evil-inner-js-function (count &optional beg end type)
     "Inner text object for all Javascript functions."
     (my/evil-select-js-function type nil t))
   (evil-define-text-object
-    evil-visual-outer-javascript-function (count &optional beg end type)
+    evil-visual-outer-js-function (count &optional beg end type)
     "Visual outer text object for all Javascript functions."
     (my/evil-select-js-function type t nil))
   (evil-define-text-object
-    evil-outer-javascript-function (count &optional beg end type)
+    evil-outer-js-function (count &optional beg end type)
     "Outer text object for all Javascript functions."
     (my/evil-select-js-function type nil nil))
 
   ;; Hook to install the above functions
   (add-hook! (javascript-mode js-mode js2-mode typescript-mode)
     (map! :map evil-operator-state-local-map
-          "af" #'evil-outer-javascript-function
-          "if" #'evil-inner-javascript-function
+          "af" #'evil-outer-js-function
+          "if" #'evil-inner-js-function
           :map evil-visual-state-local-map
-          "af" #'evil-visual-outer-javascript-function
-          "if" #'evil-visual-inner-javascript-function)))
+          "af" #'evil-visual-outer-js-function
+          "if" #'evil-visual-inner-js-function)))
