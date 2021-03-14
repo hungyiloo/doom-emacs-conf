@@ -1,5 +1,6 @@
-;;; lisp/hydras.el -*- lexical-binding: t; -*-
+;;; autoload/hydras.el -*- lexical-binding: t; -*-
 
+;;;###autoload
 (defun my/mc-select-matches ()
   (interactive)
   (evil-mc-execute-for-all-cursors
@@ -16,6 +17,7 @@
                        (match-end 0)
                        'char)))))))
 
+;;;###autoload (autoload #'my/mc-hydra/body "autoload/hydras" nil t)
 (defhydra my/mc-hydra (:color pink
                        :hint nil
                        :pre (evil-mc-pause-cursors)
@@ -46,6 +48,7 @@ Current pattern: %`evil-mc-pattern  "
   ("q" nil "quit" :color blue)
   ("<escape>" nil "quit" :color blue))
 
+;;;###autoload (autoload #'my/sp-hydra/body "autoload/hydras" nil t)
 (defhydra my/sp-hydra (:color amaranth
                        :hint nil
                        :pre (recenter)
@@ -112,6 +115,7 @@ _u_: undo  _C-r_: redo  _C-SPC_: set mark  _s_: toggle strict"
   ("C-g" nil "quit" :color blue)
   ("<escape>" nil "quit" :color blue))
 
+;;;###autoload (autoload #'my/window-hydra/body "autoload/hydras" nil t)
 (defhydra my/window-hydra (:color amaranth
                            :hint nil
                            :idle 1.0)
@@ -162,6 +166,7 @@ _SPC_ 🎯    _x_ 🔫    _M-w_ ⌨️    _w_ 👟    "
   ("q" nil "quit" :color blue)
   ("<escape>" nil "quit" :color blue))
 
+;;;###autoload
 (defun my/evil-window-map-launcher ()
   (interactive)
   (run-at-time 0 nil #'execute-kbd-macro (kbd "SPC W")))

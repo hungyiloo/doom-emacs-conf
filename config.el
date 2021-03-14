@@ -319,7 +319,7 @@
     :side 'bottom :height 20 :width 40 :quit t :select t :ttl 5))
 
 ;; Load some external files
-(dolist (dir (list "config" "lisp"))
+(dolist (dir (list "config"))
   (dolist (file (directory-files
                  (doom-path doom-private-dir dir)
                  t
