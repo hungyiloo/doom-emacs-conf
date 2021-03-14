@@ -3,10 +3,10 @@
 
 (package! embark
   :recipe (:host github :repo "oantolin/embark")
-  :pin "d267c11b2d6f510d9e173400ec90e18a471fc7b3")
+  :pin "1edbb1af2a6ff2f25a34d9c769baf6fc175a7ef7")
 (package! embark-consult
   :recipe (:host github :repo "oantolin/embark")
-  :pin "d267c11b2d6f510d9e173400ec90e18a471fc7b3")
+  :pin "1edbb1af2a6ff2f25a34d9c769baf6fc175a7ef7")
 (package! consult
   :recipe (:host github :repo "minad/consult")
   :pin "bd58f2e3b7a9bd52145aa97997e62ec5d9e7e4d5")
