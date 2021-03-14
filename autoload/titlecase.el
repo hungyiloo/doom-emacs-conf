@@ -1,10 +1,11 @@
 ;;; titlecase.el --- convert text to title case -*- lexical-binding: t; -*-
 
-(require 'cl-lib)
-(require 'subr-x)
 
+;;;###autoload
 (defun titlecase-string (str)
   "Convert string STR to title case and return the resulting string."
+  (require 'cl-lib)
+  (require 'subr-x)
   (let* ((case-fold-search nil)
          (str-length (length str))
          ;; A list of markers that indicate start of a new phrase within the title, e.g. "The Lonely Reindeer: A Christmas Story"
@@ -66,8 +67,11 @@
                                nil))))  ; are we inside of a filesystem path?
     (aref final-state 0)))
 
+;;;###autoload
 (defun titlecase--segment (segment capitalize-p)
   "Convert a title's inner SEGMENT to capitalized or lower case depending on CAPITALIZE-P, then return the result."
+  (require 'cl-lib)
+  (require 'subr-x)
   (let* ((case-fold-search nil)
          (ignore-chars '(?' ?\" ?\( ?\[ ?‘ ?“ ?’ ?” ?_))
          (final-state (cl-reduce
@@ -84,6 +88,7 @@
       (reverse)
       (apply #'string))))
 
+;;;###autoload
 (defun titlecase-region (begin end)
   "Convert text in region from BEGIN to END to title case."
   (interactive "*r")
@@ -91,6 +96,7 @@
     (insert (titlecase-string (delete-and-extract-region begin end)))
     (goto-char pt)))
 
+;;;###autoload
 (defun titlecase-dwim ()
   "Convert the region or current line to title case.
 If Transient Mark Mode is on and there is an active region, convert
@@ -99,6 +105,14 @@ the region to title case.  Otherwise, work on the current line."
   (if (and transient-mark-mode mark-active)
       (titlecase-region (region-beginning) (region-end))
     (titlecase-region (point-at-bol) (point-at-eol))))
+
+;;;###autoload (autoload #'my/evil-titlecase-operator "autoload/titlecase" nil t)
+(evil-define-operator my/evil-titlecase-operator (beg end)
+  (interactive "<r>")
+  (save-excursion
+    (set-mark beg)
+    (goto-char end)
+    (titlecase-dwim)))
 
 ;; (defun titlecase-test ()
 ;;   (interactive)
@@ -159,5 +173,3 @@ the region to title case.  Otherwise, work on the current line."
 ;;               ("roses are red\nand violets are blue" "Roses Are Red\nAnd Violets Are Blue")
 ;;               ("the home directory is /home/username\nbut the root's home is /root" "The Home Directory Is /home/username\nBut the Root's Home Is /root")))
 ;;     "\n")))
-
-(provide 'titlecase)
