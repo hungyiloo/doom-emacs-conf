@@ -9,10 +9,10 @@
   :pin "d267c11b2d6f510d9e173400ec90e18a471fc7b3")
 (package! consult
   :recipe (:host github :repo "minad/consult")
-  :pin "e0449110d8b132161a3abc3d77caa6e1bbd34948")
+  :pin "bd58f2e3b7a9bd52145aa97997e62ec5d9e7e4d5")
 (package! consult-flycheck
   :recipe (:host github :repo "minad/consult")
-  :pin "e0449110d8b132161a3abc3d77caa6e1bbd34948")
+  :pin "bd58f2e3b7a9bd52145aa97997e62ec5d9e7e4d5")
 (package! marginalia
   :recipe (:host github :repo "minad/marginalia")
   :pin "e54aa0c4974905cc4da114c3bbcfb084486aa6e1")
