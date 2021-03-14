@@ -1,18 +1,15 @@
 ;;; autoload/journal.el -*- lexical-binding: t; -*-
 
-;;;###autoload
 (defun my/journal-date-stamp (&optional timestamp)
   (format-time-string
    "%Y-%m-%d %a"
    (or timestamp (current-time))))
 
-;;;###autoload
 (defun my/journal-month-stamp (&optional timestamp)
   (format-time-string
    "%Y-%m"
    (or timestamp (current-time))))
 
-;;;###autoload
 (defun my/journal-goto-heading (heading this-month &optional post-heading-action)
   (interactive)
   (evil-set-jump)

@@ -67,7 +67,6 @@
                                nil))))  ; are we inside of a filesystem path?
     (aref final-state 0)))
 
-;;;###autoload
 (defun titlecase--segment (segment capitalize-p)
   "Convert a title's inner SEGMENT to capitalized or lower case depending on CAPITALIZE-P, then return the result."
   (require 'cl-lib)
