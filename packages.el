@@ -24,13 +24,6 @@
 ;; org-babel typescript support
 (package! ob-typescript)
 
-;; smooth scrolling when jump-navigating
-;; disabled because it doesn't work on some of my systems (pgtk?)
-;; and also because it interferes with evil/better jumper
-;; (package! scroll-on-jump
-;;   :recipe (:host gitlab :repo "ideasman42/emacs-scroll-on-jump")
-;;   :pin "69c86542")
-
 ;; figure out what mysterious commands are being run
 (package! command-log-mode)
 
