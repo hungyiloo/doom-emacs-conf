@@ -102,20 +102,28 @@
     [remap +default/search-notes-for-symbol-at-point] #'+compres/consult-ripgrep-notes-symbol-at-point)
 
   :config
+  (advice-add #'consult-ripgrep
+              :around
+              (defun +compres--consult-ripgrep-this-command-wrapper (orig-fun &rest args)
+                (let ((this-command #'consult-ripgrep))
+                  (apply orig-fun args))))
+  (advice-add #'consult-buffer
+              :around
+              (defun +compres--consult-buffer-this-command-wrapper (orig-fun &rest args)
+                (let ((this-command #'consult-buffer))
+                  (apply orig-fun args))))
+  (advice-add #'consult-find
+              :around
+              (defun +compres--consult-find-this-command-wrapper (orig-fun &rest args)
+                (let ((this-command #'consult-buffer))
+                  (apply orig-fun args))))
 
   ;; Don't be so aggresive with previews
   (setq consult-config `((consult-buffer :preview-key ,(kbd "C-."))
                          (consult-bookmark :preview-key ,(kbd "C-."))
                          (consult-grep :preview-key ,(kbd "C-."))
                          (consult-ripgrep :preview-key ,(kbd "C-."))
-                         (consult-recent-file :preview-key ,(kbd "C-."))
-                         (+compres/consult-project-buffer :preview-key ,(kbd "C-."))
-                         (+compres/consult-ripgrep-dwim :preview-key ,(kbd "C-."))
-                         (+compres/consult-ripgrep-symbol-at-point :preview-key ,(kbd "C-."))
-                         (+compres/consult-ripgrep-cwd :preview-key ,(kbd "C-."))
-                         (+compres/consult-ripgrep-other-cwd :preview-key ,(kbd "C-."))
-                         (+compres/consult-ripgrep-other-project-dwim :preview-key ,(kbd "C-."))
-                         (+compres/consult-find-under-here :preview-key ,(kbd "C-."))))
+                         (consult-recent-file :preview-key ,(kbd "C-."))))
 
   ;; Ensure consult-recent-file returns a list of files on startup.
   ;; Without this, sometimes it can be empty on startup because it hasn't been loaded yet?
