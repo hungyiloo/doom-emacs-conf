@@ -43,14 +43,14 @@
           (when (save-excursion (search-backward-regexp "[^ ]" (line-beginning-position) t))
             (newline-and-indent))
           (web-mode-tag-end)
-          (if (eq (point)
-                  (save-excursion (backward-char) (web-mode-tag-match-position)))
-              (web-mode-tag-next)
-            (progn
-              (when (save-excursion (search-forward-regexp "[^ ]" (line-end-position) t))
-                (newline-and-indent))
-              (when (not (eq (char-after) ?<))
-                (web-mode-tag-next))))
+          (when (eq (point)
+                    (save-excursion (backward-char) (web-mode-tag-match-position)))
+            (web-mode-tag-end))
+          (progn
+            (when (save-excursion (search-forward-regexp "[^ ]" (line-end-position) t))
+              (newline-and-indent))
+            (when (not (eq (char-after) ?<))
+              (web-mode-tag-next)))
           (save-excursion
             (goto-char beg-pos)
             (setq end-pos (web-mode-element-end-position))))
