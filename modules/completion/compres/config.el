@@ -49,6 +49,9 @@
   :config
   (setq orderless-component-separator #'orderless-escapable-split-on-space)
   (setq orderless-skip-highlighting (lambda () selectrum-is-active))
+  (setq orderless-style-dispatchers `(,(defun +compress--orderless-without-if-at-bang (pattern _index _total)
+                                         (when (string-prefix-p "@!" pattern)
+                                           `(orderless-without-literal . ,(substring pattern 2))))))
   (custom-set-faces!
     `(orderless-match-face-0 :foreground ,(doom-color 'magenta) :bold t :background ,(doom-color 'base0))
     `(orderless-match-face-1 :foreground ,(doom-color 'yellow) :bold t :background ,(doom-color 'base0))
