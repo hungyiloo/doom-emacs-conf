@@ -192,20 +192,7 @@
 
   ;; Integrate with evil jumping
   (after! evil
-    (evil-set-command-property #'consult-imenu :jump t)
-    (evil-set-command-property #'consult-outline :jump t)
-    (evil-set-command-property #'consult-mark :jump t)
-    (evil-set-command-property #'consult-line :jump t)
-    (evil-set-command-property #'+compres/consult-ripgrep-cwd :jump t)
-    (evil-set-command-property #'+compres/consult-ripgrep-dwim :jump t)
-    (evil-set-command-property #'+compres/consult-ripgrep-other-cwd :jump t)
-    (evil-set-command-property #'+compres/consult-ripgrep-symbol-at-point :jump t)
-    (evil-set-command-property #'+compres/consult-ripgrep-other-project-dwim :jump t)
-    (evil-set-command-property #'+compres/consult-ripgrep-notes :jump t)
-    (evil-set-command-property #'+compres/consult-line-dwim :jump t)
-    (evil-set-command-property #'+compres/consult-line-symbol-at-point :jump t)
-    (evil-set-command-property #'+compres/consult-file-under-here :jump t)
-    (evil-set-command-property #'+compres/consult-ripgrep-notes-symbol-at-point :jump t))
+    (evil-set-command-property #'consult--jump :jump t))
 
   ;; Better than `org-set-tags-command'
   (after! org
