@@ -16,6 +16,7 @@
   (setq lsp-clients-angular-language-server-command
         `("node"
           ,(doom-path (getenv "HOME") ".config/yarn/global/node_modules/@angular/language-server")
+          ;; "--experimental-ivy"
           "--ngProbeLocations"
           ,(doom-path (getenv "HOME") ".config/yarn/global/node_modules")
           "--tsProbeLocations"
