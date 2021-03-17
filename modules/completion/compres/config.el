@@ -123,7 +123,9 @@
                          (consult-bookmark :preview-key ,(kbd "C-."))
                          (consult-grep :preview-key ,(kbd "C-."))
                          (consult-ripgrep :preview-key ,(kbd "C-."))
-                         (consult-recent-file :preview-key ,(kbd "C-."))))
+                         (consult-recent-file :preview-key ,(kbd "C-."))
+                         ;; this fixes consult's inability to pass through `this-command' sometimes
+                         (selectrum-select-current-candidate :preview-key ,(kbd "C-.")) ))
 
   ;; Ensure consult-recent-file returns a list of files on startup.
   ;; Without this, sometimes it can be empty on startup because it hasn't been loaded yet?
