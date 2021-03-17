@@ -18,9 +18,11 @@
   ;;                     (company-cancel)
   ;;                   (apply orig-fun args)))))
 
-  (advice-add #'company-complete-common-or-cycle
-              :around
-              (defun my/yas-expand-before-company-complete (orig-fun &rest args)
-                "Attempts to yas-expand before falling back to the ORIG-FUN from company"
-                (unless (yas-expand-from-trigger-key)
-                  (apply orig-fun args)))))
+  ;; REVIEW: Is this aggressive approach better, or is doom's C-x C-s snippet completion already fine?
+  ;; (advice-add #'company-complete-common-or-cycle
+  ;;             :around
+  ;;             (defun my/yas-expand-before-company-complete (orig-fun &rest args)
+  ;;               "Attempts to yas-expand before falling back to the ORIG-FUN from company"
+  ;;               (unless (yas-expand-from-trigger-key)
+  ;;                 (apply orig-fun args))))
+  )
