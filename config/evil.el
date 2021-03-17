@@ -120,33 +120,34 @@
 
   (after! smartparens
     ;; Very basic, barely workable evil-mc integration with my smartparens hydra
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-up-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-copy-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-down-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-join-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-kill-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-next-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-split-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-wrap-curly (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-wrap-round (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-raise-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-clone-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-wrap-square (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-splice-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-end-of-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-forward-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-backward-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-convolute-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-transpose-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-kill-whole-line (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-beginning-of-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-forward-barf-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-forward-slurp-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-backward-barf-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-backward-slurp-sexp (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-splice-sexp-killing-forward (:default . evil-mc-execute-call)))
-    (add-to-list 'evil-mc-custom-known-commands '(my/sp-hydra/sp-splice-sexp-killing-backward (:default . evil-mc-execute-call)))
-    )
+    (dolist (sp-command '(my/sp-hydra/sp-up-sexp
+                          my/sp-hydra/sp-copy-sexp
+                          my/sp-hydra/sp-down-sexp
+                          my/sp-hydra/sp-join-sexp
+                          my/sp-hydra/sp-kill-sexp
+                          my/sp-hydra/sp-next-sexp
+                          my/sp-hydra/sp-split-sexp
+                          my/sp-hydra/sp-wrap-curly
+                          my/sp-hydra/sp-wrap-round
+                          my/sp-hydra/sp-raise-sexp
+                          my/sp-hydra/sp-clone-sexp
+                          my/sp-hydra/sp-wrap-square
+                          my/sp-hydra/sp-splice-sexp
+                          my/sp-hydra/sp-end-of-sexp
+                          my/sp-hydra/sp-forward-sexp
+                          my/sp-hydra/sp-backward-sexp
+                          my/sp-hydra/sp-convolute-sexp
+                          my/sp-hydra/sp-transpose-sexp
+                          my/sp-hydra/sp-kill-whole-line
+                          my/sp-hydra/sp-beginning-of-sexp
+                          my/sp-hydra/sp-forward-barf-sexp
+                          my/sp-hydra/sp-forward-slurp-sexp
+                          my/sp-hydra/sp-backward-barf-sexp
+                          my/sp-hydra/sp-backward-slurp-sexp
+                          my/sp-hydra/sp-splice-sexp-killing-forward
+                          my/sp-hydra/sp-splice-sexp-killing-backward))
+      (add-to-list 'evil-mc-custom-known-commands `(,sp-command (:default . evil-mc-execute-call)))))
+
   ;; FIXME: This advice doesn't move the point like intended. Why?
   ;; (advice-add #'evil-mc-set-pattern
   ;;             :before
