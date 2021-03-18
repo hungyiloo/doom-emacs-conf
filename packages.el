@@ -33,7 +33,7 @@
 ;; window positioning sorcery
 (package! transpose-frame)
 
-(package! lsp-mode :pin "2451a70f376b47eb6c7ef146c06ac20f057fad0a")
+(package! lsp-mode :pin "ed9308e57ff3f3de0adfb2a5036d43852ea1179e")
 ;; (package! evil :pin "f5ab7ff")
 ;; (package! evil-mc :pin "f04fb17")
 ;; (package! doom-themes :pin "55f01ed")

@@ -3,10 +3,10 @@
 
 (package! embark
   :recipe (:host github :repo "oantolin/embark")
-  :pin "2d85252ccc18e07c83e0298b0802350bb696efef")
+  :pin "4e3e751725787f18b55defc2fe7d8115adf524fd")
 (package! embark-consult
   :recipe (:host github :repo "oantolin/embark")
-  :pin "2d85252ccc18e07c83e0298b0802350bb696efef")
+  :pin "4e3e751725787f18b55defc2fe7d8115adf524fd")
 (package! consult
   :recipe (:host github :repo "minad/consult")
   :pin "3d1595e1565b0fa591655f6d1a0a9dd25cd8c984")
@@ -15,7 +15,7 @@
   :pin "3d1595e1565b0fa591655f6d1a0a9dd25cd8c984")
 (package! marginalia
   :recipe (:host github :repo "minad/marginalia")
-  :pin "e54aa0c4974905cc4da114c3bbcfb084486aa6e1")
+  :pin "e741b243b30f6cfe85e568cc551acff9a1e5e74f")
 (package! selectrum
   :recipe (:host github :repo "raxod502/selectrum")
   :pin "a72109ab3eb3a06d1d8e01629bed06871b2c94d2")
