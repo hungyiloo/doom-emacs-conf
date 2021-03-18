@@ -2,6 +2,7 @@
 
 (use-package! eyebrowse
   :commands (my/eyebrowse-open-project
+             my/eyebrowse-close-workspace
              my/eyebrowse-switch-buffer
              eyebrowse-create-window-config
              eyebrowse-create-named-window-config
