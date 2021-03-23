@@ -1,5 +1,7 @@
 ;;; autoload/journal.el -*- lexical-binding: t; -*-
 
+(require 'org)
+
 (defun my/journal-date-stamp (&optional timestamp)
   (format-time-string
    "%Y-%m-%d %a"
