@@ -1,8 +1,9 @@
 ;;; config/company.el -*- lexical-binding: t; -*-
 
 (after! company
-  ;; More responsive company autocompletion
-  (setq company-idle-delay 0.2)
+  ;; Less responsive company autocompletion.
+  ;; I can trigger it manually using C-SPC
+  (setq company-idle-delay 1)
 
   ;; REVIEW: This doesn't really feel good to me. Maybe I've gotten used to the
   ;; C-g way to cancel company already
