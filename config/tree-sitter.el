@@ -22,4 +22,7 @@
   ;; NOTE: need tree-sitter-cli for this to work
   ;; install via "yarn global add tree-sitter-cli"
   ;; (setq tree-sitter-langs-git-dir (doom-path (getenv "HOME") ".config/emacs/.local/straight/repos/tree-sitter-langs/"))
-  )
+
+  (custom-set-faces!
+    ;; Fix blotches of wrong background color in org src blocks
+    `(tree-sitter-hl-face:punctuation :inherit nil)))
