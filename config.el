@@ -14,6 +14,13 @@
 ;; Better default window placement on startup
 (setq initial-frame-alist '((width . 100) (height . 35) (fullscreen . fullheight)))
 
+;; If you use `org' and don't want your org files in the default location below,
+;; change `org-directory'. It must be set before org loads!
+(setq org-directory "~/Notes/")
+(setq org-agenda-files '("~/Notes/"))
+;; uncomment the line below to include archive in agenda search
+;; (setq org-agenda-files '("~/Notes/" "~/Notes/Archive/"))
+
 (add-hook! 'after-init-hook
            ;; Font adjustments should be more fine
            (setq text-scale-mode-step 1.05)
@@ -29,14 +36,6 @@
            (setq save-interprogram-paste-before-kill t)
 
            (setq calendar-date-style 'iso)
-
-           ;; If you use `org' and don't want your org files in the default location below,
-           ;; change `org-directory'. It must be set before org loads!
-
-           (setq org-directory "~/Notes/")
-           (setq org-agenda-files '("~/Notes/"))
-           ;; uncomment the line below to include archive in agenda search
-           ;; (setq org-agenda-files '("~/Notes/" "~/Notes/Archive/"))
 
            ;; Some global keymap adjustments
            (map! :leader
@@ -185,25 +184,25 @@
       `(show-paren-match :background unspecified :foreground "#ff0000" :underline t)
 
       ;; Customize ediff highlighting
-      `(ediff-fine-diff-A    :background ,current-bg-fine-A :weight unspecified :extend t)
-      `(ediff-fine-diff-B    :background ,current-bg-fine-B :weight unspecified :extend t)
-      `(ediff-fine-diff-C    :background ,current-bg-fine-C :weight unspecified :extend t)
-      `(ediff-current-diff-A :background ,current-bg-A :extend t)
-      `(ediff-current-diff-B :background ,current-bg-B :extend t)
-      `(ediff-current-diff-C :background ,current-bg-C :extend t)
-      `(ediff-even-diff-A    :background ,other-bg-A :extend t)
-      `(ediff-even-diff-B    :background ,other-bg-B :extend t)
-      `(ediff-even-diff-C    :background ,other-bg-C :extend t)
-      `(ediff-odd-diff-A     :background ,other-bg-A :extend t)
-      `(ediff-odd-diff-B     :background ,other-bg-B :extend t)
-      `(ediff-odd-diff-C     :background ,other-bg-C :extend t)
+      `(ediff-fine-diff-A    :background ,current-bg-fine-A :weight unspecified)
+      `(ediff-fine-diff-B    :background ,current-bg-fine-B :weight unspecified)
+      `(ediff-fine-diff-C    :background ,current-bg-fine-C :weight unspecified)
+      `(ediff-current-diff-A :background ,current-bg-A)
+      `(ediff-current-diff-B :background ,current-bg-B)
+      `(ediff-current-diff-C :background ,current-bg-C)
+      `(ediff-even-diff-A    :background ,other-bg-A)
+      `(ediff-even-diff-B    :background ,other-bg-B)
+      `(ediff-even-diff-C    :background ,other-bg-C)
+      `(ediff-odd-diff-A     :background ,other-bg-A)
+      `(ediff-odd-diff-B     :background ,other-bg-B)
+      `(ediff-odd-diff-C     :background ,other-bg-C)
 
       ;; Ignore ligatures in org-verbatim and org-code
-      `(org-verbatim :font ,(font-spec :family "JetBrains Mono NL" :extend t))
-      `(org-code     :font ,(font-spec :family "JetBrains Mono NL" :extend t))
+      `(org-verbatim :family "JetBrains Mono NL")
+      `(org-code     :family "JetBrains Mono NL")
 
       ;; Fix tree-sitter punctuation having stuck bg color
-      `(tree-sitter-hl-face:punctuation :inherit unspecified)
+      `(tree-sitter-hl-face:punctuation)
 
       ;; Treemacs customizations
       `(treemacs-root-face :height 120)
