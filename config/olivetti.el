@@ -13,9 +13,9 @@
          "z" #'olivetti-mode))
   :config
   (after! org-roam
-    (advice-add #'org-roam-capture
-                :around
-                (defun my/disable-olivetti-for-roaming (orig-fun &rest args)
-                  (when olivetti-mode
-                    (olivetti-mode -1))
-                  (apply orig-fun args)))))
+    (defun my/disable-olivetti-for-roaming (orig-fun &rest args)
+      (when olivetti-mode
+        (olivetti-mode -1))
+      (apply orig-fun args))
+    (advice-add #'org-roam-capture :around #'my/disable-olivetti-for-roaming)
+    (advice-add #'org-roam-find-file :around #'my/disable-olivetti-for-roaming)))
