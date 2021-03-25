@@ -84,4 +84,8 @@ This function is called by `org-babel-execute-src-block'."
   (custom-set-faces!
     `(org-roam-link :foreground ,(doom-color 'green) :inherit org-link)
     `(org-roam-link-curent :foreground ,(doom-color 'fg) :inherit org-link)
-    `(org-roam-tag :foreground ,(doom-color 'base6) :weight unspecified)))
+    `(org-roam-tag :foreground ,(doom-color 'base6) :weight unspecified))
+  (map! :leader
+        (:prefix-map ("n" . "notes")
+         (:prefix ("r" . "roam")
+          :desc "Migrate" "m" #'my/org-roam-create-note-from-headline))))
