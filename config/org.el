@@ -73,3 +73,8 @@ This function is called by `org-babel-execute-src-block'."
         "O" #'consult-outline
         (:prefix ("l" . "links")
          "y" #'my/org-retrieve-url-from-point)))
+
+(after! org-roam
+  (add-hook! 'org-roam-buffer-prepare-hook
+    (setq doom--line-number-style nil)
+    (setq display-line-numbers nil)))
