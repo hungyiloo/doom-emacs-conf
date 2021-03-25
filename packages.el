@@ -34,6 +34,7 @@
 (package! transpose-frame)
 
 (package! lsp-mode :pin "73b127f4cf09a443e1353aa6c40b2379b59c1bd6")
+(package! org-roam :pin "8ad57b121831eda8d226faa14ff2ba7ab652849c")
 ;; (package! evil :pin "f5ab7ff")
 ;; (package! evil-mc :pin "f04fb17")
 ;; (package! doom-themes :pin "55f01ed")
