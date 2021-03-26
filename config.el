@@ -45,7 +45,11 @@
                   "=" #'calc-dispatch
                   "c" #'calc
                   "q" #'quick-calc
-                  "g" #'calc-grab-region)
+                  "g" #'calc-grab-region
+                  "G" #'calc-grab-rectangle
+                  (:prefix ("+" . "sum")
+                   "+" #'calc-grab-sum-down
+                   "=" #'calc-grab-sum-across))
                  (:prefix-map ("t" . "toggle")
                   :desc "Git gutter" "v" #'git-gutter-mode
                   :desc "Highlight line" "h" #'hl-line-mode
