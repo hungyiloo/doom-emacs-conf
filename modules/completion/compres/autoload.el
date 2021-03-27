@@ -81,8 +81,7 @@ If a selection is active, pre-fill the prompt with it."
 ;;;###autoload
 (defun +compres/consult-project-buffer ()
     (interactive)
-    (when (doom-project-p)
-      (run-at-time 0.1 nil #'execute-kbd-macro (kbd "p SPC"))) ; this feels DIRTY but it works
+    ;; See +compres/consult-initial-narrow-config
     (consult-buffer))
 
 ;;;###autoload

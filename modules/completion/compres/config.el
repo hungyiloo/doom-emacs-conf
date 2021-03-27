@@ -1,5 +1,9 @@
 ;;; completion/compres/config.el -*- lexical-binding: t; -*-
 
+;; Configure initial narrowing per command
+(defvar +compres/consult-initial-narrow-config
+  '((+compres/consult-project-buffer . ?p)))
+
 (use-package! selectrum
   :hook (after-init . selectrum-mode)
   :config
@@ -102,30 +106,10 @@
     [remap +default/search-notes-for-symbol-at-point] #'+compres/consult-ripgrep-notes-symbol-at-point)
 
   :config
-  (advice-add #'consult-ripgrep
-              :around
-              (defun +compres--consult-ripgrep-this-command-wrapper (orig-fun &rest args)
-                (let ((this-command #'consult-ripgrep))
-                  (apply orig-fun args))))
-  (advice-add #'consult-buffer
-              :around
-              (defun +compres--consult-buffer-this-command-wrapper (orig-fun &rest args)
-                (let ((this-command #'consult-buffer))
-                  (apply orig-fun args))))
-  (advice-add #'consult-find
-              :around
-              (defun +compres--consult-find-this-command-wrapper (orig-fun &rest args)
-                (let ((this-command #'consult-buffer))
-                  (apply orig-fun args))))
-
   ;; Don't be so aggresive with previews
-  (setq consult-config `((consult-buffer :preview-key ,(kbd "C-."))
-                         (consult-bookmark :preview-key ,(kbd "C-."))
-                         (consult-grep :preview-key ,(kbd "C-."))
-                         (consult-ripgrep :preview-key ,(kbd "C-."))
-                         (consult-recent-file :preview-key ,(kbd "C-."))
-                         ;; this fixes consult's inability to pass through `this-command' sometimes
-                         (selectrum-select-current-candidate :preview-key ,(kbd "C-.")) ))
+  (setq consult-preview-key (kbd "C-."))
+  (setq consult-config '((consult-line :preview-key any)
+                         (+compres/consult-line-dwim :preview-key any)))
 
   ;; Ensure consult-recent-file returns a list of files on startup.
   ;; Without this, sometimes it can be empty on startup because it hasn't been loaded yet?
@@ -172,6 +156,13 @@
                             ;; These are added by me
                             (?a "Advice" font-lock-function-name-face)
                             (?S "Section" font-lock-constant-face)))))
+
+
+  ;; Add initial narrowing hook
+  (defun +compres/consult-initial-narrow ()
+    (when-let (key (alist-get this-command +compres/consult-initial-narrow-config))
+      (setq unread-command-events (append unread-command-events (list key 32)))))
+  (add-hook 'minibuffer-setup-hook #'+compres/consult-initial-narrow)
 
   ;; Use expanded file name to compare with project root
   (setq consult--source-project-file
