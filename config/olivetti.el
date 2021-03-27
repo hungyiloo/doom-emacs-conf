@@ -3,7 +3,7 @@
 (use-package! olivetti
   :hook (olivetti-mode . my/olivetti-setup)
   :init
-  (setq olivetti-body-width 80)
+  (setq olivetti-body-width 82)
   (defun my/olivetti-setup ()
     (setq doom--line-number-style (not olivetti-mode))
     (setq display-line-numbers (not olivetti-mode))
