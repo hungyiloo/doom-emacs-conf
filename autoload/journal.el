@@ -16,6 +16,7 @@
   (interactive)
   (evil-set-jump)
   (find-file +org-capture-journal-file)
+  (olivetti-mode 1)
   (let* ((result nil)
          (position (save-excursion
                      (org-remove-occur-highlights)
@@ -93,7 +94,7 @@
   (my/journal-goto-heading
    "Daily Log"
    t
-   (org-next-visible-heading 1)))
+   (lambda ()  (org-next-visible-heading 1))))
 
 ;;;###autoload
 (defun my/journal-goto-monthly-log ()
@@ -101,7 +102,7 @@
   (my/journal-goto-heading
    "Monthly Log"
    t
-   (org-next-visible-heading 1)))
+   (lambda () (org-next-visible-heading 1))))
 
 ;;;###autoload
 (defun my/journal-goto-future-log ()
@@ -109,7 +110,7 @@
   (my/journal-goto-heading
    "Future Log"
    t
-   (org-next-visible-heading 1)))
+   (lambda () (org-next-visible-heading 1))))
 
 ;;;###autoload
 (defun my/journal-goto-recurring ()
@@ -117,7 +118,7 @@
   (my/journal-goto-heading
    "Recurring"
    nil
-   (org-next-visible-heading 1)))
+   (lambda () (org-next-visible-heading 1))))
 
 ;;;###autoload
 (defun my/journal-goto-cook-list ()
@@ -125,7 +126,7 @@
   (my/journal-goto-heading
    "Cook List"
    nil
-   (org-next-visible-heading 1)))
+   (lambda () (org-next-visible-heading 1))))
 
 
 
