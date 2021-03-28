@@ -7,17 +7,22 @@
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
   ;; This enables tsx tree-sitter features but highlighting doesn't work.
-  ;; Currently it's expected to produce this error when visiting a tsx file:
-  ;;   tree-sitter-after-on-hook: (wrong-type-argument user-ptrp nil)
   (add-to-list 'tree-sitter-major-mode-language-alist '(typescript-tsx-mode . tsx))
-  (add-hook! 'typescript-tsx-mode
+  (add-to-list 'tree-sitter-major-mode-language-alist '(tsx-mode . tsx))
+  (add-hook! '(typescript-tsx-mode tsx-mode)
     (tree-sitter-require 'tsx))
   ;; Temporarily disable tree-sitter-hl-mode on typescript-tsx-mode, because of the above
+  ;; (advice-remove #'tree-sitter-hl-mode #'my/tree-sitter-hl-disable-tsx)
   (advice-add #'tree-sitter-hl-mode
               :around
               (defun my/tree-sitter-hl-disable-tsx (orig-fun &rest args)
                 (unless (eq major-mode 'typescript-tsx-mode)
                   (apply orig-fun args))))
+  ;; (advice-add #'font-lock-eval-keywords
+  ;;             :around
+  ;;             (defun my/font-lock-eval-keywords-quote-safe (orig-fun keywords)
+  ;;               (unless (or (not keywords) (eq keywords 'quote))
+  ;;                   (apply orig-fun (list keywords)))))
 
   ;; NOTE: need tree-sitter-cli for this to work
   ;; install via "yarn global add tree-sitter-cli"
