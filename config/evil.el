@@ -148,6 +148,30 @@
                           my/sp-hydra/sp-splice-sexp-killing-backward))
       (add-to-list 'evil-mc-custom-known-commands `(,sp-command (:default . evil-mc-execute-call)))))
 
+  ;; Try out some faster evil scroll up/down replacement commands
+  ;; ​https://www.reddit.com/r/emacs/comments/mdl5yo
+  ;; REVIEW: If these commands cause problems, they can be removed.
+  ;;         What am I missing by replacing evil-scroll-up/down like this?
+  (evil-define-command my/evil-scroll-up-fast
+    :repeat nil
+    :keep-visual t
+    (interactive)
+    (evil-save-column
+      (when (= (point-min) (line-beginning-position))
+        (signal 'beginning-of-buffer nil))
+      (scroll-down (/ (window-body-height) 2))))
+  (evil-define-command my/evil-scroll-down-fast
+    :repeat nil
+    :keep-visual t
+    (interactive)
+    (evil-save-column
+      (when (= (point-max) (line-end-position))
+        (signal 'end-of-buffer nil))
+      (scroll-up (/ (window-body-height) 2))))
+  (define-key!
+    [remap evil-scroll-up] #'my/evil-scroll-up-fast
+    [remap evil-scroll-down] #'my/evil-scroll-down-fast)
+
   ;; FIXME: This advice doesn't move the point like intended. Why?
   ;; (advice-add #'evil-mc-set-pattern
   ;;             :before
