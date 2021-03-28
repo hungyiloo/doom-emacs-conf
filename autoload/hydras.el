@@ -150,9 +150,9 @@ _SPC_ 🎯    _x_ 🔫    _M-w_ ⌨️    _w_ 👟    "
   (">" #'evil-window-increase-width)
   ("<" #'evil-window-decrease-width)
   ("m" #'doom/window-maximize-buffer :color blue)
-  ("S" #'doom/window-maximize-horizontally)
-  ("V" #'doom/window-maximize-vertically)
-  ("d" #'delete-window)
+  ("S" #'doom/window-maximize-horizontally :color blue)
+  ("V" #'doom/window-maximize-vertically :color blue)
+  ("d" #'delete-window :color blue)
   ("x" #'ace-delete-window :color blue)
   ("D" #'kill-buffer-and-window :color blue)
   ;; ("r" #'evil-window-rotate-downwards) ; Don't actually understand what these do!
