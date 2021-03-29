@@ -33,7 +33,7 @@ background is COLOR. The foreground is computed using
                                  "white" "black"))
                (:background ,color))
        'ovrainbow t
-       'priority 5000
+       'priority 50
        'modification-hooks '(my/ov-evaporate-ovrainbow))))
   (defun rainbow-turn-off ()
     "Turn off rainbow-mode."
