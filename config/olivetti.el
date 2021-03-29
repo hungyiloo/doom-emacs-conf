@@ -7,7 +7,9 @@
   (defun my/olivetti-setup ()
     (setq doom--line-number-style (not olivetti-mode))
     (setq display-line-numbers (not olivetti-mode))
-    (git-gutter-mode (if olivetti-mode -1 1)))
+    (if olivetti-mode
+        (git-gutter-mode -1)
+      (+vc-gutter-init-maybe-h)))
   (map! :leader
         (:prefix-map ("t" . "toggle")
          "z" #'olivetti-mode))
