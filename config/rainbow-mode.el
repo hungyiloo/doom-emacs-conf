@@ -5,19 +5,36 @@
   ;; This prevents inteferefence with hl-line-mode.
   ;; Source: https://github.com/amosbird/rainbow-mode
   (require 'ov)
+  (defun my/ov-evaporate-ovrainbow (_ov after beg end &optional _length)
+    (let ((inhibit-modification-hooks t))
+      (when after
+        (ov-clear 'ovrainbow t beg end))
+      (ov-clear 'hl-line)))
   (defun rainbow-colorize-match (color &optional match)
     "Return a matched string propertized with a face whose
 background is COLOR. The foreground is computed using
 `rainbow-color-luminance', and is either white or black."
-    (let ((match (or match 0)))
-      (ov-clear (match-beginning match) (match-end match) 'ovrainbow t)
+    (let* ((match (or match 0))
+           (beg (match-beginning match))
+           (end (match-end match)))
+      ;; Add this chunk back if underlying text properties need to be set as a fallback
+      ;; (a.k.a. normal rainbow-mode coloring)
+      ;;
+      ;; (put-text-property
+      ;;  (match-beginning match) (match-end match)
+      ;;  'face `((:foreground ,(if (> 0.5 (rainbow-x-color-luminance color))
+      ;;                            "white" "black"))
+      ;;          (:background ,color)))
+      (ov-clear 'ovrainbow t beg end)
+      (ov-clear 'hl-line t beg end)
       (ov
-       (match-beginning match) (match-end match)
+       beg end
        'face `((:foreground ,(if (> 0.5 (rainbow-x-color-luminance color))
                                  "white" "black"))
                (:background ,color))
        'ovrainbow t
-       'priority 5000)))
+       'priority 5000
+       'modification-hooks '(my/ov-evaporate-ovrainbow))))
   (defun rainbow-turn-off ()
     "Turn off rainbow-mode."
     (font-lock-remove-keywords
