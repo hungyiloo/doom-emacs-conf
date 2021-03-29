@@ -68,7 +68,7 @@ If a selection is active, pre-fill the prompt with it."
 (defun +compres/consult-ripgrep-symbol-at-point (dir)
     "Conduct a text search on in the current (project) directory for the symbol at point."
     (interactive "P")
-    (consult-ripgrep dir (thing-at-point 'symbol)))
+    (consult-ripgrep dir (regexp-quote (thing-at-point 'symbol))))
 
 ;;;###autoload
 (defun +compres/consult-ripgrep-notes-symbol-at-point (dir)
@@ -76,7 +76,7 @@ If a selection is active, pre-fill the prompt with it."
     (interactive "P")
     (unless (bound-and-true-p org-directory)
       (require 'org))
-    (consult-ripgrep org-directory (thing-at-point 'symbol)))
+    (consult-ripgrep org-directory (regexp-quote (thing-at-point 'symbol))))
 
 ;;;###autoload
 (defun +compres/consult-project-buffer ()
