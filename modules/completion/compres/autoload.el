@@ -82,7 +82,10 @@ If a selection is active, pre-fill the prompt with it."
 (defun +compres/consult-project-buffer ()
     (interactive)
     ;; See +compres/consult-initial-narrow-config
-    (consult-buffer))
+    (let ((this-command (if (doom-project-p)
+                            this-command
+                          #'consult-buffer)))
+      (consult-buffer)))
 
 ;;;###autoload
 (defun +compres/consult-find-under-here (dir)
