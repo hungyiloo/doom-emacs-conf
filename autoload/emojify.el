@@ -133,3 +133,31 @@ completion UI to display properly emojis."
                                 def
                                 inherit-input-method)
                        " "))))
+
+;;;###autoload
+(defun my/emojify-reset-global-mode (orig-fun &rest args)
+  "Calls ORIG-FUN then toggles off and on global emojify mode to reset state.
+This makes emojify-mode play nice with certain commands like `consult-line' and
+`consult-outline'."
+  (condition-case nil
+      (progn
+        (apply orig-fun args)
+        (global-emojify-mode -1)
+        (global-emojify-mode +1))
+    (quit (progn (global-emojify-mode -1)
+                 (global-emojify-mode +1)))))
+
+;;;###autoload
+(defun my/emojify-result-advice (orig-fun &rest args)
+  "Emojifies the result of ORIG-FUN and returns it."
+  (emojify-string (apply orig-fun args)))
+
+;;;###autoload
+(defun my/emojify-hydra-hint (orig-fun hint caller)
+  "Emojifies the strings within `hydra-show-hint'."
+  (funcall
+   orig-fun
+   (cons (car hint)
+         (cons (emojify-string (cadr hint))
+               (cddr hint)))
+   caller))

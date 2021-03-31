@@ -2,17 +2,7 @@
 
 (use-package! emojify
   :commands (emojify-mode emojify-string)
-  :init
-  (after! hydra
-    (advice-add #'hydra-show-hint
-                :around
-                (defun my/emojify-hydra-hint (orig-fun hint caller)
-                  (funcall
-                   orig-fun
-                   (cons (car hint)
-                         (cons (emojify-string (cadr hint))
-                               (cddr hint)))
-                   caller))))
+
   :config
   ;; I created a folder ~/.doom.d/.local/emojis/twemoji-latest and
   ;; downloaded the PNG assets from https://github.com/twitter/twemoji
@@ -24,25 +14,14 @@
   (setq emojify-emoji-json (concat doom-private-dir "emoji.json"))
 
   (after! selectrum
-    (advice-add #'selectrum--format-candidate
-                :around
-                (defun my/emojify-selectrum-candidate (orig-fun &rest args)
-                  (emojify-string (apply orig-fun args)))))
+    ;; Fix selectrum candidate emojification
+    (advice-add #'selectrum--format-candidate :around #'my/emojify-result-advice))
 
   (after! consult
     ;; Fix emojify display issues after using consult.
     ;; `consult-line' and `consult-outline' in particular seems to mess with the buffer's
     ;; emojify region, so the following setup resets the global mode after use.
-    (defun my/emojify-reset-global-mode (orig-fun &rest args)
-      (condition-case nil
-          (progn
-            (apply orig-fun args)
-            (global-emojify-mode -1)
-            (global-emojify-mode +1))
-        (quit (progn (global-emojify-mode -1)
-                     (global-emojify-mode +1)))))
-    (add-hook! 'consult-after-jump-hook
-               #'emojify-redisplay-emojis-in-region)
+    (add-hook! 'consult-after-jump-hook #'emojify-redisplay-emojis-in-region)
     (advice-add #'consult-line :around #'my/emojify-reset-global-mode)
     (advice-add #'consult-outline :around #'my/emojify-reset-global-mode))
 
