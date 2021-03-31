@@ -1,13 +1,13 @@
 ;;; autoload/emojify.el -*- lexical-binding: t; -*-
 
 ;;;###autoload
-(defun my/partition-list (list parts)
-  "Partition LIST into PARTS parts.  They will all be the same length except
-the last one which will be shorter. Doesn't deal with the case where there are
-less than PARTS elements in LIST at all (it does something, but it may not be
-sensible)."
-  (cl-loop with size = (ceiling (length list) parts)
-           and tail = list
+(defun my/batch-list (input size)
+  "Split INPUT list into a batches (i.e. sublists) of maximum SIZE."
+  (when (< size 1)
+    (error "SIZE of the batches must be at least 1"))
+  (unless (seqp input)
+    (error "INPUT must be a sequence or list"))
+  (cl-loop with tail = input
            for part upfrom 1
            while tail
            collect (cl-loop for pt on tail
@@ -15,15 +15,6 @@ sensible)."
                             while (< i size)
                             collect (car pt)
                             finally (setf tail pt))))
-
-;;;###autoload
-(defun my/batch-list (list size)
-  "Split LIST into batches of maximum SIZE, keeping the batches as evenly
-sized as possible. This means splitting '(1 2 3 4) into batches of max size 3
-will result in '((1 2) (3 4)) instead of '((1 2 3) (4))."
-  (my/partition-list
-   list
-   (ceiling (/ (length list) (float size)))))
 
 ;;;###autoload
 (defun my/emojify-set-emoji-data-simplified-override (_orig-fun)
