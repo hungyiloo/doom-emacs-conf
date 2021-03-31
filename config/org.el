@@ -31,6 +31,9 @@
   (setq org-default-priority 68)
   ;; Tweak what shows up by default on opening org buffers
   (setq org-startup-folded 'content)
+  ;; Don't inherit tags on sublevels
+  (setq org-agenda-use-tag-inheritance nil)
+  (setq org-use-tag-inheritance nil)
 
   ;; Allow large tables to be processed
   (setq org-table-convert-region-max-lines 9999)
