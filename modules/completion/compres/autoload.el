@@ -93,6 +93,13 @@ If a selection is active, pre-fill the prompt with it."
     (consult-find (or dir default-directory)))
 
 ;;;###autoload
+(defun +compres/consult-find-notes ()
+    (interactive)
+    (unless (bound-and-true-p org-directory)
+      (require 'org))
+    (consult-find org-directory))
+
+;;;###autoload
 (defun +compres/consult-org-set-tags ()
       "Select tags to add to or remove from a headline.
   Choose one or more tags. Chosen tags that are already on the current headline will

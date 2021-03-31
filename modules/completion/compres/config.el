@@ -100,7 +100,7 @@
     [remap +default/search-project-for-symbol-at-point] #'+compres/consult-ripgrep-symbol-at-point
     [remap +default/search-buffer] #'+compres/consult-line-dwim
     [remap +default/search-other-project] #'+compres/consult-ripgrep-other-project-dwim
-    [remap +default/find-in-notes] #'+compres/consult-ripgrep-notes
+    [remap +default/find-in-notes] #'+compres/consult-find-notes
     [remap +default/find-file-under-here] #'+compres/consult-find-under-here
     [remap +default/org-notes-search] #'+compres/consult-ripgrep-notes
     [remap +default/search-notes-for-symbol-at-point] #'+compres/consult-ripgrep-notes-symbol-at-point)
