@@ -3,6 +3,7 @@
 * STRT External Dependencies
 
 ** TODO Document how to download emojis into the correct directory
+[[file:config/emojify.el][See instructions here]]
 
 ** TODO Font setup
 - JetBrains Mono
@@ -50,10 +51,12 @@ sudo apt install libtool-bin cmake
 #+end_src
 
 *** TODO Why is there a permissions error with sudo?
+This only happens on my PGTK install on Elementary OS.
 
 ** TODO Auxiliary apps
 - ripgrep
 - fd
+- =apt install elpa-pdf-tools-server= (it's hard to compile pdf-tools locally in WSL)
 
 ** TODO WSL-specific setup
 - xdg-open workarounds
