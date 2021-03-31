@@ -59,10 +59,10 @@
     "image": "1f60a.png",
     "name": "smiling face with smiling eyes [blush, smile]"
   },
-  "���": {
+  "😇": {
     "style": "unicode",
-    "image": "fffd-fffd-fffd.png",
-    "name": "smiling face with halo [boot, clothing, shoe, woman, woman’s boot]"
+    "image": "1f607.png",
+    "name": "smiling face with halo [angel, fantasy, innocent]"
   },
   "🥰": {
     "style": "unicode",
@@ -262,7 +262,7 @@
   "🤮": {
     "style": "unicode",
     "image": "1f92e.png",
-    "name": "face vomiting [sick, puke]"
+    "name": "face vomiting [puke, sick]"
   },
   "🤧": {
     "style": "unicode",
@@ -462,7 +462,7 @@
   "😠": {
     "style": "unicode",
     "image": "1f620.png",
-    "name": "angry face [mad, anger]"
+    "name": "angry face [anger, mad]"
   },
   "🤬": {
     "style": "unicode",
@@ -879,9 +879,9 @@
     "image": "1f590.png",
     "name": "hand with fingers splayed"
   },
-  "🖐����": {
+  "🖐🏻": {
     "style": "unicode",
-    "image": "1f590-fffd-fffd-fffd-fffd.png",
+    "image": "1f590-1f3fb.png",
     "name": "hand with fingers splayed: light skin tone"
   },
   "🖐🏼": {
@@ -1274,9 +1274,9 @@
     "image": "1f446.png",
     "name": "backhand index pointing up [finger]"
   },
-  "👆��": {
+  "👆🏻": {
     "style": "unicode",
-    "image": "1f446-fffd-fffd.png",
+    "image": "1f446-1f3fb.png",
     "name": "backhand index pointing up: light skin tone"
   },
   "👆🏼": {
@@ -1494,9 +1494,9 @@
     "image": "1f44a-1f3fb.png",
     "name": "oncoming fist: light skin tone"
   },
-  "👊����": {
+  "👊🏼": {
     "style": "unicode",
-    "image": "1f44a-fffd-fffd-fffd-fffd.png",
+    "image": "1f44a-1f3fc.png",
     "name": "oncoming fist: medium-light skin tone"
   },
   "👊🏽": {
@@ -2439,9 +2439,9 @@
     "image": "1f469-1f3fc.png",
     "name": "woman: medium-light skin tone"
   },
-  "����🏽": {
+  "👩🏽": {
     "style": "unicode",
-    "image": "fffd-fffd-fffd-fffd-1f3fd.png",
+    "image": "1f469-1f3fd.png",
     "name": "woman: medium skin tone"
   },
   "👩🏾": {
@@ -3004,9 +3004,9 @@
     "image": "1f64d-200d-2640.png",
     "name": "woman frowning [gesture]"
   },
-  "🙍🏻‍��️": {
+  "��🏻‍♀️": {
     "style": "unicode",
-    "image": "1f64d-1f3fb-200d-fffd-fffd-fe0f.png",
+    "image": "fffd-fffd-1f3fb-200d-2640-fe0f.png",
     "name": "woman frowning: light skin tone"
   },
   "🙍🏻‍♀": {
@@ -5694,10 +5694,10 @@
     "image": "1f9d1-1f3ff-200d-1f3a8.png",
     "name": "artist: dark skin tone"
   },
-  "��‍🎨": {
+  "👨‍🎨": {
     "style": "unicode",
-    "image": "fffd-fffd-200d-1f3a8.png",
-    "name": "man artist"
+    "image": "1f468-200d-1f3a8.png",
+    "name": "man artist [palette]"
   },
   "👨🏻‍🎨": {
     "style": "unicode",
@@ -11419,9 +11419,9 @@
     "image": "1f6b4-1f3fd-200d-2642.png",
     "name": "man biking: medium skin tone"
   },
-  "🚴🏾‍♂️": {
+  "🚴🏾‍���️": {
     "style": "unicode",
-    "image": "1f6b4-1f3fe-200d-2642-fe0f.png",
+    "image": "1f6b4-1f3fe-200d-fffd-fffd-fffd-fe0f.png",
     "name": "man biking: medium-dark skin tone"
   },
   "🚴🏾‍♂": {
@@ -11849,9 +11849,9 @@
     "image": "1f93d-1f3fe.png",
     "name": "person playing water polo: medium-dark skin tone"
   },
-  "🤽🏿": {
+  "���🏿": {
     "style": "unicode",
-    "image": "1f93d-1f3ff.png",
+    "image": "fffd-fffd-fffd-1f3ff.png",
     "name": "person playing water polo: dark skin tone"
   },
   "🤽‍♂️": {
@@ -13832,7 +13832,7 @@
   "🐞": {
     "style": "unicode",
     "image": "1f41e.png",
-    "name": "lady beetle [insect, ladybird, ladybug]"
+    "name": "lady beetle"
   },
   "🦗": {
     "style": "unicode",
@@ -14109,10 +14109,10 @@
     "image": "1f965.png",
     "name": "coconut [palm, piña colada]"
   },
-  "🥑": {
+  "��": {
     "style": "unicode",
-    "image": "1f951.png",
-    "name": "avocado [food, fruit]"
+    "image": "fffd-fffd.png",
+    "name": "avocado"
   },
   "🍆": {
     "style": "unicode",
@@ -15337,7 +15337,7 @@
   "🛑": {
     "style": "unicode",
     "image": "1f6d1.png",
-    "name": "stop sign"
+    "name": "stop sign [octagonal]"
   },
   "🚧": {
     "style": "unicode",
@@ -16642,7 +16642,7 @@
   "👢": {
     "style": "unicode",
     "image": "1f462.png",
-    "name": "woman’s boot"
+    "name": "woman’s boot [clothing, shoe]"
   },
   "👑": {
     "style": "unicode",
