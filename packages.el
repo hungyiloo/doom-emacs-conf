@@ -5,9 +5,6 @@
 ;; I don't use it anyway, and my muscle memory always goes for the ESC key.
 (package! evil-escape :disable t)
 
-;; Kurecolor doesn't work well for me
-(package! kurecolor :disable t)
-
 ;; simpler than doom's zen
 (package! olivetti)
 
@@ -33,10 +30,14 @@
 ;; window positioning sorcery
 (package! transpose-frame)
 
-;; overlay helpers
+;; overlay helpers, currently used for rainbow-mode enhancements
 (package! ov)
 
-(package! lsp-mode :pin "73b127f4cf09a443e1353aa6c40b2379b59c1bd6")
+;; rainbow-mode without the extra rgb module stuff (e.g. kurecolor)
+(package! rainbow-mode)
+
+(package! lsp-mode :pin "4a234270d6a9706a9aee9d6acd6d56c3e8537b84")
+(package! lsp-ui :pin "1613a2de55eca6213761a9b2c3e400063c87b5d0")
 (package! org-roam :pin "8ad57b121831eda8d226faa14ff2ba7ab652849c")
 ;; (package! evil :pin "f5ab7ff")
 ;; (package! evil-mc :pin "f04fb17")

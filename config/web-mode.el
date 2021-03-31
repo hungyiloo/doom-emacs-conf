@@ -8,6 +8,7 @@
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-attr-indent-offset nil)
   (setq emmet-indentation 2)
+  (setq web-mode-enable-css-colorization nil)
 
   ;; Redefine this function to fix incomplete tag renames
   ;; and prepopulate minibuffer with existing tag name

@@ -29,9 +29,10 @@ background is COLOR. The foreground is computed using
       (ov-clear 'hl-line t beg end)
       (ov
        beg end
-       'face `((:foreground ,(if (> 0.5 (rainbow-x-color-luminance color))
+       'face `((:foreground ,(if (< (rainbow-x-color-luminance color) 0.36)
                                  "white" "black"))
-               (:background ,color))
+               (:background ,color)
+               (:weight bold))
        'ovrainbow t
        'priority 50
        'modification-hooks '(my/ov-evaporate-ovrainbow))))
