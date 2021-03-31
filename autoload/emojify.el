@@ -26,42 +26,23 @@ will result in '((1 2) (3 4)) instead of '((1 2 3) (4))."
    (ceiling (/ (length list) (float size)))))
 
 ;;;###autoload
-(defun my/emojify-set-emoji-data-override (_orig-fun)
+(defun my/emojify-set-emoji-data-simplified-override (_orig-fun)
   "Read the emoji data for STYLES and set the regexp required to search them."
+  ;; Construct emojify-regexps such that github style are searched first
+  ;; followed by unicode and then ascii emojis.
+  ;;
+  ;; NOTE: This has been modified by me, and I don't use :this: style of
+  ;;       emoji or ascii emojis --- only unicode ones. I've also added
+  ;;       batching because more than about 4200 emojis and regexp matching
+  ;;       starts having issues.
   (setq-default emojify-emojis (let ((json-array-type 'list)
                                      (json-object-type 'hash-table))
                                  (json-read-file emojify-emoji-json)))
 
-  (let (unicode-emojis ascii-emojis)
-    (ht-each (lambda (emoji data)
-               (when (string= (ht-get data "style") "unicode")
-                 (push emoji unicode-emojis))
-
-               (when (string= (ht-get data "style") "ascii")
-                 (push emoji ascii-emojis)))
-             emojify-emojis)
-
-    ;; Construct emojify-regexps such that github style are searched first
-    ;; followed by unicode and then ascii emojis.
-    ;;
-    ;; NOTE: This has been modified by me, and I don't use :this: style of
-    ;;       emoji or ascii emojis --- only unicode ones. I've also added
-    ;;       batching because more than about 4200 emojis and regexp matching
-    ;;       starts having issues.
+  (let ((unicode-emojis (ht-keys emojify-emojis)))
     (setq emojify-regexps (mapcar
                            (lambda (unicode-emoji-batch) (regexp-opt unicode-emoji-batch))
                            (my/batch-list (sort unicode-emojis (lambda (a b) (> (length a) (length b)))) 4000))))
-
-  (when emojify-user-emojis
-    (if (emojify--verify-user-emojis emojify-user-emojis)
-        ;; Create entries for user emojis
-        (let ((emoji-pairs (mapcar (lambda (user-emoji)
-                                     (cons (car user-emoji)
-                                           (ht-from-alist (cdr user-emoji))))
-                                   emojify-user-emojis)))
-          (setq emojify--user-emojis (ht-from-alist emoji-pairs))
-          (setq emojify--user-emojis-regexp (regexp-opt (mapcar #'car emoji-pairs))))
-      (message "[emojify] User emojis are not in correct format ignoring them.")))
 
   (emojify-emojis-each (lambda (emoji data)
                          ;; Add the emoji text to data, this makes the values

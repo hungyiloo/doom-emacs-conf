@@ -26,7 +26,7 @@
     (advice-add #'consult-outline :around #'my/emojify-reset-global-mode))
 
   ;; Override this function to fix "regexp too big" issues
-  (advice-add #'emojify-set-emoji-data :around #'my/emojify-set-emoji-data-override)
+  (advice-add #'emojify-set-emoji-data :around #'my/emojify-set-emoji-data-simplified-override)
 
   ;; Redefine this function to simplify the label on each emoji when inserting
   (advice-add #'emojify--get-completing-read-candidates :around #'my/emojify--get-completing-read-candidates-override)
