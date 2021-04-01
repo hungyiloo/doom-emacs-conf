@@ -1,8 +1,7 @@
 ;;; config/ctrlf.el -*- lexical-binding: t; -*-
 
-(use-package
+(use-package! ctrf
   :hook (doom-first-buffer . ctrlf-mode)
-
   :config
   ;; Clearer active search face
   (custom-set-faces!
