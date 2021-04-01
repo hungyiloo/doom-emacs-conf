@@ -33,7 +33,7 @@
   (let ((unicode-emojis (ht-keys emojify-emojis)))
     (setq emojify-regexps (mapcar
                            (lambda (unicode-emoji-batch) (regexp-opt unicode-emoji-batch))
-                           (my/batch-list (sort unicode-emojis (lambda (a b) (> (length a) (length b)))) 4000))))
+                           (my/batch-list (sort unicode-emojis (lambda (a b) (> (length a) (length b)))) 2000))))
 
   (emojify-emojis-each (lambda (emoji data)
                          ;; Add the emoji text to data, this makes the values
