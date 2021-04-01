@@ -106,7 +106,11 @@
       (scroll-up (/ (window-body-height) 2))))
   (define-key!
     [remap evil-scroll-up] #'my/evil-scroll-up-fast
-    [remap evil-scroll-down] #'my/evil-scroll-down-fast))
+    [remap evil-scroll-down] #'my/evil-scroll-down-fast)
+
+  ;; Clearer evil active search face
+  (custom-set-faces!
+    `(evil-ex-search :background ,(doom-color 'magenta 256) :foreground ,(doom-color 'base0) :weight bold)))
 
 (after! evil-collection
   ;; Fix regular linewise movement in org mode and outline mode.
