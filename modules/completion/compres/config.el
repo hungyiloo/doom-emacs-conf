@@ -199,7 +199,7 @@
     (advice-add #'consult-line
                 :after
                 (defun +compres/consult-line-evil-search-integrate (&rest _args)
-                  (when-let ((str (remove-text-properties (car consult--line-history))))
+                  (when-let ((str (substring-no-properties (car consult--line-history))))
                     (unless (eq str (car evil-ex-search-history))
                       (add-to-history 'evil-ex-search-history str)
                       (setq evil-ex-search-pattern (list str nil t))
@@ -212,8 +212,8 @@
     (advice-add #'consult-line
                 :after
                 (defun +compres/consult-line-ctrlf-search-integrate (&rest _args)
-                  (when-let ((str (remove-text-properties (car consult--line-history))))
-                    (unless (eq str (car evil-ex-search-history))
+                  (when-let ((str (substring-no-properties (car consult--line-history))))
+                    (unless (eq str (car ctrlf-search-history))
                       (add-to-history 'ctrlf-search-history str))))))
 
   ;; Better than `org-set-tags-command'
