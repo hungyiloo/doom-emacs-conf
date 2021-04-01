@@ -18,7 +18,7 @@
   :pin "f26374545275cdde96d67576a43f3a919b6927cd")
 (package! selectrum
   :recipe (:host github :repo "raxod502/selectrum")
-  :pin "847947bb3fdc5991132ab9005feea0c5d650417f")
+  :pin "b34e24587ae9eda60ff75ed7941c45abad85c0f7")
 (package! prescient
   :recipe (:host github :repo "raxod502/prescient.el")
   :pin "8573df977eaceffc6607b7242ff8c0dab02aad65")
