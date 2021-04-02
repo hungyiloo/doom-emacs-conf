@@ -1,5 +1,7 @@
 ;;; autoload/emojify.el -*- lexical-binding: t; -*-
 
+(require 'cl-lib)
+
 ;;;###autoload
 (defun my/batch-list (input size)
   "Split INPUT list into a batches (i.e. sublists) of maximum SIZE."
@@ -8,13 +10,12 @@
   (unless (seqp input)
     (error "INPUT must be a sequence or list"))
   (cl-loop with tail = input
-           for part upfrom 1
            while tail
-           collect (cl-loop for pt on tail
+           collect (cl-loop for ptr on tail
                             for i upfrom 0
                             while (< i size)
-                            collect (car pt)
-                            finally (setf tail pt))))
+                            collect (car ptr)
+                            finally (setf tail ptr))))
 
 ;;;###autoload
 (defun my/emojify-set-emoji-data-simplified-override (_orig-fun)
