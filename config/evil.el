@@ -113,7 +113,26 @@
 
   ;; Clearer evil active search face
   (custom-set-faces!
-    `(evil-ex-search :background ,(doom-color 'magenta 256) :foreground ,(doom-color 'base0) :weight bold)))
+    `(evil-ex-search :background ,(doom-color 'magenta 256) :foreground ,(doom-color 'base0) :weight bold))
+  (defun my/evil-ex-search-highlight-current (&rest _args)
+    (require 'ov)
+    (ov-clear 'ov-evil-ex-active-search)
+    (when-let* ((pattern (car evil-ex-search-pattern))
+                (matched (save-excursion (search-forward-regexp pattern nil t)))
+                (beg (match-beginning 0))
+                (end (match-end 0)))
+      (ov beg end
+          'face 'evil-ex-search
+          'ov-evil-ex-active-search t
+          'evaporate t
+          'priority 1002)))
+  (defun my/evil-ex-search-clear-current-highlight (&rest _args)
+    (ov-clear 'ov-evil-ex-active-search))
+  (advice-add #'evil-ex-search-next :after #'my/evil-ex-search-highlight-current)
+  (advice-add #'evil-ex-search-previous :after #'my/evil-ex-search-highlight-current)
+  (advice-add #'evil-ex-search-forward :after #'my/evil-ex-search-highlight-current)
+  (advice-add #'evil-ex-search-backward :after #'my/evil-ex-search-highlight-current)
+  (advice-add #'+evil-disable-ex-highlights-h :after #'my/evil-ex-search-clear-current-highlight))
 
 (after! evil-collection
   ;; Fix regular linewise movement in org mode and outline mode.
