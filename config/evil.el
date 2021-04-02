@@ -24,9 +24,11 @@
   (setq evil-want-fine-undo 't)
 
   ;; Setting this to nil fixes small edge cases in evil-mc
+  ;; (which I've fixed without needing to change `evil-move-cursor-back'! See
+  ;; the redefinition of `evil-mc-execute-evil-change' in the evil-mc config)
+  ;;
   ;; but setting it to t fixes LARGE edge cases in evil-mc
-  ;; TODO: Look into evil-mc single character visual selection to see
-  ;; if it can be fixed when this flag is still set to true.
+  ;; (which would be difficult for me to patch)
   (setq evil-move-cursor-back t)
 
   ;; Use emacs-style regexp everywhere to prevent confusion and
