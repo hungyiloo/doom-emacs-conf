@@ -39,9 +39,12 @@
   ;; Better minibuffer prepopulation using M-n
   (setq minibuffer-default-add-function #'+compres/minibuffer-default-add-function)
 
+  ;; Better selectrum candidate scrolling
   (map! :map selectrum-minibuffer-map
        "C-d" #'selectrum-next-page
        "C-u" #'selectrum-previous-page
+       "<mouse-4>" #'selectrum-previous-candidate
+       "<mouse-5>" #'selectrum-next-candidate
        "C-k" #'kill-line)
 
   (after! magit
