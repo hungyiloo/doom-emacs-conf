@@ -66,6 +66,8 @@
     (recenter))
   (advice-add #'evil-ex-search-forward :after #'my/recenter)
   (advice-add #'evil-ex-search-backward :after #'my/recenter)
+  (advice-add #'evil-ex-search-next :after #'my/recenter)
+  (advice-add #'evil-ex-search-previous :after #'my/recenter)
 
   ;; Evil text objects for inner/outer line selection
   (defun my/evil-select-line (type inner-p)
@@ -82,7 +84,6 @@
     evil-outer-line (count &optional beg end type)
     "Outer text object for line."
     (my/evil-select-line type nil))
-
   (map! :map evil-inner-text-objects-map "l" #'evil-inner-line)
   (map! :map evil-outer-text-objects-map "l" #'evil-outer-line)
 
