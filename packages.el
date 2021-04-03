@@ -36,8 +36,8 @@
 ;; rainbow-mode without the extra rgb module stuff (e.g. kurecolor)
 (package! rainbow-mode)
 
-(package! lsp-mode :pin "57dccd67c289d62323b0656edffd10c2caba4b29")
-(package! lsp-ui :pin "1613a2de55eca6213761a9b2c3e400063c87b5d0")
+(package! lsp-mode :pin "e8b1edf56d5d7ede32a52c87caf43f81ee1c123b")
+(package! lsp-ui :pin "efae00eb6a733d5271cb33e9d92c3d8c2fa98dde")
 (package! org-roam :pin "8ad57b121831eda8d226faa14ff2ba7ab652849c")
 (package! ctrlf :pin "f9ef7a5e1b53f5ea9d486c93d47806e7d7f432ef")
 ;; (package! evil :pin "f5ab7ff")
