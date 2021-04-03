@@ -125,7 +125,7 @@ _k_ ⬆️ _K_    _[_ ⏮    _=_ ☯️     ^↓^ ▪     ▪ ^↓^   ^ ^▪_<_ 
 _l_ ➡️ _L_    _}_ ⏩    _T_ 🪚     _s_ ▪     ▪ _V_   ^ ^    ^ ___ ^  ▪▪^ ^ ▪    _u_ 💩 _C-r_
 _h_ ⬅️ _H_    _{_ ⏪    _t_ 🪄     ^ ^ ▪     ▪ ^ ^   ^ ^
 
-_SPC_ 🎯    _x_ 🔫    _M-w_ ⌨️    _w_ 👟    "
+_SPC_ 🎯    _x_ 🔫    _M-w_ ⌨️    _w_ 👟    _|_ ♊    "
   ("SPC" #'ace-window :color blue)
   ("]" #'evil-window-next)
   ("[" #'evil-window-prev)
@@ -163,6 +163,7 @@ _SPC_ 🎯    _x_ 🔫    _M-w_ ⌨️    _w_ 👟    "
   ("f" #'flop-frame)
   ("M-w" #'my/evil-window-map-launcher :color blue)
   ("w" #'evil-window-next :color blue)
+  ("|" #'my/split-vertically-with-last-buffer :color blue)
   ("C-g" nil "quit" :color blue)
   ("q" nil "quit" :color blue)
   ("<escape>" nil "quit" :color blue))
@@ -171,3 +172,9 @@ _SPC_ 🎯    _x_ 🔫    _M-w_ ⌨️    _w_ 👟    "
 (defun my/evil-window-map-launcher ()
   (interactive)
   (run-at-time 0 nil #'execute-kbd-macro (kbd "SPC W")))
+
+;;;###autoload
+(defun my/split-vertically-with-last-buffer ()
+  (interactive)
+  (evil-window-vsplit)
+  (previous-buffer))
