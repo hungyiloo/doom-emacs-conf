@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: jsdoc
+# uuid: jsdoc
+# key: ///
+# condition: t
+# --
+/**
+ * $0
+ */
