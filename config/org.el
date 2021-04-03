@@ -77,7 +77,39 @@ This function is called by `org-babel-execute-src-block'."
         :localleader
         "O" #'consult-outline
         (:prefix ("l" . "links")
-         "y" #'my/org-retrieve-url-from-point)))
+         "y" #'my/org-retrieve-url-from-point))
+
+  ;; Org agenda customization
+  (setq org-agenda-span 'week)
+  (setq org-agenda-start-day "+0d")
+  (setq org-agenda-block-separator ? )
+  (defun my/org-agenda-format-big-date (date)
+    (require 'cal-iso)
+    (let* ((dayname (calendar-day-name date 1 nil))
+           (day (cadr date))
+           (month (car date))
+           (monthname (calendar-month-name month 1)))
+      (format (if (org-agenda-today-p date)
+                  "\n\n           ┏━━━━━━━━━━━━┓\n           ┃ %-2s %2d %s ┃\n           ┗━━━━━━━━━━━━┛"
+                "\n\n            %-2s %2d %s\n            ‾‾‾‾‾‾‾‾‾‾")
+              dayname day monthname)))
+  (setq org-agenda-custom-commands
+        '(("n" "My Agenda"
+           ((agenda "" ((org-agenda-start-day "+0d")
+                        (org-agenda-span 3)
+                        (org-agenda-overriding-header "")
+                        (org-agenda-repeating-timestamp-show-all nil)
+                        (org-agenda-remove-tags t)
+                        (org-agenda-prefix-format "     %-7t%s")
+                        (org-agenda-current-time-string "◁─────────── NOW")
+                        (org-agenda-scheduled-leaders '("" "🔺 %sx: "))
+                        (org-agenda-time-grid '((daily today remove-match)
+                                                (900 1200 1500 1800)
+                                                "" "┈┈┈┈┈┈┈┈┈┈┈┈"))
+                        (org-agenda-format-date #'my/org-agenda-format-big-date)))
+            (alltodo "" ((org-agenda-overriding-header "            Hanging Todos\n            ‾‾‾‾‾‾‾‾‾‾‾‾‾")
+                         (org-agenda-prefix-format "            ")
+                         (org-agenda-remove-tags t))))))))
 
 (after! org-roam
   (setq org-roam-verbose t)
