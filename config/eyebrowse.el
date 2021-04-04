@@ -85,6 +85,7 @@ and then closes the window config"
     (interactive)
     (let ((saved-slot (eyebrowse--get 'current-slot)))
       (eyebrowse-create-window-config)
+      (switch-to-buffer doom-fallback-buffer-name)
       (condition-case nil
           (progn
             (call-interactively #'project-switch-project)
