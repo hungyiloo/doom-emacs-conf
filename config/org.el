@@ -90,8 +90,8 @@ This function is called by `org-babel-execute-src-block'."
            (month (car date))
            (monthname (calendar-month-name month 1)))
       (format (if (org-agenda-today-p date)
-                  "\n\n           ┏━━━━━━━━━━━━┓\n           ┃ %-2s %2d %s ┃\n           ┗━━━━━━━━━━━━┛"
-                "\n\n            %-2s %2d %s\n            ‾‾‾‾‾‾‾‾‾‾")
+                  "\n\n            ┏━━━━━━━━━━━━┓\n            ┃ %-2s %2d %s ┃\n            ┗━━━━━━━━━━━━┛"
+                "\n\n             %-2s %2d %s\n             ‾‾‾‾‾‾‾‾‾‾")
               dayname day monthname)))
   (setq org-agenda-custom-commands
         '(("n" "My Agenda"
@@ -100,16 +100,17 @@ This function is called by `org-babel-execute-src-block'."
                         (org-agenda-overriding-header "")
                         (org-agenda-repeating-timestamp-show-all nil)
                         (org-agenda-remove-tags t)
-                        (org-agenda-prefix-format "     %-7t%s")
+                        (org-agenda-prefix-format "%11t  %s")
                         (org-agenda-current-time-string "◁─────────── NOW")
                         (org-agenda-scheduled-leaders '("" "🔺 %sx: "))
                         (org-agenda-time-grid '((daily today remove-match)
                                                 (900 1200 1500 1800)
                                                 "" "┈┈┈┈┈┈┈┈┈┈┈┈"))
                         (org-agenda-format-date #'my/org-agenda-format-big-date)))
-            (alltodo "" ((org-agenda-overriding-header "            Hanging Todos\n            ‾‾‾‾‾‾‾‾‾‾‾‾‾")
-                         (org-agenda-prefix-format "            ")
-                         (org-agenda-remove-tags t))))))))
+            (alltodo "" ((org-agenda-overriding-header "             Hanging Todos\n             ═════════════")
+                         (org-agenda-prefix-format "%11c  %-45b ")
+                         (org-agenda-remove-tags t)
+                         (org-agenda-breadcrumbs-separator "·"))))))))
 
 (after! org-roam
   (setq org-roam-verbose t)
