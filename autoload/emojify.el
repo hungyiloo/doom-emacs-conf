@@ -134,3 +134,7 @@ This makes emojify-mode play nice with certain commands like `consult-line' and
          (cons (emojify-string (cadr hint))
                (cddr hint)))
    caller))
+
+;;;###autoload
+(defun my/emojify-face-height-override (&rest _args)
+  (* 2 (frame-char-width)))

@@ -33,4 +33,7 @@
 
   ;; Redefine this function to get rid of line spacing side effects in the
   ;; buffer when selection emojies
-  (advice-add #'emojify-completing-read :around #'my/emojify-completing-read-override))
+  (advice-add #'emojify-completing-read :around #'my/emojify-completing-read-override)
+
+  (advice-add #'emojify-face-height :around #'my/emojify-face-height-override)
+  (advice-add #'emojify-default-font-height :around #'my/emojify-face-height-override))
