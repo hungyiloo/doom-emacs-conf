@@ -35,5 +35,9 @@
   ;; buffer when selection emojies
   (advice-add #'emojify-completing-read :around #'my/emojify-completing-read-override)
 
+  ;; Make emojies 2 chars wide, always
   (advice-add #'emojify-face-height :around #'my/emojify-face-height-override)
-  (advice-add #'emojify-default-font-height :around #'my/emojify-face-height-override))
+  (advice-add #'emojify-default-font-height :around #'my/emojify-face-height-override)
+
+  ;; Reset emojies after setting font size
+  (advice-add #'doom-adjust-font-size :around #'my/emojify-reset-global-mode))
