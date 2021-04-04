@@ -112,13 +112,15 @@ completion UI to display properly emojis."
   "Calls ORIG-FUN then toggles off and on global emojify mode to reset state.
 This makes emojify-mode play nice with certain commands like `consult-line' and
 `consult-outline'."
-  (condition-case nil
-      (progn
-        (apply orig-fun args)
-        (global-emojify-mode -1)
-        (global-emojify-mode +1))
-    (quit (progn (global-emojify-mode -1)
-                 (global-emojify-mode +1)))))
+  (if global-emojify-mode
+      (condition-case nil
+          (progn
+            (apply orig-fun args)
+            (global-emojify-mode -1)
+            (global-emojify-mode +1))
+        (quit (progn (global-emojify-mode -1)
+                     (global-emojify-mode +1))))
+    (apply orig-fun args)))
 
 ;;;###autoload
 (defun my/emojify-result-advice (orig-fun &rest args)
@@ -137,4 +139,4 @@ This makes emojify-mode play nice with certain commands like `consult-line' and
 
 ;;;###autoload
 (defun my/emojify-face-height-override (&rest _args)
-  (* 2 (frame-char-width)))
+  (* 2 (default-font-width)))
