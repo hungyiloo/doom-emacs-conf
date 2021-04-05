@@ -75,7 +75,7 @@ This function is called by `org-babel-execute-src-block'."
   ;; Org agenda customization
   (setq org-agenda-span 'week
         org-agenda-start-day "+0d"
-        org-agenda-block-separator ?
+        org-agenda-block-separator 32
         org-agenda-skip-scheduled-if-deadline-is-shown t
         org-agenda-skip-deadline-prewarning-if-scheduled t
         org-agenda-skip-scheduled-if-done t
