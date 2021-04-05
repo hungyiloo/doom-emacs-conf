@@ -32,39 +32,39 @@
            :empty-lines-after 1)
           ("jm" "Journal Monthly")
           ("jmt" "Journal Monthly Todo" entry
-           (file+headline +org-capture-journal-file "Monthly Log")
+           (file+headline +org-capture-journal-file "Monthly")
            "* TODO %?"
            :kill-buffer t
            :empty-lines-before 1
            :empty-lines-after 1)
           ("jmn" "Journal Monthly Note" entry
-           (file+headline +org-capture-journal-file "Monthly Log")
+           (file+headline +org-capture-journal-file "Monthly")
            "* %?"
            :kill-buffer t
            :empty-lines-before 1
            :empty-lines-after 1)
           ("jf" "Journal Future")
           ("jft" "Journal Future Todo" entry
-           (file+headline +org-capture-journal-file "Future Log")
+           (file+headline +org-capture-journal-file "Future")
            "* TODO %?"
            :kill-buffer t
            :empty-lines-before 1
            :empty-lines-after 1)
           ("jfn" "Journal Future Note" entry
-           (file+headline +org-capture-journal-file "Future Log")
+           (file+headline +org-capture-journal-file "Future")
            "* %?"
            :kill-buffer t
            :empty-lines-before 1
            :empty-lines-after 1)
           ("jc" "Journal Cook List")
           ("jct" "Journal Cook List Todo" entry
-           (file+headline +org-capture-journal-file "Cook List")
+           (file+headline +org-capture-journal-file "Cooking")
            "* TODO %?"
            :kill-buffer t
            :empty-lines-before 1
            :empty-lines-after 1)
           ("jcn" "Journal Cook List Note" entry
-           (file+headline +org-capture-journal-file "Cook List")
+           (file+headline +org-capture-journal-file "Cook")
            "* %?"
            :kill-buffer t
            :empty-lines-before 1
