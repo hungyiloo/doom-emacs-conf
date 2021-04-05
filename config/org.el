@@ -73,7 +73,7 @@ This function is called by `org-babel-execute-src-block'."
          "y" #'my/org-retrieve-url-from-point))
 
   ;; Org agenda customization
-  (setq org-agenda-span 'week
+  (setq org-agenda-span 3
         org-agenda-start-day "+0d"
         org-agenda-block-separator 32
         org-agenda-skip-scheduled-if-deadline-is-shown t
@@ -99,25 +99,33 @@ This function is called by `org-babel-execute-src-block'."
                   "\n\n            ┏━━━━━━━━━━━━┓\n            ┃ %-2s %2d %s ┃\n            ┗━━━━━━━━━━━━┛"
                 "\n\n             %-2s %2d %s\n             ‾‾‾‾‾‾‾‾‾‾")
               dayname day monthname)))
-  (setq org-agenda-custom-commands
-        '(("n" "My Agenda"
-           ((agenda "" ((org-agenda-start-day "+0d")
-                        (org-agenda-span 3)
-                        (org-agenda-overriding-header "")
-                        (org-agenda-repeating-timestamp-show-all nil)
+  (let ((my-agenda '((org-agenda-start-day "+0d")
+                     (org-agenda-overriding-header "")
+                     (org-agenda-repeating-timestamp-show-all nil)
+                     (org-agenda-remove-tags t)
+                     (org-agenda-prefix-format "%11t  %s")
+                     (org-agenda-current-time-string "◁─────────── NOW")
+                     (org-agenda-scheduled-leaders '("" "🔺 %sd ago: "))
+                     (org-agenda-deadline-leaders '("‼ " "🔻 %sd: " "⚠ %sd ago: "))
+                     (org-agenda-time-grid '((daily today remove-match)
+                                             (900 1200 1500 1800)
+                                             "" "┈┈┈┈┈┈┈┈┈┈┈┈"))
+                     (org-agenda-format-date #'my/org-agenda-format-big-date)))
+        (my-todo-list '((org-agenda-overriding-header "\n\n            ┏━━━━━━━━━━━━━━━┓\n            ┃ Hanging Todos ┃\n            ┗━━━━━━━━━━━━━━━┛")
+                        (org-agenda-prefix-format "%10i  %-45b ")
                         (org-agenda-remove-tags t)
-                        (org-agenda-prefix-format "%11t  %s")
-                        (org-agenda-current-time-string "◁─────────── NOW")
-                        (org-agenda-scheduled-leaders '("" "🔺 %sd ago: "))
-                        (org-agenda-deadline-leaders '("‼ " "🔻 %sd: " "⚠ %sd ago: "))
-                        (org-agenda-time-grid '((daily today remove-match)
-                                                (900 1200 1500 1800)
-                                                "" "┈┈┈┈┈┈┈┈┈┈┈┈"))
-                        (org-agenda-format-date #'my/org-agenda-format-big-date)))
-            (alltodo "" ((org-agenda-overriding-header "            ┏━━━━━━━━━━━━━━━┓\n            ┃ Hanging Todos ┃\n            ┗━━━━━━━━━━━━━━━┛")
-                         (org-agenda-prefix-format "%10i  %-45b ")
-                         (org-agenda-remove-tags t)
-                         (org-agenda-breadcrumbs-separator "·"))))))))
+                        (org-agenda-breadcrumbs-separator "·")
+                        (org-agenda-format-date #'my/org-agenda-format-big-date))))
+    (setq org-agenda-custom-commands
+          `(("a" "My Agenda"
+             ((agenda "" ,(append my-agenda
+                                  '((org-agenda-span 7))))))
+            ("t" "My Todo List"
+             ((alltodo "" ,my-todo-list)))
+            ("n" "My Agenda + Todo List"
+             ((agenda "" ,(append my-agenda
+                                  '((org-agenda-span 3))))
+              (alltodo "" ,my-todo-list)))))))
 
 (after! org-roam
   (setq org-roam-verbose t)
