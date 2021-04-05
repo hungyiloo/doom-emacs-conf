@@ -7,12 +7,7 @@
    "%Y-%m-%d %a"
    (or timestamp (current-time))))
 
-(defun my/journal-month-stamp (&optional timestamp)
-  (format-time-string
-   "%Y-%m"
-   (or timestamp (current-time))))
-
-(defun my/journal-goto-heading (heading this-month &optional post-heading-action)
+(defun my/journal-goto-heading (heading &optional post-heading-action)
   (interactive)
   (evil-set-jump)
   (find-file +org-capture-journal-file)
@@ -23,12 +18,7 @@
                      (widen)
                      (org-set-startup-visibility)
                      (goto-char 0)
-                     (when this-month
-                       (search-forward
-                        (concat "* " (my/journal-month-stamp))
-                        nil
-                        t))
-                     (search-forward (concat "* " heading) nil t)
+                     (search-forward-regexp (concat "* " (regexp-quote heading) "$") nil t)
                      (setq result (when post-heading-action (funcall post-heading-action)))
                      (point))))
     ;; (scroll-on-jump (goto-char position))
@@ -40,8 +30,7 @@
 (defun my/journal-goto-or-create-today ()
     (interactive)
     (my/journal-goto-heading
-     "Daily Log"
-     t
+     "Daily"
      (lambda ()
        (interactive)
        (let* ((today (my/journal-date-stamp))
@@ -71,7 +60,6 @@
   (let ((today-was-created (my/journal-goto-or-create-today)))
     (my/journal-goto-heading
      (my/journal-date-stamp)
-     t
      (lambda ()
        (interactive)
        (if today-was-created
@@ -83,7 +71,6 @@
   (interactive)
   (my/journal-goto-heading
    "Exercise"
-   t
    (lambda ()
      (interactive)
      (search-forward-regexp (concat "[MTWFS] " (number-to-string (nth 1 (calendar-current-date)))) nil t))))
@@ -92,24 +79,21 @@
 (defun my/journal-goto-daily-log ()
   (interactive)
   (my/journal-goto-heading
-   "Daily Log"
-   t
+   "Daily"
    (lambda ()  (org-next-visible-heading 1))))
 
 ;;;###autoload
 (defun my/journal-goto-monthly-log ()
   (interactive)
   (my/journal-goto-heading
-   "Monthly Log"
-   t
+   "Monthly"
    (lambda () (org-next-visible-heading 1))))
 
 ;;;###autoload
 (defun my/journal-goto-future-log ()
   (interactive)
   (my/journal-goto-heading
-   "Future Log"
-   t
+   "Future"
    (lambda () (org-next-visible-heading 1))))
 
 ;;;###autoload
@@ -117,15 +101,13 @@
   (interactive)
   (my/journal-goto-heading
    "Recurring"
-   nil
    (lambda () (org-next-visible-heading 1))))
 
 ;;;###autoload
 (defun my/journal-goto-cook-list ()
   (interactive)
   (my/journal-goto-heading
-   "Cook List"
-   nil
+   "Cooking"
    (lambda () (org-next-visible-heading 1))))
 
 
