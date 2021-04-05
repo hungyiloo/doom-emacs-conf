@@ -18,13 +18,6 @@
   (setq org-export-with-section-numbers nil)
   ;; Also show state changes (such as finished recurring tasks) in agenda
   (setq org-agenda-log-mode-items '(closed clock state))
-  ;; Configure some org agenda smarts for schedules/deadlines
-  (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
-  (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
-  (setq org-agenda-skip-scheduled-if-done t)
-  (setq org-agenda-skip-deadline-if-done t)
-  (setq org-agenda-skip-scheduled-delay-if-deadline t)
-  (setq org-agenda-todo-ignore-scheduled t)
   ;; Tweak priorities so unprioritized items are lowest
   (setq org-priority-start-cycle-with-default nil)
   (setq org-lowest-priority 67)
@@ -80,9 +73,17 @@ This function is called by `org-babel-execute-src-block'."
          "y" #'my/org-retrieve-url-from-point))
 
   ;; Org agenda customization
-  (setq org-agenda-span 'week)
-  (setq org-agenda-start-day "+0d")
-  (setq org-agenda-block-separator ? )
+  (setq org-agenda-span 'week
+        org-agenda-start-day "+0d"
+        org-agenda-block-separator ?
+        org-agenda-skip-scheduled-if-deadline-is-shown t
+        org-agenda-skip-deadline-prewarning-if-scheduled t
+        org-agenda-skip-scheduled-if-done t
+        org-agenda-skip-deadline-if-done t
+        org-agenda-skip-scheduled-delay-if-deadline t
+        org-agenda-todo-ignore-timestamp t
+        org-agenda-todo-ignore-with-date t)
+  (require 'emojify)
   (setq org-agenda-category-icon-alist
         `(("Journal" ,(doom-path emojify-emojis-dir emojify-emoji-set "1f4d8.png") nil nil :ascent center :height ,(* 2(default-font-width)))
           ("Shopping" ,(doom-path emojify-emojis-dir emojify-emoji-set "1f6d2.png") nil nil :ascent center :height ,(* 2(default-font-width)))
