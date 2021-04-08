@@ -33,6 +33,12 @@
           ,(doom-path (getenv "HOME") ".config/yarn/global/node_modules")
           "--stdio"))
 
+  ;; Powershell support
+  (use-package! powershell
+    :hook (powershell-mode . lsp)
+    :config
+    (setq lsp-pwsh-exe "/usr/bin/pwsh"))
+
   ;; Load the lsp-command-map earlier, up front.
   ;; In practice, it's never there early enough when I need it.
   ;; e.g. without this, I keep getting "SPC c l s r is undefined"
