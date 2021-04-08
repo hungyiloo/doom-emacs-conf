@@ -85,7 +85,6 @@ and then closes the window config"
     (interactive)
     (let ((saved-slot (eyebrowse--get 'current-slot)))
       (eyebrowse-create-window-config)
-      (switch-to-buffer doom-fallback-buffer-name)
       (condition-case nil
           (progn
             (call-interactively #'project-switch-project)
@@ -99,4 +98,9 @@ and then closes the window config"
     (interactive)
     (if (doom-project-p)
         (call-interactively #'project-switch-to-buffer)
-      (call-interactively #'consult-buffer))))
+      (call-interactively #'consult-buffer)))
+
+  (advice-add #'eyebrowse-create-window-config
+              :after
+              (defun my/eyebrowse-start-config-with-doom-buffer (&rest _args)
+                (switch-to-buffer doom-fallback-buffer-name))))
