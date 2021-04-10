@@ -11,7 +11,9 @@
          "N" #'consult-minor-mode-menu)
         (:prefix-map ("s" . "search")
          "I" #'consult-project-imenu
-         "S" #'+compres/consult-line-symbol-at-point))
+         "S" #'+compres/consult-line-symbol-at-point)
+        (:prefix-map ("i" . "insert")
+         "c" #'my/consult-color))
 
   ;; Make occur mode (with consult) act more similarly
   ;; to wgrep mode
@@ -28,4 +30,28 @@
         "w" (defun my/widen-dwim ()
               (interactive)
               (consult-focus-lines t)
-              (widen))))
+              (widen)))
+
+  (defun my/consult-color (&optional initial)
+    (interactive)
+    (let ((hex (consult--read
+                (consult--async-command "curl https://www.colourlovers.com/api/colors?numResults=50&format=json --data-urlencode \"keywords=ARG\""
+                  (consult--async-transform
+                   (lambda (response)
+                     (mapcar
+                      (lambda (color)
+                        (let ((hex (format "#%s" (downcase (alist-get 'hex color)))))
+                          (cons (format "%s %s %s"
+                                        (propertize "██" 'face `(:foreground ,hex))
+                                        (alist-get 'title color)
+                                        (propertize hex 'face 'consult-key))
+                                hex)))
+                      (json-read-from-string (car response))))))
+                :prompt "Color keywords: "
+                :lookup #'consult--lookup-cdr
+                :initial initial
+                :require-match t
+                :sort nil)))
+      (when (region-active-p)
+        (delete-active-region))
+      (insert hex))))
