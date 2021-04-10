@@ -1,6 +1,7 @@
 ;;; autoload/journal.el -*- lexical-binding: t; -*-
 
 (require 'org)
+(require 'seq)
 
 (defun my/journal-date-stamp (&optional timestamp)
   (format-time-string
@@ -10,7 +11,15 @@
 (defun my/journal-goto-heading (heading &optional post-heading-action)
   (interactive)
   (evil-set-jump)
-  (find-file +org-capture-journal-file)
+  (let ((existing-journal-window
+         (seq-find
+          (lambda (w)
+            (with-current-buffer (window-buffer w)
+              (string-equal +org-capture-journal-file buffer-file-name)))
+          (window-list))))
+    (if existing-journal-window
+        (select-window existing-journal-window)
+      (find-file +org-capture-journal-file)))
   (olivetti-mode 1)
   (let* ((result nil)
          (position (save-excursion
