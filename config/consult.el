@@ -42,7 +42,7 @@
                       (lambda (color)
                         (let ((hex (format "#%s" (downcase (alist-get 'hex color)))))
                           (cons (format "%s %s %s"
-                                        (propertize "██" 'face `(:foreground ,hex))
+                                        (propertize "█████" 'face `(:foreground ,hex :background ,hex))
                                         (alist-get 'title color)
                                         (propertize hex 'face 'consult-key))
                                 hex)))
