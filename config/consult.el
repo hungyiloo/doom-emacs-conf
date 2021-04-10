@@ -49,7 +49,7 @@
                       (json-read-from-string (car response))))))
                 :prompt "Color keywords: "
                 :lookup #'consult--lookup-cdr
-                :initial initial
+                :initial (concat consult-async-default-split initial)
                 :require-match t
                 :sort nil)))
       (when (region-active-p)
