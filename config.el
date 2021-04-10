@@ -35,7 +35,11 @@
            ;; More emacs-y clipboard intergration
            (setq save-interprogram-paste-before-kill t)
 
+           ;; ISO calendar by default
            (setq calendar-date-style 'iso)
+
+           ;; Re-enable some disabled commands
+           (put #'narrow-to-region 'disabled nil)
 
            ;; Some global keymap adjustments
            (map! :leader
