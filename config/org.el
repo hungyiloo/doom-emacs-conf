@@ -82,7 +82,8 @@ This function is called by `org-babel-execute-src-block'."
         org-agenda-skip-deadline-if-done t
         org-agenda-skip-scheduled-delay-if-deadline t
         org-agenda-todo-ignore-timestamp t
-        org-agenda-todo-ignore-with-date t)
+        org-agenda-todo-ignore-with-date t
+        org-agenda-breadcrumbs-separator "·")
   (require 'emojify)
   (setq org-agenda-category-icon-alist
         `(("Journal" ,(doom-path emojify-emojis-dir emojify-emoji-set "1f4d8.png") nil nil :ascent center :height ,(* 2(default-font-width)))
@@ -114,7 +115,6 @@ This function is called by `org-babel-execute-src-block'."
         (my-todo-list '((org-agenda-overriding-header "\n\n            ┏━━━━━━━━━━━━━━━┓\n            ┃ Hanging Todos ┃\n            ┗━━━━━━━━━━━━━━━┛")
                         (org-agenda-prefix-format "%10i  %-45b ")
                         (org-agenda-remove-tags t)
-                        (org-agenda-breadcrumbs-separator "·")
                         (org-agenda-format-date #'my/org-agenda-format-big-date))))
     (setq org-agenda-custom-commands
           `(("a" "My Agenda"
