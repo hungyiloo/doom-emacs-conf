@@ -336,4 +336,5 @@
 
 (after! spell-fu
   (define-key!
-   [remap ispell-word] #'+compres/spell-correct))
+   [remap ispell-word] #'+compres/spell-correct
+   [remap +spell/correct] #'+compres/spell-correct))
