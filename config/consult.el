@@ -35,53 +35,64 @@
 
   (defun my/consult-color (&optional initial)
     (interactive)
-    (let ((hex (consult--read
-                (consult--async-command
-                    "curl https://www.colourlovers.com/api/colors?numResults=50&format=json --data-urlencode \"keywords=ARG\""
-                  (consult--async-transform
-                   (lambda (response)
-                     (mapcar
-                      (lambda (color)
-                        (let ((hex (format "#%s" (downcase (alist-get 'hex color)))))
-                          (cons (format "%s %s %s"
-                                        (propertize "████" 'face `(:foreground ,hex))
-                                        (propertize hex 'face 'consult-key)
-                                        (alist-get 'title color))
-                                hex)))
-                      (json-read-from-string (car response))))))
-                :prompt "Color keywords: "
-                :lookup #'consult--lookup-cdr
-                :initial (concat consult-async-default-split initial)
-                :require-match t
-                :sort nil)))
-      (when (region-active-p)
-        (delete-active-region))
-      (insert hex)))
+    (let* ((cmd "curl https://www.colourlovers.com/api/colors?numResults=50&format=json --data-urlencode \"keywords=ARG\"")
+           (get-key
+            (lambda (color) (format "#%s" (downcase (alist-get 'hex color)))))
+           (get-candidate
+            (lambda (color)
+              (let ((hex (funcall get-key color)))
+                (cons (format "%s %s %s"
+                              (propertize "████" 'face `(:foreground ,hex))
+                              (propertize hex 'face 'consult-key)
+                              (alist-get 'title color))
+                      color))))
+           (result (consult--read
+                    (consult--async-command cmd
+                      (consult--async-transform
+                       (lambda (response)
+                         (mapcar
+                          get-candidate
+                          (json-read-from-string (car response))))))
+                    :prompt "Color keywords: "
+                    :lookup #'consult--lookup-cdr
+                    :initial (concat consult-async-default-split initial)
+                    :require-match t
+                    :sort nil)))
+      (when (region-active-p) (delete-active-region))
+      (insert (funcall get-key result))))
 
   (defun my/consult-palette (&optional initial)
     (interactive)
-    (let ((result (consult--read
-                   (consult--async-command
-                       "curl https://www.colourlovers.com/api/palettes?numResults=50&format=json --data-urlencode \"keywords=ARG\""
-                     (consult--async-transform
-                      (lambda (response)
-                        (mapcar
-                         (lambda (palette)
-                           (let* ((colors (mapcar
-                                           (lambda (c) (format "#%s" (downcase c)))
-                                           (alist-get 'colors palette)))
-                                  (result (string-join colors " ")))
-                             (cons (format "%-10s %s %s"
-                                           (string-join (mapcar (lambda (c) (propertize "██" 'face `(:foreground ,c))) colors))
-                                           (propertize result 'face 'consult-key)
-                                           (alist-get 'title palette))
-                                   result)))
-                         (json-read-from-string (car response))))))
-                   :prompt "Palette keywords: "
-                   :lookup #'consult--lookup-cdr
-                   :initial (concat consult-async-default-split initial)
-                   :require-match t
-                   :sort nil)))
+    (let* ((cmd "curl https://www.colourlovers.com/api/palettes?numResults=50&format=json --data-urlencode \"keywords=ARG\"")
+           (get-hex-colors
+            (lambda (palette)
+              (mapcar
+               (lambda (hex) (format "#%s" (downcase hex)))
+               (alist-get 'colors palette))))
+           (get-key
+            (lambda (palette) (string-join (funcall get-hex-colors palette) " ")))
+           (get-candidate
+            (lambda (palette)
+              (let* ((colors (funcall get-hex-colors palette)))
+                (cons (format "%-10s %s %s"
+                              (string-join (mapcar
+                                            (lambda (c) (propertize "██" 'face `(:foreground ,c)))
+                                            colors))
+                              (propertize (funcall get-key palette) 'face 'consult-key)
+                              (alist-get 'title palette))
+                      palette))))
+           (result (consult--read
+                    (consult--async-command cmd
+                      (consult--async-transform
+                       (lambda (response)
+                         (mapcar
+                          get-candidate
+                          (json-read-from-string (car response))))))
+                    :prompt "Palette keywords: "
+                    :lookup #'consult--lookup-cdr
+                    :initial (concat consult-async-default-split initial)
+                    :require-match t
+                    :sort nil)))
       (when (region-active-p)
         (delete-active-region))
-      (insert result))))
+      (insert (funcall get-key result)))))
