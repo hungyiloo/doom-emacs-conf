@@ -36,6 +36,14 @@
     result))
 
 ;;;###autoload
+(defun my/journal-refile-today ()
+  (interactive)
+  (let ((pos (save-excursion
+               (find-file +org-capture-journal-file)
+               (org-find-exact-headline-in-buffer (my/journal-date-stamp)))))
+    (org-refile nil nil (list (my/journal-date-stamp) +org-capture-journal-file nil pos))))
+
+;;;###autoload
 (defun my/journal-goto-or-create-today ()
     (interactive)
     (my/journal-goto-heading
