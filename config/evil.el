@@ -51,8 +51,11 @@
     :nv "z" #'my/mc-hydra/body)
 
    ;; TODO: This should really be in its own smartparens config file
-   :prefix "gs"
-   :nv "p" #'my/sp-hydra/body)
+   (:prefix "gs"
+    :nv "p" #'my/sp-hydra/body)
+
+   (:prefix "g"
+    :nv "|" #'my/evil-duplicate-operator))
 
   ;; Fix ^ movement to also respect visual line mode.
   ;; It works for 0 and $ so why not ^?
@@ -197,6 +200,20 @@
                           my/sp-hydra/sp-splice-sexp-killing-forward
                           my/sp-hydra/sp-splice-sexp-killing-backward))
       (add-to-list 'evil-mc-custom-known-commands `(,sp-command (:default . evil-mc-execute-call)))))
+
+  (evil-define-operator my/evil-duplicate-operator (beg end type)
+    (interactive "<R>")
+    (message "%s" type)
+    (save-excursion
+      (evil-exit-visual-state)
+      (let ((linewise (memq type '(line screen-line))))
+        (if linewise
+            (evil-yank-lines beg end)
+          (progn
+            (evil-yank beg end)))
+        (goto-char (if linewise (1- end) end)))
+      (evil-paste-after 1))
+    (goto-char (car (last evil-last-paste))))
 
   ;; FIXME: This advice doesn't move the point like intended. Why?
   ;; (advice-add #'evil-mc-set-pattern
