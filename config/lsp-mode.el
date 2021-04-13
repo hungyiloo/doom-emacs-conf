@@ -8,7 +8,8 @@
         lsp-enable-folding nil
         lsp-semantic-tokens-enable nil
         lsp-enable-links nil
-        lsp-enable-snippet t)
+        lsp-enable-snippet t
+        lsp-signature-auto-activate nil)
 
   ;; Don't autocomplete snippets in LSP by default.
   ;; It seems to interfere a lot more than it helps.
