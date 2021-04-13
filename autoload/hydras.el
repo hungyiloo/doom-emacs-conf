@@ -31,7 +31,7 @@ _M_: make & prev   _I_: make visual beg  _R_: remove all
 _n_: skip & next   _A_: make visual end  _p_: pause/resume
 _N_: skip & prev
 
-Current pattern: %`evil-mc-pattern  "
+Current pattern: %s(replace-regexp-in-string \"%\" \"%%\" (or (caar evil-mc-pattern) \"\"))  "
   ("z" #'evil-mc-make-all-cursors)
   ("m" #'evil-mc-make-and-goto-next-match)
   ("M" #'evil-mc-make-and-goto-prev-match)
