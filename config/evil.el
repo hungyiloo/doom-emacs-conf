@@ -211,8 +211,8 @@
             (evil-yank-lines beg end)
           (progn
             (evil-yank beg end)))
-        (goto-char (if linewise (1- end) end)))
-      (evil-paste-after 1))
+        (goto-char end))
+      (evil-paste-before 1))
     (goto-char (car (last evil-last-paste))))
 
   ;; FIXME: This advice doesn't move the point like intended. Why?
