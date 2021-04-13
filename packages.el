@@ -40,6 +40,7 @@
 (package! lsp-ui :pin "efae00eb6a733d5271cb33e9d92c3d8c2fa98dde")
 (package! org-roam :pin "2d586516999ddb32df773cc86e0bf2df19e64811")
 (package! ctrlf :pin "45026a8655fb170004959f83b984589224cc156e")
+(package! org-mode :pin "bf98b12d5c087166cefaba0d6f8296de59261419")
 ;; (package! good-scroll :pin "fb01f121c4c77db3e6750303894d57b31e410b14")
 ;; (package! evil :pin "f5ab7ff")
 ;; (package! evil-mc :pin "f04fb17")
