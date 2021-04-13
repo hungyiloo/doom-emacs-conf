@@ -125,7 +125,34 @@ This function is called by `org-babel-execute-src-block'."
             ("n" "My Agenda + Todo List"
              ((agenda "" ,(append my-agenda
                                   '((org-agenda-span 3))))
-              (alltodo "" ,my-todo-list)))))))
+              (alltodo "" ,my-todo-list))))))
+
+  ;; Redefine this command to fix agenda issues when going to buffers that
+  ;; aren't yet "open"
+  (defun org-agenda-goto (&optional highlight)
+    "Go to the entry at point in the corresponding Org file."
+    (interactive)
+    (let* ((marker (or (org-get-at-bol 'org-marker)
+                       (org-agenda-error)))
+           (buffer (marker-buffer marker))
+           (pos (marker-position marker)))
+      ;; HACK: This `switch-to-buffer-other-window' doesn't work consisently in
+      ;; not-yet-really-opened "links" in the agenda, so try to work around it.
+      (unless buffer (user-error "Oops; you might have killed this buffer. Refresh the agenda to fix this link."))
+      (other-window 1)
+      (switch-to-buffer buffer)
+      (widen)
+      (push-mark)
+      (goto-char pos)
+      (when (derived-mode-p 'org-mode)
+        (org-show-context 'agenda)
+        (recenter (/ (window-height) 2))
+        (org-back-to-heading t)
+        (let ((case-fold-search nil))
+          (when (re-search-forward org-complex-heading-regexp nil t)
+            (goto-char (match-beginning 4)))))
+      (run-hooks 'org-agenda-after-show-hook)
+      (and highlight (org-highlight (point-at-bol) (point-at-eol))))))
 
 (after! org-roam
   (setq org-roam-verbose t)
