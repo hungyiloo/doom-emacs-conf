@@ -24,7 +24,9 @@
   (map! :map occur-edit-mode-map
         :n "C-x C-q" nil
         :n "C-c C-k" #'occur-cease-edit
-        :n "Z Z" #'occur-cease-edit)
+        :n "C-c C-c" #'occur-cease-edit
+        :n "Z Z" #'occur-cease-edit
+        :n "Z Q" #'occur-cease-edit)
 
   (map! :map narrow-map
         "l" #'consult-focus-lines
