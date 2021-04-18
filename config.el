@@ -41,6 +41,9 @@
            ;; Re-enable some disabled commands
            (put #'narrow-to-region 'disabled nil)
 
+           ;; Always provide enough room for line numbers
+           (setq-default display-line-numbers-width-start t)
+
            ;; Some global keymap adjustments
            (map! :leader
                  "]" #'better-jumper-jump-forward
