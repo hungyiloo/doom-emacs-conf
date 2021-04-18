@@ -307,11 +307,10 @@
     ("W" +compres/prj-embark-save-relative-path))
 
   ;; Make embark export occur buffers less overwhelming by putting them in popups
-  ;; (set-popup-rule!
-  ;;   "^\\*Embark Export Occur"
-  ;;   :height 0.4
-  ;;   :quit t)
-  )
+  (set-popup-rule!
+    "\\(*Embark Export Occur*\\|*Embark Collect*\\)"
+    :height 0.6
+    :quit t))
 
 (use-package! embark-consult
   :after (embark consult))
