@@ -44,6 +44,10 @@
            ;; Always provide enough room for line numbers
            (setq-default display-line-numbers-width-start t)
 
+           ;; I prefer 2 space indenting
+           (setq standard-indent 2)
+           (setq-default tab-width 2)
+
            ;; Some global keymap adjustments
            (map! :leader
                  "]" #'better-jumper-jump-forward

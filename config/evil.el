@@ -2,7 +2,7 @@
 
 (after! evil
   ;; I'm a dirty javascripter, so I like 2-space indentation
-  (setq evil-shift-width 2)
+  (setq-default evil-shift-width 2)
 
   ;; A lot of non-evil emacs packages expect the point
   ;; to be able to move past the last character of something.
