@@ -10,7 +10,8 @@
         lsp-enable-links nil
         lsp-enable-snippet t
         lsp-signature-auto-activate nil
-        lsp-auto-execute-action nil)
+        lsp-auto-execute-action nil
+        lsp-ui-sideline-actions-kind-regex "quickfix.*")
 
   ;; Don't autocomplete snippets in LSP by default.
   ;; It seems to interfere a lot more than it helps.
