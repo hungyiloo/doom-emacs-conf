@@ -16,50 +16,41 @@
 
 (defun my/tsx-indent-line-function ()
   (let* ((curr-point (save-excursion (back-to-indentation) (point)))
-         (curr-column (save-excursion (back-to-indentation) (current-column)))
+         (curr-column (current-indentation))
          (node (tree-sitter-indent--highest-node-at-position curr-point))
          (node-line (car (tsc-node-start-point node)))
          (node-type (tsc-node-type node))
          (curr-line (line-number-at-pos curr-point))
-         (target-column (or (when-let* ((parent (if (or (memq node-type '(jsx_text))
-                                                        (= curr-line node-line))
-                                                    (tsc-get-parent node)
-                                                  node))
-                                        (parent (unless (eq 'program (tsc-node-type parent)) parent))
-                                        (parent-line (car (tsc-node-start-point parent)))
-                                        (parent-out-of-line (not (= curr-line parent-line)))
-                                        (parent-column (save-excursion
-                                                         (goto-char (tsc-node-start-byte parent))
-                                                         (back-to-indentation)
-                                                         (current-column))))
-                              (if parent-out-of-line
-                                  (if (member node-type '("[" "(" "{" "}" ")" "]" "<"
-                                                          jsx_closing_element
-                                                          statement_block
-                                                          else_clause))
-                                      (if (> curr-point (tsc-node-start-byte node))
-                                          (+ parent-column tsx-indent-offset)
-                                        parent-column)
-                                    (+ parent-column tsx-indent-offset))
-                                curr-column))
-                            0))
-         (delta-column (- target-column curr-column)))
+         (container (if (or (memq node-type '(jsx_text))
+                            (= curr-line node-line))
+                        (or (tsc-get-parent node) node)
+                      node))
+         (container-line (car (tsc-node-start-point container)))
+         (container-out-of-line (not (= curr-line container-line)))
+         (container-column (save-excursion
+                             (goto-char (tsc-node-start-byte container))
+                             (current-indentation)))
+         (target-column (cond
+                         ((eq 'program (tsc-node-type container)) 0)
+                         ((member node-type '("[" "(" "{" "}" ")" "]" "<"
+                                              jsx_closing_element
+                                              statement_block
+                                              else_clause))
+                          (if (and (> curr-line node-line)
+                                   (< curr-line (car (tsc-node-end-point node))))
+                              (+ container-column tsx-indent-offset)
+                            container-column))
+                         ((> curr-point (tsc-node-start-byte container))
+                          (+ container-column tsx-indent-offset))
+                         (t curr-column))))
 
-    ;; (message "%s %s parent:%s node:%s"
+    ;; (message "%s container:%s node:%s"
     ;;          target-column
-    ;;          delta-column
-    ;;          (tsc-node-type (tsc-get-parent node))
+    ;;          (tsc-node-type container)
     ;;          (tsc-node-type node))
 
-    (if (> delta-column 0)
-        (progn
-          (save-excursion
-            (beginning-of-line)
-            (indent-to target-column))
-          (if (search-forward-regexp "[^ \t]" (line-end-position) t)
-              (backward-char)
-            (end-of-line)))
-      (delete-region (line-beginning-position) (+ (line-beginning-position) (abs delta-column))))))
+    (save-excursion (indent-line-to target-column))
+    (skip-chars-forward " \t\n" (line-end-position))))
 
 (add-hook! 'tsx-mode-hook
   (setq tsx-indent-offset 2)
