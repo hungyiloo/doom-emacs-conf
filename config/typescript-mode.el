@@ -15,8 +15,8 @@
            (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode)))
 
 (defun my/tsx-indent-line-function ()
-  (let* ((curr-point (save-excursion (beginning-of-line-text) (point)))
-         (curr-column (save-excursion (beginning-of-line-text) (current-column)))
+  (let* ((curr-point (save-excursion (back-to-indentation) (point)))
+         (curr-column (save-excursion (back-to-indentation) (current-column)))
          (node (tree-sitter-indent--highest-node-at-position curr-point))
          (node-line (car (tsc-node-start-point node)))
          (node-type (tsc-node-type node))
@@ -30,7 +30,7 @@
                                         (parent-out-of-line (not (= curr-line parent-line)))
                                         (parent-column (save-excursion
                                                          (goto-char (tsc-node-start-byte parent))
-                                                         (beginning-of-line-text)
+                                                         (back-to-indentation)
                                                          (current-column))))
                               (if parent-out-of-line
                                   (if (member node-type '("[" "(" "{" "}" ")" "]" "<"
