@@ -1,23 +1,20 @@
 ;;; autoload/tsx-mode.el -*- lexical-binding: t; -*-
 
-(defun tsx--mode-close-element ()
-  (interactive)
+(defun tsx--element-close ()
   (when-let* ((nearest-container (or (save-excursion
                                        (backward-char 2)
-                                       (tree-sitter-node-at-point 'jsx_element))
+                                       (tsx--element-at-point))
                                      (tree-sitter-node-at-point 'ERROR)))
-              (opening-element (tsx--tsc-get-first-child-of-type nearest-container 'jsx_opening_element))
-              (tag-name-node (tsx--tsc-get-first-child-of-type opening-element 'identifier))
-              (tag-name (tsc-node-text tag-name-node))
+              (tag-name (tsx--element-tag-name nearest-container))
               (closing-tag-markup (format "</%s>" tag-name)))
     (insert closing-tag-markup)
     t))
 
 ;;;###autoload
-(defun tsx-mode-auto-close-element-maybe-h ()
+(defun tsx-element-auto-close-maybe-h ()
   (interactive)
   (if (eq (char-before) ?<)
-      (or (when (save-excursion (tsx--mode-close-element))
+      (or (when (save-excursion (tsx--element-close))
             (delete-char -1)
             (unless (eq (char-before) ?>)
               (search-forward ">" (line-end-position) t))
@@ -25,15 +22,57 @@
           (insert "/"))
     (insert "/")))
 
-(defun tsx--tsc-get-first-child-of-type (node type)
+(defun tsx--element-tag-nodes (element-node)
+  (when-let* ((opening-element (tsx--tsc-first-child-of-type
+                                element-node
+                                '(jsx_opening_element)))
+              (closing-element (tsx--tsc-first-child-of-type
+                                element-node
+                                '(jsx_closing_element))))
+    `(,(tsx--tsc-first-child-of-type
+        opening-element
+        '(identifier nested_identifier))
+      .
+      ,(tsx--tsc-first-child-of-type
+        closing-element
+        '(identifier nested_identifier)))))
+
+(defun tsx--element-tag-name (element-node)
+  (when-let* ((opening-element (tsx--tsc-first-child-of-type
+                                element-node
+                                '(jsx_opening_element)))
+              (tag-name-node (car (tsx--element-tag-nodes element-node))))
+    (tsc-node-text tag-name-node)))
+
+(defun tsx--element-at-point ()
+  (tree-sitter-node-at-point 'jsx_element))
+
+(defun tsx--replace-node (node replacement-text)
+  (replace-region-contents
+   (tsc-node-start-position node)
+   (tsc-node-end-position node)
+   (lambda () replacement-text)))
+
+;;;###autoload
+(defun tsx-element-rename ()
+  (interactive)
+  (when-let* ((element-node (tsx--element-at-point))
+              (tag-nodes (tsx--element-tag-nodes element-node))
+              (tag-name (tsx--element-tag-name element-node))
+              (new-tag-name (string-trim (read-string "Rename element: " tag-name))))
+    (unless (> (length new-tag-name) 0) (user-error "Oops! That isn't a valid tag name..."))
+    (tsx--replace-node (cdr tag-nodes) new-tag-name)
+    (tsx--replace-node (car tag-nodes) new-tag-name)))
+
+(defun tsx--tsc-first-child-of-type (node types)
   (let* ((index 0)
          (child-node (tsc-get-nth-child node index)))
     (while (and child-node
-                (not (eq (tsc-node-type child-node) type)))
+                (not (memq (tsc-node-type child-node) types)))
       (setq index (1+ index))
       (setq child-node (tsc-get-nth-child node index)))
     (and child-node
-         (eq (tsc-node-type child-node) type)
+         (memq (tsc-node-type child-node) types)
          child-node)))
 
 (defun tsx--tsc-highest-node-at-position (position)
@@ -80,13 +119,5 @@ POSITION is a byte position in buffer like \\(point-min\\)."
                          ((> curr-point (car (tsc-node-position-range container)))
                           (+ container-column js-indent-level))
                          (t curr-column))))
-
-    ;; (message "%s container:%s%s node:%s%s"
-    ;;          target-column
-    ;;          (tsc-node-type container)
-    ;;          (tsc-node-start-point container)
-    ;;          (tsc-node-type node)
-    ;;          (tsc-node-start-point node))
-
     (save-excursion (indent-line-to target-column))
     (skip-chars-forward " \t\n" (line-end-position))))

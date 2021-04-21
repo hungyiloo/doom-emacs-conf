@@ -9,13 +9,18 @@
            (define-derived-mode tsx-mode typescript-mode "tsx")
            (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
 
+           (map! :map 'tsx-mode-map
+                 :i "/" #'tsx-element-auto-close-maybe-h)
+           (map! :map 'tsx-mode-map
+                 :localleader
+                 (:prefix-map ("e" . "element")
+                  :desc "Rename" "r" #'tsx-element-rename))
+
            (defun my/tsx-mode-setup ()
              (tree-sitter-require 'tsx)
              (tree-sitter-hl-add-patterns nil "[\"/\" \"*\"] @operator")
              (emmet-mode 1)
              (lsp)
-             (map! :map 'tsx-mode-map
-                   :i "/" #'tsx-mode-auto-close-element-maybe-h)
              (cond
               ((eq major-mode 'tsx-mode) (setq-local indent-line-function #'tsx-indent-line-function))
               (t (setq-local indent-line-function (default-value 'indent-line-function)))))
