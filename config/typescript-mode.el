@@ -17,10 +17,25 @@
 (after! tree-sitter
   (add-to-list 'tree-sitter-major-mode-language-alist '(tsx-mode . tsx)))
 
+(defun my/tsc-highest-node-at-position (position)
+  "Get the node at buffer POSITION that's at the highest level.
+
+POSITION is a byte position in buffer like \\(point-min\\)."
+  (save-excursion
+    (goto-char position)
+    (let* ((current-node (tree-sitter-node-at-point))
+           (parent-node (tsc-get-parent current-node)))
+      (while (and parent-node
+                  (eq (tsc-node-start-byte parent-node)
+                      (tsc-node-start-byte current-node)))
+        (setq current-node parent-node)
+        (setq parent-node (tsc-get-parent current-node)))
+      current-node)))
+
 (defun my/tsx-indent-line-function ()
   (let* ((curr-point (save-excursion (back-to-indentation) (point)))
          (curr-column (current-indentation))
-         (node (tree-sitter-indent--highest-node-at-position curr-point))
+         (node (my/tsc-highest-node-at-position curr-point))
          (node-line (car (tsc-node-start-point node)))
          (node-type (tsc-node-type node))
          (curr-line (line-number-at-pos curr-point))
@@ -57,9 +72,7 @@
 
 (add-hook! 'tsx-mode-hook
   (tree-sitter-require 'tsx)
-  (require 'tree-sitter-indent)
   (tree-sitter-hl-add-patterns nil "[\"/\" \"*\"] @operator")
-  (require 'emmet-mode)
   (emmet-mode 1)
   (lsp)
   (cond
