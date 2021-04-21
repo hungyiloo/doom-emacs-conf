@@ -10,11 +10,14 @@
            (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
 
            (map! :map 'tsx-mode-map
-                 :i "/" #'tsx-element-auto-close-maybe-h)
+                 :i "/" #'tsx-element-auto-close-maybe-h
+                 :nv "]a" #'tsx-goto-next-sibling
+                 :nv "[a" #'tsx-goto-prev-sibling)
            (map! :map 'tsx-mode-map
                  :localleader
                  (:prefix-map ("e" . "element")
-                  :desc "Rename" "r" #'tsx-element-rename))
+                  :desc "Rename" "r" #'tsx-element-rename
+                  :desc "Wrap" "w" #'tsx-element-wrap))
 
            (defun my/tsx-mode-setup ()
              (tree-sitter-require 'tsx)

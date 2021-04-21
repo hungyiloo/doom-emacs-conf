@@ -29,13 +29,13 @@
               (closing-element (tsx--tsc-first-child-of-type
                                 element-node
                                 '(jsx_closing_element))))
-    `(,(tsx--tsc-first-child-of-type
-        opening-element
-        '(identifier nested_identifier))
-      .
-      ,(tsx--tsc-first-child-of-type
-        closing-element
-        '(identifier nested_identifier)))))
+    (cons
+     (tsx--tsc-first-child-of-type
+      opening-element
+      '(identifier nested_identifier))
+     (tsx--tsc-first-child-of-type
+      closing-element
+      '(identifier nested_identifier)))))
 
 (defun tsx--element-tag-name (element-node)
   (when-let* ((opening-element (tsx--tsc-first-child-of-type
@@ -64,6 +64,64 @@
     (tsx--replace-node (cdr tag-nodes) new-tag-name)
     (tsx--replace-node (car tag-nodes) new-tag-name)))
 
+;;;###autoload
+(defun tsx-element-wrap ()
+  (interactive)
+  (let* ((wrap-region
+          (or (and (region-active-p)
+                   (cons (region-beginning) (region-end)))
+              (when-let ((node (tsx--element-at-point)))
+                (cons (tsc-node-start-position node) (tsc-node-end-position node)))
+              (bounds-of-thing-at-point 'symbol)))
+         (wrap-tag-name (string-trim (read-string "Wrapping element: ")))
+         (wrap-start (car wrap-region))
+         (wrap-end (cdr wrap-region))
+         (region-linewise (and (region-active-p)
+                               (= 0 (save-excursion
+                                      (goto-char wrap-start)
+                                      (current-column)))))
+         (element-linewise (not (or (region-active-p)
+                                    (eq (line-number-at-pos wrap-start)
+                                        (line-number-at-pos wrap-end)))))
+         (replacement (concat (format "<%s>" wrap-tag-name)
+                              (when (or element-linewise region-linewise) "\n")
+                              (buffer-substring wrap-start wrap-end)
+                              (when element-linewise "\n")
+                              (format "</%s>" wrap-tag-name)
+                              (when region-linewise "\n"))))
+    (unless (> (length wrap-tag-name) 0) (user-error "Oops! That isn't a valid tag name..."))
+    (replace-region-contents
+     wrap-start wrap-end
+     (lambda () replacement))
+    (indent-region wrap-start (+ wrap-start (length replacement)))))
+
+(defun tsx--goto-sibling (direction)
+  (or (> (skip-chars-forward " \t\n") 0)
+      (when-let* ((node (tsx--highest-node-at-position (point)))
+                  (node-type (tsc-node-type node))
+                  (target node))
+        (while (and target
+                    (or (eq target node)
+                        (not (eq (tsc-node-type target) node-type))))
+          (setq
+           target
+           (cond
+            ((eq direction 'forward) (tsc-get-next-sibling target))
+            ((eq direction 'backward) (tsc-get-prev-sibling target))
+            (t (user-error "Direction must be 'forward or 'backward")))))
+        (when target
+          (goto-char (tsc-node-start-position target))))))
+
+;;;###autoload
+(defun tsx-goto-next-sibling ()
+  (interactive)
+  (tsx--goto-sibling 'forward))
+
+;;;###autoload
+(defun tsx-goto-prev-sibling ()
+  (interactive)
+  (tsx--goto-sibling 'backward))
+
 (defun tsx--tsc-first-child-of-type (node types)
   (let* ((index 0)
          (child-node (tsc-get-nth-child node index)))
@@ -75,7 +133,7 @@
          (memq (tsc-node-type child-node) types)
          child-node)))
 
-(defun tsx--tsc-highest-node-at-position (position)
+(defun tsx--highest-node-at-position (position)
   "Get the node at buffer POSITION that's at the highest level.
 
 POSITION is a byte position in buffer like \\(point-min\\)."
@@ -94,7 +152,7 @@ POSITION is a byte position in buffer like \\(point-min\\)."
 (defun tsx-indent-line-function ()
   (let* ((curr-point (save-excursion (back-to-indentation) (point)))
          (curr-column (current-indentation))
-         (node (tsx--tsc-highest-node-at-position curr-point))
+         (node (tsx--highest-node-at-position curr-point))
          (node-line (car (tsc-node-start-point node)))
          (node-type (tsc-node-type node))
          (curr-line (line-number-at-pos curr-point))
