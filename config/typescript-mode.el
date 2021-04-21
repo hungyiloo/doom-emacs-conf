@@ -14,6 +14,9 @@
            (define-derived-mode tsx-mode typescript-mode "tsx")
            (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode)))
 
+(after! tree-sitter
+  (add-to-list 'tree-sitter-major-mode-language-alist '(tsx-mode . tsx)))
+
 (defun my/tsx-indent-line-function ()
   (let* ((curr-point (save-excursion (back-to-indentation) (point)))
          (curr-column (current-indentation))
@@ -25,40 +28,42 @@
                             (= curr-line node-line))
                         (or (tsc-get-parent node) node)
                       node))
-         (container-line (car (tsc-node-start-point container)))
-         (container-out-of-line (not (= curr-line container-line)))
          (container-column (save-excursion
-                             (goto-char (tsc-node-start-byte container))
+                             (goto-char (car (tsc-node-position-range container)))
                              (current-indentation)))
          (target-column (cond
                          ((eq 'program (tsc-node-type container)) 0)
-                         ((member node-type '("[" "(" "{" "}" ")" "]" "<"
+                         ((member node-type '("[" "(" "{" "}" ")" "]" "<" "/"
                                               jsx_closing_element
                                               statement_block
                                               else_clause))
                           (if (and (> curr-line node-line)
                                    (< curr-line (car (tsc-node-end-point node))))
-                              (+ container-column tsx-indent-offset)
+                              (+ container-column js-indent-level)
                             container-column))
-                         ((> curr-point (tsc-node-start-byte container))
-                          (+ container-column tsx-indent-offset))
+                         ((> curr-point (car (tsc-node-position-range container)))
+                          (+ container-column js-indent-level))
                          (t curr-column))))
 
-    ;; (message "%s container:%s node:%s"
+    ;; (message "%s container:%s%s node:%s%s"
     ;;          target-column
     ;;          (tsc-node-type container)
-    ;;          (tsc-node-type node))
+    ;;          (tsc-node-start-point container)
+    ;;          (tsc-node-type node)
+    ;;          (tsc-node-start-point node))
 
     (save-excursion (indent-line-to target-column))
     (skip-chars-forward " \t\n" (line-end-position))))
 
+(defvar tsx-indent-off)
+
 (add-hook! 'tsx-mode-hook
-  (setq tsx-indent-offset 2)
+  (tree-sitter-require 'tsx)
   (require 'tree-sitter-indent)
   (setq electric-indent-chars '(123 125 40 41 58 59 44 10 127 61 34 39 96 91 93))
   (require 'emmet-mode)
   (emmet-mode 1)
   (lsp)
   (cond
-   (tsx-mode (setq-local indent-line-function #'my/tsx-indent-line-function))
+   ((eq major-mode 'tsx-mode) (setq-local indent-line-function #'my/tsx-indent-line-function))
    (t (setq-local indent-line-function (default-value 'indent-line-function)))))
