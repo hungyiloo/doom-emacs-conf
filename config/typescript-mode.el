@@ -55,12 +55,10 @@
     (save-excursion (indent-line-to target-column))
     (skip-chars-forward " \t\n" (line-end-position))))
 
-(defvar tsx-indent-off)
-
 (add-hook! 'tsx-mode-hook
   (tree-sitter-require 'tsx)
   (require 'tree-sitter-indent)
-  (setq electric-indent-chars '(123 125 40 41 58 59 44 10 127 61 34 39 96 91 93))
+  (tree-sitter-hl-add-patterns nil "[\"/\" \"*\"] @operator")
   (require 'emmet-mode)
   (emmet-mode 1)
   (lsp)
