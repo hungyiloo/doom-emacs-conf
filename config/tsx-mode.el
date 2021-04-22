@@ -20,7 +20,8 @@
                   :desc "Wrap" "w" #'tsx-element-wrap
                   :desc "End" "e" #'tsx-goto-element-end
                   :desc "Beginning" "b" #'tsx-goto-element-beginning
-                  :desc "Select" "s" #'tsx-element-select))
+                  :desc "Select" "s" #'tsx-element-select
+                  :desc "Close" "/" #'tsx-element-close))
 
            (defun my/tsx-mode-setup ()
              (tree-sitter-require 'tsx)
