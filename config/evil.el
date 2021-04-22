@@ -223,3 +223,11 @@
   ;;                          (eq (evil-visual-type) 'line))
   ;;                 (call-interactively #'move-end-of-line))))
   )
+
+(after! evil-nerd-commenter
+  ;; Detect TSX files as JSX for commenting purposes
+  (advice-add #'evilnc-html-jsx-p
+              :around
+              (defun my/evilnc-html-jsx-p (&rest _ignored)
+                (and buffer-file-name
+                     (string-match-p "\.[jt]sx?$" buffer-file-name)))))

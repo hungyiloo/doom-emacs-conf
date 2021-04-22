@@ -31,7 +31,10 @@
              (lsp)
              (cond
               ((eq major-mode 'tsx-mode) (setq-local indent-line-function #'tsx-indent-line-function))
-              (t (setq-local indent-line-function (default-value 'indent-line-function)))))
+              (t (setq-local indent-line-function (default-value 'indent-line-function))))
+             (after! evil-nerd-commenter
+               (setq-local evilnc-comment-or-uncomment-region-function
+                           'tsx-comment-or-uncomment-region)))
 
            (add-hook! 'tsx-mode-hook
              (my/tsx-mode-setup)))

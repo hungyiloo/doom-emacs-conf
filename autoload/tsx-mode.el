@@ -1,5 +1,7 @@
 ;;; autoload/tsx-mode.el -*- lexical-binding: t; -*-
 
+(require 'tree-sitter)
+
 ;;;###autoload
 (defun tsx-element-close (&optional dont-indent)
   (interactive)
@@ -222,3 +224,22 @@ POSITION is a byte position in buffer like \\(point-min\\)."
                          (t curr-column))))
     (save-excursion (indent-line-to target-column))
     (skip-chars-forward " \t\n" (line-end-position))))
+
+;;;###autoload
+(defun tsx-comment-or-uncomment-region (beg end)
+  (let* ((outside-pos (1- beg))
+         (outside-node-type (tsc-node-type (tsx--highest-node-at-position outside-pos)))
+         (jsx-node-types '(jsx_element
+                           jsx_opening_element
+                           jsx_closing_element
+                           jsx_text
+                           jsx_attribute
+                           jsx_fragment))
+         (in-jsx (memq outside-node-type jsx-node-types))
+         (comment-start (if in-jsx "{/*" "/*"))
+         (comment-end (if in-jsx "*/}" "*/")))
+    (message (if in-jsx "JSX" nil))
+    ;; FIXME: JSX uncomment doesn't work because `comment-only-p' returns false
+    (if (fboundp #'evilnc-comment-or-uncomment-region-internal)
+        (evilnc-comment-or-uncomment-region-internal beg end)
+      (comment-or-uncomment-region beg end))))
