@@ -135,7 +135,21 @@
   (advice-add #'evil-ex-search-previous :after #'my/evil-ex-search-highlight-current)
   (advice-add #'evil-ex-search-forward :after #'my/evil-ex-search-highlight-current)
   (advice-add #'evil-ex-search-backward :after #'my/evil-ex-search-highlight-current)
-  (advice-add #'+evil-disable-ex-highlights-h :after #'my/evil-ex-search-clear-current-highlight))
+  (advice-add #'+evil-disable-ex-highlights-h :after #'my/evil-ex-search-clear-current-highlight)
+
+  (evil-define-operator my/evil-duplicate-operator (beg end type)
+    (interactive "<R>")
+    (message "%s" type)
+    (save-excursion
+      (evil-exit-visual-state)
+      (let ((linewise (memq type '(line screen-line))))
+        (if linewise
+            (evil-yank-lines beg end)
+          (progn
+            (evil-yank beg end)))
+        (goto-char end))
+      (evil-paste-before 1))
+    (goto-char (car (last evil-last-paste)))))
 
 (after! evil-collection
   ;; Fix regular linewise movement in org mode and outline mode.
@@ -200,20 +214,6 @@
                           my/sp-hydra/sp-splice-sexp-killing-forward
                           my/sp-hydra/sp-splice-sexp-killing-backward))
       (add-to-list 'evil-mc-custom-known-commands `(,sp-command (:default . evil-mc-execute-call)))))
-
-  (evil-define-operator my/evil-duplicate-operator (beg end type)
-    (interactive "<R>")
-    (message "%s" type)
-    (save-excursion
-      (evil-exit-visual-state)
-      (let ((linewise (memq type '(line screen-line))))
-        (if linewise
-            (evil-yank-lines beg end)
-          (progn
-            (evil-yank beg end)))
-        (goto-char end))
-      (evil-paste-before 1))
-    (goto-char (car (last evil-last-paste))))
 
   ;; FIXME: This advice doesn't move the point like intended. Why?
   ;; (advice-add #'evil-mc-set-pattern
