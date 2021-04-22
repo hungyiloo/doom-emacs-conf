@@ -1,14 +1,14 @@
 ;;; config/tsx-mode.el -*- lexical-binding: t; -*-
 
+(define-derived-mode tsx-mode typescript-mode "tsx")
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
+
 (add-hook! 'after-init-hook
            ;; This derived mode won't work well until tree-sitter-indent
            ;; supports typescript/tsx.
            ;;
            ;; For now it provides a faster alternative when the web-mode derived
            ;; mode from doom is too slow
-           (define-derived-mode tsx-mode typescript-mode "tsx")
-           (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
-
            (map! :map 'tsx-mode-map
                  :i "/" #'tsx-element-auto-close-maybe-h
                  :nv "]a" #'tsx-goto-next-sibling
@@ -19,7 +19,8 @@
                   :desc "Rename" "r" #'tsx-element-rename
                   :desc "Wrap" "w" #'tsx-element-wrap
                   :desc "End" "e" #'tsx-goto-element-end
-                  :desc "Beginning" "b" #'tsx-goto-element-beginning))
+                  :desc "Beginning" "b" #'tsx-goto-element-beginning
+                  :desc "Select" "s" #'tsx-element-select))
 
            (defun my/tsx-mode-setup ()
              (tree-sitter-require 'tsx)

@@ -3,6 +3,7 @@
 (defun tsx--element-close ()
   (when-let* ((nearest-container (or (save-excursion
                                        (backward-char 2)
+
                                        (tsx--element-at-point))
                                      (tree-sitter-node-at-point 'ERROR)))
               (tag-name (tsx--element-tag-name nearest-container))
@@ -23,19 +24,21 @@
     (insert "/")))
 
 (defun tsx--element-tag-nodes (element-node)
-  (when-let* ((opening-element (tsx--tsc-first-child-of-type
-                                element-node
-                                '(jsx_opening_element)))
-              (closing-element (tsx--tsc-first-child-of-type
-                                element-node
-                                '(jsx_closing_element))))
+  (let ((opening-element (tsx--tsc-first-child-of-type
+                          element-node
+                          '(jsx_opening_element)))
+        (closing-element (tsx--tsc-first-child-of-type
+                          element-node
+                          '(jsx_closing_element))))
     (cons
-     (tsx--tsc-first-child-of-type
-      opening-element
-      '(identifier nested_identifier))
-     (tsx--tsc-first-child-of-type
-      closing-element
-      '(identifier nested_identifier)))))
+     (and opening-element
+          (tsx--tsc-first-child-of-type
+           opening-element
+           '(identifier nested_identifier)))
+     (and closing-element
+          (tsx--tsc-first-child-of-type
+           closing-element
+           '(identifier nested_identifier))))))
 
 (defun tsx--element-tag-name (element-node)
   (when-let* ((opening-element (tsx--tsc-first-child-of-type
@@ -45,9 +48,14 @@
     (tsc-node-text tag-name-node)))
 
 (defun tsx--element-at-point (&optional include-self-closing)
-  (or (and include-self-closing
-           (tree-sitter-node-at-point 'jsx_self_closing_element))
-      (tree-sitter-node-at-point 'jsx_element)))
+  (let ((nearest-self-closing-element (and include-self-closing
+                                   (tree-sitter-node-at-point 'jsx_self_closing_element)))
+        (nearest-element (tree-sitter-node-at-point 'jsx_element)))
+    (if (and nearest-self-closing-element nearest-element)
+        (if (> (tsc-node-start-position nearest-element) (tsc-node-start-position nearest-self-closing-element))
+            nearest-element
+          nearest-self-closing-element)
+      (or nearest-element nearest-self-closing-element))))
 
 (defun tsx--replace-node (node replacement-text)
   (replace-region-contents
@@ -72,7 +80,7 @@
   (let* ((wrap-region
           (or (and (region-active-p)
                    (cons (region-beginning) (region-end)))
-              (when-let ((node (tsx--element-at-point)))
+              (when-let ((node (tsx--element-at-point t)))
                 (cons (tsc-node-start-position node) (tsc-node-end-position node)))
               (bounds-of-thing-at-point 'symbol)))
          (wrap-tag-name (string-trim (read-string "Wrapping element: ")))
@@ -98,18 +106,30 @@
     (indent-region wrap-start (+ wrap-start (length replacement)))))
 
 ;;;###autoload
+(defun tsx-element-select ()
+  (interactive)
+  (when-let* ((node (tsx--element-at-point t))
+              (node-start (tsc-node-start-position node))
+              (node-end (tsc-node-end-position node)))
+    (set-mark node-start)
+    (goto-char node-end)
+    (activate-mark)))
+
+;;;###autoload
 (defun tsx-goto-element-end ()
   (interactive)
   (when-let* ((node (tsx--element-at-point t))
               (closing-element (or (and (eq (tsc-node-type node) 'jsx_self_closing_element) node)
                                    (tsx--tsc-first-child-of-type node '(jsx_closing_element))))
-              (target-pos (1- (tsc-node-end-position closing-element))))
+              (target-pos (tsc-node-end-position closing-element)))
     (goto-char target-pos)))
 
 ;;;###autoload
 (defun tsx-goto-element-beginning ()
   (interactive)
-  (when-let* ((node (tsx--element-at-point t))
+  (when-let* ((node (save-excursion
+                      (backward-char)
+                      (tsx--element-at-point t)))
               (opening-element (or (and (eq (tsc-node-type node) 'jsx_self_closing_element) node)
                                    (tsx--tsc-first-child-of-type node '(jsx_opening_element))))
               (target-pos (tsc-node-start-position opening-element)))
@@ -185,7 +205,6 @@ POSITION is a byte position in buffer like \\(point-min\\)."
                              (current-indentation)))
          (target-column (cond
                          ((memq (tsc-node-type container) '(string template_string program)) 0)
-                         ((memq (tsc-node-type node) '(string template_string)) 0)
                          ((member node-type '("[" "(" "{" "}" ")" "]" "<" "/"
                                               jsx_closing_element
                                               statement_block
