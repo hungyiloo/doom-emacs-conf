@@ -44,8 +44,10 @@
               (tag-name-node (car (tsx--element-tag-nodes element-node))))
     (tsc-node-text tag-name-node)))
 
-(defun tsx--element-at-point ()
-  (tree-sitter-node-at-point 'jsx_element))
+(defun tsx--element-at-point (&optional include-self-closing)
+  (or (and include-self-closing
+           (tree-sitter-node-at-point 'jsx_self_closing_element))
+      (tree-sitter-node-at-point 'jsx_element)))
 
 (defun tsx--replace-node (node replacement-text)
   (replace-region-contents
@@ -94,6 +96,24 @@
      wrap-start wrap-end
      (lambda () replacement))
     (indent-region wrap-start (+ wrap-start (length replacement)))))
+
+;;;###autoload
+(defun tsx-goto-element-end ()
+  (interactive)
+  (when-let* ((node (tsx--element-at-point t))
+              (closing-element (or (and (eq (tsc-node-type node) 'jsx_self_closing_element) node)
+                                   (tsx--tsc-first-child-of-type node '(jsx_closing_element))))
+              (target-pos (1- (tsc-node-end-position closing-element))))
+    (goto-char target-pos)))
+
+;;;###autoload
+(defun tsx-goto-element-beginning ()
+  (interactive)
+  (when-let* ((node (tsx--element-at-point t))
+              (opening-element (or (and (eq (tsc-node-type node) 'jsx_self_closing_element) node)
+                                   (tsx--tsc-first-child-of-type node '(jsx_opening_element))))
+              (target-pos (tsc-node-start-position opening-element)))
+    (goto-char target-pos)))
 
 (defun tsx--goto-sibling (direction)
   (or (> (skip-chars-forward " \t\n") 0)
