@@ -1,29 +1,30 @@
 ;;; autoload/tsx-mode.el -*- lexical-binding: t; -*-
 
 ;;;###autoload
-(defun tsx-element-close ()
+(defun tsx-element-close (&optional dont-indent)
   (interactive)
   (when-let* ((nearest-container (or (save-excursion
                                        (backward-char)
-
                                        (tsx--element-at-point))
                                      (tree-sitter-node-at-point 'ERROR)))
               (tag-name (tsx--element-tag-name nearest-container))
               (closing-tag-markup (format "</%s>" tag-name)))
     (insert closing-tag-markup)
-    (funcall indent-line-function)
+    (unless dont-indent
+      (funcall indent-line-function))
     t))
 
 ;;;###autoload
 (defun tsx-element-auto-close-maybe-h ()
   (interactive)
   (if (eq (char-before) ?<)
-      (or (when (save-excursion (backward-char) (tsx-element-close))
-            (delete-char -1)
-            (unless (eq (char-before) ?>)
-              (search-forward ">" (line-end-position) t))
-            (funcall indent-line-function))
-          (insert "/"))
+      (let* ((before-tag-pos (- (point) 1))
+             (empty-tag (eq (char-before before-tag-pos) ?>)))
+        (or (when (save-excursion (backward-char) (tsx-element-close t))
+              (delete-char -1)
+              (when empty-tag (goto-char before-tag-pos))
+              (funcall indent-line-function))
+            (insert "/")))
     (insert "/")))
 
 (defun tsx--element-tag-nodes (element-node)
