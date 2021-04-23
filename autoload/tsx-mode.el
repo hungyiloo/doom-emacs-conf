@@ -209,14 +209,18 @@ POSITION is a byte position in buffer like \\(point-min\\)."
          (container-column (save-excursion
                              (goto-char (car (tsc-node-position-range container)))
                              (current-indentation)))
+         (below-node-start (> curr-line node-line))
+         (in-node-body (and below-node-start
+                            (< curr-line (car (tsc-node-end-point node)))))
          (target-column (cond
                          ((memq (tsc-node-type container) '(string template_string program)) 0)
+                         ((and (eq node-type 'comment) below-node-start)
+                          (+ container-column 1))
                          ((member node-type '("[" "(" "{" "}" ")" "]" "<" "/"
                                               jsx_closing_element
                                               statement_block
                                               else_clause))
-                          (if (and (> curr-line node-line)
-                                   (< curr-line (car (tsc-node-end-point node))))
+                          (if in-node-body
                               (+ container-column js-indent-level)
                             container-column))
                          ((> curr-point (car (tsc-node-position-range container)))
@@ -236,8 +240,8 @@ POSITION is a byte position in buffer like \\(point-min\\)."
                            jsx_attribute
                            jsx_fragment))
          (in-jsx (memq outside-node-type jsx-node-types))
-         (comment-start (if in-jsx "{/*" "/*"))
-         (comment-end (if in-jsx "*/}" "*/")))
+         (comment-start (if in-jsx "{/*" "//"))
+         (comment-end (if in-jsx "*/}" "")))
     (message (if in-jsx "JSX" nil))
     ;; FIXME: JSX uncomment doesn't work because `comment-only-p' returns false
     (if (fboundp #'evilnc-comment-or-uncomment-region-internal)
