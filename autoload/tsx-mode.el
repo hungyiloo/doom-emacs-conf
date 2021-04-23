@@ -241,9 +241,42 @@ POSITION is a byte position in buffer like \\(point-min\\)."
                            jsx_fragment))
          (in-jsx (memq outside-node-type jsx-node-types))
          (comment-start (if in-jsx "{/*" "//"))
-         (comment-end (if in-jsx "*/}" "")))
-    (message (if in-jsx "JSX" nil))
+         (comment-end (if in-jsx "*/}" ""))
+         (region-contains-only-jsx-comments
+          (when-let ((node (save-excursion (goto-char beg)
+                                           (skip-chars-forward " \t\n")
+                                           (tree-sitter-node-at-point 'jsx_expression)))
+                     (is-jsx-comment t))
+            (while (and node is-jsx-comment (<= (tsc-node-end-position node) end))
+              (setq is-jsx-comment (or (and (eq 'jsx_text (tsc-node-type node))
+                                            (string-empty-p (string-trim (tsc-node-text node))))
+                                       (and (eq 'jsx_expression (tsc-node-type node))
+                                            (= 3 (tsc-count-children node))
+                                            (eq (tsc-node-type (tsc-get-nth-child node 1))
+                                                'comment))))
+              (setq node (tsc-get-next-sibling node)))
+            is-jsx-comment)))
+    (when region-contains-only-jsx-comments
+      (message "only jsx comments")
+      ;; unwrap all jsx comments
+      (when-let ((node (save-excursion (goto-char beg)
+                                       (skip-chars-forward " \t\n")
+                                       (tree-sitter-node-at-point 'jsx_expression))))
+        (while (and node
+                    (<= (tsc-node-end-position node) end))
+          (when (eq 'jsx_expression (tsc-node-type node))
+            (replace-region-contents
+             (tsc-node-start-position node)
+             (tsc-node-end-position node)
+             (lambda ()
+               (let ((node-text (tsc-node-text node)))
+                 (concat
+                  " "
+                  (substring node-text 1 (1- (length node-text)))
+                  " ")))))
+          (setq node (tsc-get-next-sibling node)))))
     ;; FIXME: JSX uncomment doesn't work because `comment-only-p' returns false
     (if (fboundp #'evilnc-comment-or-uncomment-region-internal)
         (evilnc-comment-or-uncomment-region-internal beg end)
-      (comment-or-uncomment-region beg end))))
+      (comment-or-uncomment-region beg end)))
+  (indent-region beg end))
