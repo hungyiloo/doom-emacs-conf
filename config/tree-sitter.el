@@ -19,4 +19,24 @@
 
   (custom-set-faces!
     ;; Fix blotches of wrong background color in org src blocks
-    `(tree-sitter-hl-face:punctuation :inherit nil)))
+    `(tree-sitter-hl-face:punctuation :inherit nil))
+
+  (defun my/tree-sitter-point-in-comment-p (&optional pos)
+    "Use tree-sitter to determine if point is inside comment"
+    (let ((pos (or pos (point))))
+      (and (not (= (point-min) pos))
+           (save-excursion
+             (goto-char (1- pos))
+             (tree-sitter-node-at-point 'comment)))))
+
+  ;; Don't really need to add this hook if we're already overriding `doom-point-in-comment-p'
+  ;; (add-hook! 'doom-point-in-comment-functions #'my/tree-sitter-point-in-comment-p)
+  (advice-add #'doom-point-in-comment-p
+              :around
+              ;; Use tree-sitter instead of smartparens to detect if we're in a comment
+              ;; Hooray for tree-sitter!
+              (defun my/doom-point-in-comment-p-override (orig-fun &rest args)
+                (apply (if tree-sitter-mode
+                             #'my/tree-sitter-point-in-comment-p
+                           orig-fun)
+                       args))))

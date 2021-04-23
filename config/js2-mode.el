@@ -8,7 +8,32 @@
   ;; Ligature fonts already handle =>, <= and >=
   ;; so I don't need emacs's prettification for them.
   (after! js
-    (setq js--prettify-symbols-alist nil)))
+    (setq js--prettify-symbols-alist nil))
+
+  ;; Override this function to prevent lisp max-depth issues on hitting RET
+  ;; within certain points inside comments.  This is because doom's
+  ;; `+default--newline-indent-and-continue-comments-a' advice on
+  ;; `newline-and-indent' can repeatedly call into `js2-line-break' since the
+  ;; original version of it has the default `cond' case as `newline-and-indent'
+  ;; too. Yuck.
+  (defun js2-line-break (&optional _soft)
+    "Break line at point and indent, continuing comment if within one.
+If inside a string, and `js2-concat-multiline-strings' is not
+nil, turn it into concatenation."
+    (interactive)
+    (let ((parse-status (syntax-ppss)))
+      (cond
+       ;; Check if we're inside a string.
+       ((nth 3 parse-status)
+        (if js2-concat-multiline-strings
+            (js2-mode-split-string parse-status)
+          (insert "\n")))
+       ;; Check if inside a block comment.
+       ((nth 4 parse-status)
+        (js2-mode-extend-comment (nth 8 parse-status)))
+       (t
+        (newline)
+        (funcall indent-line-function))))))
 
 (after! evil
   ;; Hook to install custom js/ts text objects
