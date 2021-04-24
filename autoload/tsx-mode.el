@@ -135,7 +135,7 @@
 
 ;;;###autoload
 (defun tsx--evil-region-end-shim (pos)
-  (if (or (bound-and-true-p evil-this-operator)
+  (if (or (and (boundp 'evil-state) (eq evil-state 'operator))
           (and (fboundp #'evil-visual-state-p) (evil-visual-state-p)))
       pos (1- pos)))
 
