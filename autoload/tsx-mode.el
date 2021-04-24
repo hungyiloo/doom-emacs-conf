@@ -5,10 +5,7 @@
 ;;;###autoload
 (defun tsx-element-close (&optional dont-indent)
   (interactive)
-  (when-let* ((nearest-container (or (save-excursion
-                                       (backward-char)
-                                       (tsx--element-at-point))
-                                     (tree-sitter-node-at-point 'ERROR)))
+  (when-let* ((nearest-container (tsx--closest-parent-node (1- (point)) '(jsx_element ERROR)))
               (tag-name (tsx--element-tag-name nearest-container))
               (closing-tag-markup (format "</%s>" tag-name)))
     (insert closing-tag-markup)
@@ -53,15 +50,25 @@
               (tag-name-node (car (tsx--element-tag-nodes element-node))))
     (tsc-node-text tag-name-node)))
 
+(defun tsx--closest-parent-node (&optional pos node-types)
+  "Gets the closest node at POS (point if nil) that matches one of NODE-TYPES
+(smallest node if nil)"
+  (let* ((root (tsc-root-node tree-sitter-tree))
+         (pos (or pos (point)))
+         (node (tsc-get-descendant-for-position-range root pos pos)))
+    (if node-types
+        (let ((this node) result)
+          (while this
+            (if (memq (tsc-node-type this) node-types)
+                (setq result this
+                      this nil)
+              (setq this (tsc-get-parent this))))
+          result)
+      node)))
+
 (defun tsx--element-at-point (&optional include-self-closing)
-  (let ((nearest-self-closing-element (and include-self-closing
-                                   (tree-sitter-node-at-point 'jsx_self_closing_element)))
-        (nearest-element (tree-sitter-node-at-point 'jsx_element)))
-    (if (and nearest-self-closing-element nearest-element)
-        (if (> (tsc-node-start-position nearest-element) (tsc-node-start-position nearest-self-closing-element))
-            nearest-element
-          nearest-self-closing-element)
-      (or nearest-element nearest-self-closing-element))))
+  (tsx--closest-parent-node nil (list 'jsx_element
+                               (when include-self-closing 'jsx_self_closing_element))))
 
 (defun tsx--replace-node (node replacement-text)
   (replace-region-contents
