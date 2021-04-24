@@ -21,6 +21,7 @@
                   :desc "End" "e" #'tsx-goto-element-end
                   :desc "Beginning" "b" #'tsx-goto-element-beginning
                   :desc "Select" "s" #'tsx-element-select
+                  :desc "Select content" "a" #'tsx-element-select-content
                   :desc "Close" "/" #'tsx-element-close))
 
            (defun my/tsx-mode-setup ()
@@ -28,9 +29,7 @@
              (tree-sitter-hl-add-patterns nil "[\"/\" \"*\"] @operator")
              (emmet-mode 1)
              (lsp)
-             (cond
-              ((eq major-mode 'tsx-mode) (setq-local indent-line-function #'tsx-indent-line-function))
-              (t (setq-local indent-line-function (default-value 'indent-line-function))))
+             (setq-local indent-line-function #'tsx-indent-line-function)
              (after! evil-nerd-commenter
                (setq-local evilnc-comment-or-uncomment-region-function
                            'tsx-comment-or-uncomment-region)))

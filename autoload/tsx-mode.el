@@ -116,9 +116,25 @@
   (interactive)
   (when-let* ((node (tsx--element-at-point t))
               (node-start (tsc-node-start-position node))
-              (node-end (tsc-node-end-position node)))
+              (node-end (tsx--evil-region-end-shim (tsc-node-end-position node))))
     (set-mark node-start)
     (goto-char node-end)
+    (activate-mark)))
+
+(defun tsx--evil-region-end-shim (pos)
+  (if (bound-and-true-p evil-this-operator) pos (1- pos)))
+
+;;;###autoload
+(defun tsx-element-select-content ()
+  (interactive)
+  (when-let* ((element-node (tsx--element-at-point))
+              (opening-node (tsx--tsc-first-child-of-type element-node '(jsx_opening_element)))
+              (closing-node (tsx--tsc-first-child-of-type element-node '(jsx_closing_element)))
+              (beg (tsc-node-end-position opening-node))
+              (end (tsx--evil-region-end-shim (tsc-node-start-position closing-node))))
+    (when (< end beg) (user-error "Element is empty; nothing to select"))
+    (set-mark beg)
+    (goto-char end)
     (activate-mark)))
 
 ;;;###autoload
