@@ -229,54 +229,81 @@ POSITION is a byte position in buffer like \\(point-min\\)."
     (save-excursion (indent-line-to target-column))
     (skip-chars-forward " \t\n" (line-end-position))))
 
+(defun tsx--unwrap-jsx-expressions-in-region (beg end)
+  (when-let ((node (save-excursion (goto-char beg)
+                                   (skip-chars-forward " \t\n")
+                                   (tree-sitter-node-at-point 'jsx_expression))))
+    (while (and node
+                (<= (tsc-node-end-position node) end))
+      (when (eq 'jsx_expression (tsc-node-type node))
+        (replace-region-contents
+         (tsc-node-start-position node)
+         (tsc-node-end-position node)
+         (lambda ()
+           (let ((node-text (tsc-node-text node)))
+             (concat
+              " "
+              (substring node-text 1 (1- (length node-text)))
+              " ")))))
+      (setq node (tsc-get-next-sibling node)))))
+
+(defun tsx--actual-content-region (beg end)
+  "Returns the region with non-whitespace actual content between BEG and END"
+  (let ((content-beg (save-excursion (goto-char beg) (skip-chars-forward " \t\n") (point)))
+        (content-end (save-excursion (goto-char end) (skip-chars-backward " \t\n") (point))))
+    (cons content-beg content-end)))
+
+(defun tsx--comment-or-uncomment-jsx-region (beg end)
+  ;; FIXME: doesn't work with nested jsx comments
+  ;; currently not used
+  (let* ((content-region (tsx--actual-content-region beg end))
+         (content-beg (car content-region))
+         (content-end (cdr content-region)))
+    (replace-region-contents
+     content-beg content-end
+     (lambda () (concat comment-start
+                   (buffer-substring-no-properties content-beg content-end)
+                   comment-end)))))
+
+(defun tsx--jsx-comment-only-p (beg end)
+  (when-let ((content-region (tsx--actual-content-region beg end))
+             (content-beg (car content-region))
+             (node (save-excursion (goto-char content-beg)
+                                   (tree-sitter-node-at-point 'jsx_expression)))
+             (is-jsx-comment t))
+    (while (and node is-jsx-comment (<= (tsc-node-end-position node) end))
+      (setq is-jsx-comment (or (and (eq 'jsx_text (tsc-node-type node))
+                                    (string-empty-p (string-trim (tsc-node-text node))))
+                               (and (eq 'jsx_expression (tsc-node-type node))
+                                    (= 3 (tsc-count-children node))
+                                    (eq (tsc-node-type (tsc-get-nth-child node 1))
+                                        'comment))))
+      (setq node (tsc-get-next-sibling node)))
+    is-jsx-comment))
+
 ;;;###autoload
 (defun tsx-comment-or-uncomment-region (beg end)
-  (let* ((outside-pos (1- beg))
-         (outside-node-type (tsc-node-type (tsx--highest-node-at-position outside-pos)))
-         (jsx-node-types '(jsx_element
-                           jsx_opening_element
-                           jsx_closing_element
-                           jsx_text
-                           jsx_attribute
-                           jsx_fragment))
-         (in-jsx (memq outside-node-type jsx-node-types))
-         (comment-start (if in-jsx "{/*" "//"))
-         (comment-end (if in-jsx "*/}" ""))
-         (region-contains-only-jsx-comments
-          (when-let ((node (save-excursion (goto-char beg)
-                                           (skip-chars-forward " \t\n")
-                                           (tree-sitter-node-at-point 'jsx_expression)))
-                     (is-jsx-comment t))
-            (while (and node is-jsx-comment (<= (tsc-node-end-position node) end))
-              (setq is-jsx-comment (or (and (eq 'jsx_text (tsc-node-type node))
-                                            (string-empty-p (string-trim (tsc-node-text node))))
-                                       (and (eq 'jsx_expression (tsc-node-type node))
-                                            (= 3 (tsc-count-children node))
-                                            (eq (tsc-node-type (tsc-get-nth-child node 1))
-                                                'comment))))
-              (setq node (tsc-get-next-sibling node)))
-            is-jsx-comment)))
-    (when region-contains-only-jsx-comments
-      (message "only jsx comments")
-      ;; unwrap all jsx comments
-      (when-let ((node (save-excursion (goto-char beg)
-                                       (skip-chars-forward " \t\n")
-                                       (tree-sitter-node-at-point 'jsx_expression))))
-        (while (and node
-                    (<= (tsc-node-end-position node) end))
-          (when (eq 'jsx_expression (tsc-node-type node))
-            (replace-region-contents
-             (tsc-node-start-position node)
-             (tsc-node-end-position node)
-             (lambda ()
-               (let ((node-text (tsc-node-text node)))
-                 (concat
-                  " "
-                  (substring node-text 1 (1- (length node-text)))
-                  " ")))))
-          (setq node (tsc-get-next-sibling node)))))
-    ;; FIXME: JSX uncomment doesn't work because `comment-only-p' returns false
-    (if (fboundp #'evilnc-comment-or-uncomment-region-internal)
-        (evilnc-comment-or-uncomment-region-internal beg end)
-      (comment-or-uncomment-region beg end)))
-  (indent-region beg end))
+  (evil-with-single-undo
+    (let* ((content-region (tsx--actual-content-region beg end))
+           (content-beg (car content-region))
+           (outside-pos (1- content-beg))
+           (outside-node-type (tsc-node-type (tsx--highest-node-at-position outside-pos)))
+           (jsx-node-types '(jsx_element
+                             jsx_opening_element
+                             jsx_closing_element
+                             jsx_text
+                             jsx_attribute
+                             jsx_fragment))
+           (in-jsx (memq outside-node-type jsx-node-types))
+           (comment-start (if in-jsx "{/*" "//"))
+           (comment-end (if in-jsx "*/}" ""))
+           ;; this must be true otherwise we get "Can't find comment end"
+           ;; when we uncomment a JSX comment as the very first one in the buffer
+           (comment-use-syntax t)
+           (region-contains-only-jsx-comments (tsx--jsx-comment-only-p beg end)))
+      (when region-contains-only-jsx-comments
+        (tsx--unwrap-jsx-expressions-in-region beg end))
+      (if (fboundp #'evilnc-comment-or-uncomment-region-internal)
+          (evilnc-comment-or-uncomment-region-internal beg end)
+        (comment-or-uncomment-region beg end)))
+    (indent-region beg end)))
