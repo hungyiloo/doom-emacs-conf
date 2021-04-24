@@ -129,7 +129,9 @@
     (activate-mark)))
 
 (defun tsx--evil-region-end-shim (pos)
-  (if (bound-and-true-p evil-this-operator) pos (1- pos)))
+  (if (or (bound-and-true-p evil-this-operator)
+          (and (fboundp #'evil-visual-state-p) (evil-visual-state-p)))
+      pos (1- pos)))
 
 ;;;###autoload
 (defun tsx-element-select-content ()
