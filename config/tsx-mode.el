@@ -1,8 +1,7 @@
 ;;; config/tsx-mode.el -*- lexical-binding: t; -*-
 
-(add-hook! 'doom-first-buffer-hook
-  (define-derived-mode tsx-mode typescript-mode "tsx")
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode)))
+(define-derived-mode tsx-mode typescript-mode "tsx")
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
 
 (add-hook! 'after-init-hook
            ;; This derived mode won't work well until tree-sitter-indent
