@@ -26,28 +26,34 @@
             (insert "/")))
     (insert "/")))
 
-(defun tsx--element-tag-nodes (element-node)
+(defun tsx--element-tag-name-nodes (element-node)
   (let ((opening-element (tsx--tsc-first-child-of-type
                           element-node
                           '(jsx_opening_element)))
         (closing-element (tsx--tsc-first-child-of-type
                           element-node
-                          '(jsx_closing_element))))
-    (cons
-     (and opening-element
-          (tsx--tsc-first-child-of-type
-           opening-element
-           '(identifier nested_identifier)))
-     (and closing-element
-          (tsx--tsc-first-child-of-type
-           closing-element
-           '(identifier nested_identifier))))))
+                          '(jsx_closing_element)))
+        (self-closing-element (and (eq 'jsx_self_closing_element
+                                       (tsc-node-type element-node))
+                                   element-node)))
+    (seq-filter
+     (lambda (n) n)
+     (list
+      (and opening-element
+           (tsx--tsc-first-child-of-type
+            opening-element
+            '(identifier nested_identifier)))
+      (and closing-element
+           (tsx--tsc-first-child-of-type
+            closing-element
+            '(identifier nested_identifier)))
+      (and self-closing-element
+           (tsx--tsc-first-child-of-type
+            self-closing-element
+            '(identifier nested_identifier)))))))
 
 (defun tsx--element-tag-name (element-node)
-  (when-let* ((opening-element (tsx--tsc-first-child-of-type
-                                element-node
-                                '(jsx_opening_element)))
-              (tag-name-node (car (tsx--element-tag-nodes element-node))))
+  (when-let* ((tag-name-node (car (tsx--element-tag-name-nodes element-node))))
     (tsc-node-text tag-name-node)))
 
 (defun tsx--closest-parent-node (&optional pos node-types)
@@ -82,13 +88,15 @@
 ;;;###autoload
 (defun tsx-element-rename ()
   (interactive)
-  (when-let* ((element-node (tsx--element-at-point))
-              (tag-nodes (tsx--element-tag-nodes element-node))
-              (tag-name (tsx--element-tag-name element-node))
+  (when-let* ((element-node (tsx--element-at-point t))
+              (tag-nodes (tsx--element-tag-name-nodes element-node))
+              (first-tag-node (car tag-nodes))
+              (tag-name (tsc-node-text first-tag-node))
               (new-tag-name (string-trim (read-string "Rename element: " tag-name))))
     (unless (> (length new-tag-name) 0) (user-error "Oops! That isn't a valid tag name..."))
-    (tsx--replace-node (cdr tag-nodes) new-tag-name)
-    (tsx--replace-node (car tag-nodes) new-tag-name)))
+    (evil-with-single-undo
+      (dolist (tag-node (nreverse tag-nodes))
+        (tsx--replace-node tag-node new-tag-name)))))
 
 ;;;###autoload
 (defun tsx-element-wrap ()
@@ -300,15 +308,13 @@ POSITION is a byte position in buffer like \\(point-min\\)."
     (while (and node
                 (<= (tsc-node-end-position node) end))
       (when (eq 'jsx_expression (tsc-node-type node))
-        (replace-region-contents
-         (tsc-node-start-position node)
-         (tsc-node-end-position node)
-         (lambda ()
-           (let ((node-text (tsc-node-text node)))
-             (concat
-              " "
-              (substring node-text 1 (1- (length node-text)))
-              " ")))))
+        (tsx--replace-node
+         node
+         (let ((node-text (tsc-node-text node)))
+           (concat
+            " "
+            (substring node-text 1 (1- (length node-text)))
+            " "))))
       (setq node (tsc-get-next-sibling node)))))
 
 (defun tsx--actual-content-region (beg end)
