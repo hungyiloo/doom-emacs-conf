@@ -22,7 +22,13 @@
                   :desc "Beginning" "b" #'tsx-goto-element-beginning
                   :desc "Select" "s" #'tsx-element-select
                   :desc "Select content" "a" #'tsx-element-select-content
-                  :desc "Close" "/" #'tsx-element-close))
+                  :desc "Close" "/" #'tsx-element-close
+                  :desc "Kill" "k" #'tsx-element-kill)
+                 (:prefix-map ("t" . "tag")
+                  :desc "End" "e" #'tsx-goto-tag-end
+                  :desc "Beginning" "b" #'tsx-goto-tag-beginning
+                  :desc "Select" "s" #'tsx-tag-select
+                  :desc "Kill" "k" #'tsx-tag-kill))
 
            (defun my/tsx-mode-setup ()
              (tree-sitter-require 'tsx)

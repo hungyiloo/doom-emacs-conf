@@ -70,6 +70,9 @@
   (tsx--closest-parent-node nil (list 'jsx_element
                                (when include-self-closing 'jsx_self_closing_element))))
 
+(defun tsx--tag-at-point ()
+  (tsx--closest-parent-node nil '(jsx_opening_element jsx_closing_element jsx_self_closing_element)))
+
 (defun tsx--replace-node (node replacement-text)
   (replace-region-contents
    (tsc-node-start-position node)
@@ -118,20 +121,47 @@
      (lambda () replacement))
     (indent-region wrap-start (+ wrap-start (length replacement)))))
 
-;;;###autoload
-(defun tsx-element-select ()
-  (interactive)
-  (when-let* ((node (tsx--element-at-point t))
-              (node-start (tsc-node-start-position node))
+(defun tsx--node-select (node)
+  (when-let* ((node-start (tsc-node-start-position node))
               (node-end (tsx--evil-region-end-shim (tsc-node-end-position node))))
     (set-mark node-start)
     (goto-char node-end)
     (activate-mark)))
 
+(defun tsx--node-kill (node)
+  (when-let* ((node-start (tsc-node-start-position node))
+              (node-end (tsc-node-end-position node)))
+    (kill-region node-start node-end)))
+
+;;;###autoload
 (defun tsx--evil-region-end-shim (pos)
   (if (or (bound-and-true-p evil-this-operator)
           (and (fboundp #'evil-visual-state-p) (evil-visual-state-p)))
       pos (1- pos)))
+
+;;;###autoload
+(defun tsx-element-select ()
+  (interactive)
+  (when-let ((node (tsx--element-at-point t)))
+    (tsx--node-select node)))
+
+;;;###autoload
+(defun tsx-element-kill ()
+  (interactive)
+  (when-let ((node (tsx--element-at-point t)))
+    (tsx--node-kill node)))
+
+;;;###autoload
+(defun tsx-tag-select ()
+  (interactive)
+  (when-let ((node (tsx--tag-at-point)))
+    (tsx--node-select node)))
+
+;;;###autoload
+(defun tsx-tag-kill ()
+  (interactive)
+  (when-let ((node (tsx--tag-at-point)))
+    (tsx--node-kill node)))
 
 ;;;###autoload
 (defun tsx-element-select-content ()
@@ -166,32 +196,41 @@
               (target-pos (tsc-node-start-position opening-element)))
     (goto-char target-pos)))
 
-(defun tsx--goto-sibling (direction)
-  (or (> (skip-chars-forward " \t\n") 0)
-      (when-let* ((node (tsx--highest-node-at-position (point)))
-                  (node-type (tsc-node-type node))
-                  (target node))
-        (while (and target
-                    (or (eq target node)
-                        (not (eq (tsc-node-type target) node-type))))
-          (setq
-           target
-           (cond
-            ((eq direction 'forward) (tsc-get-next-sibling target))
-            ((eq direction 'backward) (tsc-get-prev-sibling target))
-            (t (user-error "Direction must be 'forward or 'backward")))))
-        (when target
-          (goto-char (tsc-node-start-position target))))))
+;;;###autoload
+(defun tsx-goto-tag-end ()
+  (interactive)
+  (when-let ((node (tsx--tag-at-point)))
+    (goto-char (tsc-node-end-position node))))
+
+;;;###autoload
+(defun tsx-goto-tag-beginning ()
+  (interactive)
+  (when-let ((node (save-excursion
+                     (backward-char)
+                     (tsx--tag-at-point))))
+    (goto-char (tsc-node-start-position node))))
+
+(defun tsx--goto-sibling (&optional backward)
+  (or (> (if backward 0 (skip-chars-forward " \t\n")) 0)
+      (let* ((node (tsx--highest-node-at-position (point)))
+             (target (if backward
+                         (tsc-get-prev-sibling node)
+                       (tsc-get-next-sibling node))))
+        (if target
+            (goto-char (tsc-node-start-position target))
+          (goto-char (if backward
+                         (tsc-node-start-position node)
+                       (tsc-node-end-position node)))))))
 
 ;;;###autoload
 (defun tsx-goto-next-sibling ()
   (interactive)
-  (tsx--goto-sibling 'forward))
+  (tsx--goto-sibling))
 
 ;;;###autoload
 (defun tsx-goto-prev-sibling ()
   (interactive)
-  (tsx--goto-sibling 'backward))
+  (tsx--goto-sibling t))
 
 (defun tsx--tsc-first-child-of-type (node types)
   (let* ((index 0)
