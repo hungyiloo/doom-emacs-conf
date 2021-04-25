@@ -30,7 +30,8 @@
                   :desc "End" "e" #'tsx-goto-tag-end
                   :desc "Beginning" "b" #'tsx-goto-tag-beginning
                   :desc "Select" "s" #'tsx-tag-select
-                  :desc "Kill" "k" #'tsx-tag-kill))
+                  :desc "Kill" "k" #'tsx-tag-kill
+                  :desc "Spread" "RET" #'tsx-tag-spread))
 
            (defun my/tsx-mode-setup ()
              (tree-sitter-require 'tsx)

@@ -483,3 +483,21 @@ to achieve this."
          (forward-char)
          (point))))
     linebreak-count))
+
+;;;###autoload
+(defun tsx-tag-spread ()
+  (interactive)
+  (when-let* ((tag-node (tsx--closest-parent-node nil '(jsx_opening_element jsx_closing_element jsx_self_closing_element)))
+              (beg (tsc-node-start-position tag-node))
+              (end (tsc-node-end-position tag-node))
+              (linebreak-count 0))
+    (let ((attribute-nodes (tsx--tsc-children-of-type
+                           tag-node
+                           '(jsx_attribute))))
+      (dolist (attribute-node attribute-nodes)
+        (setq
+         linebreak-count
+         (+ linebreak-count
+            (tsx--node-own-line attribute-node 'before)))))
+    (indent-region beg (+ end linebreak-count))
+    linebreak-count))
