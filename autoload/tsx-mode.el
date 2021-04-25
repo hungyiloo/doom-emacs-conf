@@ -1,6 +1,8 @@
 ;;; autoload/tsx-mode.el -*- lexical-binding: t; -*-
 
 (require 'tree-sitter)
+(require 'seq)
+(require 'cl-lib)
 
 ;;;###autoload
 (defun tsx-element-close (&optional dont-indent)
@@ -26,7 +28,7 @@
             (insert "/")))
     (insert "/")))
 
-(defun tsx--element-tag-name-nodes (element-node)
+(defun tsx--element-tag-nodes (element-node)
   (let ((opening-element (tsx--tsc-first-child-of-type
                           element-node
                           '(jsx_opening_element)))
@@ -39,18 +41,18 @@
     (seq-filter
      (lambda (n) n)
      (list
-      (and opening-element
-           (tsx--tsc-first-child-of-type
-            opening-element
-            '(identifier nested_identifier)))
-      (and closing-element
-           (tsx--tsc-first-child-of-type
-            closing-element
-            '(identifier nested_identifier)))
-      (and self-closing-element
-           (tsx--tsc-first-child-of-type
-            self-closing-element
-            '(identifier nested_identifier)))))))
+      opening-element
+      closing-element
+      self-closing-element))))
+
+(defun tsx--element-tag-name-nodes (element-node)
+  (let ((tag-nodes (tsx--element-tag-nodes element-node)))
+    (seq-filter
+     (lambda (n) n)
+     (mapcar
+      (lambda (n)
+        (tsx--tsc-first-child-of-type n '(identifier nested_identifier)))
+      tag-nodes))))
 
 (defun tsx--element-tag-name (element-node)
   (when-let* ((tag-name-node (car (tsx--element-tag-name-nodes element-node))))
@@ -136,10 +138,25 @@
     (goto-char node-end)
     (activate-mark)))
 
-(defun tsx--node-kill (node)
+(defun tsx--node-delete (node &optional push-kill clean-whitespace)
   (when-let* ((node-start (tsc-node-start-position node))
-              (node-end (tsc-node-end-position node)))
-    (kill-region node-start node-end)))
+              (node-end (tsc-node-end-position node))
+              (node-start (if (or (eq clean-whitespace t)
+                                  (eq clean-whitespace 'before))
+                              (save-excursion
+                                (goto-char node-start)
+                                (skip-chars-backward " \t\n\r")
+                                (point))
+                            node-start))
+              (node-end (if (or (eq clean-whitespace t)
+                                (eq clean-whitespace 'after))
+                            (save-excursion
+                              (goto-char node-end)
+                              (skip-chars-forward " \t\n\r")
+                              (point))
+                          node-end)))
+    (funcall (if push-kill #'kill-region #'delete-region)
+             node-start node-end)))
 
 ;;;###autoload
 (defun tsx--evil-region-end-shim (pos)
@@ -157,7 +174,7 @@
 (defun tsx-element-kill ()
   (interactive)
   (when-let ((node (tsx--element-at-point t)))
-    (tsx--node-kill node)))
+    (tsx--node-delete node t 'after)))
 
 ;;;###autoload
 (defun tsx-tag-select ()
@@ -169,7 +186,7 @@
 (defun tsx-tag-kill ()
   (interactive)
   (when-let ((node (tsx--tag-at-point)))
-    (tsx--node-kill node)))
+    (tsx--node-delete node t 'after)))
 
 ;;;###autoload
 (defun tsx-element-select-content ()
@@ -219,7 +236,7 @@
     (goto-char (tsc-node-start-position node))))
 
 (defun tsx--goto-sibling (&optional backward)
-  (or (> (if backward 0 (skip-chars-forward " \t\n")) 0)
+  (or (> (if backward 0 (skip-chars-forward " \t\n\r")) 0)
       (let* ((node (tsx--highest-node-at-position (point)))
              (target (if backward
                          (tsc-get-prev-sibling node)
@@ -299,11 +316,11 @@ POSITION is a byte position in buffer like \\(point-min\\)."
                           (+ container-column js-indent-level))
                          (t curr-column))))
     (save-excursion (indent-line-to target-column))
-    (skip-chars-forward " \t\n" (line-end-position))))
+    (skip-chars-forward " \t\n\r" (line-end-position))))
 
 (defun tsx--unwrap-jsx-expressions-in-region (beg end)
   (when-let ((node (save-excursion (goto-char beg)
-                                   (skip-chars-forward " \t\n")
+                                   (skip-chars-forward " \t\n\r")
                                    (tree-sitter-node-at-point 'jsx_expression))))
     (while (and node
                 (<= (tsc-node-end-position node) end))
@@ -319,8 +336,8 @@ POSITION is a byte position in buffer like \\(point-min\\)."
 
 (defun tsx--actual-content-region (beg end)
   "Returns the region with non-whitespace actual content between BEG and END"
-  (let ((content-beg (save-excursion (goto-char beg) (skip-chars-forward " \t\n") (point)))
-        (content-end (save-excursion (goto-char end) (skip-chars-backward " \t\n") (point))))
+  (let ((content-beg (save-excursion (goto-char beg) (skip-chars-forward " \t\n\r") (point)))
+        (content-end (save-excursion (goto-char end) (skip-chars-backward " \t\n\r") (point))))
     (cons content-beg content-end)))
 
 (defun tsx--comment-or-uncomment-jsx-region (beg end)
@@ -376,4 +393,19 @@ POSITION is a byte position in buffer like \\(point-min\\)."
       (if (fboundp #'evilnc-comment-or-uncomment-region-internal)
           (evilnc-comment-or-uncomment-region-internal beg end)
         (comment-or-uncomment-region beg end)))
+    (indent-region beg end)))
+
+;;;###autoload
+(defun tsx-element-vanish ()
+  (interactive)
+  (when-let* ((element-node (tsx--element-at-point t))
+              (tag-nodes (tsx--element-tag-nodes element-node))
+              (beg (tsc-node-start-position element-node))
+              (end (tsc-node-end-position element-node)))
+    (let ((first-tag-node (car tag-nodes))
+          (second-tag-node (cadr tag-nodes)))
+      (when second-tag-node
+        (tsx--node-delete second-tag-node nil 'before))
+      (when first-tag-node
+        (tsx--node-delete first-tag-node nil 'after)))
     (indent-region beg end)))
