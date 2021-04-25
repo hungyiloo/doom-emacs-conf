@@ -24,7 +24,8 @@
                   :desc "Select content" "a" #'tsx-element-select-content
                   :desc "Close" "/" #'tsx-element-close
                   :desc "Kill" "k" #'tsx-element-kill
-                  :desc "Vanish" "v" #'tsx-element-vanish)
+                  :desc "Vanish" "v" #'tsx-element-vanish
+                  :desc "Spread" "RET" #'tsx-element-spread)
                  (:prefix-map ("t" . "tag")
                   :desc "End" "e" #'tsx-goto-tag-end
                   :desc "Beginning" "b" #'tsx-goto-tag-beginning

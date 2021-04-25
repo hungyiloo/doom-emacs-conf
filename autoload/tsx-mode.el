@@ -41,8 +41,8 @@
     (seq-filter
      (lambda (n) n)
      (list
-      opening-element
       closing-element
+      opening-element
       self-closing-element))))
 
 (defun tsx--element-tag-name-nodes (element-node)
@@ -97,7 +97,7 @@
               (new-tag-name (string-trim (read-string "Rename element: " tag-name))))
     (unless (> (length new-tag-name) 0) (user-error "Oops! That isn't a valid tag name..."))
     (evil-with-single-undo
-      (dolist (tag-node (nreverse tag-nodes))
+      (dolist (tag-node tag-nodes)
         (tsx--replace-node tag-node new-tag-name)))))
 
 ;;;###autoload
@@ -268,6 +268,17 @@
          (memq (tsc-node-type child-node) types)
          child-node)))
 
+(defun tsx--tsc-children-of-type (node types)
+  (let* ((index 0)
+         (child-node (tsc-get-nth-child node index))
+         (matching-children))
+    (while child-node
+      (when (memq (tsc-node-type child-node) types)
+        (push child-node matching-children))
+      (setq index (1+ index))
+      (setq child-node (tsc-get-nth-child node index)))
+    matching-children))
+
 (defun tsx--highest-node-at-position (position)
   "Get the node at buffer POSITION that's at the highest level.
 
@@ -402,10 +413,73 @@ POSITION is a byte position in buffer like \\(point-min\\)."
               (tag-nodes (tsx--element-tag-nodes element-node))
               (beg (tsc-node-start-position element-node))
               (end (tsc-node-end-position element-node)))
-    (let ((first-tag-node (car tag-nodes))
-          (second-tag-node (cadr tag-nodes)))
-      (when second-tag-node
-        (tsx--node-delete second-tag-node nil 'before))
-      (when first-tag-node
-        (tsx--node-delete first-tag-node nil 'after)))
+    (let ((closing-tag-node (car tag-nodes))
+          (opening-tag-node (cadr tag-nodes)))
+      (when closing-tag-node
+        (tsx--node-delete closing-tag-node nil 'after))
+      (when opening-tag-node
+        (tsx--node-delete opening-tag-node nil 'before)))
     (indent-region beg end)))
+
+(defun tsx--node-own-line (node &optional before-or-after)
+  "Ensures NODE is on its own line and returns the number of new lines inserted
+to achieve this."
+  (let* ((beg (tsc-node-start-position node))
+         (end (tsc-node-end-position node))
+         (beg-line (line-number-at-pos beg))
+         (end-line (line-number-at-pos end))
+         (linebreak-count 0))
+    (when (or (eq before-or-after 'after)
+              (not before-or-after))
+      (save-excursion
+        (goto-char end)
+        (skip-chars-forward " \t\n\r")
+        (when (= end-line (line-number-at-pos (point)))
+          (insert "\n")
+          (setq linebreak-count (1+ linebreak-count)))))
+    (when (or (eq before-or-after 'before)
+              (not before-or-after))
+      (save-excursion
+        (goto-char beg)
+        (skip-chars-backward " \t\n\r")
+        (when (= (line-number-at-pos (point)) beg-line)
+          (insert "\n")
+          (setq linebreak-count (1+ linebreak-count)))))
+    linebreak-count))
+
+;;;###autoload
+(defun tsx-element-spread (only-this &optional dont-indent)
+  (interactive "P")
+  (when-let* ((element-node (tsx--element-at-point t))
+              (tag-nodes (tsx--element-tag-nodes element-node))
+              (beg (tsc-node-start-position element-node))
+              (end (tsc-node-end-position element-node))
+              (linebreak-count 0))
+    (let ((closing-tag-node (car tag-nodes))
+          (opening-tag-node (cadr tag-nodes))
+          (child-elements (tsx--tsc-children-of-type
+                           element-node
+                           '(jsx_element jsx_self_closing_element))))
+      (when closing-tag-node
+        (setq linebreak-count
+              (+ linebreak-count (tsx--node-own-line closing-tag-node))))
+      (unless only-this
+        (dolist (child-element child-elements)
+          (setq
+           linebreak-count
+           (+ linebreak-count
+              (save-excursion
+                (goto-char (tsc-node-start-position child-element))
+                (tsx-element-spread nil t))))))
+      (when opening-tag-node
+        (setq linebreak-count
+              (+ linebreak-count (tsx--node-own-line opening-tag-node)))))
+    (unless dont-indent
+      (indent-region
+       beg
+       (save-excursion
+         (goto-char (+ end linebreak-count))
+         (skip-chars-forward " \t\n\r")
+         (forward-char)
+         (point))))
+    linebreak-count))
