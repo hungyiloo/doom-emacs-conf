@@ -11,6 +11,7 @@
            ;; mode from doom is too slow
            (map! :map 'tsx-mode-map
                  :i "/" #'tsx-element-auto-close-maybe-h
+                 :i "RET" #'tsx-newline-and-indent
                  :nv "]a" #'tsx-goto-next-sibling
                  :nv "[a" #'tsx-goto-prev-sibling)
            (map! :map 'tsx-mode-map

@@ -567,3 +567,16 @@ to achieve this."
      (or (evil-with-single-undo
            (tsx--node-transpose node node-target-types))
          (point)))))
+
+;;;###autoload
+(defun tsx-newline-and-indent (&optional ARG)
+  (interactive "P")
+  (if (and (looking-at-p "</")
+           (eq (char-before) ?>))
+      (progn
+        (newline-and-indent)
+        (newline-and-indent ARG)
+        (forward-line -1)
+        (end-of-line)
+        (funcall indent-line-function))
+    (newline-and-indent ARG)))
