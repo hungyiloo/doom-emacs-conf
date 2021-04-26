@@ -529,7 +529,7 @@ to achieve this."
          (point)))))
 
 ;;;###autoload
-(defun tsx-tag-transpose ()
+(defun tsx-attribute-transpose ()
   (interactive)
   (when-let ((node-target-types '(jsx_attribute))
              (node (or (tsx--closest-parent-node nil node-target-types)
