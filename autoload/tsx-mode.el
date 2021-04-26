@@ -501,3 +501,40 @@ to achieve this."
             (tsx--node-own-line attribute-node 'before)))))
     (indent-region beg (+ end linebreak-count))
     linebreak-count))
+
+(defun tsx--node-transpose (node &optional types)
+  (let ((sibling (tsc-get-next-sibling node))
+        (node-type (tsc-node-type node)))
+    (while (and sibling
+                (not (memq (tsc-node-type sibling)
+                           (or types (list node-type)))))
+      (setq sibling (tsc-get-next-sibling sibling)))
+    (when sibling
+      (let ((node-text (tsc-node-text node))
+            (sibling-text (tsc-node-text sibling))
+            (sibling-beg (tsc-node-start-position sibling)))
+        (tsx--replace-node sibling node-text)
+        (tsx--replace-node node sibling-text)
+        (+ sibling-beg (- (length sibling-text) (length node-text)))))))
+
+;;;###autoload
+(defun tsx-element-transpose ()
+  (interactive)
+  (when-let ((node-target-types '(jsx_element jsx_self_closing_element))
+             (node (or (tsx--closest-parent-node nil node-target-types)
+                       (tsx--closest-parent-node (1- (point)) node-target-types))))
+    (goto-char
+     (or (evil-with-single-undo
+           (tsx--node-transpose node node-target-types))
+         (point)))))
+
+;;;###autoload
+(defun tsx-tag-transpose ()
+  (interactive)
+  (when-let ((node-target-types '(jsx_attribute))
+             (node (or (tsx--closest-parent-node nil node-target-types)
+                       (tsx--closest-parent-node (1- (point)) node-target-types))))
+    (goto-char
+     (or (evil-with-single-undo
+           (tsx--node-transpose node node-target-types))
+         (point)))))
