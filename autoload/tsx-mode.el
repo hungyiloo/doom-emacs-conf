@@ -81,6 +81,9 @@
 (defun tsx--tag-at-point ()
   (tsx--closest-parent-node nil '(jsx_opening_element jsx_closing_element jsx_self_closing_element)))
 
+(defun tsx--attribute-at-point ()
+  (tsx--closest-parent-node nil '(jsx_attribute)))
+
 (defun tsx--replace-node (node replacement-text)
   (replace-region-contents
    (tsc-node-start-position node)
@@ -189,6 +192,18 @@
     (tsx--node-delete node t 'after)))
 
 ;;;###autoload
+(defun tsx-attribute-select ()
+  (interactive)
+  (when-let ((node (tsx--attribute-at-point)))
+    (tsx--node-select node)))
+
+;;;###autoload
+(defun tsx-attribute-kill ()
+  (interactive)
+  (when-let ((node (tsx--attribute-at-point)))
+    (tsx--node-delete node t 'after)))
+
+;;;###autoload
 (defun tsx-element-select-content ()
   (interactive)
   (when-let* ((element-node (tsx--element-at-point))
@@ -233,6 +248,20 @@
   (when-let ((node (save-excursion
                      (backward-char)
                      (tsx--tag-at-point))))
+    (goto-char (tsc-node-start-position node))))
+
+;;;###autoload
+(defun tsx-goto-attribute-end ()
+  (interactive)
+  (when-let ((node (tsx--attribute-at-point)))
+    (goto-char (tsc-node-end-position node))))
+
+;;;###autoload
+(defun tsx-goto-attribute-beginning ()
+  (interactive)
+  (when-let ((node (save-excursion
+                     (backward-char)
+                     (tsx--attribute-at-point))))
     (goto-char (tsc-node-start-position node))))
 
 (defun tsx--goto-sibling (&optional backward)

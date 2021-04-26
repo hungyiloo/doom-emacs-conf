@@ -34,6 +34,10 @@
                   :desc "Kill" "k" #'tsx-tag-kill
                   :desc "Spread" "RET" #'tsx-tag-spread)
                  (:prefix-map ("a" . "attribute")
+                  :desc "End" "e" #'tsx-goto-attribute-end
+                  :desc "Beginning" "b" #'tsx-goto-attribute-beginning
+                  :desc "Select" "s" #'tsx-attribute-select
+                  :desc "Kill" "k" #'tsx-attribute-kill
                   :desc "Transpose" "t" #'tsx-attribute-transpose))
 
            (defun my/tsx-mode-setup ()
