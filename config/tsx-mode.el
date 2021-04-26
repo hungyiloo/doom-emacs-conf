@@ -51,6 +51,7 @@
                            'tsx-comment-or-uncomment-region))
              ;; (add-to-list 'sp-pair-list (cons "/*" "*/"))
              (rainbow-delimiters-mode 1)
+             (setq rainbow-delimiters-pick-face-function #'tsx-rainbow-delimiters-pick-face)
              (emmet-mode 1)
              (lsp)
              (setq-local indent-line-function #'tsx-indent-line-function))

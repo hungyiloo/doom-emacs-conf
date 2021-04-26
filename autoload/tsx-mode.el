@@ -605,3 +605,37 @@ to achieve this."
     (funcall indent-line-function))
 
    (t (newline-and-indent ARG))))
+
+;;;###autoload
+(defun tsx-rainbow-delimiters-pick-face (depth match loc)
+  "Return a face name appropriate for nesting depth DEPTH.
+DEPTH and MATCH are as in `rainbow-delimiters-pick-face-function'.
+
+The returned value is either `rainbow-delimiters-unmatched-face',
+`rainbow-delimiters-mismatched-face', or one of the
+`rainbow-delimiters-depth-N-face' faces, obeying
+`rainbow-delimiters-max-face-count' and
+`rainbow-delimiters-outermost-only-face-count'."
+  (cond
+   ((<= depth 0)
+    'rainbow-delimiters-unmatched-face)
+   ((not match)
+    'rainbow-delimiters-mismatched-face)
+   ;; Don't do rainbow delimiters for HTML tag angle brackets
+   ((memq (char-after loc) '(?< ?>))
+    'tree-sitter-hl-face:operator)
+   (t
+    (intern-soft
+     (concat "rainbow-delimiters-depth-"
+             (number-to-string
+              (if (<= depth rainbow-delimiters-max-face-count)
+                  ;; Our nesting depth has a face defined for it.
+                  depth
+                ;; Deeper than # of defined faces; cycle back through to
+                ;; `rainbow-delimiters-outermost-only-face-count' + 1.
+                ;; Return face # that corresponds to current nesting level.
+                (+ 1 rainbow-delimiters-outermost-only-face-count
+                   (mod (- depth rainbow-delimiters-max-face-count 1)
+                        (- rainbow-delimiters-max-face-count
+                           rainbow-delimiters-outermost-only-face-count)))))
+             "-face")))))
