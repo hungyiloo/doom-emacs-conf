@@ -55,7 +55,7 @@
       tag-nodes))))
 
 (defun tsx--element-tag-name (element-node)
-  (when-let* ((tag-name-node (car (tsx--element-tag-name-nodes element-node))))
+  (when-let* ((tag-name-node (car (last (tsx--element-tag-name-nodes element-node)))))
     (tsc-node-text tag-name-node)))
 
 (defun tsx--closest-parent-node (&optional pos node-types)
