@@ -410,7 +410,14 @@ POSITION is a byte position in buffer like \\(point-min\\)."
     is-jsx-comment))
 
 ;;;###autoload
-(defun tsx-comment-or-uncomment-region (beg end)
+(defun tsx-comment-region (beg end &optional ARG)
+  (tsx--comment-or-uncomment-region beg end 'comment ARG))
+
+;;;###autoload
+(defun tsx-uncomment-region (beg end &optional ARG)
+  (tsx--comment-or-uncomment-region beg end 'uncomment ARG))
+
+(defun tsx--comment-or-uncomment-region (beg end &optional explicit ARG)
   (evil-with-single-undo
     (let* ((content-region (tsx--actual-content-region beg end))
            (content-beg (car content-region))
@@ -425,15 +432,22 @@ POSITION is a byte position in buffer like \\(point-min\\)."
            (in-jsx (memq outside-node-type jsx-node-types))
            (comment-start (if in-jsx "{/*" "//"))
            (comment-end (if in-jsx "*/}" ""))
-           ;; this must be true otherwise we get "Can't find comment end"
-           ;; when we uncomment a JSX comment as the very first one in the buffer
-           (comment-use-syntax t)
-           (region-contains-only-jsx-comments (tsx--jsx-comment-only-p beg end)))
-      (when region-contains-only-jsx-comments
-        (tsx--unwrap-jsx-expressions-in-region beg end))
-      (if (fboundp #'evilnc-comment-or-uncomment-region-internal)
-          (evilnc-comment-or-uncomment-region-internal beg end)
-        (comment-or-uncomment-region beg end)))
+           (comment-start-skip (if in-jsx
+                                   "{\\(?://+\\|/\\*+\\)\\s *"
+                                 comment-start-skip))
+           (comment-end-skip (if in-jsx
+                                 "[ 	]*\\(\\s>\\|\\*+/}\\)"
+                                 comment-end-skip))
+           (comment-use-syntax nil))
+      (save-excursion
+        (cond
+         ((eq explicit 'comment) (comment-region-default beg end ARG))
+         ((eq explicit 'uncomment) (uncomment-region-default beg end ARG))
+         (t (if (or
+                 (and in-jsx (tsx--jsx-comment-only-p beg end))
+                 (comment-only-p beg end))
+                (uncomment-region-default beg end ARG)
+              (comment-region-default beg end ARG))))))
     (indent-region beg end)))
 
 ;;;###autoload
@@ -572,12 +586,21 @@ to achieve this."
 ;;;###autoload
 (defun tsx-newline-and-indent (&optional ARG)
   (interactive "P")
-  (if (and (looking-at-p "</")
-           (eq (char-before) ?>))
-      (progn
-        (newline-and-indent)
-        (newline-and-indent ARG)
-        (forward-line -1)
-        (end-of-line)
-        (funcall indent-line-function))
-    (newline-and-indent ARG)))
+  (cond
+   ;; smartparens-like auto element spreading
+   ;; on newline inside empty tag
+   ((and (looking-at-p "</")
+         (eq (char-before) ?>))
+    (newline-and-indent)
+    (newline-and-indent ARG)
+    (forward-line -1)
+    (end-of-line)
+    (funcall indent-line-function))
+
+   ;; Multiline comment indentation helper
+   ;; REVIEW: is this needed if we fix smartparens commenting?
+   ((looking-at-p " ?\\*/")
+    (newline-and-indent)
+    (funcall indent-line-function))
+
+   (t (newline-and-indent ARG))))

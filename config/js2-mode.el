@@ -38,7 +38,7 @@ nil, turn it into concatenation."
 (after! evil
   ;; Hook to install custom js/ts text objects
   ;; All functions below are autoloaded
-  (add-hook! (javascript-mode js-mode js2-mode typescript-mode typescript-tsx-mode tsx-mode)
+  (add-hook! (js-mode js-jsx-mode js2-mode typescript-mode typescript-tsx-mode tsx-mode)
     (map! :map evil-operator-state-local-map
           "af" #'my/evil-outer-js-function
           "if" #'my/evil-inner-js-function

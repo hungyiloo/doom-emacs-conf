@@ -1,6 +1,6 @@
 ;;; config/tsx-mode.el -*- lexical-binding: t; -*-
 
-(define-derived-mode tsx-mode typescript-mode "tsx")
+(define-derived-mode tsx-mode js-jsx-mode "tsx")
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
 
 (add-hook! 'after-init-hook
@@ -44,12 +44,13 @@
            (defun my/tsx-mode-setup ()
              (tree-sitter-require 'tsx)
              (tree-sitter-hl-add-patterns nil "[\"/\" \"*\"] @operator")
+             (setq comment-region-function #'tsx-comment-region)
+             (setq uncomment-region-function #'tsx-uncomment-region)
+             ;; (add-to-list 'sp-pair-list (cons "/*" "*/"))
+             (rainbow-delimiters-mode 1)
              (emmet-mode 1)
              (lsp)
-             (setq-local indent-line-function #'tsx-indent-line-function)
-             (after! evil-nerd-commenter
-               (setq-local evilnc-comment-or-uncomment-region-function
-                           'tsx-comment-or-uncomment-region)))
+             (setq-local indent-line-function #'tsx-indent-line-function))
 
            (add-hook! 'tsx-mode-hook
              (my/tsx-mode-setup)))
