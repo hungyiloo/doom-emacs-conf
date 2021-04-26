@@ -51,10 +51,11 @@
              (setq-local indent-line-function #'tsx-indent-line-function)
              ;; (add-to-list 'sp-pair-list (cons "/*" "*/"))
              (rainbow-delimiters-mode 1)
-             (setq rainbow-delimiters-pick-face-function #'tsx-rainbow-delimiters-pick-face)
+             (setq-local rainbow-delimiters-pick-face-function #'tsx-rainbow-delimiters-pick-face)
              (emmet-mode 1)
              (lsp))
 
+           ;; (advice-add #'js-syntax-propertize :around #'ignore)
            (add-hook! 'tsx-mode-hook
              (my/tsx-mode-setup)))
 

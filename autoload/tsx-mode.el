@@ -495,57 +495,59 @@ to achieve this."
 ;;;###autoload
 (defun tsx-element-spread (only-this &optional dont-indent)
   (interactive "P")
-  (when-let* ((element-node (tsx--element-at-point t))
-              (tag-nodes (tsx--element-tag-nodes element-node))
-              (beg (tsc-node-start-position element-node))
-              (end (tsc-node-end-position element-node))
-              (linebreak-count 0))
-    (let ((closing-tag-node (car tag-nodes))
-          (opening-tag-node (cadr tag-nodes))
-          (child-elements (tsx--tsc-children-of-type
-                           element-node
-                           '(jsx_element jsx_self_closing_element))))
-      (when closing-tag-node
-        (setq linebreak-count
-              (+ linebreak-count (tsx--node-own-line closing-tag-node))))
-      (unless only-this
-        (dolist (child-element child-elements)
-          (setq
-           linebreak-count
-           (+ linebreak-count
-              (save-excursion
-                (goto-char (tsc-node-start-position child-element))
-                (tsx-element-spread nil t))))))
-      (when opening-tag-node
-        (setq linebreak-count
-              (+ linebreak-count (tsx--node-own-line opening-tag-node)))))
-    (unless dont-indent
-      (indent-region
-       beg
-       (save-excursion
-         (goto-char (+ end linebreak-count))
-         (skip-chars-forward " \t\n\r")
-         (forward-char)
-         (point))))
-    linebreak-count))
+  (cl-letf (((symbol-function #'js-syntax-propertize) #'ignore))
+    (when-let* ((element-node (tsx--element-at-point t))
+                (tag-nodes (tsx--element-tag-nodes element-node))
+                (beg (tsc-node-start-position element-node))
+                (end (tsc-node-end-position element-node))
+                (linebreak-count 0))
+      (let ((closing-tag-node (car tag-nodes))
+            (opening-tag-node (cadr tag-nodes))
+            (child-elements (tsx--tsc-children-of-type
+                             element-node
+                             '(jsx_element jsx_self_closing_element))))
+        (when closing-tag-node
+          (setq linebreak-count
+                (+ linebreak-count (tsx--node-own-line closing-tag-node))))
+        (unless only-this
+          (dolist (child-element child-elements)
+            (setq
+             linebreak-count
+             (+ linebreak-count
+                (save-excursion
+                  (goto-char (tsc-node-start-position child-element))
+                  (tsx-element-spread nil t))))))
+        (when opening-tag-node
+          (setq linebreak-count
+                (+ linebreak-count (tsx--node-own-line opening-tag-node)))))
+      (unless dont-indent
+        (indent-region
+         beg
+         (save-excursion
+           (goto-char (+ end linebreak-count))
+           (skip-chars-forward " \t\n\r")
+           (forward-char)
+           (point))))
+      linebreak-count)))
 
 ;;;###autoload
 (defun tsx-tag-spread ()
   (interactive)
-  (when-let* ((tag-node (tsx--closest-parent-node nil '(jsx_opening_element jsx_closing_element jsx_self_closing_element)))
-              (beg (tsc-node-start-position tag-node))
-              (end (tsc-node-end-position tag-node))
-              (linebreak-count 0))
-    (let ((attribute-nodes (tsx--tsc-children-of-type
-                           tag-node
-                           '(jsx_attribute))))
-      (dolist (attribute-node attribute-nodes)
-        (setq
-         linebreak-count
-         (+ linebreak-count
-            (tsx--node-own-line attribute-node 'before)))))
-    (indent-region beg (+ end linebreak-count))
-    linebreak-count))
+  (cl-letf (((symbol-function #'js-syntax-propertize) #'ignore))
+    (when-let* ((tag-node (tsx--closest-parent-node nil '(jsx_opening_element jsx_closing_element jsx_self_closing_element)))
+                (beg (tsc-node-start-position tag-node))
+                (end (tsc-node-end-position tag-node))
+                (linebreak-count 0))
+      (let ((attribute-nodes (tsx--tsc-children-of-type
+                              tag-node
+                              '(jsx_attribute))))
+        (dolist (attribute-node attribute-nodes)
+          (setq
+           linebreak-count
+           (+ linebreak-count
+              (tsx--node-own-line attribute-node 'before)))))
+      (indent-region beg (+ end linebreak-count))
+      linebreak-count)))
 
 (defun tsx--node-transpose (node &optional types)
   (let ((sibling (tsc-get-next-sibling node))
