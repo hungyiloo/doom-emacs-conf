@@ -141,25 +141,29 @@
     (goto-char node-end)
     (activate-mark)))
 
+(defun tsx--node-region (node &optional include-whitespace)
+  (let ((node-start (tsc-node-start-position node))
+        (node-end (tsc-node-end-position node)))
+    (cons
+     (if (or (eq include-whitespace t)
+             (eq include-whitespace 'before))
+         (save-excursion
+           (goto-char node-start)
+           (skip-chars-backward " \t\n\r")
+           (point))
+       node-start)
+     (if (or (eq include-whitespace t)
+             (eq include-whitespace 'after))
+         (save-excursion
+           (goto-char node-end)
+           (skip-chars-forward " \t\n\r")
+           (point))
+       node-end))))
+
 (defun tsx--node-delete (node &optional push-kill clean-whitespace)
-  (when-let* ((node-start (tsc-node-start-position node))
-              (node-end (tsc-node-end-position node))
-              (node-start (if (or (eq clean-whitespace t)
-                                  (eq clean-whitespace 'before))
-                              (save-excursion
-                                (goto-char node-start)
-                                (skip-chars-backward " \t\n\r")
-                                (point))
-                            node-start))
-              (node-end (if (or (eq clean-whitespace t)
-                                (eq clean-whitespace 'after))
-                            (save-excursion
-                              (goto-char node-end)
-                              (skip-chars-forward " \t\n\r")
-                              (point))
-                          node-end)))
+  (when-let ((node-region (tsx--node-region node clean-whitespace)))
     (funcall (if push-kill #'kill-region #'delete-region)
-             node-start node-end)))
+             (car node-region) (cdr node-region))))
 
 ;;;###autoload
 (defun tsx--evil-region-end-shim (pos)
@@ -585,6 +589,19 @@ to achieve this."
      (or (evil-with-single-undo
            (tsx--node-transpose node node-target-types))
          (point)))))
+
+;;;###autoload
+(defun tsx-element-clone ()
+  (interactive)
+  (when-let* ((node (tsx--element-at-point t))
+              (node-region (tsx--node-region node 'after))
+              (beg (car node-region))
+              (end (cdr node-region)))
+    (goto-char end)
+    (save-excursion
+      (insert (buffer-substring-no-properties beg end))
+      (indent-region beg (+ end (- end beg))))
+    (skip-chars-forward " \t\n\r")))
 
 ;;;###autoload
 (defun tsx-newline-and-indent (&optional ARG)
