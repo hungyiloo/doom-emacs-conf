@@ -564,7 +564,7 @@ to achieve this."
 ;;;###autoload
 (defun tsx-element-transpose ()
   (interactive)
-  (when-let ((node-target-types '(jsx_element jsx_self_closing_element))
+  (when-let ((node-target-types '(jsx_element jsx_self_closing_element jsx_expression))
              (node (or (tsx--closest-parent-node nil node-target-types)
                        (tsx--closest-parent-node (1- (point)) node-target-types))))
     (goto-char
