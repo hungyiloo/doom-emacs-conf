@@ -44,17 +44,16 @@
            (defun my/tsx-mode-setup ()
              (tree-sitter-require 'tsx)
              (tree-sitter-hl-add-patterns nil "[\"/\" \"*\"] @operator")
-             (setq comment-region-function #'tsx-comment-region)
-             (setq uncomment-region-function #'tsx-uncomment-region)
-             (after! evil-nerd-commenter
-               (setq-local evilnc-comment-or-uncomment-region-function
-                           'tsx-comment-or-uncomment-region))
+             (setq-local comment-region-function #'tsx-comment-region)
+             (setq-local uncomment-region-function #'tsx-uncomment-region)
+             (setq-local evilnc-comment-or-uncomment-region-function
+                         'tsx-comment-or-uncomment-region)
+             (setq-local indent-line-function #'tsx-indent-line-function)
              ;; (add-to-list 'sp-pair-list (cons "/*" "*/"))
              (rainbow-delimiters-mode 1)
              (setq rainbow-delimiters-pick-face-function #'tsx-rainbow-delimiters-pick-face)
              (emmet-mode 1)
-             (lsp)
-             (setq-local indent-line-function #'tsx-indent-line-function))
+             (lsp))
 
            (add-hook! 'tsx-mode-hook
              (my/tsx-mode-setup)))
