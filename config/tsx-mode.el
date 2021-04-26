@@ -46,6 +46,9 @@
              (tree-sitter-hl-add-patterns nil "[\"/\" \"*\"] @operator")
              (setq comment-region-function #'tsx-comment-region)
              (setq uncomment-region-function #'tsx-uncomment-region)
+             (after! evil-nerd-commenter
+               (setq-local evilnc-comment-or-uncomment-region-function
+                           'tsx-comment-or-uncomment-region))
              ;; (add-to-list 'sp-pair-list (cons "/*" "*/"))
              (rainbow-delimiters-mode 1)
              (emmet-mode 1)

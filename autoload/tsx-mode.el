@@ -411,44 +411,45 @@ POSITION is a byte position in buffer like \\(point-min\\)."
 
 ;;;###autoload
 (defun tsx-comment-region (beg end &optional ARG)
-  (tsx--comment-or-uncomment-region beg end 'comment ARG))
+  (tsx-comment-or-uncomment-region beg end 'comment ARG))
 
 ;;;###autoload
 (defun tsx-uncomment-region (beg end &optional ARG)
-  (tsx--comment-or-uncomment-region beg end 'uncomment ARG))
+  (tsx-comment-or-uncomment-region beg end 'uncomment ARG))
 
-(defun tsx--comment-or-uncomment-region (beg end &optional explicit ARG)
-  (evil-with-single-undo
-    (let* ((content-region (tsx--actual-content-region beg end))
-           (content-beg (car content-region))
-           (outside-pos (1- content-beg))
-           (outside-node-type (tsc-node-type (tsx--highest-node-at-position outside-pos)))
-           (jsx-node-types '(jsx_element
-                             jsx_opening_element
-                             jsx_closing_element
-                             jsx_text
-                             jsx_attribute
-                             jsx_fragment))
-           (in-jsx (memq outside-node-type jsx-node-types))
-           (comment-start (if in-jsx "{/*" "//"))
-           (comment-end (if in-jsx "*/}" ""))
-           (comment-start-skip (if in-jsx
-                                   "{\\(?://+\\|/\\*+\\)\\s *"
-                                 comment-start-skip))
-           (comment-end-skip (if in-jsx
-                                 "[ 	]*\\(\\s>\\|\\*+/}\\)"
-                                 comment-end-skip))
-           (comment-use-syntax nil))
-      (save-excursion
-        (cond
-         ((eq explicit 'comment) (comment-region-default beg end ARG))
-         ((eq explicit 'uncomment) (uncomment-region-default beg end ARG))
-         (t (if (or
-                 (and in-jsx (tsx--jsx-comment-only-p beg end))
-                 (comment-only-p beg end))
-                (uncomment-region-default beg end ARG)
-              (comment-region-default beg end ARG))))))
-    (indent-region beg end)))
+;;;###autoload
+(defun tsx-comment-or-uncomment-region (beg end &optional explicit ARG)
+  (interactive)
+  (let* ((content-region (tsx--actual-content-region beg end))
+         (content-beg (car content-region))
+         (outside-pos (1- content-beg))
+         (outside-node-type (tsc-node-type (tsx--highest-node-at-position outside-pos)))
+         (jsx-node-types '(jsx_element
+                           jsx_opening_element
+                           jsx_closing_element
+                           jsx_text
+                           jsx_attribute
+                           jsx_fragment))
+         (in-jsx (memq outside-node-type jsx-node-types))
+         (comment-start (if in-jsx "{/*" "//"))
+         (comment-end (if in-jsx "*/}" ""))
+         (comment-start-skip (if in-jsx
+                                 "{\\(?://+\\|/\\*+\\)\\s *"
+                               comment-start-skip))
+         (comment-end-skip (if in-jsx
+                               "[ 	]*\\(\\s>\\|\\*+/}\\)"
+                             comment-end-skip))
+         (comment-use-syntax nil))
+    (save-excursion
+      (cond
+       ((eq explicit 'comment) (comment-region-default beg end ARG))
+       ((eq explicit 'uncomment) (uncomment-region-default beg end ARG))
+       (t (if (or
+               (and in-jsx (tsx--jsx-comment-only-p beg end))
+               (comment-only-p beg end))
+              (uncomment-region-default beg end ARG)
+            (comment-region-default beg end ARG))))))
+  (indent-region beg end))
 
 ;;;###autoload
 (defun tsx-element-vanish ()
