@@ -317,6 +317,7 @@ POSITION is a byte position in buffer like \\(point-min\\)."
     (let* ((current-node (tree-sitter-node-at-point))
            (parent-node (tsc-get-parent current-node)))
       (while (and parent-node
+                  (not (eq 'program (tsc-node-type parent-node)))
                   (eq (tsc-node-start-byte parent-node)
                       (tsc-node-start-byte current-node)))
         (setq current-node parent-node)
