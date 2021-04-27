@@ -7,13 +7,16 @@
 ;;;###autoload
 (defun tsx-element-close (&optional dont-indent)
   (interactive)
-  (when-let* ((nearest-container (tsx--closest-parent-node (1- (point)) '(jsx_element ERROR)))
-              (tag-name (tsx--element-tag-name nearest-container))
-              (closing-tag-markup (format "</%s>" tag-name)))
-    (insert closing-tag-markup)
-    (unless dont-indent
-      (funcall indent-line-function))
-    t))
+  (let ((restore-angle-bracket (looking-at-p "<>")))
+    (when restore-angle-bracket (save-excursion (forward-char) (delete-char 1)))
+    (or (when-let* ((nearest-container (tsx--closest-parent-node (1- (point)) '(jsx_element ERROR)))
+                    (tag-name (tsx--element-tag-name nearest-container))
+                    (closing-tag-markup (format "</%s>" tag-name)))
+          (insert closing-tag-markup)
+          (unless dont-indent
+            (funcall indent-line-function))
+          t)
+        (save-excursion (forward-char) (insert ">")))))
 
 ;;;###autoload
 (defun tsx-element-auto-close-maybe-h ()
