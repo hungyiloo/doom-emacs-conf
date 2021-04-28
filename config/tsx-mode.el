@@ -54,7 +54,7 @@
              (rainbow-delimiters-mode 1)
              (setq-local rainbow-delimiters-pick-face-function #'tsx-rainbow-delimiters-pick-face)
              (emmet-mode 1)
-             (lsp))
+             (lsp!))
 
            ;; (advice-add #'js-syntax-propertize :around #'ignore)
            (add-hook! 'tsx-mode-hook
