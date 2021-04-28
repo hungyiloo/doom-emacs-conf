@@ -16,7 +16,7 @@
           (unless dont-indent
             (funcall indent-line-function))
           t)
-        (save-excursion (forward-char) (insert ">")))))
+        (save-excursion (forward-char) (insert ">") nil))))
 
 ;;;###autoload
 (defun tsx-element-auto-close-maybe-h ()
@@ -27,7 +27,8 @@
         (or (when (save-excursion (backward-char) (tsx-element-close t))
               (delete-char -1)
               (when empty-tag (goto-char before-tag-pos))
-              (funcall indent-line-function))
+              (funcall indent-line-function)
+              t)
             (insert "/")))
     (insert "/")))
 
@@ -364,7 +365,8 @@ POSITION is a byte position in buffer like \\(point-min\\)."
                           (+ container-column js-indent-level))
                          (t curr-column))))
     (save-excursion (indent-line-to target-column))
-    (skip-chars-forward " \t\n\r" (line-end-position))))
+    (when (= 0 (current-column))
+      (skip-chars-forward " \t\n\r" (line-end-position)))))
 
 (defun tsx--unwrap-jsx-expressions-in-region (beg end)
   (when-let ((node (save-excursion (goto-char beg)
@@ -661,3 +663,38 @@ The returned value is either `rainbow-delimiters-unmatched-face',
                         (- rainbow-delimiters-max-face-count
                            rainbow-delimiters-outermost-only-face-count)))))
              "-face")))))
+
+;; (defun tsx-syntax-propertize (start end)
+;;   ;; JavaScript allows immediate regular expression objects, written /.../.
+;;   (goto-char start)
+;;   (if js-jsx-syntax (remove-text-properties start end js-jsx--text-properties))
+;;   (js-syntax-propertize-regexp end)
+;;   (funcall
+;;    (syntax-propertize-rules
+;;     ;; Distinguish /-division from /-regexp chars (and from /-comment-starter).
+;;     ;; FIXME: Allow regexps after infix ops like + ...
+;;     ;; https://developer.mozilla.org/en/JavaScript/Reference/Operators
+;;     ;; We can probably just add +, -, <, >, %, ^, ~, ?, : at which
+;;     ;; point I think only * and / would be missing which could also be added,
+;;     ;; but need care to avoid affecting the // and */ comment markers.
+;;     ("\\(?:^\\|[=([{,:;|&!]\\|\\_<return\\_>\\)\\(?:[ \t]\\)*\\(/\\)[^/*]"
+;;      (1 (ignore
+;; 	 (forward-char -1)
+;;          (when (or (not (memq (char-after (match-beginning 0)) '(?\s ?\t)))
+;;                    ;; If the / is at the beginning of line, we have to check
+;;                    ;; the end of the previous text.
+;;                    (save-excursion
+;;                      (goto-char (match-beginning 0))
+;;                      (forward-comment (- (point)))
+;;                      (memq (char-before)
+;;                            (eval-when-compile (append "=({[,:;" '(nil))))))
+;;            (put-text-property (match-beginning 1) (match-end 1)
+;;                               'syntax-table (string-to-syntax "\"/"))
+;;            (js-syntax-propertize-regexp end)))))
+;;     ("\\`\\(#\\)!" (1 "< b"))
+;;     ("<" (0 (ignore
+;;              (when js-jsx-syntax
+;;                ;; Not inside a comment or string.
+;;                (unless (nth 8 (save-excursion (syntax-ppss (match-beginning 0))))
+;;                  (js-jsx--syntax-propertize-tag end)))))))
+;;    (point) end))
