@@ -135,7 +135,7 @@
   ;; Bind a key for narrowing in consult.
   ;; Mainly this is to access the SPC combination to clear the filters.
   ;; Without this, there seems to be no way to widen after filtering `consult-buffer'
-  (setq consult-narrow-key (kbd "S-SPC"))
+  (setq consult-narrow-key (kbd "S-<backspace>"))
 
   ;; Fix `consult-imenu' narrowing and add a few more values
   (setq consult-imenu-narrow
