@@ -40,17 +40,7 @@
   (use-package! powershell
     :hook (powershell-mode . lsp)
     :config
-    (setq lsp-pwsh-exe "/usr/bin/pwsh"))
-
-  ;; Load the lsp-command-map earlier, up front.
-  ;; In practice, it's never there early enough when I need it.
-  ;; e.g. without this, I keep getting "SPC c l s r is undefined"
-  ;; when entering keychords quickly.
-  ;; With this, it seems to be loaded along with lsp-mode
-  (map! :leader "c l" lsp-command-map)
-  (dolist (leader-key (list doom-leader-key doom-leader-alt-key))
-    (let ((lsp-keymap-prefix (concat leader-key " c l")))
-      (lsp-enable-which-key-integration))))
+    (setq lsp-pwsh-exe "/usr/bin/pwsh")))
 
 (after! lsp-ui
   ;; Fixes code action lightbulb icon background
