@@ -2,8 +2,7 @@
 
 (after! project
   (map! :map project-prefix-map
-        "m" nil
-        "g" #'magit-status
+        "m" #'magit-status
         "s" #'consult-ripgrep
         "v" #'projectile-run-vterm)
   (setq project-switch-commands
