@@ -50,6 +50,8 @@
 
            ;; Some global keymap adjustments
            (map! :leader
+                 ";" #'execute-extended-command
+                 ":" #'pp-eval-expression
                  "]" #'better-jumper-jump-forward
                  "[" #'better-jumper-jump-backward
                  (:prefix-map ("=" . "calc")
@@ -86,10 +88,10 @@
                  "M-u" #'undo-only
                  "M-[" #'previous-buffer
                  "M-]" #'next-buffer
-                 "C-S-u" #'universal-argument)
+                 "<f12>" #'universal-argument)
 
            (map! :map universal-argument-map
-                 "C-S-u" #'universal-argument-more)
+                 "<f12>" #'universal-argument-more)
 
            (setq +doom-dashboard-ascii-banner-fn
                  (defun my/doom-dashboard-draw-ascii-banner-fn ()
