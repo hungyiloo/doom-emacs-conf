@@ -331,7 +331,8 @@
                   (+popup/close orig-window))))
 
   (custom-set-faces!
-    `(xref-match :foreground ,(doom-color 'magenta) :bold t :background ,(doom-blend (doom-color 'blue) (doom-color 'bg-alt) 0.3))))
+    `(xref-match :foreground ,(doom-color 'magenta) :bold t :background ,(doom-blend (doom-color 'blue) (doom-color 'bg-alt) 0.3)))
+  (setq xref-show-xrefs-function #'consult-xref))
 
 (after! spell-fu
   (define-key!
