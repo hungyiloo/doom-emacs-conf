@@ -1,6 +1,11 @@
 ;;; config/tsx-mode.el -*- lexical-binding: t; -*-
 
-(define-derived-mode tsx-mode js-jsx-mode "tsx")
+;; Always "correct" with underlying propertization, but inexplicable bad performance
+;; (define-derived-mode tsx-mode js-jsx-mode "tsx")
+
+;; seems more stable using typescript-mode as a base, even though not 100% correct
+(define-derived-mode tsx-mode typescript-mode "tsx")
+
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
 
 (add-hook! 'after-init-hook

@@ -448,7 +448,9 @@ POSITION is a byte position in buffer like \\(point-min\\)."
          (comment-end-skip (if in-jsx
                                "[ 	]*\\(\\s>\\|\\*+/}\\)"
                              comment-end-skip))
-         (comment-use-syntax nil))
+         (is-ts-mode (derived-mode-p 'typescript-mode))
+         (comment-use-syntax (if is-ts-mode t nil)))
+    (when is-ts-mode (tsx--unwrap-jsx-expressions-in-region beg end))
     (save-excursion
       (cond
        ((eq explicit 'comment) (comment-region-default beg end ARG))
