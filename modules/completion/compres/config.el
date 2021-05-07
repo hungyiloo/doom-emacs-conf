@@ -338,3 +338,10 @@
   (define-key!
    [remap ispell-word] #'+compres/spell-correct
    [remap +spell/correct] #'+compres/spell-correct))
+
+(after! (:and grep evil)
+  ;; Fix left and right char movement in grep-mode for evil
+  ;; REVIEW: does this belong in this module?
+  (map! :map grep-mode-map
+        :nv "h" #'evil-backward-char
+        :nv "l" #'evil-forward-char))
