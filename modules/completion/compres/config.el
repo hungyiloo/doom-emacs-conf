@@ -339,7 +339,7 @@
    [remap ispell-word] #'+compres/spell-correct
    [remap +spell/correct] #'+compres/spell-correct))
 
-(after! (:and grep evil)
+(after! evil
   ;; Fix left and right char movement in grep-mode for evil
   ;; REVIEW: does this belong in this module?
   (map! :map grep-mode-map
