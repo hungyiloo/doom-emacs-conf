@@ -72,6 +72,38 @@ This function is called by `org-babel-execute-src-block'."
         (:prefix ("l" . "links")
          "y" #'my/org-retrieve-url-from-point))
 
+  ;; Some basic, experimental org mode presentation functionality
+  ;; using narrowing and heading navigation
+  (map! :map org-mode-map
+        :nvi "C-S-SPC" (cmd! (widen) (goto-char 0))
+        :nvi "C-^" (cmd! (let ((narrowed (buffer-narrowed-p)))
+                           (when narrowed
+                             (goto-char 0)
+                             (widen))
+                           (when (> (org-outline-level) 1)
+                             (outline-up-heading 1)
+                             (if narrowed
+                                 (org-narrow-to-subtree)
+                               (recenter 0)))))
+        :nvi "C-V" (cmd! (org-narrow-to-subtree)
+                         (goto-char 0))
+        :nvi "C->" (cmd! (let ((narrowed (buffer-narrowed-p)))
+                           (when narrowed
+                             (goto-char 0)
+                             (widen))
+                           (org-forward-heading-same-level nil)
+                           (if narrowed
+                               (org-narrow-to-subtree)
+                             (recenter 0))))
+        :nvi "C-<" (cmd! (let ((narrowed (buffer-narrowed-p)))
+                           (when narrowed
+                             (goto-char 0)
+                             (widen))
+                           (org-backward-heading-same-level nil)
+                           (if narrowed
+                               (org-narrow-to-subtree)
+                             (recenter 0)))))
+
   ;; Org agenda customization
   (setq org-agenda-span 3
         org-agenda-start-day "+0d"
@@ -158,7 +190,8 @@ This function is called by `org-babel-execute-src-block'."
   (setq org-roam-verbose t)
   (add-hook! 'org-roam-buffer-prepare-hook
     (setq doom--line-number-style nil)
-    (setq display-line-numbers nil))
+    (setq display-line-numbers nil)
+    (set-fill-column 80))
   (custom-set-faces!
     `(org-roam-link :foreground ,(doom-color 'green) :inherit org-link)
     `(org-roam-link-curent :foreground ,(doom-color 'fg) :inherit org-link)
