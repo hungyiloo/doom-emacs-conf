@@ -150,9 +150,9 @@
     (interactive)
     (let ((parsed-url (thread-last
                           url
-                        (replace-regexp-in-string "file://" "file://wsl%24/Ubuntu")
-                        (replace-regexp-in-string "\\(wsl%24/Ubuntu\\)?/mnt/c/" "C:/")
-                        (replace-regexp-in-string "^/" "file://wsl%24/Ubuntu/")
+                        (replace-regexp-in-string "file://" (concat "file://wsl%24/" (getenv "WSL_DISTRO_NAME")))
+                        (replace-regexp-in-string (concat "\\(wsl%24/" (getenv "WSL_DISTRO_NAME") "\\)?/mnt/c/") "C:/")
+                        (replace-regexp-in-string "^/" (concat "file://wsl%24/" (getenv "WSL_DISTRO_NAME") "/"))
                         (url-encode-url))))
       (message "%s" (concat "Browsing to: " parsed-url))
       (apply #'browse-url-generic (list parsed-url new-window))))
