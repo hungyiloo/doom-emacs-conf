@@ -85,7 +85,7 @@ This function is called by `org-babel-execute-src-block'."
                              (if narrowed
                                  (org-narrow-to-subtree)
                                (recenter 0)))))
-        :nvi "C-V" (cmd! (org-narrow-to-subtree)
+        :nvi "C-S-v" (cmd! (org-narrow-to-subtree)
                          (goto-char 0))
         :nvi "C->" (cmd! (let ((narrowed (buffer-narrowed-p)))
                            (when narrowed
