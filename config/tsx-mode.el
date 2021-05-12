@@ -59,6 +59,8 @@
              (rainbow-delimiters-mode 1)
              (setq-local rainbow-delimiters-pick-face-function #'tsx-rainbow-delimiters-pick-face)
              (emmet-mode 1)
+             (require 'js2-mode)
+             (setq-local typescript-indent-level 2)
              (lsp!))
 
            ;; (advice-add #'js-syntax-propertize :around #'ignore)
