@@ -5,14 +5,13 @@
 ** TODO Document how to download emojis into the correct directory
 [[file:config/emojify.el][See instructions here]]
 
-** TODO Font setup
-- JetBrains Mono
-- Fira Code
-- Noto Sans CJK
+** Font setup
+In order of importance:
+- JetBrains Mono is the all-purpose font for this config
+- Fira Code is a supplemental font for certain symbols that JetBrains Mono doesn't support
+- Noto Sans CJK is only for Chinese, Japanese and Korean character support.
 
-Might have to symlink =.ttc= files from =/usr/share/fonts/opentype/= to =~/.local/share/fonts/=.
-
-*** STRT JetBrains Mono Font
+*** JetBrains Mono
 #+begin_src bash
 wget https://download.jetbrains.com/fonts/JetBrainsMono-2.225.zip
 unzip JetBrainsMono-2.225.zip
@@ -20,46 +19,64 @@ unzip JetBrainsMono-2.225.zip
 mv *.ttf ~/.local/share/fonts/
 #+end_src
 
-** STRT Typescript Language Server for LSP
-Ensure that Node and Yarn are installed, then install the language server packages:
+*** Fira Code
+Run =./scripts/firacode.sh= to automatically install Fira Code fonts to =~/.local/share/fonts=
+
+*** Noto Sans CJK
+Download the the Super OTC =NotoSansCJK.ttc= file from https://www.google.com/get/noto/help/cjk/, unzip, then move the file to =~/.local/share/fonts=
+
+** Language Servers for lsp-mode
+Ensure that Node is installed, assuming Ubuntu 20.04:
 #+begin_src bash
-sudo apt install nodejs
-sudo npm install -g yarn
-yarn global add typescript-language-server typescript
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+sudo apt-get install -y nodejs
 #+end_src
 
-It would be good to also add the yarn bin to the PATH in =~/.profile=:
+For language servers other than those specified below, you can use the =lsp-install-server= command provided by lsp-mode.
+
+*** TypeScript
 #+begin_src bash
-PATH="$HOME/.yarn/bin:$PATH"
+sudo npm install -g typescript-language-server typescript
 #+end_src
 
-** TODO Other Language Servers
-- HTML
-- Angular
-- CSS
-- C#
-
-** STRT VTerm
+*** CSS
 #+begin_src bash
-wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | gpg --dearmor - | sudo tee /etc/apt/trusted.gpg.d/kitware.gpg >/dev/null
+sudo npm install -g vscode-css-languageserver-bin
+#+end_src
 
-# 18.04
-sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
-
-sudo apt update
+** VTerm
+In order to compile vterm within Emacs, these dependencies are required:
+#+begin_src bash
+# Assuming Ubuntu 20.04, which includes these packages by default
 sudo apt install libtool-bin cmake
 #+end_src
 
 *** TODO Why is there a permissions error with sudo?
 This only happens on my PGTK install on Elementary OS.
 
-** TODO Auxiliary apps
+** Auxiliary apps
 - ripgrep
 - fd
-- =apt install elpa-pdf-tools-server= (it's hard to compile pdf-tools locally in WSL)
+- PDF tools server (it's hard to compile pdf-tools locally in WSL)
+#+begin_src bash
+sudo apt install ripgrep fd-find elpa-pdf-tools-server
+#+end_src
 
 ** TODO WSL-specific setup
-- xdg-open workarounds
+Ensure that WSL is set up to run as WSL 2. This makes a big difference in performance.
+
+Follow [[https://github.com/hubisan/emacs-wsl][these instructions]] paying special attention to the =apt install= dependencies that Emacs requires.
+
+Then to run using X410 (a Windows X server), follow [[https://x410.dev/cookbook/wsl/using-x410-with-wsl2/][these instructions]], paying special attention to the firewall settings. "Public network" access is required. This can be manually configured in advanced firewall settings in Windows.
+
+In addition, there are a few bits of wiring to pipe stuff between WSL and the Windows host:
+- xdg-open workaround allows opening files and links into the Windows host
 - pinentry-wsl-ps1.sh for HTTPS authenticated git repos that need a password store
   + pass
   + gpg
+
+#+begin_src bash
+ln -rs ./scripts/xdg_open_wsl.py ~/.local/bin/xdg-open
+ln -rs ./scripts/pinentry-wsl-ps1.sh ~/.local/bin/
+ln -rs ./scripts/runemacs.sh ~/.local/bin/
+#+end_src
