@@ -359,10 +359,10 @@ POSITION is a byte position in buffer like \\(point-min\\)."
                                               statement_block
                                               else_clause))
                           (if in-node-body
-                              (+ container-column js-indent-level)
+                              (+ container-column evil-shift-width)
                             container-column))
                          ((> curr-point (car (tsc-node-position-range container)))
-                          (+ container-column js-indent-level))
+                          (+ container-column evil-shift-width))
                          (t curr-column))))
     (save-excursion (indent-line-to target-column))
     (when (= 0 (current-column))
