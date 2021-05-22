@@ -18,10 +18,13 @@
           t)
         (save-excursion (forward-char) (insert ">") nil))))
 
+(defvar tsx-mode-enable-auto-closing t "Enabled auto closing JSX tags tsx-mode")
+
 ;;;###autoload
 (defun tsx-element-auto-close-maybe-h ()
   (interactive)
-  (if (eq (char-before) ?<)
+  (if (and tsx-mode-enable-auto-closing
+           (eq (char-before) ?<))
       (let* ((before-tag-pos (- (point) 1))
              (empty-tag (eq (char-before before-tag-pos) ?>)))
         (or (when (save-excursion (backward-char) (tsx-element-close t))

@@ -15,7 +15,6 @@
            ;; For now it provides a faster alternative when the web-mode derived
            ;; mode from doom is too slow
            (map! :map 'tsx-mode-map
-                 :i "/" #'tsx-element-auto-close-maybe-h
                  :i "RET" #'tsx-newline-and-indent
                  :nv "]a" #'tsx-goto-next-sibling
                  :nv "[a" #'tsx-goto-prev-sibling)
@@ -47,6 +46,14 @@
                   :desc "Kill" "k" #'tsx-attribute-kill
                   :desc "Transpose" "t" #'tsx-attribute-transpose))
 
+           (advice-add #'self-insert-command
+                       :around
+                       (defun tsx-self-insert-command-advice (orig-fun N &optional C)
+                         (if (and (eq major-mode 'tsx-mode)
+                                  (eq C ?/))
+                             (tsx-element-auto-close-maybe-h)
+                           (funcall orig-fun N C))))
+
            (defun my/tsx-mode-setup ()
              (tree-sitter-require 'tsx)
              (tree-sitter-hl-add-patterns nil "[\"/\" \"*\"] @operator")
@@ -65,7 +72,15 @@
 
            ;; (advice-add #'js-syntax-propertize :around #'ignore)
            (add-hook! 'tsx-mode-hook
-             (my/tsx-mode-setup)))
+             (my/tsx-mode-setup))
+
+           (after! evil-mc
+             (add-hook! 'evil-mc-before-cursors-created
+               (when (eq major-mode 'tsx-mode)
+                 (setq tsx-mode-enable-auto-closing nil)))
+             (add-hook! 'evil-mc-after-cursors-deleted
+               (when (eq major-mode 'tsx-mode)
+                 (setq tsx-mode-enable-auto-closing t)))))
 
 (after! tree-sitter
   (add-to-list 'tree-sitter-major-mode-language-alist '(tsx-mode . tsx)))
