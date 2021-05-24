@@ -68,6 +68,7 @@
              (emmet-mode 1)
              (require 'js2-mode)
              ;; (setq-local typescript-indent-level 2)
+             (setq-local lsp-enable-indentation nil)
              (lsp!))
 
            ;; (advice-add #'js-syntax-propertize :around #'ignore)
