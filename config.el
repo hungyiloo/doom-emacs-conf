@@ -21,124 +21,123 @@
 ;; uncomment the line below to include archive in agenda search
 ;; (setq org-agenda-files '("~/Notes/" "~/Notes/Archive/"))
 
-(add-hook! 'after-init-hook
-           ;; Font adjustments should be more fine
-           (setq text-scale-mode-step 1.05)
-           (setq-default line-spacing 1)
+;; Font adjustments should be more fine
+(setq text-scale-mode-step 1.05)
+(setq-default line-spacing 1)
 
-           ;; Always revert files automatically
-           (global-auto-revert-mode 1)
+;; Always revert files automatically
+(global-auto-revert-mode 1)
 
-           ;; Better buffer names for files of the same name
-           (setq uniquify-buffer-name-style 'forward)
+;; Better buffer names for files of the same name
+(setq uniquify-buffer-name-style 'forward)
 
-           ;; More emacs-y clipboard intergration
-           (setq save-interprogram-paste-before-kill t)
+;; More emacs-y clipboard intergration
+(setq save-interprogram-paste-before-kill t)
 
-           ;; ISO calendar by default
-           (setq calendar-date-style 'iso)
+;; ISO calendar by default
+(setq calendar-date-style 'iso)
 
-           ;; Re-enable some disabled commands
-           (put #'narrow-to-region 'disabled nil)
+;; Re-enable some disabled commands
+(put #'narrow-to-region 'disabled nil)
 
-           ;; Always provide enough room for line numbers
-           (setq-default display-line-numbers-width-start t)
+;; Always provide enough room for line numbers
+(setq-default display-line-numbers-width-start t)
 
-           ;; I prefer 2 space indenting
-           (setq standard-indent 2)
-           (setq-default tab-width 2)
+;; I prefer 2 space indenting
+(setq standard-indent 2)
+(setq-default tab-width 2)
 
-           ;; Some global keymap adjustments
-           (map! :leader
-                 ";" #'execute-extended-command
-                 ":" #'pp-eval-expression
-                 "]" #'better-jumper-jump-forward
-                 "[" #'better-jumper-jump-backward
-                 (:prefix-map ("=" . "calc")
-                  "=" #'calc-dispatch
-                  "c" #'calc
-                  "q" #'quick-calc
-                  "g" #'calc-grab-region
-                  "G" #'calc-grab-rectangle
-                  (:prefix ("+" . "sum")
-                   "+" #'calc-grab-sum-down
-                   "=" #'calc-grab-sum-across))
-                 (:prefix-map ("t" . "toggle")
-                  :desc "Git gutter" "v" #'git-gutter-mode
-                  :desc "Highlight line" "h" #'hl-line-mode
-                  :desc "Debug on error" "d" #'toggle-debug-on-error)
-                 (:prefix-map ("p" . "project")
-                  "v" #'projectile-run-vterm)
-                 (:prefix-map ("i" . "insert")
-                  "u" #'insert-char
-                  "i" #'all-the-icons-insert))
+;; Some global keymap adjustments
+(map! :leader
+      ";" #'execute-extended-command
+      ":" #'pp-eval-expression
+      "]" #'better-jumper-jump-forward
+      "[" #'better-jumper-jump-backward
+      (:prefix-map ("=" . "calc")
+       "=" #'calc-dispatch
+       "c" #'calc
+       "q" #'quick-calc
+       "g" #'calc-grab-region
+       "G" #'calc-grab-rectangle
+       (:prefix ("+" . "sum")
+        "+" #'calc-grab-sum-down
+        "=" #'calc-grab-sum-across))
+      (:prefix-map ("t" . "toggle")
+       :desc "Git gutter" "v" #'git-gutter-mode
+       :desc "Highlight line" "h" #'hl-line-mode
+       :desc "Debug on error" "d" #'toggle-debug-on-error)
+      (:prefix-map ("p" . "project")
+       "v" #'projectile-run-vterm)
+      (:prefix-map ("i" . "insert")
+       "u" #'insert-char
+       "i" #'all-the-icons-insert))
 
-           (map! :leader
-                 :desc "window hydra" "w" #'my/window-hydra/body
-                 :desc "window" "W" evil-window-map)
+(map! :leader
+      :desc "window hydra" "w" #'my/window-hydra/body
+      :desc "window" "W" evil-window-map)
 
-           (map! :map evil-window-map
-                 ;; Use the normal other-window command
-                 ;; to take advantage of the window-select module
-                 "w" #'other-window
-                 "Q" #'kill-buffer-and-window
-                 "~" #'ace-swap-window)
+(map! :map evil-window-map
+      ;; Use the normal other-window command
+      ;; to take advantage of the window-select module
+      "w" #'other-window
+      "Q" #'kill-buffer-and-window
+      "~" #'ace-swap-window)
 
-           (map! :map global-map
-                 "M-u" #'undo-only
-                 "M-[" #'previous-buffer
-                 "M-]" #'next-buffer
-                 "<f12>" #'universal-argument)
+(map! :map global-map
+      "M-u" #'undo-only
+      "M-[" #'previous-buffer
+      "M-]" #'next-buffer
+      "<f12>" #'universal-argument)
 
-           (map! :map universal-argument-map
-                 "<f12>" #'universal-argument-more)
+(map! :map universal-argument-map
+      "<f12>" #'universal-argument-more)
 
-           (setq +doom-dashboard-ascii-banner-fn
-                 (defun my/doom-dashboard-draw-ascii-banner-fn ()
-                   (let* ((banner
-                           '("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
-                             "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
-                             "░░░░██╗░░██╗░██╗░░░██╗░░░░░░███████╗░███╗░░░███╗░░█████╗░░░█████╗░░░██████╗░░░░"
-                             "░░░░██║░░██║░╚██╗░██╔╝░░░░░░██╔════╝░████╗░████║░██╔══██╗░██╔══██╗░██╔════╝░░░░"
-                             "░░░░███████║░░╚████╔╝░░██╗░░█████╗░░░██╔████╔██║░███████║░██║░░╚═╝░╚█████╗░░░░░"
-                             "░░░░██╔══██║░░░╚██╔╝░░░╚═╝░░██╔══╝░░░██║╚██╔╝██║░██╔══██║░██║░░██╗░░╚═══██╗░░░░"
-                             "░░░░██║░░██║░░░░██║░░░░░░░░░███████╗░██║░╚═╝░██║░██║░░██║░╚█████╔╝░██████╔╝░░░░"
-                             "░░░░╚═╝░░╚═╝░░░░╚═╝░░░░░░░░░╚══════╝░╚═╝░░░░░╚═╝░╚═╝░░╚═╝░░╚════╝░░╚═════╝░░░░░"
-                             "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
-                             "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
-                             "                                                                               "))
-                          (longest-line (apply #'max (mapcar #'length banner))))
-                     (put-text-property
-                      (point)
-                      (dolist (line banner (point))
-                        (insert (+doom-dashboard--center
-                                 +doom-dashboard--width
-                                 (concat
-                                  line (make-string (max 0 (- longest-line (length line)))
-                                                    32)))
-                                "\n"))
-                      'face 'doom-dashboard-banner))))
+(setq +doom-dashboard-ascii-banner-fn
+      (defun my/doom-dashboard-draw-ascii-banner-fn ()
+        (let* ((banner
+                '("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+                  "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+                  "░░░░██╗░░██╗░██╗░░░██╗░░░░░░███████╗░███╗░░░███╗░░█████╗░░░█████╗░░░██████╗░░░░"
+                  "░░░░██║░░██║░╚██╗░██╔╝░░░░░░██╔════╝░████╗░████║░██╔══██╗░██╔══██╗░██╔════╝░░░░"
+                  "░░░░███████║░░╚████╔╝░░██╗░░█████╗░░░██╔████╔██║░███████║░██║░░╚═╝░╚█████╗░░░░░"
+                  "░░░░██╔══██║░░░╚██╔╝░░░╚═╝░░██╔══╝░░░██║╚██╔╝██║░██╔══██║░██║░░██╗░░╚═══██╗░░░░"
+                  "░░░░██║░░██║░░░░██║░░░░░░░░░███████╗░██║░╚═╝░██║░██║░░██║░╚█████╔╝░██████╔╝░░░░"
+                  "░░░░╚═╝░░╚═╝░░░░╚═╝░░░░░░░░░╚══════╝░╚═╝░░░░░╚═╝░╚═╝░░╚═╝░░╚════╝░░╚═════╝░░░░░"
+                  "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+                  "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
+                  "                                                                               "))
+               (longest-line (apply #'max (mapcar #'length banner))))
+          (put-text-property
+           (point)
+           (dolist (line banner (point))
+             (insert (+doom-dashboard--center
+                      +doom-dashboard--width
+                      (concat
+                       line (make-string (max 0 (- longest-line (length line)))
+                                         32)))
+                     "\n"))
+           'face 'doom-dashboard-banner))))
 
-           (setq +doom-dashboard-menu-sections
-                 '(("Open org-agenda" :icon
-                    (all-the-icons-octicon "calendar" :face 'doom-dashboard-menu-title)
-                    :when
-                    (fboundp 'org-agenda)
-                    :action org-agenda)
-                   ("Recently opened files" :icon
-                    (all-the-icons-octicon "file-text" :face 'doom-dashboard-menu-title)
-                    :action recentf-open-files)
-                   ("Open project" :icon
-                    (all-the-icons-octicon "briefcase" :face 'doom-dashboard-menu-title)
-                    :action project-switch-project)
-                   ("Jump to bookmark" :icon
-                    (all-the-icons-octicon "bookmark" :face 'doom-dashboard-menu-title)
-                    :action bookmark-jump)
-                   ("Open private configuration" :icon
-                    (all-the-icons-octicon "tools" :face 'doom-dashboard-menu-title)
-                    :when
-                    (file-directory-p doom-private-dir)
-                    :action doom/open-private-config))))
+(setq +doom-dashboard-menu-sections
+      '(("Open org-agenda" :icon
+         (all-the-icons-octicon "calendar" :face 'doom-dashboard-menu-title)
+         :when
+         (fboundp 'org-agenda)
+         :action org-agenda)
+        ("Recently opened files" :icon
+         (all-the-icons-octicon "file-text" :face 'doom-dashboard-menu-title)
+         :action recentf-open-files)
+        ("Open project" :icon
+         (all-the-icons-octicon "briefcase" :face 'doom-dashboard-menu-title)
+         :action project-switch-project)
+        ("Jump to bookmark" :icon
+         (all-the-icons-octicon "bookmark" :face 'doom-dashboard-menu-title)
+         :action bookmark-jump)
+        ("Open private configuration" :icon
+         (all-the-icons-octicon "tools" :face 'doom-dashboard-menu-title)
+         :when
+         (file-directory-p doom-private-dir)
+         :action doom/open-private-config)))
 
 (add-hook! 'doom-first-buffer-hook
   (setq display-line-numbers-type t))
@@ -341,3 +340,5 @@
                  t
                  ".+\\.el$"))
     (load! file)))
+
+(setq safe-local-variable-values '((org-agenda-files . ("~/work/notes/"))))
