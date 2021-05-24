@@ -3,19 +3,19 @@
 
 (package! embark
   :recipe (:host github :repo "oantolin/embark")
-  :pin "a21e510bc63c8ddc98b2bb3e6fff38e9d7f41ca9")
+  :pin "f52f9a34893a0dda493e22326aa859545a56bfe8")
 (package! embark-consult
   :recipe (:host github :repo "oantolin/embark")
-  :pin "a21e510bc63c8ddc98b2bb3e6fff38e9d7f41ca9")
+  :pin "f52f9a34893a0dda493e22326aa859545a56bfe8")
 (package! consult
   :recipe (:host github :repo "minad/consult")
-  :pin "556ff4eb31eb1d00a2afdda6664d03b698264e3c")
+  :pin "6020efd7de9882fca0b67c80876454e1994b72e9")
 (package! consult-flycheck
   :recipe (:host github :repo "minad/consult")
-  :pin "556ff4eb31eb1d00a2afdda6664d03b698264e3c")
+  :pin "6020efd7de9882fca0b67c80876454e1994b72e9")
 (package! marginalia
   :recipe (:host github :repo "minad/marginalia")
-  :pin "624028c69b55deb3387452b9eeabe9cb963bd2a4")
+  :pin "c940a49dbda97b078c240b7a7a076588e2adb30f")
 (package! selectrum
   :recipe (:host github :repo "raxod502/selectrum")
   :pin "a922b19f715ad6d046072a35a3df5ac5e4ed73d3")
