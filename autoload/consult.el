@@ -3,7 +3,9 @@
 ;;;###autoload
 (defun my/consult-color (&optional initial)
     (interactive)
-    (let* ((cmd "curl https://www.colourlovers.com/api/colors?numResults=50&format=json --data-urlencode \"keywords=ARG\"")
+    (let* ((cmd "curl https://www.colourlovers.com/api/colors?numResults=50&format=json \
+                 -H \"user-agent: Emacs\" \
+                 --data-urlencode \"keywords=ARG\"")
            (get-key
             (lambda (color) (format "#%s" (downcase (alist-get 'hex color)))))
            (get-candidate
@@ -32,7 +34,9 @@
 ;;;###autoload
 (defun my/consult-palette (&optional initial)
     (interactive)
-    (let* ((cmd "curl https://www.colourlovers.com/api/palettes?numResults=50&format=json --data-urlencode \"keywords=ARG\"")
+    (let* ((cmd "curl https://www.colourlovers.com/api/palettes?numResults=50&format=json \
+                 -H \"user-agent: Emacs\" \
+                 --data-urlencode \"keywords=ARG\"")
            (get-hex-colors
             (lambda (palette)
               (mapcar
