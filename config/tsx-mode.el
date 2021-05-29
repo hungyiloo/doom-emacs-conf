@@ -6,10 +6,17 @@
   :commands tsx-mode
   :init
   (defun my/tsx-mode-setup ()
-    ;; (add-to-list 'sp-pair-list (cons "/*" "*/"))
+    ;; Doom uses `js2-line-break' and `js2-mode-extend-comment' in typescript-mode to extend comments
+    ;; Without loading these, hitting RET in comments is broken
+    (autoload 'js2-mode-extend-comment "js2-mode")
+
+    ;; Enable rainbow delimiters in tsx-mode
     (rainbow-delimiters-mode 1)
+
+    ;; Enable emmet in tsx-mode
     (emmet-mode 1)
-    ;; (setq-local typescript-indent-level 2)
+
+    ;; Enable lsp for tsx files
     (lsp!))
 
   ;; (advice-add #'js-syntax-propertize :around #'ignore)

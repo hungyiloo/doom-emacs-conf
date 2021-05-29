@@ -1,7 +1,6 @@
 ;;; lisp/tsx-mode.el --- Real support for TSX -*- lexical-binding: t; -*-
 
 (require 'typescript-mode)
-(require 'js2-mode)
 (require 'tree-sitter)
 (require 'seq)
 (require 'cl-lib)
