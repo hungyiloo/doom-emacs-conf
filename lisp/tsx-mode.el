@@ -224,7 +224,8 @@
 (defun tsx--node-delete (node &optional push-kill clean-whitespace)
   (when-let ((node-region (tsx--node-region node clean-whitespace)))
     (funcall (if push-kill #'kill-region #'delete-region)
-             (car node-region) (cdr node-region))))
+             (car node-region) (cdr node-region))
+    (funcall indent-line-function)))
 
 (defun tsx--evil-region-end-shim (pos)
   (if (or (and (boundp 'evil-state) (eq evil-state 'operator))
