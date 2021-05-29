@@ -46,3 +46,6 @@
 ;; (package! evil :pin "f5ab7ff")
 ;; (package! evil-mc :pin "f04fb17")
 ;; (package! doom-themes :pin "55f01ed")
+
+(package! tsx-mode
+  :recipe (:local-repo "lisp"))

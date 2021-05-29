@@ -1,10 +1,67 @@
-;;; autoload/tsx-mode.el -*- lexical-binding: t; -*-
+;;; lisp/tsx-mode.el --- Real support for TSX -*- lexical-binding: t; -*-
 
+(require 'typescript-mode)
+(require 'js2-mode)
 (require 'tree-sitter)
 (require 'seq)
 (require 'cl-lib)
 
+(add-to-list 'tree-sitter-major-mode-language-alist '(tsx-mode . tsx))
+
+(defgroup tsx-mode nil
+  "Support for TSX."
+  :group 'typescript-mode)
+
+;; Always "correct" with underlying propertization, but inexplicable bad performance
+;; (define-derived-mode tsx-mode js-jsx-mode "tsx")
+
 ;;;###autoload
+(define-derived-mode tsx-mode typescript-mode "TSX"
+  "Major mode for editing JSX files."
+  :lighter ":TSX"
+  :group 'tsx-mode
+  (tree-sitter-require 'tsx)
+  (tree-sitter-hl-add-patterns nil "[\"/\" \"*\"] @operator")
+  (setq-local comment-region-function #'tsx-comment-region)
+  (setq-local uncomment-region-function #'tsx-uncomment-region)
+  (with-eval-after-load "evil-nerd-commenter"
+    (setq-local evilnc-comment-or-uncomment-region-function
+                'tsx-comment-or-uncomment-region))
+  (with-eval-after-load "rainbow-delimeters"
+    (setq-local rainbow-delimiters-pick-face-function #'tsx-rainbow-delimiters-pick-face))
+  (with-eval-after-load "lsp-mode"
+    (setq-local lsp-enable-indentation nil))
+  (setq-local indent-line-function #'tsx-indent-line-function))
+
+(with-eval-after-load "evil-mc"
+  (setq-local tsx-mode--auto-closing-temporarily-disabled nil)
+  (add-hook 'evil-mc-before-cursors-created
+            (defun tsx-disable-autoclosing-before-cursors-created ()
+              (when (eq major-mode 'tsx-mode)
+                (setq-local tsx-mode--auto-closing-temporarily-disabled t)
+                (setq-local tsx-mode-enable-auto-closing nil))))
+  (add-hook 'evil-mc-after-cursors-deleted
+            (defun tsx-reenable-autoclosing-after-cursors-deleted ()
+              (when (and tsx-mode--auto-closing-temporarily-disabled
+                         (eq major-mode 'tsx-mode))
+                (setq-local tsx-mode-enable-auto-closing t)))))
+
+(advice-add #'self-insert-command
+            :around
+            (defun tsx-self-insert-command-advice (orig-fun N &optional C)
+              (if (and (eq major-mode 'tsx-mode)
+                       (eq C ?/))
+                  (tsx-element-auto-close-maybe-h)
+                (funcall orig-fun N C))))
+
+(defmacro tsx-with-single-undo (&rest body)
+  "Execute BODY as a single undo step."
+  `(if (fboundp 'evil-with-single-undo)
+       (evil-with-single-undo
+         ,@body)
+     (atomic-change-group
+       ,@body)))
+
 (defun tsx-element-close (&optional dont-indent)
   (interactive)
   (let ((restore-angle-bracket (looking-at-p "<>")))
@@ -20,7 +77,6 @@
 
 (defvar tsx-mode-enable-auto-closing t "Enabled auto closing JSX tags tsx-mode")
 
-;;;###autoload
 (defun tsx-element-auto-close-maybe-h ()
   (interactive)
   (if (and tsx-mode-enable-auto-closing
@@ -83,7 +139,7 @@
 
 (defun tsx--element-at-point (&optional include-self-closing)
   (tsx--closest-parent-node nil (list 'jsx_element
-                               (when include-self-closing 'jsx_self_closing_element))))
+                                      (when include-self-closing 'jsx_self_closing_element))))
 
 (defun tsx--tag-at-point ()
   (tsx--closest-parent-node nil '(jsx_opening_element jsx_closing_element jsx_self_closing_element)))
@@ -97,7 +153,6 @@
    (tsc-node-end-position node)
    (lambda () replacement-text)))
 
-;;;###autoload
 (defun tsx-element-rename ()
   (interactive)
   (when-let* ((element-node (tsx--element-at-point t))
@@ -106,11 +161,10 @@
               (tag-name (tsc-node-text first-tag-node))
               (new-tag-name (string-trim (read-string "Rename element: " tag-name))))
     (unless (> (length new-tag-name) 0) (user-error "Oops! That isn't a valid tag name..."))
-    (evil-with-single-undo
-      (dolist (tag-node tag-nodes)
-        (tsx--replace-node tag-node new-tag-name)))))
+    (tsx-with-single-undo
+     (dolist (tag-node tag-nodes)
+       (tsx--replace-node tag-node new-tag-name)))))
 
-;;;###autoload
 (defun tsx-element-wrap ()
   (interactive)
   (let* ((wrap-region
@@ -172,49 +226,41 @@
     (funcall (if push-kill #'kill-region #'delete-region)
              (car node-region) (cdr node-region))))
 
-;;;###autoload
 (defun tsx--evil-region-end-shim (pos)
   (if (or (and (boundp 'evil-state) (eq evil-state 'operator))
           (and (fboundp #'evil-visual-state-p) (evil-visual-state-p)))
       pos (1- pos)))
 
-;;;###autoload
 (defun tsx-element-select ()
   (interactive)
   (when-let ((node (tsx--element-at-point t)))
     (tsx--node-select node)))
 
-;;;###autoload
 (defun tsx-element-kill ()
   (interactive)
   (when-let ((node (tsx--element-at-point t)))
     (tsx--node-delete node t 'after)))
 
-;;;###autoload
 (defun tsx-tag-select ()
   (interactive)
   (when-let ((node (tsx--tag-at-point)))
     (tsx--node-select node)))
 
-;;;###autoload
 (defun tsx-tag-kill ()
   (interactive)
   (when-let ((node (tsx--tag-at-point)))
     (tsx--node-delete node t 'after)))
 
-;;;###autoload
 (defun tsx-attribute-select ()
   (interactive)
   (when-let ((node (tsx--attribute-at-point)))
     (tsx--node-select node)))
 
-;;;###autoload
 (defun tsx-attribute-kill ()
   (interactive)
   (when-let ((node (tsx--attribute-at-point)))
     (tsx--node-delete node t 'after)))
 
-;;;###autoload
 (defun tsx-element-select-content ()
   (interactive)
   (when-let* ((element-node (tsx--element-at-point))
@@ -227,7 +273,6 @@
     (goto-char end)
     (activate-mark)))
 
-;;;###autoload
 (defun tsx-goto-element-end ()
   (interactive)
   (when-let* ((node (tsx--element-at-point t))
@@ -236,7 +281,6 @@
               (target-pos (tsc-node-end-position closing-element)))
     (goto-char target-pos)))
 
-;;;###autoload
 (defun tsx-goto-element-beginning ()
   (interactive)
   (when-let* ((node (save-excursion
@@ -247,13 +291,11 @@
               (target-pos (tsc-node-start-position opening-element)))
     (goto-char target-pos)))
 
-;;;###autoload
 (defun tsx-goto-tag-end ()
   (interactive)
   (when-let ((node (tsx--tag-at-point)))
     (goto-char (tsc-node-end-position node))))
 
-;;;###autoload
 (defun tsx-goto-tag-beginning ()
   (interactive)
   (when-let ((node (save-excursion
@@ -261,13 +303,11 @@
                      (tsx--tag-at-point))))
     (goto-char (tsc-node-start-position node))))
 
-;;;###autoload
 (defun tsx-goto-attribute-end ()
   (interactive)
   (when-let ((node (tsx--attribute-at-point)))
     (goto-char (tsc-node-end-position node))))
 
-;;;###autoload
 (defun tsx-goto-attribute-beginning ()
   (interactive)
   (when-let ((node (save-excursion
@@ -287,12 +327,10 @@
                          (tsc-node-start-position node)
                        (tsc-node-end-position node)))))))
 
-;;;###autoload
 (defun tsx-goto-next-sibling ()
   (interactive)
   (tsx--goto-sibling))
 
-;;;###autoload
 (defun tsx-goto-prev-sibling ()
   (interactive)
   (tsx--goto-sibling t))
@@ -335,7 +373,6 @@ POSITION is a byte position in buffer like \\(point-min\\)."
         (setq parent-node (tsc-get-parent current-node)))
       current-node)))
 
-;;;###autoload
 (defun tsx-indent-line-function ()
   (let* ((curr-point (save-excursion (back-to-indentation) (point)))
          (curr-column (current-indentation))
@@ -362,10 +399,10 @@ POSITION is a byte position in buffer like \\(point-min\\)."
                                               statement_block
                                               else_clause))
                           (if in-node-body
-                              (+ container-column evil-shift-width)
+                              (+ container-column typescript-indent-level)
                             container-column))
                          ((> curr-point (car (tsc-node-position-range container)))
-                          (+ container-column evil-shift-width))
+                          (+ container-column typescript-indent-level))
                          (t curr-column))))
     (save-excursion (indent-line-to target-column))
     (when (= 0 (current-column))
@@ -402,8 +439,8 @@ POSITION is a byte position in buffer like \\(point-min\\)."
     (replace-region-contents
      content-beg content-end
      (lambda () (concat comment-start
-                   (buffer-substring-no-properties content-beg content-end)
-                   comment-end)))))
+                        (buffer-substring-no-properties content-beg content-end)
+                        comment-end)))))
 
 (defun tsx--jsx-comment-only-p (beg end)
   (when-let ((content-region (tsx--actual-content-region beg end))
@@ -421,15 +458,12 @@ POSITION is a byte position in buffer like \\(point-min\\)."
       (setq node (tsc-get-next-sibling node)))
     is-jsx-comment))
 
-;;;###autoload
 (defun tsx-comment-region (beg end &optional ARG)
   (tsx-comment-or-uncomment-region beg end 'comment ARG))
 
-;;;###autoload
 (defun tsx-uncomment-region (beg end &optional ARG)
   (tsx-comment-or-uncomment-region beg end 'uncomment ARG))
 
-;;;###autoload
 (defun tsx-comment-or-uncomment-region (beg end &optional explicit ARG)
   (interactive)
   (let* ((content-region (tsx--actual-content-region beg end))
@@ -465,7 +499,6 @@ POSITION is a byte position in buffer like \\(point-min\\)."
             (comment-region-default beg end ARG))))))
   (indent-region beg end))
 
-;;;###autoload
 (defun tsx-element-vanish ()
   (interactive)
   (when-let* ((element-node (tsx--element-at-point t))
@@ -506,7 +539,6 @@ to achieve this."
           (setq linebreak-count (1+ linebreak-count)))))
     linebreak-count))
 
-;;;###autoload
 (defun tsx-element-spread (only-this &optional dont-indent)
   (interactive "P")
   (cl-letf (((symbol-function #'js-syntax-propertize) #'ignore))
@@ -544,7 +576,6 @@ to achieve this."
            (point))))
       linebreak-count)))
 
-;;;###autoload
 (defun tsx-tag-spread ()
   (interactive)
   (cl-letf (((symbol-function #'js-syntax-propertize) #'ignore))
@@ -578,29 +609,26 @@ to achieve this."
         (tsx--replace-node node sibling-text)
         (+ sibling-beg (- (length sibling-text) (length node-text)))))))
 
-;;;###autoload
 (defun tsx-element-transpose ()
   (interactive)
   (when-let ((node-target-types '(jsx_element jsx_self_closing_element jsx_expression))
              (node (or (tsx--closest-parent-node nil node-target-types)
                        (tsx--closest-parent-node (1- (point)) node-target-types))))
     (goto-char
-     (or (evil-with-single-undo
-           (tsx--node-transpose node node-target-types))
+     (or (tsx-with-single-undo
+          (tsx--node-transpose node node-target-types))
          (point)))))
 
-;;;###autoload
 (defun tsx-attribute-transpose ()
   (interactive)
   (when-let ((node-target-types '(jsx_attribute))
              (node (or (tsx--closest-parent-node nil node-target-types)
                        (tsx--closest-parent-node (1- (point)) node-target-types))))
     (goto-char
-     (or (evil-with-single-undo
-           (tsx--node-transpose node node-target-types))
+     (or (tsx-with-single-undo
+          (tsx--node-transpose node node-target-types))
          (point)))))
 
-;;;###autoload
 (defun tsx-element-clone ()
   (interactive)
   (when-let* ((node (tsx--element-at-point t))
@@ -613,7 +641,6 @@ to achieve this."
       (indent-region beg (+ end (- end beg))))
     (skip-chars-forward " \t\n\r")))
 
-;;;###autoload
 (defun tsx-newline-and-indent (&optional ARG)
   (interactive "P")
   (cond
@@ -635,7 +662,6 @@ to achieve this."
 
    (t (newline-and-indent ARG))))
 
-;;;###autoload
 (defun tsx-rainbow-delimiters-pick-face (depth match loc)
   "Return a face name appropriate for nesting depth DEPTH.
 DEPTH and MATCH are as in `rainbow-delimiters-pick-face-function'.
@@ -703,3 +729,5 @@ The returned value is either `rainbow-delimiters-unmatched-face',
 ;;                (unless (nth 8 (save-excursion (syntax-ppss (match-beginning 0))))
 ;;                  (js-jsx--syntax-propertize-tag end)))))))
 ;;    (point) end))
+
+(provide 'tsx-mode)
