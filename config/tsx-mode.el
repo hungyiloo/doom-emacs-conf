@@ -47,5 +47,4 @@
          :desc "Beginning" "b" #'tsx-goto-attribute-beginning
          :desc "Select" "s" #'tsx-attribute-select
          :desc "Kill" "k" #'tsx-attribute-kill
-         :desc "Transpose" "t" #'tsx-attribute-transpose))
-  )
+         :desc "Transpose" "t" #'tsx-attribute-transpose)))
