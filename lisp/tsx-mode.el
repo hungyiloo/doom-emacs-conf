@@ -242,6 +242,21 @@
   (when-let ((node (tsx--element-at-point t)))
     (tsx--node-delete node t 'after)))
 
+(defun tsx-element-toggle-self-closing ()
+  (interactive)
+  (when-let* ((node (tsx--element-at-point t))
+              (tag-name (tsx--element-tag-name node)))
+    (if (eq (tsc-node-type node) 'jsx_self_closing_element)
+        (tsx--replace-node
+         node
+         (concat (substring (tsc-node-text node) 0 -2)
+                 ">"
+                 "</" tag-name ">"))
+      (tsx--replace-node
+       node
+       (concat (substring (tsc-node-text (car (last (tsx--element-tag-nodes node)))) 0 -1)
+               "/>")))))
+
 (defun tsx-tag-select ()
   (interactive)
   (when-let ((node (tsx--tag-at-point)))

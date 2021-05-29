@@ -35,7 +35,8 @@
          :desc "Vanish" "v" #'tsx-element-vanish
          :desc "Spread" "RET" #'tsx-element-spread
          :desc "Transpose" "t" #'tsx-element-transpose
-         :desc "Clone" "c" #'tsx-element-clone)
+         :desc "Clone" "c" #'tsx-element-clone
+         :desc "Toggle self-closing" "%" #'tsx-element-toggle-self-closing)
         (:prefix-map ("t" . "tag")
          :desc "End" "e" #'tsx-goto-tag-end
          :desc "Beginning" "b" #'tsx-goto-tag-beginning
