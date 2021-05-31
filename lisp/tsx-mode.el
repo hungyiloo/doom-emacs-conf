@@ -23,6 +23,7 @@
   (tree-sitter-hl-add-patterns nil "[\"/\" \"*\"] @operator")
   (setq-local comment-region-function #'tsx-comment-region)
   (setq-local uncomment-region-function #'tsx-uncomment-region)
+  (setq-local indent-line-function #'tsx-indent-line-function)
   (with-eval-after-load "evil-nerd-commenter"
     (setq-local evilnc-comment-or-uncomment-region-function
                 'tsx-comment-or-uncomment-region))
@@ -30,20 +31,19 @@
     (setq-local rainbow-delimiters-pick-face-function #'tsx-rainbow-delimiters-pick-face))
   (with-eval-after-load "lsp-mode"
     (setq-local lsp-enable-indentation nil))
-  (setq-local indent-line-function #'tsx-indent-line-function))
+  (with-eval-after-load "evil-mc"
+    (add-hook 'evil-mc-before-cursors-created
+              (defun tsx-disable-autoclosing-before-cursors-created ()
+                (when (eq major-mode 'tsx-mode)
+                  (setq-local tsx-mode--auto-closing-temporarily-disabled t)
+                  (setq-local tsx-mode-enable-auto-closing nil))))
+    (add-hook 'evil-mc-after-cursors-deleted
+              (defun tsx-reenable-autoclosing-after-cursors-deleted ()
+                (when (and (eq major-mode 'tsx-mode)
+                           (bound-and-true-p tsx-mode--auto-closing-temporarily-disabled))
+                  (setq-local tsx-mode-enable-auto-closing t))))))
 
-(with-eval-after-load "evil-mc"
-  (setq-local tsx-mode--auto-closing-temporarily-disabled nil)
-  (add-hook 'evil-mc-before-cursors-created
-            (defun tsx-disable-autoclosing-before-cursors-created ()
-              (when (eq major-mode 'tsx-mode)
-                (setq-local tsx-mode--auto-closing-temporarily-disabled t)
-                (setq-local tsx-mode-enable-auto-closing nil))))
-  (add-hook 'evil-mc-after-cursors-deleted
-            (defun tsx-reenable-autoclosing-after-cursors-deleted ()
-              (when (and tsx-mode--auto-closing-temporarily-disabled
-                         (eq major-mode 'tsx-mode))
-                (setq-local tsx-mode-enable-auto-closing t)))))
+
 
 (advice-add #'self-insert-command
             :around
