@@ -21,6 +21,7 @@
   :group 'tsx-mode
   (tree-sitter-require 'tsx)
   (tree-sitter-hl-add-patterns nil "[\"/\" \"*\"] @operator")
+  (tree-sitter-hl-add-patterns nil "(jsx_text) @string")
   (setq-local comment-region-function #'tsx-comment-region)
   (setq-local uncomment-region-function #'tsx-uncomment-region)
   (setq-local indent-line-function #'tsx-indent-line-function)
@@ -41,7 +42,9 @@
               (defun tsx-reenable-autoclosing-after-cursors-deleted ()
                 (when (and (eq major-mode 'tsx-mode)
                            (bound-and-true-p tsx-mode--auto-closing-temporarily-disabled))
-                  (setq-local tsx-mode-enable-auto-closing t))))))
+                  (setq-local tsx-mode-enable-auto-closing t)))))
+  (with-eval-after-load "spell-fu"
+    (setq-local spell-fu-faces-include '(tree-sitter-hl-face:comment tree-sitter-hl-face:string))))
 
 
 
