@@ -114,8 +114,8 @@ This seems to work better for me than doom's provided `+eval:replace-region'"
   ;; Fix typescript quickrunning by simplfiying using deno
   ;; NOTE: Deno must be externally installed within the environment for this to work
   (add-to-list 'quickrun--language-alist
-               '("typescript"
+               '("deno"
                  (:command . "deno run")
-                 (:exec . ("cp %n %n.ts" "%c --quiet %n.ts"))
+                 (:exec . ("cp %s %n.ts" "%c --quiet %n.ts"))
                  (:remove . ("%n.ts"))
                  (:description . "Run Typescript file with deno"))))
