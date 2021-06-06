@@ -74,7 +74,7 @@ This seems to work better for me than doom's provided `+eval:replace-region'"
     (goto-char end)
     (activate-mark)
     ;; Now the mark is set and activated, hand off to quickrun
-    (+eval/region beg end))
+    (quickrun-region beg end))
 
   (defun quickrun--outputter-replace-region ()
     "Replace region with quickrun output, and truncate the last character if it's a newline"
