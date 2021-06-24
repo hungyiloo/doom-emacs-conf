@@ -218,11 +218,11 @@
            (point))
        node-end))))
 
-(defun tsx--node-delete (node &optional push-kill clean-whitespace)
+(defun tsx--node-delete (node &optional push-kill clean-whitespace dont-reindent)
   (when-let ((node-region (tsx--node-region node clean-whitespace)))
     (funcall (if push-kill #'kill-region #'delete-region)
              (car node-region) (cdr node-region))
-    (funcall indent-line-function)))
+    (unless dont-reindent (funcall indent-line-function))))
 
 (defun tsx--evil-region-end-shim (pos)
   (if (or (and (boundp 'evil-state) (eq evil-state 'operator))
@@ -521,9 +521,9 @@ POSITION is a byte position in buffer like \\(point-min\\)."
     (let ((closing-tag-node (car tag-nodes))
           (opening-tag-node (cadr tag-nodes)))
       (when closing-tag-node
-        (tsx--node-delete closing-tag-node nil 'after))
+        (tsx--node-delete closing-tag-node nil 'after t))
       (when opening-tag-node
-        (tsx--node-delete opening-tag-node nil 'before)))
+        (tsx--node-delete opening-tag-node nil 'before t)))
     (indent-region beg end)))
 
 (defun tsx--node-own-line (node &optional before-or-after)
