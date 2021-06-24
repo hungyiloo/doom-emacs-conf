@@ -167,10 +167,13 @@
 (after! evil-mc
   ;; Prevents evil-mc from clearing registers when multiple cursors are created
   ;; NOTE: This might break named register jumping, yanking and pasting *during* evil-mc-mode
-  (setq evil-mc-cursor-variables (mapcar
-                                  (lambda (s)
-                                    (remove 'register-alist (remove 'evil-markers-alist s)))
-                                  evil-mc-cursor-variables))
+  (setq evil-mc-cursor-variables
+        (mapcar
+          (lambda (s)
+            (remove 'register-alist
+                    (remove 'evil-markers-alist
+                            (remove evil-was-yanked-without-register s))))
+          evil-mc-cursor-variables))
 
   ;; Redefine this function to fix cursor misalignment issues.
   ;; e.g. With multiple cursors, visually select one character and change.
