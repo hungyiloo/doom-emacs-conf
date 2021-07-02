@@ -9,13 +9,13 @@
   :pin "acbe1cba548832d295449da348719f69b9685c6f")
 (package! consult
   :recipe (:host github :repo "minad/consult")
-  :pin "ee58941308d83a717728f056ea753e80f68cfbc0")
+  :pin "6ce9aa58e74da92e391cfe938bc3da4f47ab591e")
 (package! consult-flycheck
   :recipe (:host github :repo "minad/consult")
-  :pin "ee58941308d83a717728f056ea753e80f68cfbc0")
+  :pin "6ce9aa58e74da92e391cfe938bc3da4f47ab591e")
 (package! marginalia
   :recipe (:host github :repo "minad/marginalia")
-  :pin "9796fada769f44cb8e05914bd6be3fcc15d791e2")
+  :pin "3bf0a4db55f6267467f0a08715f4776509a3b503")
 (package! selectrum
   :recipe (:host github :repo "raxod502/selectrum")
   :pin "a19bbe94de492bf504399c093cfc5695eb630fa8")
