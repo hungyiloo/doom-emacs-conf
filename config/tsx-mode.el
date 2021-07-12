@@ -55,4 +55,7 @@
          :desc "Beginning" "b" #'tsx-goto-attribute-beginning
          :desc "Select" "s" #'tsx-attribute-select
          :desc "Kill" "k" #'tsx-attribute-kill
-         :desc "Transpose" "t" #'tsx-attribute-transpose)))
+         :desc "Transpose" "t" #'tsx-attribute-transpose))
+
+  (after! editorconfig
+    (add-to-list 'editorconfig-indentation-alist '(tsx-mode typescript-indent-level))))
