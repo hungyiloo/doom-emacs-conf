@@ -9,4 +9,4 @@ fi
 cd ~
 ~/.config/emacs/bin/doom env
 # setsid emacsclient -c -a=""
-~/.local/bin/emacs
+emacs
