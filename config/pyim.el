@@ -1,7 +1,8 @@
 ;;; config/pyim.el -*- lexical-binding: t; -*-
 
 (use-package! pyim
-  :commands #'set-input-method
+  :after-call after-find-file pre-command-hook
+  :init
+  (setq pyim-dcache-directory (concat doom-cache-dir "pyim/"))
   :config
-  (require 'pyim-basedict)
-  (pyim-basedict-enable))
+  (setq pyim-page-tooltip t))
