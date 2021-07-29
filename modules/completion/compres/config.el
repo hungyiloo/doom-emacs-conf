@@ -183,7 +183,7 @@
              (when-let (root (funcall consult-project-root-function))
                (let ((len (length root))
                      (inv-root (propertize root 'invisible t))
-                     (ht (consult--cached-buffer-file-hash)))
+                     (ht (consult--buffer-file-hash)))
                  (mapcar (lambda (x)
                            (concat inv-root (substring x len)))
                          (seq-filter (lambda (x)
@@ -338,10 +338,3 @@
   (define-key!
    [remap ispell-word] #'+compres/spell-correct
    [remap +spell/correct] #'+compres/spell-correct))
-
-(after! evil
-  ;; Fix left and right char movement in grep-mode for evil
-  ;; REVIEW: does this belong in this module?
-  (map! :map grep-mode-map
-        :nv "h" #'evil-backward-char
-        :nv "l" #'evil-forward-char))

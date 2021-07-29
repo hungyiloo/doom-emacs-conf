@@ -46,6 +46,9 @@
 ;; (package! evil :pin "f5ab7ff")
 ;; (package! evil-mc :pin "f04fb17")
 ;; (package! doom-themes :pin "55f01ed")
+(package! vertico-mouse
+  :recipe (:host github :repo "minad/vertico")
+  :pin "51152475cf96c78a795525675999f6d12545c0ec")
 
 (package! tsx-mode
   :recipe (:local-repo "lisp"))

@@ -149,7 +149,12 @@
             (evil-yank beg end)))
         (goto-char end))
       (evil-paste-before 1))
-    (goto-char (car (last evil-last-paste)))))
+    (goto-char (car (last evil-last-paste))))
+
+  ;; Fix left and right char movement in grep-mode for evil
+  (map! :map grep-mode-map
+        :nv "h" #'evil-backward-char
+        :nv "l" #'evil-forward-char))
 
 (after! evil-collection
   ;; Fix regular linewise movement in org mode and outline mode.

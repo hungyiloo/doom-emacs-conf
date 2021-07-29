@@ -13,9 +13,9 @@
   ;; Run it using "node generate-emoji-json.js"
   (setq emojify-emoji-json (concat doom-private-dir "emoji.json"))
 
-  (after! selectrum
-    ;; Fix selectrum candidate emojification
-    (advice-add #'selectrum--format-candidate :around #'my/emojify-result-advice))
+  (after! vertico
+    ;; Fix vertico candidate emojification
+    (advice-add #'vertico--format-candidate :around #'my/emojify-result-advice))
 
   (after! consult
     ;; Fix emojify display issues after using consult.
