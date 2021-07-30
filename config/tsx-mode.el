@@ -8,7 +8,8 @@
   (defun my/tsx-mode-setup ()
     ;; Doom uses `js2-line-break' and `js2-mode-extend-comment' in typescript-mode to extend comments
     ;; Without loading these, hitting RET in comments is broken
-    (autoload 'js2-mode-extend-comment "js2-mode")
+    ;; (autoload 'js2-mode-extend-comment "js2-mode")
+    (require 'js2-mode)
 
     ;; Enable rainbow delimiters in tsx-mode
     (rainbow-delimiters-mode 1)
