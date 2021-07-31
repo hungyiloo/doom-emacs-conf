@@ -1,24 +1,24 @@
 ;;; lisp/tsx-mode.el --- Real support for TSX -*- lexical-binding: t; -*-
 
-(require 'typescript-mode)
 (require 'tree-sitter)
 (require 'seq)
 (require 'cl-lib)
 
 (add-to-list 'tree-sitter-major-mode-language-alist '(tsx-mode . tsx))
 
+(defvar tsx-indent-level 2
+  "Number of spaces for each indentation level in tsx-mode")
+
 (defgroup tsx-mode nil
   "Support for TSX."
-  :group 'typescript-mode)
-
-;; Always "correct" with underlying propertization, but inexplicable bad performance
-;; (define-derived-mode tsx-mode js-jsx-mode "tsx")
+  :group 'tsx-mode)
 
 ;;;###autoload
-(define-derived-mode tsx-mode typescript-mode "TSX"
-  "Major mode for editing JSX files."
+(define-derived-mode tsx-mode prog-mode "TSX"
+  "Major mode for editing TSX files."
   :lighter ":TSX"
   :group 'tsx-mode
+  (set-syntax-table text-mode-syntax-table)
   (tree-sitter-require 'tsx)
   (tree-sitter-hl-add-patterns nil "[\"/\" \"*\"] @operator")
   (tree-sitter-hl-add-patterns nil "(jsx_text) @string")
@@ -26,7 +26,7 @@
   (setq-local uncomment-region-function #'tsx-uncomment-region)
   (setq-local indent-line-function #'tsx-indent-line-function)
   (setq-local evilnc-comment-or-uncomment-region-function
-                    'tsx-comment-or-uncomment-region)
+              'tsx-comment-or-uncomment-region)
   (setq-local rainbow-delimiters-pick-face-function #'tsx-rainbow-delimiters-pick-face)
   (setq-local lsp-enable-indentation nil)
   (add-hook 'evil-mc-before-cursors-created
@@ -412,10 +412,10 @@ POSITION is a byte position in buffer like \\(point-min\\)."
                                               statement_block
                                               else_clause))
                           (if in-node-body
-                              (+ container-column typescript-indent-level)
+                              (+ container-column tsx-indent-level)
                             container-column))
                          ((> curr-point (car (tsc-node-position-range container)))
-                          (+ container-column typescript-indent-level))
+                          (+ container-column tsx-indent-level))
                          (t curr-column))))
     (save-excursion (indent-line-to target-column))
     (when (= 0 (current-column))
@@ -452,8 +452,8 @@ POSITION is a byte position in buffer like \\(point-min\\)."
     (replace-region-contents
      content-beg content-end
      (lambda () (concat comment-start
-                        (buffer-substring-no-properties content-beg content-end)
-                        comment-end)))))
+                   (buffer-substring-no-properties content-beg content-end)
+                   comment-end)))))
 
 (defun tsx--jsx-comment-only-p (beg end)
   (when-let ((content-region (tsx--actual-content-region beg end))

@@ -59,4 +59,4 @@
          :desc "Transpose" "t" #'tsx-attribute-transpose))
 
   (after! editorconfig
-    (add-to-list 'editorconfig-indentation-alist '(tsx-mode typescript-indent-level))))
+    (add-to-list 'editorconfig-indentation-alist '(tsx-mode tsx-indent-level))))
