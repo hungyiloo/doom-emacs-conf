@@ -3,7 +3,7 @@
 (after! company
   ;; Less responsive company autocompletion.
   ;; I can trigger it manually using C-SPC
-  (setq company-idle-delay 1)
+  (setq company-idle-delay nil)
 
   ;; REVIEW: This doesn't really feel good to me. Maybe I've gotten used to the
   ;; C-g way to cancel company already
