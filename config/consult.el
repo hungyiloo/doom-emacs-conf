@@ -39,9 +39,10 @@
         "l" #'consult-focus-lines
         "w" #'my/widen-dwim)
 
-  ;; Don't be so aggresive with previews
-  (setq consult-preview-key (kbd "C-."))
-  (setq consult-config '((consult-line :preview-key any)))
+  ;; REVIEW: Using doom's default previewing behavior for now, but apparent we
+  ;; can customize `consult--read-config' to change this behavior more easily.
+  ;; (setq consult-preview-key (kbd "C-."))
+  ;; (setq consult-config '((consult-line :preview-key any)))
 
   (after! evil
     ;; Integrate with evil jumping
