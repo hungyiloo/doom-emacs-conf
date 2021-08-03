@@ -137,8 +137,9 @@
          :desc "Kill" "k" #'tsx-attribute-kill
          :desc "Transpose" "t" #'tsx-attribute-transpose))
 
-  ;; Register tsx-mode as a cpp-like mode for commenting purposes
-  (add-to-list 'evilnc-cpp-like-comment-syntax-modes 'tsx-mode)
+  (after! evilnc
+    ;; Register tsx-mode as a cpp-like mode for commenting purposes
+    (add-to-list 'evilnc-cpp-like-comment-syntax-modes 'tsx-mode))
 
   (after! editorconfig
     (add-to-list 'editorconfig-indentation-alist '(tsx-mode tsx-indent-level))))
