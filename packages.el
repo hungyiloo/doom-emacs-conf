@@ -36,11 +36,11 @@
 ;; rainbow-mode without the extra rgb module stuff (e.g. kurecolor)
 (package! rainbow-mode)
 
-(package! lsp-mode :pin "f996db04e1159299c4fce2cbf3dc0cfa0e3966c4")
-(package! lsp-ui :pin "4283414de69312298d51b03e938d95d37d238391")
+(package! lsp-mode :pin "5b2daf688e7bf2590b1d1c8cea06fa57114282f9")
+(package! lsp-ui :pin "177c31e982345ba35dc7c5d90cb1f8e68585323a")
 ;; (package! org-roam :pin "756f6215b672e267f986a3d6e494f5309825b91a")
 (package! ctrlf :pin "b78e129a8a4fabfebba8cdd5ef51278d0d57e0f4")
-(package! org-mode :pin "3ba46cbe4ace6cbc12eec4af1060f41c84367591")
+(package! org-mode :pin "8df3e25db8a629bbffa883edadb13a55239ae4b7")
 (package! vterm :pin "d9dfa624679afdd5db6ad25429ef86d3dd91401e")
 ;; (package! good-scroll :pin "fb01f121c4c77db3e6750303894d57b31e410b14")
 ;; (package! evil :pin "f5ab7ff")
@@ -48,7 +48,7 @@
 ;; (package! doom-themes :pin "55f01ed")
 (package! vertico-mouse
   :recipe (:host github :repo "minad/vertico")
-  :pin "9de6709cddc09740d23d24fb425fa3c174d0e956")
+  :pin "864dfeb4e98c4629d1c3e2005b1c3baa7dea7cc9")
 
 (package! tsx-mode
   :recipe (:local-repo "lisp"))
