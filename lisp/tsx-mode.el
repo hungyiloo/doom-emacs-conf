@@ -18,30 +18,26 @@
   "Major mode for editing TSX files."
   :lighter ":TSX"
   :group 'tsx-mode
-  (set-syntax-table text-mode-syntax-table)
+  (modify-syntax-entry ?' "'")
+  (modify-syntax-entry ?= ".")
+  (modify-syntax-entry ?> ".")
+  (modify-syntax-entry ?< ".")
+  (modify-syntax-entry ?+ ".")
+  (modify-syntax-entry ?- ".")
+  (modify-syntax-entry ?/ ". 124")
+  (modify-syntax-entry ?* ". 23b")
+  (modify-syntax-entry ?\n ">")
   (tree-sitter-require 'tsx)
   (tree-sitter-hl-add-patterns nil "[\"/\" \"*\"] @operator")
   (tree-sitter-hl-add-patterns nil "(jsx_text) @string")
   (setq-local comment-region-function #'tsx-comment-region)
   (setq-local uncomment-region-function #'tsx-uncomment-region)
   (setq-local indent-line-function #'tsx-indent-line-function)
-  (setq-local evilnc-comment-or-uncomment-region-function
-              'tsx-comment-or-uncomment-region)
-  (setq-local rainbow-delimiters-pick-face-function #'tsx-rainbow-delimiters-pick-face)
-  (setq-local lsp-enable-indentation nil)
-  (add-hook 'evil-mc-before-cursors-created
-            (defun tsx-disable-autoclosing-before-cursors-created ()
-              (when (eq major-mode 'tsx-mode)
-                (setq-local tsx-mode--auto-closing-temporarily-disabled t)
-                (setq-local tsx-mode-enable-auto-closing nil))))
-  (add-hook 'evil-mc-after-cursors-deleted
-            (defun tsx-reenable-autoclosing-after-cursors-deleted ()
-              (when (and (eq major-mode 'tsx-mode)
-                         (bound-and-true-p tsx-mode--auto-closing-temporarily-disabled))
-                (setq-local tsx-mode-enable-auto-closing t))))
-  (setq-local spell-fu-faces-include '(tree-sitter-hl-face:comment tree-sitter-hl-face:string)))
-
-
+  (setq-local comment-line-break-function #'tsx-comment-line-break)
+  (setq-local comment-start "// ")
+  (setq-local comment-start-skip "[[:space:]]*\\(//+\\|{?/\\*+\\)")
+  (setq-local comment-end "")
+  (setq-local comment-end-skip "\\(\\*+/}?[[:space:]]*\\)\n?\\|\n"))
 
 (advice-add #'self-insert-command
             :around
@@ -498,9 +494,9 @@ POSITION is a byte position in buffer like \\(point-min\\)."
          (comment-end-skip (if in-jsx
                                "[ 	]*\\(\\s>\\|\\*+/}\\)"
                              comment-end-skip))
-         (is-ts-mode (derived-mode-p 'typescript-mode))
-         (comment-use-syntax (if is-ts-mode t nil)))
-    (when is-ts-mode (tsx--unwrap-jsx-expressions-in-region beg end))
+         ;; (is-ts-mode (derived-mode-p 'typescript-mode))
+         (comment-use-syntax (if in-jsx nil t)))
+    ;; (when is-ts-mode (tsx--unwrap-jsx-expressions-in-region beg end))
     (save-excursion
       (cond
        ((eq explicit 'comment) (comment-region-default beg end ARG))
@@ -707,6 +703,71 @@ The returned value is either `rainbow-delimiters-unmatched-face',
                         (- rainbow-delimiters-max-face-count
                            rainbow-delimiters-outermost-only-face-count)))))
              "-face")))))
+
+(defun tsx-comment-line-break (&optional _soft)
+  "Break line at point and indent, continuing comment if within one.
+If inside a string, and `js2-concat-multiline-strings' is not
+nil, turn it into concatenation."
+  (interactive)
+  (let ((parse-status (syntax-ppss)))
+    (cond
+     ;; Check if inside a block comment.
+     ((nth 4 parse-status)
+      (tsx-extend-comment (nth 8 parse-status)))
+     (t
+      (insert "\n")
+      (tsx-indent-line-function)))))
+
+(defun tsx-extend-comment (start-pos)
+  "Indent the line and, when inside a comment block, add comment prefix."
+  (let (star single col first-line needs-close)
+    (save-excursion
+      (back-to-indentation)
+      (when (< (point) start-pos)
+        (goto-char start-pos))
+      (cond
+       ((looking-at "\\*[^/]")
+        (setq star t
+              col (current-column)))
+       ((looking-at "/\\*")
+        (setq star t
+              first-line t
+              col (1+ (current-column))))
+       ((looking-at "//")
+        (setq single t
+              col (current-column)))))
+    ;; Heuristic for whether we need to close the comment:
+    ;; if we've got a parse error here, assume it's an unterminated
+    ;; comment.
+    (setq needs-close
+          (or
+           (get-char-property (1- (point)) 'js2-error)
+           ;; The heuristic above doesn't work well when we're
+           ;; creating a comment and there's another one downstream,
+           ;; as our parser thinks this one ends at the end of the
+           ;; next one.  (You can have a /* inside a js block comment.)
+           ;; So just close it if the next non-ws char isn't a *.
+           (and first-line
+                (eolp)
+                (save-excursion
+                  (skip-chars-forward " \t\r\n")
+                  (not (eq (char-after) ?*))))))
+    (delete-horizontal-space)
+    (insert "\n")
+    (cond
+     (star
+      (indent-to col)
+      (insert "* ")
+      (if (and first-line needs-close)
+          (save-excursion
+            (insert "\n")
+            (indent-to col)
+            (insert "*/"))))
+     (single
+      (indent-to col)
+      (insert "// ")))
+    ;; Don't need to extend the comment after all.
+    (tsx-indent-line-function)))
 
 ;; (defun tsx-syntax-propertize (start end)
 ;;   ;; JavaScript allows immediate regular expression objects, written /.../.
