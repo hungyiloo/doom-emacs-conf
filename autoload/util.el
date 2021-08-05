@@ -8,3 +8,10 @@
   (save-restriction
     (narrow-to-region (point) (point))
     (yank-rectangle)))
+
+;;;###autoload
+(defun my/yank-rectangle-push-lines-after ()
+  "Yank a rectangle as if it was an ordinary kill, to the position after the point."
+  (interactive "*")
+  (forward-char)
+  (my/yank-rectangle-push-lines))
