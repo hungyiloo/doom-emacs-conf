@@ -35,9 +35,6 @@
     ;; evil-nc (commenting) integration
     (setq-local evilnc-comment-or-uncomment-region-function 'tsx-comment-or-uncomment-region)
 
-    ;; Better spell checking
-    (setq-local spell-fu-faces-include '(tree-sitter-hl-face:comment tree-sitter-hl-face:string))
-
     ;; Enable lsp for tsx files
     (lsp!)
     (setq-local lsp-enable-indentation nil))
