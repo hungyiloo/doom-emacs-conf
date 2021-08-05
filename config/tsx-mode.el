@@ -16,63 +16,6 @@
     ;; i.e. fix angle bracket behavior
     (setq-local evil-embrace-evil-surround-keys '(40 91 123 41 93 125 34 39 98 66 116 27 119 87 115 112 60 62))
 
-    ;; Better smartparens integration
-    (setq-local sp-local-pairs '((:open "<!--" :close "-->" :actions
-                                  (insert)
-                                  :when nil :unless
-                                  (sp-point-before-word-p sp-point-before-same-p)
-                                  :pre-handlers nil :post-handlers
-                                  (("| " "SPC")))
-                                 (:open "<" :close ">" :actions
-                                  (wrap insert autoskip navigate)
-                                  :when nil :unless nil :pre-handlers nil :post-handlers nil)
-                                 (:open "\\\\(" :close "\\\\)" :actions
-                                  (insert wrap autoskip navigate))
-                                 (:open "\\{" :close "\\}" :actions
-                                  (insert wrap autoskip navigate))
-                                 (:open "\\(" :close "\\)" :actions
-                                  (insert wrap autoskip navigate))
-                                 (:open "\\\"" :close "\\\"" :actions
-                                  (insert wrap autoskip navigate))
-                                 (:open "\"" :close "\"" :actions
-                                  (wrap insert autoskip navigate)
-                                  :unless
-                                  (sp-point-before-word-p sp-point-after-word-p sp-point-before-same-p)
-                                  :post-handlers nil)
-                                 (:open "'" :close "'" :actions
-                                  (wrap insert autoskip navigate)
-                                  :unless
-                                  (sp-point-before-word-p sp-point-after-word-p sp-point-before-same-p)
-                                  :post-handlers nil)
-                                 (:open "(" :close ")" :actions
-                                  (wrap insert autoskip navigate)
-                                  :unless
-                                  (sp-point-before-word-p sp-point-before-same-p)
-                                  :post-handlers
-                                  (("||\n[i]" "RET")
-                                   ("| " "SPC")))
-                                 (:open "[" :close "]" :actions
-                                  (wrap insert autoskip navigate)
-                                  :unless
-                                  (sp-point-before-word-p sp-point-before-same-p)
-                                  :post-handlers
-                                  (("||\n[i]" "RET")
-                                   ("| " "SPC")))
-                                 (:open "{" :close "}" :actions
-                                  (wrap insert autoskip navigate)
-                                  :unless
-                                  (sp-point-before-word-p sp-point-before-same-p)
-                                  :post-handlers
-                                  (("||\n[i]" "RET")
-                                   ("| " "SPC")))
-                                 (:open "`" :close "`" :actions
-                                  (insert wrap autoskip navigate))
-                                 (:open "/*" :close "*/" :actions
-                                  (insert)
-                                  :when nil :unless nil :pre-handlers nil :post-handlers
-                                  (("| " "SPC")
-                                   (" | " "*")
-                                   ("|[i]\n[i]" "RET")))))
     ;; Better rainbow delimiters integration
     (setq-local rainbow-delimiters-pick-face-function #'tsx-rainbow-delimiters-pick-face)
 
@@ -142,4 +85,39 @@
     (add-to-list 'evilnc-cpp-like-comment-syntax-modes 'tsx-mode))
 
   (after! editorconfig
-    (add-to-list 'editorconfig-indentation-alist '(tsx-mode tsx-indent-level))))
+    (add-to-list 'editorconfig-indentation-alist '(tsx-mode tsx-indent-level)))
+
+  (after! smartparens
+    (add-to-list 'sp-pairs '(tsx-mode
+                             (:open "<" :close ">" :actions
+                              (wrap autoskip navigate)
+                              :when
+                              (:add)
+                              :unless
+                              (:add)
+                              :pre-handlers
+                              (:add)
+                              :post-handlers
+                              (:add))
+                             (:open "/*" :close "*/" :actions
+                              (insert)
+                              :when
+                              (:add)
+                              :unless
+                              (:add)
+                              :pre-handlers
+                              (:add)
+                              :post-handlers
+                              (("| " "SPC")
+                               (" | " "*")
+                               ("|[i]\n[i]" "RET")))
+                             (:open "<!--" :close "-->" :actions
+                              (insert)
+                              :when
+                              (:add)
+                              :unless
+                              (sp-point-before-word-p sp-point-before-same-p)
+                              :pre-handlers
+                              (:add)
+                              :post-handlers
+                              (("| " "SPC")))))))
