@@ -41,14 +41,14 @@
 ;; (package! org-roam :pin "756f6215b672e267f986a3d6e494f5309825b91a")
 (package! ctrlf :pin "b78e129a8a4fabfebba8cdd5ef51278d0d57e0f4")
 (package! org-mode :pin "8df3e25db8a629bbffa883edadb13a55239ae4b7")
-(package! vterm :pin "d9dfa624679afdd5db6ad25429ef86d3dd91401e")
+(package! vterm :pin "f73644a07ce56712101d1568139a8f3c3b4a9e59")
 ;; (package! good-scroll :pin "fb01f121c4c77db3e6750303894d57b31e410b14")
 ;; (package! evil :pin "f5ab7ff")
 ;; (package! evil-mc :pin "f04fb17")
 ;; (package! doom-themes :pin "55f01ed")
 (package! vertico-mouse
   :recipe (:host github :repo "minad/vertico")
-  :pin "864dfeb4e98c4629d1c3e2005b1c3baa7dea7cc9")
+  :pin "5e612540ed380394fda38cc7938b8734c7001bca")
 
 (package! tsx-mode
   :recipe (:local-repo "lisp"))
