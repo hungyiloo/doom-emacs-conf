@@ -28,8 +28,8 @@
 _z_: match all     _J_: make & go down   _._: toggle here
 _m_: make & next   _K_: make & go up     _r_: remove last
 _M_: make & prev   _I_: make visual beg  _R_: remove all
-_n_: skip & next   _A_: make visual end  _p_: pause/resume
-_N_: skip & prev
+_n_: skip & next   _A_: make visual end  _!_: pause/resume
+_N_: skip & prev   ^ ^                   _p_: paste multiple
 
 Current pattern: %s(replace-regexp-in-string \"%\" \"%%\" (or (caar evil-mc-pattern) \"\"))  "
   ("z" #'evil-mc-make-all-cursors)
@@ -44,7 +44,8 @@ Current pattern: %s(replace-regexp-in-string \"%\" \"%%\" (or (caar evil-mc-patt
   ("." #'+multiple-cursors/evil-mc-toggle-cursor-here)
   ("r" #'+multiple-cursors/evil-mc-undo-cursor)
   ("R" #'evil-mc-undo-all-cursors)
-  ("p" #'+multiple-cursors/evil-mc-toggle-cursors)
+  ("p" #'my/yank-rectangle-push-lines :color blue)
+  ("!" #'+multiple-cursors/evil-mc-toggle-cursors)
   ("q" nil "quit" :color blue)
   ("<escape>" nil "quit" :color blue))
 
