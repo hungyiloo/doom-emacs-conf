@@ -129,7 +129,7 @@
          :action recentf-open-files)
         ("Open project" :icon
          (all-the-icons-octicon "briefcase" :face 'doom-dashboard-menu-title)
-         :action project-switch-project)
+         :action projectile-switch-project)
         ("Jump to bookmark" :icon
          (all-the-icons-octicon "bookmark" :face 'doom-dashboard-menu-title)
          :action bookmark-jump)

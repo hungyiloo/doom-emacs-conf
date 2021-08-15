@@ -7,8 +7,8 @@
   :config
   ;; Adjust some keybindings to use consult equivalents
   (map! :leader
-        "," #'my/consult-project-buffer
-        "<" #'consult-buffer
+        ;; "," #'my/consult-project-buffer
+        ;; "<" #'consult-buffer
         (:prefix-map ("M" . "mode")
          "M" #'consult-mode-command
          "N" #'consult-minor-mode-menu)

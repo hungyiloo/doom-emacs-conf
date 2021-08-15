@@ -16,7 +16,7 @@
 (package! pyim)
 
 ;; simpler and more robust than persp-mode and doom's workspaces, but fewer features
-(package! eyebrowse)
+;; (package! eyebrowse)
 
 ;; org-babel typescript support
 (package! ob-typescript)
