@@ -58,6 +58,7 @@
       "[" #'better-jumper-jump-backward
       (:prefix-map ("=" . "calc")
        "=" #'calc-dispatch
+       "l" #'literate-calc-minor-mode
        "c" #'calc
        "q" #'quick-calc
        "g" #'calc-grab-region

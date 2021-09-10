@@ -52,6 +52,7 @@
 (package! vertico-mouse
   :recipe (:host github :repo "minad/vertico")
   :pin "81a4b35f8d11dfad56de1727ee9bdd3b4461d07c")
+(package! literate-calc-mode)
 
 (package! tsx-mode
   :recipe (:local-repo "lisp"))
