@@ -8,7 +8,7 @@
         lsp-enable-folding nil
         lsp-semantic-tokens-enable nil
         lsp-enable-links nil
-        lsp-enable-snippet t
+        lsp-enable-snippet nil
         lsp-signature-auto-activate nil
         lsp-auto-execute-action nil
         lsp-ui-doc-enable nil
