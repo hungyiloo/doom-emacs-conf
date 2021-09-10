@@ -12,7 +12,10 @@ a bit cleaner for a short note, which Org-roam encourages."
   (let ((title (nth 4 (org-heading-components)))
         (has-properties (org-get-property-block)))
     (org-cut-subtree)
-    (org-roam-find-file title nil nil 'no-confirm)
+    (save-buffer)
+    (org-roam-capture-
+       :node (org-roam-node-create :title title)
+       :props '(:finalize find-file))
     (org-paste-subtree)
     (unless has-properties
       (kill-line)

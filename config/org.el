@@ -188,10 +188,6 @@ This function is called by `org-babel-execute-src-block'."
 
 (after! org-roam
   (setq org-roam-verbose t)
-  (add-hook! 'org-roam-buffer-prepare-hook
-    (setq doom--line-number-style nil)
-    (setq display-line-numbers nil)
-    (set-fill-column 80))
   (custom-set-faces!
     `(org-roam-link :foreground ,(doom-color 'green) :inherit org-link)
     `(org-roam-link-curent :foreground ,(doom-color 'fg) :inherit org-link)
