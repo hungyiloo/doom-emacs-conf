@@ -35,6 +35,13 @@
     ;; evil-nc (commenting) integration
     (setq-local evilnc-comment-or-uncomment-region-function 'tsx-comment-or-uncomment-region)
 
+    ;; Add spelling support
+    (require 'spell-fu)
+    (add-to-list 'spell-fu-faces-include 'tree-sitter-hl-face:comment)
+    (add-to-list 'spell-fu-faces-include 'tree-sitter-hl-face:doc)
+    (add-to-list 'spell-fu-faces-include 'tree-sitter-hl-face:string)
+    (add-to-list 'spell-fu-faces-exclude 'tree-sitter-hl-face:embedded)
+
     ;; Enable lsp for tsx files
     (lsp!)
     (setq-local lsp-enable-indentation nil))
