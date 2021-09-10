@@ -27,6 +27,7 @@
   (modify-syntax-entry ?/ ". 124")
   (modify-syntax-entry ?* ". 23b")
   (modify-syntax-entry ?\n ">")
+  (modify-syntax-entry ?` "\"")
   (tree-sitter-require 'tsx)
   (tree-sitter-hl-add-patterns nil "[\"/\" \"*\"] @operator")
   (tree-sitter-hl-add-patterns nil "(jsx_text) @string")
