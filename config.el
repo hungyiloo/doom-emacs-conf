@@ -29,7 +29,10 @@
 (global-auto-revert-mode 1)
 
 ;; Better buffer names for files of the same name
-(setq uniquify-buffer-name-style 'forward)
+;; NOTE: Setting this here messes up persp-mode *really* badly with duplicate
+;; buffer names. This is especially painful when copying common files between
+;; projects. Best just to live with the angle brackets...
+;; (setq uniquify-buffer-name-style 'forward)
 
 ;; More emacs-y clipboard intergration
 (setq save-interprogram-paste-before-kill t)
