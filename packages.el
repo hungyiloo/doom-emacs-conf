@@ -36,22 +36,22 @@
 ;; rainbow-mode without the extra rgb module stuff (e.g. kurecolor)
 (package! rainbow-mode)
 
-(package! lsp-mode :pin "32d34445f3c4da37840c0ebb3a12e2c0627782a8")
-(package! lsp-ui :pin "177c31e982345ba35dc7c5d90cb1f8e68585323a")
-;; (package! org-roam :pin "756f6215b672e267f986a3d6e494f5309825b91a")
+(package! lsp-mode :pin "0f50dec790154e1d003024f87058991c1f24e83e")
+(package! lsp-ui :pin "b625f3cb5e88559ab99bec58f7a14272edb296bc")
+(package! org-roam :pin "1795039ab93ef19611dbb3fca21c4211c4e655a9")
 (package! ctrlf :pin "b78e129a8a4fabfebba8cdd5ef51278d0d57e0f4")
-(package! org-mode :pin "09cf4a075efe62262cb103605c5bd9c6f5cdcae2")
-(package! vterm :pin "f73644a07ce56712101d1568139a8f3c3b4a9e59")
+(package! org-mode :pin "d70f2806788dce06871287ef02c88ee08076dffc")
+(package! vterm :pin "2681120b770573044832ba8c22ccbac192e1a294")
 ;; (package! good-scroll :pin "fb01f121c4c77db3e6750303894d57b31e410b14")
 ;; (package! evil :pin "f5ab7ff")
 ;; (package! evil-mc :pin "f04fb17")
 ;; (package! doom-themes :pin "55f01ed")
 (package! embark
   :recipe (:host github :repo "oantolin/embark")
-  :pin "fcd70f55918e0f015418cb00c20b04d282cb211b")
+  :pin "d21277a638827623ab84e9e6341312a2da5062ab")
 (package! vertico-mouse
   :recipe (:host github :repo "minad/vertico")
-  :pin "d00ad0697024aa9555972ea2bce678080272d633")
+  :pin "81a4b35f8d11dfad56de1727ee9bdd3b4461d07c")
 
 (package! tsx-mode
   :recipe (:local-repo "lisp"))
