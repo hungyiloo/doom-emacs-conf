@@ -23,7 +23,10 @@ mv *.ttf ~/.local/share/fonts/
 Run =./scripts/firacode.sh= to automatically install Fira Code fonts to =~/.local/share/fonts=
 
 *** Noto Sans CJK
-Download the the Super OTC =NotoSansCJK.ttc= file from https://www.google.com/get/noto/help/cjk/, unzip, then move the file to =~/.local/share/fonts=
+Download the Super OTC =NotoSansCJK.ttc= file from https://www.google.com/get/noto/help/cjk/, unzip, then move the file to =~/.local/share/fonts=
+
+*** Noto Sans Thai
+Download the zip file from https://www.google.com/get/noto/#sans-thai, unzip, the move all the =*.ttf= files to =~/.local/share/fonts=
 
 ** Language Servers for lsp-mode
 Ensure that Node is installed, assuming Ubuntu 20.04:
@@ -50,9 +53,6 @@ In order to compile vterm within Emacs, these dependencies are required:
 # Assuming Ubuntu 20.04, which includes these packages by default
 sudo apt install libtool-bin cmake
 #+end_src
-
-*** TODO Why is there a permissions error with sudo?
-This only happens on my PGTK install on Elementary OS.
 
 ** Auxiliary apps
 - ripgrep

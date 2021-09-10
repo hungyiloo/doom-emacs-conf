@@ -283,9 +283,11 @@
   (when (fboundp #'set-fontset-font)
     (set-fontset-font t 'chinese-gbk
                       ;; Noto Sans CJK: https://www.google.com/get/noto/help/cjk/
-                      (font-spec :family "Noto Sans CJK SC"))
+                      (font-spec :family "Noto Sans CJK SC" :weight 'regular))
     (set-fontset-font t 'japanese-jisx0213.2004-1
-                      (font-spec :family "Noto Sans CJK JP")))
+                      (font-spec :family "Noto Sans CJK JP" :weight 'regular))
+    (set-fontset-font t 'thai
+                      (font-spec :family "Noto Sans Thai" :weight 'regular)))
   (dolist (item '(("Noto Sans CJK JP" . 0.85)
                   ("Noto Sans CJK SC" . 0.85)))
     (add-to-list 'face-font-rescale-alist item))
