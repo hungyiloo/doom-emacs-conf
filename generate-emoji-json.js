@@ -25,7 +25,7 @@ function toCodePoints(rawEmoji) {
   return points.join('-');
 }
 
-// Source emoji.json: https://unpkg.com/emoji.json@13.0.0/emoji.json
+// Source emoji.json: https://unpkg.com/emoji.json@13.1.0/emoji.json
 // Format:
 // [
 //   {
@@ -55,7 +55,7 @@ const emojiKeywordsPromise  = new Promise(resolve => https.get(
 ));
 
 const transformedEmojisPromise = new Promise(resolve => https.get(
-  'https://unpkg.com/emoji.json@13.0.0/emoji.json',
+  'https://unpkg.com/emoji.json@13.1.0/emoji.json',
   response => {
     let data = '';
     response.on('data', chunk => data += chunk);

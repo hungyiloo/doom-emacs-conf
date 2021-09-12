@@ -147,7 +147,7 @@
   "🤗": {
     "style": "unicode",
     "image": "1f917.png",
-    "name": "hugging face"
+    "name": "hugging face [open hands, smiling face, smiling face with open hands]"
   },
   "🤭": {
     "style": "unicode",
@@ -189,6 +189,16 @@
     "image": "1f636.png",
     "name": "face without mouth [quiet, silent]"
   },
+  "😶‍🌫️": {
+    "style": "unicode",
+    "image": "1f636-200d-1f32b-fe0f.png",
+    "name": "face in clouds"
+  },
+  "😶‍🌫": {
+    "style": "unicode",
+    "image": "1f636-200d-1f32b.png",
+    "name": "face in clouds [absentminded, face in the fog, head in clouds]"
+  },
   "😏": {
     "style": "unicode",
     "image": "1f60f.png",
@@ -209,6 +219,11 @@
     "image": "1f62c.png",
     "name": "grimacing face [grimace]"
   },
+  "😮‍💨": {
+    "style": "unicode",
+    "image": "1f62e-200d-1f4a8.png",
+    "name": "face exhaling [exhale, gasp, groan, relief, whisper, whistle]"
+  },
   "🤥": {
     "style": "unicode",
     "image": "1f925.png",
@@ -227,7 +242,7 @@
   "😪": {
     "style": "unicode",
     "image": "1f62a.png",
-    "name": "sleepy face"
+    "name": "sleepy face [good night]"
   },
   "🤤": {
     "style": "unicode",
@@ -237,7 +252,7 @@
   "😴": {
     "style": "unicode",
     "image": "1f634.png",
-    "name": "sleeping face [zzz]"
+    "name": "sleeping face [good night, ZZZ]"
   },
   "😷": {
     "style": "unicode",
@@ -287,7 +302,12 @@
   "😵": {
     "style": "unicode",
     "image": "1f635.png",
-    "name": "dizzy face [dead, knocked out, knocked-out face]"
+    "name": "knocked-out face [crossed-out eyes, dead, face with crossed-out eyes, knocked out]"
+  },
+  "😵‍💫": {
+    "style": "unicode",
+    "image": "1f635-200d-1f4ab.png",
+    "name": "face with spiral eyes [dizzy, hypnotized, trouble, whoa]"
   },
   "🤯": {
     "style": "unicode",
@@ -457,7 +477,7 @@
   "😡": {
     "style": "unicode",
     "image": "1f621.png",
-    "name": "pouting face [angry, mad, rage, red]"
+    "name": "pouting face [angry, enraged, mad, rage, red]"
   },
   "😠": {
     "style": "unicode",
@@ -659,6 +679,26 @@
     "image": "1f494.png",
     "name": "broken heart [break]"
   },
+  "❤️‍🔥": {
+    "style": "unicode",
+    "image": "2764-fe0f-200d-1f525.png",
+    "name": "heart on fire"
+  },
+  "❤‍🔥": {
+    "style": "unicode",
+    "image": "2764-200d-1f525.png",
+    "name": "heart on fire [burn, love, lust, sacred heart]"
+  },
+  "❤️‍🩹": {
+    "style": "unicode",
+    "image": "2764-fe0f-200d-1fa79.png",
+    "name": "mending heart"
+  },
+  "❤‍🩹": {
+    "style": "unicode",
+    "image": "2764-200d-1fa79.png",
+    "name": "mending heart [healthier, improving, recovering, recuperating, well]"
+  },
   "❤️": {
     "style": "unicode",
     "image": "2764.png",
@@ -777,7 +817,7 @@
   "👁‍🗨": {
     "style": "unicode",
     "image": "1f441-200d-1f5e8.png",
-    "name": "eye in speech bubble [witness]"
+    "name": "eye in speech bubble [balloon, witness]"
   },
   "🗨️": {
     "style": "unicode",
@@ -787,7 +827,7 @@
   "🗨": {
     "style": "unicode",
     "image": "1f5e8.png",
-    "name": "left speech bubble [dialog]"
+    "name": "left speech bubble [balloon, dialog]"
   },
   "🗯️": {
     "style": "unicode",
@@ -807,7 +847,7 @@
   "💤": {
     "style": "unicode",
     "image": "1f4a4.png",
-    "name": "zzz [comic, sleep]"
+    "name": "zzz [comic, good night, sleep, ZZZ]"
   },
   "👋": {
     "style": "unicode",
@@ -1182,7 +1222,7 @@
   "🤙": {
     "style": "unicode",
     "image": "1f919.png",
-    "name": "call me hand"
+    "name": "call me hand [hang loose, Shaka]"
   },
   "🤙🏻": {
     "style": "unicode",
@@ -2277,32 +2317,152 @@
   "🧔": {
     "style": "unicode",
     "image": "1f9d4.png",
-    "name": "man: beard [person, person: beard]"
+    "name": "person: beard"
   },
   "🧔🏻": {
     "style": "unicode",
     "image": "1f9d4-1f3fb.png",
-    "name": "man: light skin tone, beard"
+    "name": "person: light skin tone, beard"
   },
   "🧔🏼": {
     "style": "unicode",
     "image": "1f9d4-1f3fc.png",
-    "name": "man: medium-light skin tone, beard"
+    "name": "person: medium-light skin tone, beard"
   },
   "🧔🏽": {
     "style": "unicode",
     "image": "1f9d4-1f3fd.png",
-    "name": "man: medium skin tone, beard"
+    "name": "person: medium skin tone, beard"
   },
   "🧔🏾": {
     "style": "unicode",
     "image": "1f9d4-1f3fe.png",
-    "name": "man: medium-dark skin tone, beard"
+    "name": "person: medium-dark skin tone, beard"
   },
   "🧔🏿": {
     "style": "unicode",
     "image": "1f9d4-1f3ff.png",
+    "name": "person: dark skin tone, beard"
+  },
+  "🧔‍♂️": {
+    "style": "unicode",
+    "image": "1f9d4-200d-2642-fe0f.png",
+    "name": "man: beard"
+  },
+  "🧔‍♂": {
+    "style": "unicode",
+    "image": "1f9d4-200d-2642.png",
+    "name": "man: beard"
+  },
+  "🧔🏻‍♂️": {
+    "style": "unicode",
+    "image": "1f9d4-1f3fb-200d-2642-fe0f.png",
+    "name": "man: light skin tone, beard"
+  },
+  "🧔🏻‍♂": {
+    "style": "unicode",
+    "image": "1f9d4-1f3fb-200d-2642.png",
+    "name": "man: light skin tone, beard"
+  },
+  "🧔🏼‍♂️": {
+    "style": "unicode",
+    "image": "1f9d4-1f3fc-200d-2642-fe0f.png",
+    "name": "man: medium-light skin tone, beard"
+  },
+  "🧔🏼‍♂": {
+    "style": "unicode",
+    "image": "1f9d4-1f3fc-200d-2642.png",
+    "name": "man: medium-light skin tone, beard"
+  },
+  "🧔🏽‍♂️": {
+    "style": "unicode",
+    "image": "1f9d4-1f3fd-200d-2642-fe0f.png",
+    "name": "man: medium skin tone, beard"
+  },
+  "🧔🏽‍♂": {
+    "style": "unicode",
+    "image": "1f9d4-1f3fd-200d-2642.png",
+    "name": "man: medium skin tone, beard"
+  },
+  "🧔🏾‍♂️": {
+    "style": "unicode",
+    "image": "1f9d4-1f3fe-200d-2642-fe0f.png",
+    "name": "man: medium-dark skin tone, beard"
+  },
+  "🧔🏾‍♂": {
+    "style": "unicode",
+    "image": "1f9d4-1f3fe-200d-2642.png",
+    "name": "man: medium-dark skin tone, beard"
+  },
+  "🧔🏿‍♂️": {
+    "style": "unicode",
+    "image": "1f9d4-1f3ff-200d-2642-fe0f.png",
     "name": "man: dark skin tone, beard"
+  },
+  "🧔🏿‍♂": {
+    "style": "unicode",
+    "image": "1f9d4-1f3ff-200d-2642.png",
+    "name": "man: dark skin tone, beard"
+  },
+  "🧔‍♀️": {
+    "style": "unicode",
+    "image": "1f9d4-200d-2640-fe0f.png",
+    "name": "woman: beard"
+  },
+  "🧔‍♀": {
+    "style": "unicode",
+    "image": "1f9d4-200d-2640.png",
+    "name": "woman: beard"
+  },
+  "🧔🏻‍♀️": {
+    "style": "unicode",
+    "image": "1f9d4-1f3fb-200d-2640-fe0f.png",
+    "name": "woman: light skin tone, beard"
+  },
+  "🧔🏻‍♀": {
+    "style": "unicode",
+    "image": "1f9d4-1f3fb-200d-2640.png",
+    "name": "woman: light skin tone, beard"
+  },
+  "🧔🏼‍♀️": {
+    "style": "unicode",
+    "image": "1f9d4-1f3fc-200d-2640-fe0f.png",
+    "name": "woman: medium-light skin tone, beard"
+  },
+  "🧔🏼‍♀": {
+    "style": "unicode",
+    "image": "1f9d4-1f3fc-200d-2640.png",
+    "name": "woman: medium-light skin tone, beard"
+  },
+  "🧔🏽‍♀️": {
+    "style": "unicode",
+    "image": "1f9d4-1f3fd-200d-2640-fe0f.png",
+    "name": "woman: medium skin tone, beard"
+  },
+  "🧔🏽‍♀": {
+    "style": "unicode",
+    "image": "1f9d4-1f3fd-200d-2640.png",
+    "name": "woman: medium skin tone, beard"
+  },
+  "🧔🏾‍♀️": {
+    "style": "unicode",
+    "image": "1f9d4-1f3fe-200d-2640-fe0f.png",
+    "name": "woman: medium-dark skin tone, beard"
+  },
+  "🧔🏾‍♀": {
+    "style": "unicode",
+    "image": "1f9d4-1f3fe-200d-2640.png",
+    "name": "woman: medium-dark skin tone, beard"
+  },
+  "🧔🏿‍♀️": {
+    "style": "unicode",
+    "image": "1f9d4-1f3ff-200d-2640-fe0f.png",
+    "name": "woman: dark skin tone, beard"
+  },
+  "🧔🏿‍♀": {
+    "style": "unicode",
+    "image": "1f9d4-1f3ff-200d-2640.png",
+    "name": "woman: dark skin tone, beard"
   },
   "👨‍🦰": {
     "style": "unicode",
@@ -3004,9 +3164,9 @@
     "image": "1f64d-200d-2640.png",
     "name": "woman frowning [gesture]"
   },
-  "��🏻‍♀️": {
+  "🙍🏻‍♀️": {
     "style": "unicode",
-    "image": "fffd-fffd-1f3fb-200d-2640-fe0f.png",
+    "image": "1f64d-1f3fb-200d-2640-fe0f.png",
     "name": "woman frowning: light skin tone"
   },
   "🙍🏻‍♀": {
@@ -11419,9 +11579,9 @@
     "image": "1f6b4-1f3fd-200d-2642.png",
     "name": "man biking: medium skin tone"
   },
-  "🚴🏾‍���️": {
+  "🚴🏾‍♂️": {
     "style": "unicode",
-    "image": "1f6b4-1f3fe-200d-fffd-fffd-fffd-fe0f.png",
+    "image": "1f6b4-1f3fe-200d-2642-fe0f.png",
     "name": "man biking: medium-dark skin tone"
   },
   "🚴🏾‍♂": {
@@ -11849,9 +12009,9 @@
     "image": "1f93d-1f3fe.png",
     "name": "person playing water polo: medium-dark skin tone"
   },
-  "���🏿": {
+  "🤽🏿": {
     "style": "unicode",
-    "image": "fffd-fffd-fffd-1f3ff.png",
+    "image": "1f93d-1f3ff.png",
     "name": "person playing water polo: dark skin tone"
   },
   "🤽‍♂️": {
@@ -12457,7 +12617,7 @@
   "🛌": {
     "style": "unicode",
     "image": "1f6cc.png",
-    "name": "person in bed [hotel, sleep]"
+    "name": "person in bed [good night, hotel, sleep]"
   },
   "🛌🏻": {
     "style": "unicode",
@@ -13009,6 +13169,231 @@
     "image": "1f48f.png",
     "name": "kiss [couple]"
   },
+  "💏🏻": {
+    "style": "unicode",
+    "image": "1f48f-1f3fb.png",
+    "name": "kiss: light skin tone"
+  },
+  "💏🏼": {
+    "style": "unicode",
+    "image": "1f48f-1f3fc.png",
+    "name": "kiss: medium-light skin tone"
+  },
+  "💏🏽": {
+    "style": "unicode",
+    "image": "1f48f-1f3fd.png",
+    "name": "kiss: medium skin tone"
+  },
+  "💏🏾": {
+    "style": "unicode",
+    "image": "1f48f-1f3fe.png",
+    "name": "kiss: medium-dark skin tone"
+  },
+  "💏🏿": {
+    "style": "unicode",
+    "image": "1f48f-1f3ff.png",
+    "name": "kiss: dark skin tone"
+  },
+  "🧑🏻‍❤️‍💋‍🧑🏼": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3fc.png",
+    "name": "kiss: person, person, light skin tone, medium-light skin tone"
+  },
+  "🧑🏻‍❤‍💋‍🧑🏼": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fb-200d-2764-200d-1f48b-200d-1f9d1-1f3fc.png",
+    "name": "kiss: person, person, light skin tone, medium-light skin tone"
+  },
+  "🧑🏻‍❤️‍💋‍🧑🏽": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3fd.png",
+    "name": "kiss: person, person, light skin tone, medium skin tone"
+  },
+  "🧑🏻‍❤‍💋‍🧑🏽": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fb-200d-2764-200d-1f48b-200d-1f9d1-1f3fd.png",
+    "name": "kiss: person, person, light skin tone, medium skin tone"
+  },
+  "🧑🏻‍❤️‍💋‍🧑🏾": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3fe.png",
+    "name": "kiss: person, person, light skin tone, medium-dark skin tone"
+  },
+  "🧑🏻‍❤‍💋‍🧑🏾": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fb-200d-2764-200d-1f48b-200d-1f9d1-1f3fe.png",
+    "name": "kiss: person, person, light skin tone, medium-dark skin tone"
+  },
+  "🧑🏻‍❤️‍💋‍🧑🏿": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3ff.png",
+    "name": "kiss: person, person, light skin tone, dark skin tone"
+  },
+  "🧑🏻‍❤‍💋‍🧑🏿": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fb-200d-2764-200d-1f48b-200d-1f9d1-1f3ff.png",
+    "name": "kiss: person, person, light skin tone, dark skin tone"
+  },
+  "🧑🏼‍❤️‍💋‍🧑🏻": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3fb.png",
+    "name": "kiss: person, person, medium-light skin tone, light skin tone"
+  },
+  "🧑🏼‍❤‍💋‍🧑🏻": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fc-200d-2764-200d-1f48b-200d-1f9d1-1f3fb.png",
+    "name": "kiss: person, person, medium-light skin tone, light skin tone"
+  },
+  "🧑🏼‍❤️‍💋‍🧑🏽": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3fd.png",
+    "name": "kiss: person, person, medium-light skin tone, medium skin tone"
+  },
+  "🧑🏼‍❤‍💋‍🧑🏽": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fc-200d-2764-200d-1f48b-200d-1f9d1-1f3fd.png",
+    "name": "kiss: person, person, medium-light skin tone, medium skin tone"
+  },
+  "🧑🏼‍❤️‍💋‍🧑🏾": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3fe.png",
+    "name": "kiss: person, person, medium-light skin tone, medium-dark skin tone"
+  },
+  "🧑🏼‍❤‍💋‍🧑🏾": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fc-200d-2764-200d-1f48b-200d-1f9d1-1f3fe.png",
+    "name": "kiss: person, person, medium-light skin tone, medium-dark skin tone"
+  },
+  "🧑🏼‍❤️‍💋‍🧑🏿": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3ff.png",
+    "name": "kiss: person, person, medium-light skin tone, dark skin tone"
+  },
+  "🧑🏼‍❤‍💋‍🧑🏿": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fc-200d-2764-200d-1f48b-200d-1f9d1-1f3ff.png",
+    "name": "kiss: person, person, medium-light skin tone, dark skin tone"
+  },
+  "🧑🏽‍❤️‍💋‍🧑🏻": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3fb.png",
+    "name": "kiss: person, person, medium skin tone, light skin tone"
+  },
+  "🧑🏽‍❤‍💋‍🧑🏻": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fd-200d-2764-200d-1f48b-200d-1f9d1-1f3fb.png",
+    "name": "kiss: person, person, medium skin tone, light skin tone"
+  },
+  "🧑🏽‍❤️‍💋‍🧑🏼": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3fc.png",
+    "name": "kiss: person, person, medium skin tone, medium-light skin tone"
+  },
+  "🧑🏽‍❤‍💋‍🧑🏼": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fd-200d-2764-200d-1f48b-200d-1f9d1-1f3fc.png",
+    "name": "kiss: person, person, medium skin tone, medium-light skin tone"
+  },
+  "🧑🏽‍❤️‍💋‍🧑🏾": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3fe.png",
+    "name": "kiss: person, person, medium skin tone, medium-dark skin tone"
+  },
+  "🧑🏽‍❤‍💋‍🧑🏾": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fd-200d-2764-200d-1f48b-200d-1f9d1-1f3fe.png",
+    "name": "kiss: person, person, medium skin tone, medium-dark skin tone"
+  },
+  "🧑🏽‍❤️‍💋‍🧑🏿": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3ff.png",
+    "name": "kiss: person, person, medium skin tone, dark skin tone"
+  },
+  "🧑🏽‍❤‍💋‍🧑🏿": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fd-200d-2764-200d-1f48b-200d-1f9d1-1f3ff.png",
+    "name": "kiss: person, person, medium skin tone, dark skin tone"
+  },
+  "🧑🏾‍❤️‍💋‍🧑🏻": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3fb.png",
+    "name": "kiss: person, person, medium-dark skin tone, light skin tone"
+  },
+  "🧑🏾‍❤‍💋‍🧑🏻": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fe-200d-2764-200d-1f48b-200d-1f9d1-1f3fb.png",
+    "name": "kiss: person, person, medium-dark skin tone, light skin tone"
+  },
+  "🧑🏾‍❤️‍💋‍🧑🏼": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3fc.png",
+    "name": "kiss: person, person, medium-dark skin tone, medium-light skin tone"
+  },
+  "🧑🏾‍❤‍💋‍🧑🏼": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fe-200d-2764-200d-1f48b-200d-1f9d1-1f3fc.png",
+    "name": "kiss: person, person, medium-dark skin tone, medium-light skin tone"
+  },
+  "🧑🏾‍❤️‍💋‍🧑🏽": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3fd.png",
+    "name": "kiss: person, person, medium-dark skin tone, medium skin tone"
+  },
+  "🧑🏾‍❤‍💋‍🧑🏽": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fe-200d-2764-200d-1f48b-200d-1f9d1-1f3fd.png",
+    "name": "kiss: person, person, medium-dark skin tone, medium skin tone"
+  },
+  "🧑🏾‍❤️‍💋‍🧑🏿": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3ff.png",
+    "name": "kiss: person, person, medium-dark skin tone, dark skin tone"
+  },
+  "🧑🏾‍❤‍💋‍🧑🏿": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fe-200d-2764-200d-1f48b-200d-1f9d1-1f3ff.png",
+    "name": "kiss: person, person, medium-dark skin tone, dark skin tone"
+  },
+  "🧑🏿‍❤️‍💋‍🧑🏻": {
+    "style": "unicode",
+    "image": "1f9d1-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3fb.png",
+    "name": "kiss: person, person, dark skin tone, light skin tone"
+  },
+  "🧑🏿‍❤‍💋‍🧑🏻": {
+    "style": "unicode",
+    "image": "1f9d1-1f3ff-200d-2764-200d-1f48b-200d-1f9d1-1f3fb.png",
+    "name": "kiss: person, person, dark skin tone, light skin tone"
+  },
+  "🧑🏿‍❤️‍💋‍🧑🏼": {
+    "style": "unicode",
+    "image": "1f9d1-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3fc.png",
+    "name": "kiss: person, person, dark skin tone, medium-light skin tone"
+  },
+  "🧑🏿‍❤‍💋‍🧑🏼": {
+    "style": "unicode",
+    "image": "1f9d1-1f3ff-200d-2764-200d-1f48b-200d-1f9d1-1f3fc.png",
+    "name": "kiss: person, person, dark skin tone, medium-light skin tone"
+  },
+  "🧑🏿‍❤️‍💋‍🧑🏽": {
+    "style": "unicode",
+    "image": "1f9d1-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3fd.png",
+    "name": "kiss: person, person, dark skin tone, medium skin tone"
+  },
+  "🧑🏿‍❤‍💋‍🧑🏽": {
+    "style": "unicode",
+    "image": "1f9d1-1f3ff-200d-2764-200d-1f48b-200d-1f9d1-1f3fd.png",
+    "name": "kiss: person, person, dark skin tone, medium skin tone"
+  },
+  "🧑🏿‍❤️‍💋‍🧑🏾": {
+    "style": "unicode",
+    "image": "1f9d1-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f9d1-1f3fe.png",
+    "name": "kiss: person, person, dark skin tone, medium-dark skin tone"
+  },
+  "🧑🏿‍❤‍💋‍🧑🏾": {
+    "style": "unicode",
+    "image": "1f9d1-1f3ff-200d-2764-200d-1f48b-200d-1f9d1-1f3fe.png",
+    "name": "kiss: person, person, dark skin tone, medium-dark skin tone"
+  },
   "👩‍❤️‍💋‍👨": {
     "style": "unicode",
     "image": "1f469-200d-2764-fe0f-200d-1f48b-200d-1f468.png",
@@ -13018,6 +13403,256 @@
     "style": "unicode",
     "image": "1f469-200d-2764-200d-1f48b-200d-1f468.png",
     "name": "kiss: woman, man"
+  },
+  "👩🏻‍❤️‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: woman, man, light skin tone"
+  },
+  "👩🏻‍❤‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: woman, man, light skin tone"
+  },
+  "👩🏻‍❤️‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: woman, man, light skin tone, medium-light skin tone"
+  },
+  "👩🏻‍❤‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: woman, man, light skin tone, medium-light skin tone"
+  },
+  "👩🏻‍❤️‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: woman, man, light skin tone, medium skin tone"
+  },
+  "👩🏻‍❤‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: woman, man, light skin tone, medium skin tone"
+  },
+  "👩🏻‍❤️‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: woman, man, light skin tone, medium-dark skin tone"
+  },
+  "👩🏻‍❤‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: woman, man, light skin tone, medium-dark skin tone"
+  },
+  "👩🏻‍❤️‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: woman, man, light skin tone, dark skin tone"
+  },
+  "👩🏻‍❤‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: woman, man, light skin tone, dark skin tone"
+  },
+  "👩🏼‍❤️‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: woman, man, medium-light skin tone, light skin tone"
+  },
+  "👩🏼‍❤‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: woman, man, medium-light skin tone, light skin tone"
+  },
+  "👩🏼‍❤️‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: woman, man, medium-light skin tone"
+  },
+  "👩🏼‍❤‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: woman, man, medium-light skin tone"
+  },
+  "👩🏼‍❤️‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: woman, man, medium-light skin tone, medium skin tone"
+  },
+  "👩🏼‍❤‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: woman, man, medium-light skin tone, medium skin tone"
+  },
+  "👩🏼‍❤️‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: woman, man, medium-light skin tone, medium-dark skin tone"
+  },
+  "👩🏼‍❤‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: woman, man, medium-light skin tone, medium-dark skin tone"
+  },
+  "👩🏼‍❤️‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: woman, man, medium-light skin tone, dark skin tone"
+  },
+  "👩🏼‍❤‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: woman, man, medium-light skin tone, dark skin tone"
+  },
+  "👩🏽‍❤️‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: woman, man, medium skin tone, light skin tone"
+  },
+  "👩🏽‍❤‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: woman, man, medium skin tone, light skin tone"
+  },
+  "👩🏽‍❤️‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: woman, man, medium skin tone, medium-light skin tone"
+  },
+  "👩🏽‍❤‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: woman, man, medium skin tone, medium-light skin tone"
+  },
+  "👩🏽‍❤️‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: woman, man, medium skin tone"
+  },
+  "👩🏽‍❤‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: woman, man, medium skin tone"
+  },
+  "👩🏽‍❤️‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: woman, man, medium skin tone, medium-dark skin tone"
+  },
+  "👩🏽‍❤‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: woman, man, medium skin tone, medium-dark skin tone"
+  },
+  "👩🏽‍❤️‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: woman, man, medium skin tone, dark skin tone"
+  },
+  "👩🏽‍❤‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: woman, man, medium skin tone, dark skin tone"
+  },
+  "👩🏾‍❤️‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: woman, man, medium-dark skin tone, light skin tone"
+  },
+  "👩🏾‍❤‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: woman, man, medium-dark skin tone, light skin tone"
+  },
+  "👩🏾‍❤️‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: woman, man, medium-dark skin tone, medium-light skin tone"
+  },
+  "👩🏾‍❤‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: woman, man, medium-dark skin tone, medium-light skin tone"
+  },
+  "👩🏾‍❤️‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: woman, man, medium-dark skin tone, medium skin tone"
+  },
+  "👩🏾‍❤‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: woman, man, medium-dark skin tone, medium skin tone"
+  },
+  "👩🏾‍❤️‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: woman, man, medium-dark skin tone"
+  },
+  "👩🏾‍❤‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: woman, man, medium-dark skin tone"
+  },
+  "👩🏾‍❤️‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: woman, man, medium-dark skin tone, dark skin tone"
+  },
+  "👩🏾‍❤‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: woman, man, medium-dark skin tone, dark skin tone"
+  },
+  "👩🏿‍❤️‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: woman, man, dark skin tone, light skin tone"
+  },
+  "👩🏿‍❤‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: woman, man, dark skin tone, light skin tone"
+  },
+  "👩🏿‍❤️‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: woman, man, dark skin tone, medium-light skin tone"
+  },
+  "👩🏿‍❤‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: woman, man, dark skin tone, medium-light skin tone"
+  },
+  "👩🏿‍❤️‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: woman, man, dark skin tone, medium skin tone"
+  },
+  "👩🏿‍❤‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: woman, man, dark skin tone, medium skin tone"
+  },
+  "👩🏿‍❤️‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: woman, man, dark skin tone, medium-dark skin tone"
+  },
+  "👩🏿‍❤‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: woman, man, dark skin tone, medium-dark skin tone"
+  },
+  "👩🏿‍❤️‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: woman, man, dark skin tone"
+  },
+  "👩🏿‍❤‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: woman, man, dark skin tone"
   },
   "👨‍❤️‍💋‍👨": {
     "style": "unicode",
@@ -13029,6 +13664,256 @@
     "image": "1f468-200d-2764-200d-1f48b-200d-1f468.png",
     "name": "kiss: man, man"
   },
+  "👨🏻‍❤️‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: man, man, light skin tone"
+  },
+  "👨🏻‍❤‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: man, man, light skin tone"
+  },
+  "👨🏻‍❤️‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: man, man, light skin tone, medium-light skin tone"
+  },
+  "👨🏻‍❤‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: man, man, light skin tone, medium-light skin tone"
+  },
+  "👨🏻‍❤️‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: man, man, light skin tone, medium skin tone"
+  },
+  "👨🏻‍❤‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: man, man, light skin tone, medium skin tone"
+  },
+  "👨🏻‍❤️‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: man, man, light skin tone, medium-dark skin tone"
+  },
+  "👨🏻‍❤‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: man, man, light skin tone, medium-dark skin tone"
+  },
+  "👨🏻‍❤️‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: man, man, light skin tone, dark skin tone"
+  },
+  "👨🏻‍❤‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: man, man, light skin tone, dark skin tone"
+  },
+  "👨🏼‍❤️‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: man, man, medium-light skin tone, light skin tone"
+  },
+  "👨🏼‍❤‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: man, man, medium-light skin tone, light skin tone"
+  },
+  "👨🏼‍❤️‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: man, man, medium-light skin tone"
+  },
+  "👨🏼‍❤‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: man, man, medium-light skin tone"
+  },
+  "👨🏼‍❤️‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: man, man, medium-light skin tone, medium skin tone"
+  },
+  "👨🏼‍❤‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: man, man, medium-light skin tone, medium skin tone"
+  },
+  "👨🏼‍❤️‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: man, man, medium-light skin tone, medium-dark skin tone"
+  },
+  "👨🏼‍❤‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: man, man, medium-light skin tone, medium-dark skin tone"
+  },
+  "👨🏼‍❤️‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: man, man, medium-light skin tone, dark skin tone"
+  },
+  "👨🏼‍❤‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: man, man, medium-light skin tone, dark skin tone"
+  },
+  "👨🏽‍❤️‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: man, man, medium skin tone, light skin tone"
+  },
+  "👨🏽‍❤‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: man, man, medium skin tone, light skin tone"
+  },
+  "👨🏽‍❤️‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: man, man, medium skin tone, medium-light skin tone"
+  },
+  "👨🏽‍❤‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: man, man, medium skin tone, medium-light skin tone"
+  },
+  "👨🏽‍❤️‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: man, man, medium skin tone"
+  },
+  "👨🏽‍❤‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: man, man, medium skin tone"
+  },
+  "👨🏽‍❤️‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: man, man, medium skin tone, medium-dark skin tone"
+  },
+  "👨🏽‍❤‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: man, man, medium skin tone, medium-dark skin tone"
+  },
+  "👨🏽‍❤️‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: man, man, medium skin tone, dark skin tone"
+  },
+  "👨🏽‍❤‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: man, man, medium skin tone, dark skin tone"
+  },
+  "👨🏾‍❤️‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: man, man, medium-dark skin tone, light skin tone"
+  },
+  "👨🏾‍❤‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: man, man, medium-dark skin tone, light skin tone"
+  },
+  "👨🏾‍❤️‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: man, man, medium-dark skin tone, medium-light skin tone"
+  },
+  "👨🏾‍❤‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: man, man, medium-dark skin tone, medium-light skin tone"
+  },
+  "👨🏾‍❤️‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: man, man, medium-dark skin tone, medium skin tone"
+  },
+  "👨🏾‍❤‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: man, man, medium-dark skin tone, medium skin tone"
+  },
+  "👨🏾‍❤️‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: man, man, medium-dark skin tone"
+  },
+  "👨🏾‍❤‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: man, man, medium-dark skin tone"
+  },
+  "👨🏾‍❤️‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: man, man, medium-dark skin tone, dark skin tone"
+  },
+  "👨🏾‍❤‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: man, man, medium-dark skin tone, dark skin tone"
+  },
+  "👨🏿‍❤️‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: man, man, dark skin tone, light skin tone"
+  },
+  "👨🏿‍❤‍💋‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-200d-1f48b-200d-1f468-1f3fb.png",
+    "name": "kiss: man, man, dark skin tone, light skin tone"
+  },
+  "👨🏿‍❤️‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: man, man, dark skin tone, medium-light skin tone"
+  },
+  "👨🏿‍❤‍💋‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-200d-1f48b-200d-1f468-1f3fc.png",
+    "name": "kiss: man, man, dark skin tone, medium-light skin tone"
+  },
+  "👨🏿‍❤️‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: man, man, dark skin tone, medium skin tone"
+  },
+  "👨🏿‍❤‍💋‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-200d-1f48b-200d-1f468-1f3fd.png",
+    "name": "kiss: man, man, dark skin tone, medium skin tone"
+  },
+  "👨🏿‍❤️‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: man, man, dark skin tone, medium-dark skin tone"
+  },
+  "👨🏿‍❤‍💋‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-200d-1f48b-200d-1f468-1f3fe.png",
+    "name": "kiss: man, man, dark skin tone, medium-dark skin tone"
+  },
+  "👨🏿‍❤️‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: man, man, dark skin tone"
+  },
+  "👨🏿‍❤‍💋‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-200d-1f48b-200d-1f468-1f3ff.png",
+    "name": "kiss: man, man, dark skin tone"
+  },
   "👩‍❤️‍💋‍👩": {
     "style": "unicode",
     "image": "1f469-200d-2764-fe0f-200d-1f48b-200d-1f469.png",
@@ -13039,10 +13924,485 @@
     "image": "1f469-200d-2764-200d-1f48b-200d-1f469.png",
     "name": "kiss: woman, woman"
   },
+  "👩🏻‍❤️‍💋‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fb.png",
+    "name": "kiss: woman, woman, light skin tone"
+  },
+  "👩🏻‍❤‍💋‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f48b-200d-1f469-1f3fb.png",
+    "name": "kiss: woman, woman, light skin tone"
+  },
+  "👩🏻‍❤️‍💋‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fc.png",
+    "name": "kiss: woman, woman, light skin tone, medium-light skin tone"
+  },
+  "👩🏻‍❤‍💋‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f48b-200d-1f469-1f3fc.png",
+    "name": "kiss: woman, woman, light skin tone, medium-light skin tone"
+  },
+  "👩🏻‍❤️‍💋‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fd.png",
+    "name": "kiss: woman, woman, light skin tone, medium skin tone"
+  },
+  "👩🏻‍❤‍💋‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f48b-200d-1f469-1f3fd.png",
+    "name": "kiss: woman, woman, light skin tone, medium skin tone"
+  },
+  "👩🏻‍❤️‍💋‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fe.png",
+    "name": "kiss: woman, woman, light skin tone, medium-dark skin tone"
+  },
+  "👩🏻‍❤‍💋‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f48b-200d-1f469-1f3fe.png",
+    "name": "kiss: woman, woman, light skin tone, medium-dark skin tone"
+  },
+  "👩🏻‍❤️‍💋‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3ff.png",
+    "name": "kiss: woman, woman, light skin tone, dark skin tone"
+  },
+  "👩🏻‍❤‍💋‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f48b-200d-1f469-1f3ff.png",
+    "name": "kiss: woman, woman, light skin tone, dark skin tone"
+  },
+  "👩🏼‍❤️‍💋‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fb.png",
+    "name": "kiss: woman, woman, medium-light skin tone, light skin tone"
+  },
+  "👩🏼‍❤‍💋‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f48b-200d-1f469-1f3fb.png",
+    "name": "kiss: woman, woman, medium-light skin tone, light skin tone"
+  },
+  "👩🏼‍❤️‍💋‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fc.png",
+    "name": "kiss: woman, woman, medium-light skin tone"
+  },
+  "👩🏼‍❤‍💋‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f48b-200d-1f469-1f3fc.png",
+    "name": "kiss: woman, woman, medium-light skin tone"
+  },
+  "👩🏼‍❤️‍💋‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fd.png",
+    "name": "kiss: woman, woman, medium-light skin tone, medium skin tone"
+  },
+  "👩🏼‍❤‍💋‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f48b-200d-1f469-1f3fd.png",
+    "name": "kiss: woman, woman, medium-light skin tone, medium skin tone"
+  },
+  "👩🏼‍❤️‍💋‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fe.png",
+    "name": "kiss: woman, woman, medium-light skin tone, medium-dark skin tone"
+  },
+  "👩🏼‍❤‍💋‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f48b-200d-1f469-1f3fe.png",
+    "name": "kiss: woman, woman, medium-light skin tone, medium-dark skin tone"
+  },
+  "👩🏼‍❤️‍💋‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3ff.png",
+    "name": "kiss: woman, woman, medium-light skin tone, dark skin tone"
+  },
+  "👩🏼‍❤‍💋‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f48b-200d-1f469-1f3ff.png",
+    "name": "kiss: woman, woman, medium-light skin tone, dark skin tone"
+  },
+  "👩🏽‍❤️‍💋‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fb.png",
+    "name": "kiss: woman, woman, medium skin tone, light skin tone"
+  },
+  "👩🏽‍❤‍💋‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f48b-200d-1f469-1f3fb.png",
+    "name": "kiss: woman, woman, medium skin tone, light skin tone"
+  },
+  "👩🏽‍❤️‍💋‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fc.png",
+    "name": "kiss: woman, woman, medium skin tone, medium-light skin tone"
+  },
+  "👩🏽‍❤‍💋‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f48b-200d-1f469-1f3fc.png",
+    "name": "kiss: woman, woman, medium skin tone, medium-light skin tone"
+  },
+  "👩🏽‍❤️‍💋‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fd.png",
+    "name": "kiss: woman, woman, medium skin tone"
+  },
+  "👩🏽‍❤‍💋‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f48b-200d-1f469-1f3fd.png",
+    "name": "kiss: woman, woman, medium skin tone"
+  },
+  "👩🏽‍❤️‍💋‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fe.png",
+    "name": "kiss: woman, woman, medium skin tone, medium-dark skin tone"
+  },
+  "👩🏽‍❤‍💋‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f48b-200d-1f469-1f3fe.png",
+    "name": "kiss: woman, woman, medium skin tone, medium-dark skin tone"
+  },
+  "👩🏽‍❤️‍💋‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3ff.png",
+    "name": "kiss: woman, woman, medium skin tone, dark skin tone"
+  },
+  "👩🏽‍❤‍💋‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f48b-200d-1f469-1f3ff.png",
+    "name": "kiss: woman, woman, medium skin tone, dark skin tone"
+  },
+  "👩🏾‍❤️‍💋‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fb.png",
+    "name": "kiss: woman, woman, medium-dark skin tone, light skin tone"
+  },
+  "👩🏾‍❤‍💋‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f48b-200d-1f469-1f3fb.png",
+    "name": "kiss: woman, woman, medium-dark skin tone, light skin tone"
+  },
+  "👩🏾‍❤️‍💋‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fc.png",
+    "name": "kiss: woman, woman, medium-dark skin tone, medium-light skin tone"
+  },
+  "👩🏾‍❤‍💋‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f48b-200d-1f469-1f3fc.png",
+    "name": "kiss: woman, woman, medium-dark skin tone, medium-light skin tone"
+  },
+  "👩🏾‍❤️‍💋‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fd.png",
+    "name": "kiss: woman, woman, medium-dark skin tone, medium skin tone"
+  },
+  "👩🏾‍❤‍💋‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f48b-200d-1f469-1f3fd.png",
+    "name": "kiss: woman, woman, medium-dark skin tone, medium skin tone"
+  },
+  "👩🏾‍❤️‍💋‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fe.png",
+    "name": "kiss: woman, woman, medium-dark skin tone"
+  },
+  "👩🏾‍❤‍💋‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f48b-200d-1f469-1f3fe.png",
+    "name": "kiss: woman, woman, medium-dark skin tone"
+  },
+  "👩🏾‍❤️‍💋‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3ff.png",
+    "name": "kiss: woman, woman, medium-dark skin tone, dark skin tone"
+  },
+  "👩🏾‍❤‍💋‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f48b-200d-1f469-1f3ff.png",
+    "name": "kiss: woman, woman, medium-dark skin tone, dark skin tone"
+  },
+  "👩🏿‍❤️‍💋‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fb.png",
+    "name": "kiss: woman, woman, dark skin tone, light skin tone"
+  },
+  "👩🏿‍❤‍💋‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f48b-200d-1f469-1f3fb.png",
+    "name": "kiss: woman, woman, dark skin tone, light skin tone"
+  },
+  "👩🏿‍❤️‍💋‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fc.png",
+    "name": "kiss: woman, woman, dark skin tone, medium-light skin tone"
+  },
+  "👩🏿‍❤‍💋‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f48b-200d-1f469-1f3fc.png",
+    "name": "kiss: woman, woman, dark skin tone, medium-light skin tone"
+  },
+  "👩🏿‍❤️‍💋‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fd.png",
+    "name": "kiss: woman, woman, dark skin tone, medium skin tone"
+  },
+  "👩🏿‍❤‍💋‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f48b-200d-1f469-1f3fd.png",
+    "name": "kiss: woman, woman, dark skin tone, medium skin tone"
+  },
+  "👩🏿‍❤️‍💋‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3fe.png",
+    "name": "kiss: woman, woman, dark skin tone, medium-dark skin tone"
+  },
+  "👩🏿‍❤‍💋‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f48b-200d-1f469-1f3fe.png",
+    "name": "kiss: woman, woman, dark skin tone, medium-dark skin tone"
+  },
+  "👩🏿‍❤️‍💋‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f48b-200d-1f469-1f3ff.png",
+    "name": "kiss: woman, woman, dark skin tone"
+  },
+  "👩🏿‍❤‍💋‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f48b-200d-1f469-1f3ff.png",
+    "name": "kiss: woman, woman, dark skin tone"
+  },
   "💑": {
     "style": "unicode",
     "image": "1f491.png",
     "name": "couple with heart [love]"
+  },
+  "💑🏻": {
+    "style": "unicode",
+    "image": "1f491-1f3fb.png",
+    "name": "couple with heart: light skin tone"
+  },
+  "💑🏼": {
+    "style": "unicode",
+    "image": "1f491-1f3fc.png",
+    "name": "couple with heart: medium-light skin tone"
+  },
+  "💑🏽": {
+    "style": "unicode",
+    "image": "1f491-1f3fd.png",
+    "name": "couple with heart: medium skin tone"
+  },
+  "💑🏾": {
+    "style": "unicode",
+    "image": "1f491-1f3fe.png",
+    "name": "couple with heart: medium-dark skin tone"
+  },
+  "💑🏿": {
+    "style": "unicode",
+    "image": "1f491-1f3ff.png",
+    "name": "couple with heart: dark skin tone"
+  },
+  "🧑🏻‍❤️‍🧑🏼": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fb-200d-2764-fe0f-200d-1f9d1-1f3fc.png",
+    "name": "couple with heart: person, person, light skin tone, medium-light skin tone"
+  },
+  "🧑🏻‍❤‍🧑🏼": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fb-200d-2764-200d-1f9d1-1f3fc.png",
+    "name": "couple with heart: person, person, light skin tone, medium-light skin tone"
+  },
+  "🧑🏻‍❤️‍🧑🏽": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fb-200d-2764-fe0f-200d-1f9d1-1f3fd.png",
+    "name": "couple with heart: person, person, light skin tone, medium skin tone"
+  },
+  "🧑🏻‍❤‍🧑🏽": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fb-200d-2764-200d-1f9d1-1f3fd.png",
+    "name": "couple with heart: person, person, light skin tone, medium skin tone"
+  },
+  "🧑🏻‍❤️‍🧑🏾": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fb-200d-2764-fe0f-200d-1f9d1-1f3fe.png",
+    "name": "couple with heart: person, person, light skin tone, medium-dark skin tone"
+  },
+  "🧑🏻‍❤‍🧑🏾": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fb-200d-2764-200d-1f9d1-1f3fe.png",
+    "name": "couple with heart: person, person, light skin tone, medium-dark skin tone"
+  },
+  "🧑🏻‍❤️‍🧑🏿": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fb-200d-2764-fe0f-200d-1f9d1-1f3ff.png",
+    "name": "couple with heart: person, person, light skin tone, dark skin tone"
+  },
+  "🧑🏻‍❤‍🧑🏿": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fb-200d-2764-200d-1f9d1-1f3ff.png",
+    "name": "couple with heart: person, person, light skin tone, dark skin tone"
+  },
+  "🧑🏼‍❤️‍🧑🏻": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fc-200d-2764-fe0f-200d-1f9d1-1f3fb.png",
+    "name": "couple with heart: person, person, medium-light skin tone, light skin tone"
+  },
+  "🧑🏼‍❤‍🧑🏻": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fc-200d-2764-200d-1f9d1-1f3fb.png",
+    "name": "couple with heart: person, person, medium-light skin tone, light skin tone"
+  },
+  "🧑🏼‍❤️‍🧑🏽": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fc-200d-2764-fe0f-200d-1f9d1-1f3fd.png",
+    "name": "couple with heart: person, person, medium-light skin tone, medium skin tone"
+  },
+  "🧑🏼‍❤‍🧑🏽": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fc-200d-2764-200d-1f9d1-1f3fd.png",
+    "name": "couple with heart: person, person, medium-light skin tone, medium skin tone"
+  },
+  "🧑🏼‍❤️‍🧑🏾": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fc-200d-2764-fe0f-200d-1f9d1-1f3fe.png",
+    "name": "couple with heart: person, person, medium-light skin tone, medium-dark skin tone"
+  },
+  "🧑🏼‍❤‍🧑🏾": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fc-200d-2764-200d-1f9d1-1f3fe.png",
+    "name": "couple with heart: person, person, medium-light skin tone, medium-dark skin tone"
+  },
+  "🧑🏼‍❤️‍🧑🏿": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fc-200d-2764-fe0f-200d-1f9d1-1f3ff.png",
+    "name": "couple with heart: person, person, medium-light skin tone, dark skin tone"
+  },
+  "🧑🏼‍❤‍🧑🏿": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fc-200d-2764-200d-1f9d1-1f3ff.png",
+    "name": "couple with heart: person, person, medium-light skin tone, dark skin tone"
+  },
+  "🧑🏽‍❤️‍🧑🏻": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fd-200d-2764-fe0f-200d-1f9d1-1f3fb.png",
+    "name": "couple with heart: person, person, medium skin tone, light skin tone"
+  },
+  "🧑🏽‍❤‍🧑🏻": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fd-200d-2764-200d-1f9d1-1f3fb.png",
+    "name": "couple with heart: person, person, medium skin tone, light skin tone"
+  },
+  "🧑🏽‍❤️‍🧑🏼": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fd-200d-2764-fe0f-200d-1f9d1-1f3fc.png",
+    "name": "couple with heart: person, person, medium skin tone, medium-light skin tone"
+  },
+  "🧑🏽‍❤‍🧑🏼": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fd-200d-2764-200d-1f9d1-1f3fc.png",
+    "name": "couple with heart: person, person, medium skin tone, medium-light skin tone"
+  },
+  "🧑🏽‍❤️‍🧑🏾": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fd-200d-2764-fe0f-200d-1f9d1-1f3fe.png",
+    "name": "couple with heart: person, person, medium skin tone, medium-dark skin tone"
+  },
+  "🧑🏽‍❤‍🧑🏾": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fd-200d-2764-200d-1f9d1-1f3fe.png",
+    "name": "couple with heart: person, person, medium skin tone, medium-dark skin tone"
+  },
+  "🧑🏽‍❤️‍🧑🏿": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fd-200d-2764-fe0f-200d-1f9d1-1f3ff.png",
+    "name": "couple with heart: person, person, medium skin tone, dark skin tone"
+  },
+  "🧑🏽‍❤‍🧑🏿": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fd-200d-2764-200d-1f9d1-1f3ff.png",
+    "name": "couple with heart: person, person, medium skin tone, dark skin tone"
+  },
+  "🧑🏾‍❤️‍🧑🏻": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fe-200d-2764-fe0f-200d-1f9d1-1f3fb.png",
+    "name": "couple with heart: person, person, medium-dark skin tone, light skin tone"
+  },
+  "🧑🏾‍❤‍🧑🏻": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fe-200d-2764-200d-1f9d1-1f3fb.png",
+    "name": "couple with heart: person, person, medium-dark skin tone, light skin tone"
+  },
+  "🧑🏾‍❤️‍🧑🏼": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fe-200d-2764-fe0f-200d-1f9d1-1f3fc.png",
+    "name": "couple with heart: person, person, medium-dark skin tone, medium-light skin tone"
+  },
+  "🧑🏾‍❤‍🧑🏼": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fe-200d-2764-200d-1f9d1-1f3fc.png",
+    "name": "couple with heart: person, person, medium-dark skin tone, medium-light skin tone"
+  },
+  "🧑🏾‍❤️‍🧑🏽": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fe-200d-2764-fe0f-200d-1f9d1-1f3fd.png",
+    "name": "couple with heart: person, person, medium-dark skin tone, medium skin tone"
+  },
+  "🧑🏾‍❤‍🧑🏽": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fe-200d-2764-200d-1f9d1-1f3fd.png",
+    "name": "couple with heart: person, person, medium-dark skin tone, medium skin tone"
+  },
+  "🧑🏾‍❤️‍🧑🏿": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fe-200d-2764-fe0f-200d-1f9d1-1f3ff.png",
+    "name": "couple with heart: person, person, medium-dark skin tone, dark skin tone"
+  },
+  "🧑🏾‍❤‍🧑🏿": {
+    "style": "unicode",
+    "image": "1f9d1-1f3fe-200d-2764-200d-1f9d1-1f3ff.png",
+    "name": "couple with heart: person, person, medium-dark skin tone, dark skin tone"
+  },
+  "🧑🏿‍❤️‍🧑🏻": {
+    "style": "unicode",
+    "image": "1f9d1-1f3ff-200d-2764-fe0f-200d-1f9d1-1f3fb.png",
+    "name": "couple with heart: person, person, dark skin tone, light skin tone"
+  },
+  "🧑🏿‍❤‍🧑🏻": {
+    "style": "unicode",
+    "image": "1f9d1-1f3ff-200d-2764-200d-1f9d1-1f3fb.png",
+    "name": "couple with heart: person, person, dark skin tone, light skin tone"
+  },
+  "🧑🏿‍❤️‍🧑🏼": {
+    "style": "unicode",
+    "image": "1f9d1-1f3ff-200d-2764-fe0f-200d-1f9d1-1f3fc.png",
+    "name": "couple with heart: person, person, dark skin tone, medium-light skin tone"
+  },
+  "🧑🏿‍❤‍🧑🏼": {
+    "style": "unicode",
+    "image": "1f9d1-1f3ff-200d-2764-200d-1f9d1-1f3fc.png",
+    "name": "couple with heart: person, person, dark skin tone, medium-light skin tone"
+  },
+  "🧑🏿‍❤️‍🧑🏽": {
+    "style": "unicode",
+    "image": "1f9d1-1f3ff-200d-2764-fe0f-200d-1f9d1-1f3fd.png",
+    "name": "couple with heart: person, person, dark skin tone, medium skin tone"
+  },
+  "🧑🏿‍❤‍🧑🏽": {
+    "style": "unicode",
+    "image": "1f9d1-1f3ff-200d-2764-200d-1f9d1-1f3fd.png",
+    "name": "couple with heart: person, person, dark skin tone, medium skin tone"
+  },
+  "🧑🏿‍❤️‍🧑🏾": {
+    "style": "unicode",
+    "image": "1f9d1-1f3ff-200d-2764-fe0f-200d-1f9d1-1f3fe.png",
+    "name": "couple with heart: person, person, dark skin tone, medium-dark skin tone"
+  },
+  "🧑🏿‍❤‍🧑🏾": {
+    "style": "unicode",
+    "image": "1f9d1-1f3ff-200d-2764-200d-1f9d1-1f3fe.png",
+    "name": "couple with heart: person, person, dark skin tone, medium-dark skin tone"
   },
   "👩‍❤️‍👨": {
     "style": "unicode",
@@ -13054,6 +14414,256 @@
     "image": "1f469-200d-2764-200d-1f468.png",
     "name": "couple with heart: woman, man"
   },
+  "👩🏻‍❤️‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f468-1f3fb.png",
+    "name": "couple with heart: woman, man, light skin tone"
+  },
+  "👩🏻‍❤‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f468-1f3fb.png",
+    "name": "couple with heart: woman, man, light skin tone"
+  },
+  "👩🏻‍❤️‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f468-1f3fc.png",
+    "name": "couple with heart: woman, man, light skin tone, medium-light skin tone"
+  },
+  "👩🏻‍❤‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f468-1f3fc.png",
+    "name": "couple with heart: woman, man, light skin tone, medium-light skin tone"
+  },
+  "👩🏻‍❤️‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f468-1f3fd.png",
+    "name": "couple with heart: woman, man, light skin tone, medium skin tone"
+  },
+  "👩🏻‍❤‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f468-1f3fd.png",
+    "name": "couple with heart: woman, man, light skin tone, medium skin tone"
+  },
+  "👩🏻‍❤️‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f468-1f3fe.png",
+    "name": "couple with heart: woman, man, light skin tone, medium-dark skin tone"
+  },
+  "👩🏻‍❤‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f468-1f3fe.png",
+    "name": "couple with heart: woman, man, light skin tone, medium-dark skin tone"
+  },
+  "👩🏻‍❤️‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f468-1f3ff.png",
+    "name": "couple with heart: woman, man, light skin tone, dark skin tone"
+  },
+  "👩🏻‍❤‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f468-1f3ff.png",
+    "name": "couple with heart: woman, man, light skin tone, dark skin tone"
+  },
+  "👩🏼‍❤️‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f468-1f3fb.png",
+    "name": "couple with heart: woman, man, medium-light skin tone, light skin tone"
+  },
+  "👩🏼‍❤‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f468-1f3fb.png",
+    "name": "couple with heart: woman, man, medium-light skin tone, light skin tone"
+  },
+  "👩🏼‍❤️‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f468-1f3fc.png",
+    "name": "couple with heart: woman, man, medium-light skin tone"
+  },
+  "👩🏼‍❤‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f468-1f3fc.png",
+    "name": "couple with heart: woman, man, medium-light skin tone"
+  },
+  "👩🏼‍❤️‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f468-1f3fd.png",
+    "name": "couple with heart: woman, man, medium-light skin tone, medium skin tone"
+  },
+  "👩🏼‍❤‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f468-1f3fd.png",
+    "name": "couple with heart: woman, man, medium-light skin tone, medium skin tone"
+  },
+  "👩🏼‍❤️‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f468-1f3fe.png",
+    "name": "couple with heart: woman, man, medium-light skin tone, medium-dark skin tone"
+  },
+  "👩🏼‍❤‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f468-1f3fe.png",
+    "name": "couple with heart: woman, man, medium-light skin tone, medium-dark skin tone"
+  },
+  "👩🏼‍❤️‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f468-1f3ff.png",
+    "name": "couple with heart: woman, man, medium-light skin tone, dark skin tone"
+  },
+  "👩🏼‍❤‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f468-1f3ff.png",
+    "name": "couple with heart: woman, man, medium-light skin tone, dark skin tone"
+  },
+  "👩🏽‍❤️‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f468-1f3fb.png",
+    "name": "couple with heart: woman, man, medium skin tone, light skin tone"
+  },
+  "👩🏽‍❤‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f468-1f3fb.png",
+    "name": "couple with heart: woman, man, medium skin tone, light skin tone"
+  },
+  "👩🏽‍❤️‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f468-1f3fc.png",
+    "name": "couple with heart: woman, man, medium skin tone, medium-light skin tone"
+  },
+  "👩🏽‍❤‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f468-1f3fc.png",
+    "name": "couple with heart: woman, man, medium skin tone, medium-light skin tone"
+  },
+  "👩🏽‍❤️‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f468-1f3fd.png",
+    "name": "couple with heart: woman, man, medium skin tone"
+  },
+  "👩🏽‍❤‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f468-1f3fd.png",
+    "name": "couple with heart: woman, man, medium skin tone"
+  },
+  "👩🏽‍❤️‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f468-1f3fe.png",
+    "name": "couple with heart: woman, man, medium skin tone, medium-dark skin tone"
+  },
+  "👩🏽‍❤‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f468-1f3fe.png",
+    "name": "couple with heart: woman, man, medium skin tone, medium-dark skin tone"
+  },
+  "👩🏽‍❤️‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f468-1f3ff.png",
+    "name": "couple with heart: woman, man, medium skin tone, dark skin tone"
+  },
+  "👩🏽‍❤‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f468-1f3ff.png",
+    "name": "couple with heart: woman, man, medium skin tone, dark skin tone"
+  },
+  "👩🏾‍❤️‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f468-1f3fb.png",
+    "name": "couple with heart: woman, man, medium-dark skin tone, light skin tone"
+  },
+  "👩🏾‍❤‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f468-1f3fb.png",
+    "name": "couple with heart: woman, man, medium-dark skin tone, light skin tone"
+  },
+  "👩🏾‍❤️‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f468-1f3fc.png",
+    "name": "couple with heart: woman, man, medium-dark skin tone, medium-light skin tone"
+  },
+  "👩🏾‍❤‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f468-1f3fc.png",
+    "name": "couple with heart: woman, man, medium-dark skin tone, medium-light skin tone"
+  },
+  "👩🏾‍❤️‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f468-1f3fd.png",
+    "name": "couple with heart: woman, man, medium-dark skin tone, medium skin tone"
+  },
+  "👩🏾‍❤‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f468-1f3fd.png",
+    "name": "couple with heart: woman, man, medium-dark skin tone, medium skin tone"
+  },
+  "👩🏾‍❤️‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f468-1f3fe.png",
+    "name": "couple with heart: woman, man, medium-dark skin tone"
+  },
+  "👩🏾‍❤‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f468-1f3fe.png",
+    "name": "couple with heart: woman, man, medium-dark skin tone"
+  },
+  "👩🏾‍❤️‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f468-1f3ff.png",
+    "name": "couple with heart: woman, man, medium-dark skin tone, dark skin tone"
+  },
+  "👩🏾‍❤‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f468-1f3ff.png",
+    "name": "couple with heart: woman, man, medium-dark skin tone, dark skin tone"
+  },
+  "👩🏿‍❤️‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f468-1f3fb.png",
+    "name": "couple with heart: woman, man, dark skin tone, light skin tone"
+  },
+  "👩🏿‍❤‍👨🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f468-1f3fb.png",
+    "name": "couple with heart: woman, man, dark skin tone, light skin tone"
+  },
+  "👩🏿‍❤️‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f468-1f3fc.png",
+    "name": "couple with heart: woman, man, dark skin tone, medium-light skin tone"
+  },
+  "👩🏿‍❤‍👨🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f468-1f3fc.png",
+    "name": "couple with heart: woman, man, dark skin tone, medium-light skin tone"
+  },
+  "👩🏿‍❤️‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f468-1f3fd.png",
+    "name": "couple with heart: woman, man, dark skin tone, medium skin tone"
+  },
+  "👩🏿‍❤‍👨🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f468-1f3fd.png",
+    "name": "couple with heart: woman, man, dark skin tone, medium skin tone"
+  },
+  "👩🏿‍❤️‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f468-1f3fe.png",
+    "name": "couple with heart: woman, man, dark skin tone, medium-dark skin tone"
+  },
+  "👩🏿‍❤‍👨🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f468-1f3fe.png",
+    "name": "couple with heart: woman, man, dark skin tone, medium-dark skin tone"
+  },
+  "👩🏿‍❤️‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f468-1f3ff.png",
+    "name": "couple with heart: woman, man, dark skin tone"
+  },
+  "👩🏿‍❤‍👨🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f468-1f3ff.png",
+    "name": "couple with heart: woman, man, dark skin tone"
+  },
   "👨‍❤️‍👨": {
     "style": "unicode",
     "image": "1f468-200d-2764-fe0f-200d-1f468.png",
@@ -13064,6 +14674,256 @@
     "image": "1f468-200d-2764-200d-1f468.png",
     "name": "couple with heart: man, man"
   },
+  "👨🏻‍❤️‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-fe0f-200d-1f468-1f3fb.png",
+    "name": "couple with heart: man, man, light skin tone"
+  },
+  "👨🏻‍❤‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-200d-1f468-1f3fb.png",
+    "name": "couple with heart: man, man, light skin tone"
+  },
+  "👨🏻‍❤️‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-fe0f-200d-1f468-1f3fc.png",
+    "name": "couple with heart: man, man, light skin tone, medium-light skin tone"
+  },
+  "👨🏻‍❤‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-200d-1f468-1f3fc.png",
+    "name": "couple with heart: man, man, light skin tone, medium-light skin tone"
+  },
+  "👨🏻‍❤️‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-fe0f-200d-1f468-1f3fd.png",
+    "name": "couple with heart: man, man, light skin tone, medium skin tone"
+  },
+  "👨🏻‍❤‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-200d-1f468-1f3fd.png",
+    "name": "couple with heart: man, man, light skin tone, medium skin tone"
+  },
+  "👨🏻‍❤️‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-fe0f-200d-1f468-1f3fe.png",
+    "name": "couple with heart: man, man, light skin tone, medium-dark skin tone"
+  },
+  "👨🏻‍❤‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-200d-1f468-1f3fe.png",
+    "name": "couple with heart: man, man, light skin tone, medium-dark skin tone"
+  },
+  "👨🏻‍❤️‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-fe0f-200d-1f468-1f3ff.png",
+    "name": "couple with heart: man, man, light skin tone, dark skin tone"
+  },
+  "👨🏻‍❤‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3fb-200d-2764-200d-1f468-1f3ff.png",
+    "name": "couple with heart: man, man, light skin tone, dark skin tone"
+  },
+  "👨🏼‍❤️‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-fe0f-200d-1f468-1f3fb.png",
+    "name": "couple with heart: man, man, medium-light skin tone, light skin tone"
+  },
+  "👨🏼‍❤‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-200d-1f468-1f3fb.png",
+    "name": "couple with heart: man, man, medium-light skin tone, light skin tone"
+  },
+  "👨🏼‍❤️‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-fe0f-200d-1f468-1f3fc.png",
+    "name": "couple with heart: man, man, medium-light skin tone"
+  },
+  "👨🏼‍❤‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-200d-1f468-1f3fc.png",
+    "name": "couple with heart: man, man, medium-light skin tone"
+  },
+  "👨🏼‍❤️‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-fe0f-200d-1f468-1f3fd.png",
+    "name": "couple with heart: man, man, medium-light skin tone, medium skin tone"
+  },
+  "👨🏼‍❤‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-200d-1f468-1f3fd.png",
+    "name": "couple with heart: man, man, medium-light skin tone, medium skin tone"
+  },
+  "👨🏼‍❤️‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-fe0f-200d-1f468-1f3fe.png",
+    "name": "couple with heart: man, man, medium-light skin tone, medium-dark skin tone"
+  },
+  "👨🏼‍❤‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-200d-1f468-1f3fe.png",
+    "name": "couple with heart: man, man, medium-light skin tone, medium-dark skin tone"
+  },
+  "👨🏼‍❤️‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-fe0f-200d-1f468-1f3ff.png",
+    "name": "couple with heart: man, man, medium-light skin tone, dark skin tone"
+  },
+  "👨🏼‍❤‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3fc-200d-2764-200d-1f468-1f3ff.png",
+    "name": "couple with heart: man, man, medium-light skin tone, dark skin tone"
+  },
+  "👨🏽‍❤️‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-fe0f-200d-1f468-1f3fb.png",
+    "name": "couple with heart: man, man, medium skin tone, light skin tone"
+  },
+  "👨🏽‍❤‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-200d-1f468-1f3fb.png",
+    "name": "couple with heart: man, man, medium skin tone, light skin tone"
+  },
+  "👨🏽‍❤️‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-fe0f-200d-1f468-1f3fc.png",
+    "name": "couple with heart: man, man, medium skin tone, medium-light skin tone"
+  },
+  "👨🏽‍❤‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-200d-1f468-1f3fc.png",
+    "name": "couple with heart: man, man, medium skin tone, medium-light skin tone"
+  },
+  "👨🏽‍❤️‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-fe0f-200d-1f468-1f3fd.png",
+    "name": "couple with heart: man, man, medium skin tone"
+  },
+  "👨🏽‍❤‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-200d-1f468-1f3fd.png",
+    "name": "couple with heart: man, man, medium skin tone"
+  },
+  "👨🏽‍❤️‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-fe0f-200d-1f468-1f3fe.png",
+    "name": "couple with heart: man, man, medium skin tone, medium-dark skin tone"
+  },
+  "👨🏽‍❤‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-200d-1f468-1f3fe.png",
+    "name": "couple with heart: man, man, medium skin tone, medium-dark skin tone"
+  },
+  "👨🏽‍❤️‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-fe0f-200d-1f468-1f3ff.png",
+    "name": "couple with heart: man, man, medium skin tone, dark skin tone"
+  },
+  "👨🏽‍❤‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3fd-200d-2764-200d-1f468-1f3ff.png",
+    "name": "couple with heart: man, man, medium skin tone, dark skin tone"
+  },
+  "👨🏾‍❤️‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-fe0f-200d-1f468-1f3fb.png",
+    "name": "couple with heart: man, man, medium-dark skin tone, light skin tone"
+  },
+  "👨🏾‍❤‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-200d-1f468-1f3fb.png",
+    "name": "couple with heart: man, man, medium-dark skin tone, light skin tone"
+  },
+  "👨🏾‍❤️‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-fe0f-200d-1f468-1f3fc.png",
+    "name": "couple with heart: man, man, medium-dark skin tone, medium-light skin tone"
+  },
+  "👨🏾‍❤‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-200d-1f468-1f3fc.png",
+    "name": "couple with heart: man, man, medium-dark skin tone, medium-light skin tone"
+  },
+  "👨🏾‍❤️‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-fe0f-200d-1f468-1f3fd.png",
+    "name": "couple with heart: man, man, medium-dark skin tone, medium skin tone"
+  },
+  "👨🏾‍❤‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-200d-1f468-1f3fd.png",
+    "name": "couple with heart: man, man, medium-dark skin tone, medium skin tone"
+  },
+  "👨🏾‍❤️‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-fe0f-200d-1f468-1f3fe.png",
+    "name": "couple with heart: man, man, medium-dark skin tone"
+  },
+  "👨🏾‍❤‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-200d-1f468-1f3fe.png",
+    "name": "couple with heart: man, man, medium-dark skin tone"
+  },
+  "👨🏾‍❤️‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-fe0f-200d-1f468-1f3ff.png",
+    "name": "couple with heart: man, man, medium-dark skin tone, dark skin tone"
+  },
+  "👨🏾‍❤‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3fe-200d-2764-200d-1f468-1f3ff.png",
+    "name": "couple with heart: man, man, medium-dark skin tone, dark skin tone"
+  },
+  "👨🏿‍❤️‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-fe0f-200d-1f468-1f3fb.png",
+    "name": "couple with heart: man, man, dark skin tone, light skin tone"
+  },
+  "👨🏿‍❤‍👨🏻": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-200d-1f468-1f3fb.png",
+    "name": "couple with heart: man, man, dark skin tone, light skin tone"
+  },
+  "👨🏿‍❤️‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-fe0f-200d-1f468-1f3fc.png",
+    "name": "couple with heart: man, man, dark skin tone, medium-light skin tone"
+  },
+  "👨🏿‍❤‍👨🏼": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-200d-1f468-1f3fc.png",
+    "name": "couple with heart: man, man, dark skin tone, medium-light skin tone"
+  },
+  "👨🏿‍❤️‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-fe0f-200d-1f468-1f3fd.png",
+    "name": "couple with heart: man, man, dark skin tone, medium skin tone"
+  },
+  "👨🏿‍❤‍👨🏽": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-200d-1f468-1f3fd.png",
+    "name": "couple with heart: man, man, dark skin tone, medium skin tone"
+  },
+  "👨🏿‍❤️‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-fe0f-200d-1f468-1f3fe.png",
+    "name": "couple with heart: man, man, dark skin tone, medium-dark skin tone"
+  },
+  "👨🏿‍❤‍👨🏾": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-200d-1f468-1f3fe.png",
+    "name": "couple with heart: man, man, dark skin tone, medium-dark skin tone"
+  },
+  "👨🏿‍❤️‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-fe0f-200d-1f468-1f3ff.png",
+    "name": "couple with heart: man, man, dark skin tone"
+  },
+  "👨🏿‍❤‍👨🏿": {
+    "style": "unicode",
+    "image": "1f468-1f3ff-200d-2764-200d-1f468-1f3ff.png",
+    "name": "couple with heart: man, man, dark skin tone"
+  },
   "👩‍❤️‍👩": {
     "style": "unicode",
     "image": "1f469-200d-2764-fe0f-200d-1f469.png",
@@ -13073,6 +14933,256 @@
     "style": "unicode",
     "image": "1f469-200d-2764-200d-1f469.png",
     "name": "couple with heart: woman, woman"
+  },
+  "👩🏻‍❤️‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f469-1f3fb.png",
+    "name": "couple with heart: woman, woman, light skin tone"
+  },
+  "👩🏻‍❤‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f469-1f3fb.png",
+    "name": "couple with heart: woman, woman, light skin tone"
+  },
+  "👩🏻‍❤️‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f469-1f3fc.png",
+    "name": "couple with heart: woman, woman, light skin tone, medium-light skin tone"
+  },
+  "👩🏻‍❤‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f469-1f3fc.png",
+    "name": "couple with heart: woman, woman, light skin tone, medium-light skin tone"
+  },
+  "👩🏻‍❤️‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f469-1f3fd.png",
+    "name": "couple with heart: woman, woman, light skin tone, medium skin tone"
+  },
+  "👩🏻‍❤‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f469-1f3fd.png",
+    "name": "couple with heart: woman, woman, light skin tone, medium skin tone"
+  },
+  "👩🏻‍❤️‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f469-1f3fe.png",
+    "name": "couple with heart: woman, woman, light skin tone, medium-dark skin tone"
+  },
+  "👩🏻‍❤‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f469-1f3fe.png",
+    "name": "couple with heart: woman, woman, light skin tone, medium-dark skin tone"
+  },
+  "👩🏻‍❤️‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-fe0f-200d-1f469-1f3ff.png",
+    "name": "couple with heart: woman, woman, light skin tone, dark skin tone"
+  },
+  "👩🏻‍❤‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fb-200d-2764-200d-1f469-1f3ff.png",
+    "name": "couple with heart: woman, woman, light skin tone, dark skin tone"
+  },
+  "👩🏼‍❤️‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f469-1f3fb.png",
+    "name": "couple with heart: woman, woman, medium-light skin tone, light skin tone"
+  },
+  "👩🏼‍❤‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f469-1f3fb.png",
+    "name": "couple with heart: woman, woman, medium-light skin tone, light skin tone"
+  },
+  "👩🏼‍❤️‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f469-1f3fc.png",
+    "name": "couple with heart: woman, woman, medium-light skin tone"
+  },
+  "👩🏼‍❤‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f469-1f3fc.png",
+    "name": "couple with heart: woman, woman, medium-light skin tone"
+  },
+  "👩🏼‍❤️‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f469-1f3fd.png",
+    "name": "couple with heart: woman, woman, medium-light skin tone, medium skin tone"
+  },
+  "👩🏼‍❤‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f469-1f3fd.png",
+    "name": "couple with heart: woman, woman, medium-light skin tone, medium skin tone"
+  },
+  "👩🏼‍❤️‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f469-1f3fe.png",
+    "name": "couple with heart: woman, woman, medium-light skin tone, medium-dark skin tone"
+  },
+  "👩🏼‍❤‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f469-1f3fe.png",
+    "name": "couple with heart: woman, woman, medium-light skin tone, medium-dark skin tone"
+  },
+  "👩🏼‍❤️‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-fe0f-200d-1f469-1f3ff.png",
+    "name": "couple with heart: woman, woman, medium-light skin tone, dark skin tone"
+  },
+  "👩🏼‍❤‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fc-200d-2764-200d-1f469-1f3ff.png",
+    "name": "couple with heart: woman, woman, medium-light skin tone, dark skin tone"
+  },
+  "👩🏽‍❤️‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f469-1f3fb.png",
+    "name": "couple with heart: woman, woman, medium skin tone, light skin tone"
+  },
+  "👩🏽‍❤‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f469-1f3fb.png",
+    "name": "couple with heart: woman, woman, medium skin tone, light skin tone"
+  },
+  "👩🏽‍❤️‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f469-1f3fc.png",
+    "name": "couple with heart: woman, woman, medium skin tone, medium-light skin tone"
+  },
+  "👩🏽‍❤‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f469-1f3fc.png",
+    "name": "couple with heart: woman, woman, medium skin tone, medium-light skin tone"
+  },
+  "👩🏽‍❤️‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f469-1f3fd.png",
+    "name": "couple with heart: woman, woman, medium skin tone"
+  },
+  "👩🏽‍❤‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f469-1f3fd.png",
+    "name": "couple with heart: woman, woman, medium skin tone"
+  },
+  "👩🏽‍❤️‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f469-1f3fe.png",
+    "name": "couple with heart: woman, woman, medium skin tone, medium-dark skin tone"
+  },
+  "👩🏽‍❤‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f469-1f3fe.png",
+    "name": "couple with heart: woman, woman, medium skin tone, medium-dark skin tone"
+  },
+  "👩🏽‍❤️‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-fe0f-200d-1f469-1f3ff.png",
+    "name": "couple with heart: woman, woman, medium skin tone, dark skin tone"
+  },
+  "👩🏽‍❤‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fd-200d-2764-200d-1f469-1f3ff.png",
+    "name": "couple with heart: woman, woman, medium skin tone, dark skin tone"
+  },
+  "👩🏾‍❤️‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f469-1f3fb.png",
+    "name": "couple with heart: woman, woman, medium-dark skin tone, light skin tone"
+  },
+  "👩🏾‍❤‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f469-1f3fb.png",
+    "name": "couple with heart: woman, woman, medium-dark skin tone, light skin tone"
+  },
+  "👩🏾‍❤️‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f469-1f3fc.png",
+    "name": "couple with heart: woman, woman, medium-dark skin tone, medium-light skin tone"
+  },
+  "👩🏾‍❤‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f469-1f3fc.png",
+    "name": "couple with heart: woman, woman, medium-dark skin tone, medium-light skin tone"
+  },
+  "👩🏾‍❤️‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f469-1f3fd.png",
+    "name": "couple with heart: woman, woman, medium-dark skin tone, medium skin tone"
+  },
+  "👩🏾‍❤‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f469-1f3fd.png",
+    "name": "couple with heart: woman, woman, medium-dark skin tone, medium skin tone"
+  },
+  "👩🏾‍❤️‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f469-1f3fe.png",
+    "name": "couple with heart: woman, woman, medium-dark skin tone"
+  },
+  "👩🏾‍❤‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f469-1f3fe.png",
+    "name": "couple with heart: woman, woman, medium-dark skin tone"
+  },
+  "👩🏾‍❤️‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-fe0f-200d-1f469-1f3ff.png",
+    "name": "couple with heart: woman, woman, medium-dark skin tone, dark skin tone"
+  },
+  "👩🏾‍❤‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3fe-200d-2764-200d-1f469-1f3ff.png",
+    "name": "couple with heart: woman, woman, medium-dark skin tone, dark skin tone"
+  },
+  "👩🏿‍❤️‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f469-1f3fb.png",
+    "name": "couple with heart: woman, woman, dark skin tone, light skin tone"
+  },
+  "👩🏿‍❤‍👩🏻": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f469-1f3fb.png",
+    "name": "couple with heart: woman, woman, dark skin tone, light skin tone"
+  },
+  "👩🏿‍❤️‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f469-1f3fc.png",
+    "name": "couple with heart: woman, woman, dark skin tone, medium-light skin tone"
+  },
+  "👩🏿‍❤‍👩🏼": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f469-1f3fc.png",
+    "name": "couple with heart: woman, woman, dark skin tone, medium-light skin tone"
+  },
+  "👩🏿‍❤️‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f469-1f3fd.png",
+    "name": "couple with heart: woman, woman, dark skin tone, medium skin tone"
+  },
+  "👩🏿‍❤‍👩🏽": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f469-1f3fd.png",
+    "name": "couple with heart: woman, woman, dark skin tone, medium skin tone"
+  },
+  "👩🏿‍❤️‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f469-1f3fe.png",
+    "name": "couple with heart: woman, woman, dark skin tone, medium-dark skin tone"
+  },
+  "👩🏿‍❤‍👩🏾": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f469-1f3fe.png",
+    "name": "couple with heart: woman, woman, dark skin tone, medium-dark skin tone"
+  },
+  "👩🏿‍❤️‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-fe0f-200d-1f469-1f3ff.png",
+    "name": "couple with heart: woman, woman, dark skin tone"
+  },
+  "👩🏿‍❤‍👩🏿": {
+    "style": "unicode",
+    "image": "1f469-1f3ff-200d-2764-200d-1f469-1f3ff.png",
+    "name": "couple with heart: woman, woman, dark skin tone"
   },
   "👪": {
     "style": "unicode",
@@ -13252,7 +15362,7 @@
   "🏾": {
     "style": "unicode",
     "image": "1f3fe.png",
-    "name": "medium-dark skin tone"
+    "name": "medium-dark skin tone [type 5]"
   },
   "🏿": {
     "style": "unicode",
@@ -13572,7 +15682,7 @@
   "🐨": {
     "style": "unicode",
     "image": "1f428.png",
-    "name": "koala [bear]"
+    "name": "koala [face, marsupial]"
   },
   "🐼": {
     "style": "unicode",
@@ -13832,7 +15942,7 @@
   "🐞": {
     "style": "unicode",
     "image": "1f41e.png",
-    "name": "lady beetle"
+    "name": "lady beetle [insect, ladybird, ladybug]"
   },
   "🦗": {
     "style": "unicode",
@@ -14109,10 +16219,10 @@
     "image": "1f965.png",
     "name": "coconut [palm, piña colada]"
   },
-  "��": {
+  "🥑": {
     "style": "unicode",
-    "image": "fffd-fffd.png",
-    "name": "avocado"
+    "image": "1f951.png",
+    "name": "avocado [food, fruit]"
   },
   "🍆": {
     "style": "unicode",
@@ -15282,7 +17392,7 @@
   "🚏": {
     "style": "unicode",
     "image": "1f68f.png",
-    "name": "bus stop [busstop]"
+    "name": "bus stop"
   },
   "🛣️": {
     "style": "unicode",
@@ -16282,7 +18392,7 @@
   "🎯": {
     "style": "unicode",
     "image": "1f3af.png",
-    "name": "direct hit [bullseye, dart, game, target]"
+    "name": "bullseye [dart, direct hit, game, hit, target]"
   },
   "🪀": {
     "style": "unicode",
@@ -16967,12 +19077,12 @@
   "💿": {
     "style": "unicode",
     "image": "1f4bf.png",
-    "name": "optical disk [cd, computer]"
+    "name": "optical disk [CD, computer]"
   },
   "📀": {
     "style": "unicode",
     "image": "1f4c0.png",
-    "name": "dvd [blu-ray, computer, disk, optical]"
+    "name": "dvd [Blu-ray, computer, disk, DVD, optical]"
   },
   "🧮": {
     "style": "unicode",
@@ -17612,7 +19722,7 @@
   "🔫": {
     "style": "unicode",
     "image": "1f52b.png",
-    "name": "pistol [gun, handgun, revolver, tool, water, weapon]"
+    "name": "water pistol [gun, handgun, revolver, tool, weapon]"
   },
   "🪃": {
     "style": "unicode",
@@ -17962,7 +20072,7 @@
   "🏧": {
     "style": "unicode",
     "image": "1f3e7.png",
-    "name": "ATM sign [atm, automated, bank, teller]"
+    "name": "ATM sign [automated, bank, teller]"
   },
   "🚮": {
     "style": "unicode",
@@ -17982,17 +20092,17 @@
   "🚹": {
     "style": "unicode",
     "image": "1f6b9.png",
-    "name": "men’s room [lavatory, man, restroom, wc]"
+    "name": "men’s room [bathroom, lavatory, man, restroom, toilet, WC]"
   },
   "🚺": {
     "style": "unicode",
     "image": "1f6ba.png",
-    "name": "women’s room [lavatory, restroom, wc, woman]"
+    "name": "women’s room [bathroom, lavatory, restroom, toilet, WC, woman]"
   },
   "🚻": {
     "style": "unicode",
     "image": "1f6bb.png",
-    "name": "restroom [lavatory, WC]"
+    "name": "restroom [bathroom, lavatory, toilet, WC]"
   },
   "🚼": {
     "style": "unicode",
@@ -18002,7 +20112,7 @@
   "🚾": {
     "style": "unicode",
     "image": "1f6be.png",
-    "name": "water closet [lavatory, restroom, wc]"
+    "name": "water closet [bathroom, lavatory, restroom, toilet, WC]"
   },
   "🛂": {
     "style": "unicode",
@@ -18257,27 +20367,27 @@
   "🔙": {
     "style": "unicode",
     "image": "1f519.png",
-    "name": "BACK arrow [back]"
+    "name": "BACK arrow"
   },
   "🔚": {
     "style": "unicode",
     "image": "1f51a.png",
-    "name": "END arrow [end]"
+    "name": "END arrow"
   },
   "🔛": {
     "style": "unicode",
     "image": "1f51b.png",
-    "name": "ON! arrow [mark, on]"
+    "name": "ON! arrow [mark]"
   },
   "🔜": {
     "style": "unicode",
     "image": "1f51c.png",
-    "name": "SOON arrow [soon]"
+    "name": "SOON arrow"
   },
   "🔝": {
     "style": "unicode",
     "image": "1f51d.png",
-    "name": "TOP arrow [top, up]"
+    "name": "TOP arrow [up]"
   },
   "🛐": {
     "style": "unicode",
@@ -18702,7 +20812,7 @@
   "❓": {
     "style": "unicode",
     "image": "2753.png",
-    "name": "question mark [?, punctuation, red question mark]"
+    "name": "red question mark [?, punctuation]"
   },
   "❔": {
     "style": "unicode",
@@ -18717,7 +20827,7 @@
   "❗": {
     "style": "unicode",
     "image": "2757.png",
-    "name": "exclamation mark [!, punctuation, red exclamation mark]"
+    "name": "red exclamation mark [!, punctuation]"
   },
   "〰️": {
     "style": "unicode",
@@ -18882,7 +20992,7 @@
   "©": {
     "style": "unicode",
     "image": "a9.png",
-    "name": "copyright"
+    "name": "copyright [C]"
   },
   "®️": {
     "style": "unicode",
@@ -18892,7 +21002,7 @@
   "®": {
     "style": "unicode",
     "image": "ae.png",
-    "name": "registered"
+    "name": "registered [R]"
   },
   "™️": {
     "style": "unicode",
@@ -18902,7 +21012,7 @@
   "™": {
     "style": "unicode",
     "image": "2122.png",
-    "name": "trade mark [tm, trademark]"
+    "name": "trade mark [TM, trademark]"
   },
   "#️⃣": {
     "style": "unicode",
@@ -19062,12 +21172,12 @@
   "🅰": {
     "style": "unicode",
     "image": "1f170.png",
-    "name": "A button (blood type) [a]"
+    "name": "A button (blood type)"
   },
   "🆎": {
     "style": "unicode",
     "image": "1f18e.png",
-    "name": "AB button (blood type) [ab]"
+    "name": "AB button (blood type)"
   },
   "🅱️": {
     "style": "unicode",
@@ -19082,17 +21192,17 @@
   "🆑": {
     "style": "unicode",
     "image": "1f191.png",
-    "name": "CL button [cl]"
+    "name": "CL button"
   },
   "🆒": {
     "style": "unicode",
     "image": "1f192.png",
-    "name": "COOL button [cool]"
+    "name": "COOL button"
   },
   "🆓": {
     "style": "unicode",
     "image": "1f193.png",
-    "name": "FREE button [free]"
+    "name": "FREE button"
   },
   "ℹ️": {
     "style": "unicode",
@@ -19107,7 +21217,7 @@
   "🆔": {
     "style": "unicode",
     "image": "1f194.png",
-    "name": "ID button [id, identity]"
+    "name": "ID button [identity]"
   },
   "Ⓜ️": {
     "style": "unicode",
@@ -19117,17 +21227,17 @@
   "Ⓜ": {
     "style": "unicode",
     "image": "24c2.png",
-    "name": "circled M [m]"
+    "name": "circled M"
   },
   "🆕": {
     "style": "unicode",
     "image": "1f195.png",
-    "name": "NEW button [new]"
+    "name": "NEW button"
   },
   "🆖": {
     "style": "unicode",
     "image": "1f196.png",
-    "name": "NG button [ng]"
+    "name": "NG button"
   },
   "🅾️": {
     "style": "unicode",
@@ -19157,17 +21267,17 @@
   "🆘": {
     "style": "unicode",
     "image": "1f198.png",
-    "name": "SOS button [help, sos]"
+    "name": "SOS button [help]"
   },
   "🆙": {
     "style": "unicode",
     "image": "1f199.png",
-    "name": "UP! button [mark, up]"
+    "name": "UP! button [mark]"
   },
   "🆚": {
     "style": "unicode",
     "image": "1f19a.png",
-    "name": "VS button [versus, vs]"
+    "name": "VS button [versus]"
   },
   "🈁": {
     "style": "unicode",
