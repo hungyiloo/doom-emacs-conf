@@ -9,8 +9,12 @@
 (package! olivetti)
 
 ;; semantic syntax highlighting
-(package! tree-sitter)
-(package! tree-sitter-langs)
+(package! tree-sitter
+  :recipe (:host github :repo "emacs-tree-sitter/elisp-tree-sitter")
+  :pin "4d9871d23999fe5f8de821e23c9ec576df2b2738")
+(package! tree-sitter-langs
+  :recipe (:host github :repo "emacs-tree-sitter/tree-sitter-langs")
+  :pin "fa47b55f7bd11bd2b17ab48deb03ed23000bb974")
 
 ;; chinese pinyin input
 (package! pyim)
@@ -36,19 +40,16 @@
 ;; rainbow-mode without the extra rgb module stuff (e.g. kurecolor)
 (package! rainbow-mode)
 
-(package! lsp-mode :pin "0f50dec790154e1d003024f87058991c1f24e83e")
+(package! lsp-mode :pin "d5d7a54dee2622d3fd884638617f4957e1876018")
 (package! lsp-ui :pin "b625f3cb5e88559ab99bec58f7a14272edb296bc")
 (package! org-roam :pin "1795039ab93ef19611dbb3fca21c4211c4e655a9")
-(package! ctrlf :pin "b78e129a8a4fabfebba8cdd5ef51278d0d57e0f4")
-(package! org-mode :pin "d70f2806788dce06871287ef02c88ee08076dffc")
+(package! ctrlf :pin "b8a7899faf9d37f1990dfefd9c6b2998c40d7fcc")
+(package! org-mode :pin "a246a131873e566afe243ab98b59a806b31019b8")
 (package! vterm :pin "2681120b770573044832ba8c22ccbac192e1a294")
-;; (package! good-scroll :pin "fb01f121c4c77db3e6750303894d57b31e410b14")
-;; (package! evil :pin "f5ab7ff")
-;; (package! evil-mc :pin "f04fb17")
-;; (package! doom-themes :pin "55f01ed")
+(package! magit :pin "1e40d0021790707f6e88debda04f6b14d9429586")
 (package! embark
   :recipe (:host github :repo "oantolin/embark")
-  :pin "d21277a638827623ab84e9e6341312a2da5062ab")
+  :pin "64c4132c6e29d2e415325a50f190ab8a0732a4e4")
 (package! vertico-mouse
   :recipe (:host github :repo "minad/vertico")
   :pin "81a4b35f8d11dfad56de1727ee9bdd3b4461d07c")
