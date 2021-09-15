@@ -19,10 +19,12 @@
 
   (after! tree-sitter-hl
     (custom-set-faces!
-    ;; Fix blotches of wrong background color in org src blocks
-    `(tree-sitter-hl-face:punctuation :inherit nil)
-    ;; Fix embedded code in strings to be distinguishable
-    `(tree-sitter-hl-face:embedded :weight bold)))
+      ;; Fix blotches of wrong background color in org src blocks
+      `(tree-sitter-hl-face:punctuation.bracket :inherit nil)
+      `(tree-sitter-hl-face:punctuation.delimiter :inherit nil)
+      `(tree-sitter-hl-face:punctuation :inherit nil)
+      ;; Fix embedded code in strings to be distinguishable
+      `(tree-sitter-hl-face:embedded :weight bold)))
 
   (defun my/tree-sitter-point-in-comment-p (&optional pos)
     "Use tree-sitter to determine if point is inside comment"
