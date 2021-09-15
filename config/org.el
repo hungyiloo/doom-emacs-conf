@@ -195,4 +195,7 @@ This function is called by `org-babel-execute-src-block'."
   (map! :leader
         (:prefix-map ("n" . "notes")
          (:prefix ("r" . "roam")
-          :desc "Migrate" "m" #'my/org-roam-create-note-from-headline))))
+          :desc "Migrate" "m" #'my/org-roam-create-note-from-headline)))
+  (add-hook! 'org-roam-find-file-hook
+             (defun my/org-roam-buffer-setup ()
+               (auto-fill-mode 1))))
