@@ -373,7 +373,7 @@
 POSITION is a byte position in buffer like \\(point-min\\)."
   (save-excursion
     (goto-char position)
-    (let* ((current-node (tree-sitter-node-at-point))
+    (let* ((current-node (tree-sitter-node-at-pos))
            (parent-node (tsc-get-parent current-node)))
       (while (and parent-node
                   (not (eq 'program (tsc-node-type parent-node)))
@@ -421,7 +421,7 @@ POSITION is a byte position in buffer like \\(point-min\\)."
 (defun tsx--unwrap-jsx-expressions-in-region (beg end)
   (when-let ((node (save-excursion (goto-char beg)
                                    (skip-chars-forward " \t\n\r")
-                                   (tree-sitter-node-at-point 'jsx_expression))))
+                                   (tree-sitter-node-at-pos 'jsx_expression))))
     (while (and node
                 (<= (tsc-node-end-position node) end))
       (when (eq 'jsx_expression (tsc-node-type node))
@@ -456,7 +456,7 @@ POSITION is a byte position in buffer like \\(point-min\\)."
   (when-let ((content-region (tsx--actual-content-region beg end))
              (content-beg (car content-region))
              (node (save-excursion (goto-char content-beg)
-                                   (tree-sitter-node-at-point 'jsx_expression)))
+                                   (tree-sitter-node-at-pos 'jsx_expression)))
              (is-jsx-comment t))
     (while (and node is-jsx-comment (<= (tsc-node-end-position node) end))
       (setq is-jsx-comment (or (and (eq 'jsx_text (tsc-node-type node))
