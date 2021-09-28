@@ -11,10 +11,10 @@
 ;; semantic syntax highlighting
 (package! tree-sitter
   :recipe (:host github :repo "emacs-tree-sitter/elisp-tree-sitter")
-  :pin "4d9871d23999fe5f8de821e23c9ec576df2b2738")
+  :pin "2acca5c8d2e3dc66d4d0a99831b33140b5a5f973")
 (package! tree-sitter-langs
   :recipe (:host github :repo "emacs-tree-sitter/tree-sitter-langs")
-  :pin "fa47b55f7bd11bd2b17ab48deb03ed23000bb974")
+  :pin "2b845a70080c0edd66f13200b9dc8d6d0c3f42ce")
 
 ;; chinese pinyin input
 (package! pyim)
@@ -40,20 +40,24 @@
 ;; rainbow-mode without the extra rgb module stuff (e.g. kurecolor)
 (package! rainbow-mode)
 
-(package! lsp-mode :pin "d5d7a54dee2622d3fd884638617f4957e1876018")
+(package! lsp-mode :pin "1f1a97331da472627dd08bfe3e463cfbc5fa0f0a")
 (package! lsp-ui :pin "b625f3cb5e88559ab99bec58f7a14272edb296bc")
-(package! org-roam :pin "1795039ab93ef19611dbb3fca21c4211c4e655a9")
+(package! org-roam :pin "17d8e84ea57d4ca27dac999c661a03653cc92a80")
 (package! ctrlf :pin "b8a7899faf9d37f1990dfefd9c6b2998c40d7fcc")
-(package! org-mode :pin "a246a131873e566afe243ab98b59a806b31019b8")
+(package! org-mode :pin "f33b92dea77f6679b4a5978218989dc7d6a0ed7d")
 (package! vterm :pin "2681120b770573044832ba8c22ccbac192e1a294")
-(package! magit :pin "1e40d0021790707f6e88debda04f6b14d9429586")
+(package! magit :pin "2049fd6f6eae7e958b673e809299bc7d3f02a781")
 (package! embark
   :recipe (:host github :repo "oantolin/embark")
-  :pin "64c4132c6e29d2e415325a50f190ab8a0732a4e4")
+  :pin "1492aefc00abc3355bf04c2ed05f40ff2f523fcf")
 (package! vertico-mouse
   :recipe (:host github :repo "minad/vertico")
-  :pin "81a4b35f8d11dfad56de1727ee9bdd3b4461d07c")
+  :pin "0df75c0bbc545b1bd008718b1af2e6c0df18fe74")
+;; (package! corfu
+;;   :recipe (:host github :repo "minad/corfu")
+;;   :pin "68bba8355b0d84199f1b55442f9447d9b9c70bea")
 (package! literate-calc-mode)
+(package! weblorg)
 
 (package! tsx-mode
   :recipe (:local-repo "lisp"))
