@@ -9,6 +9,10 @@
         (:prefix-map ("g" . "git")
          "p" #'my/magit-other-project))
 
+  (map! :map magit-mode-map
+        :n "Z" #'magit-stash
+        :n "*" #'magit-worktree)
+
   (defun my/magit-other-project ()
     "Opens magit for another project of user's selection."
     (interactive)
