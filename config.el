@@ -91,6 +91,8 @@
       "M-u" #'undo-only
       "M-[" #'previous-buffer
       "M-]" #'next-buffer
+      "<mouse-8>" #'better-jumper-jump-backward
+      "<mouse-9>" #'better-jumper-jump-forward
       "<f12>" #'universal-argument)
 
 (map! :map universal-argument-map
