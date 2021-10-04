@@ -52,3 +52,9 @@
   ;; Not sure of a better fix right now.
   (map! :map lsp-ui-peek-mode-map
         "<tab>" #'lsp-ui-peek--toggle-file))
+
+;; must be set before package loads
+(setq lsp-tailwindcss-add-on-mode t)
+(use-package! lsp-tailwindcss
+  :config
+  (setq lsp-tailwindcss-major-modes '(rjsx-mode web-mode tsx-mode html-mode css-mode)))

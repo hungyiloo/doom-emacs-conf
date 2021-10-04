@@ -187,4 +187,5 @@
        ;;literate
        (default +bindings +smartparens))
 
+;; these must be set before package loads
 (setq evil-respect-visual-line-mode t)
