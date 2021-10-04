@@ -42,53 +42,50 @@
 (defvar charge-node-keywords '("slug" "title" "date" "draft" "filetags")
   "The supported node field names to be parsed from org file keywords in the header.")
 
-(defun charge-make-node-org (file)
-  (with-temp-buffer
-    (insert-file-contents file)
-    (delay-mode-hooks (org-mode))
-    (let (node-alist)
-      (dolist (x (org-collect-keywords charge-node-keywords))
-        (push (cons (intern (concat ":" (downcase (car x)))) (cadr x))
-              node-alist))
-      (dolist (x (org-entry-properties 0))
-        (push (cons (intern (concat ":" (downcase (car x)))) (cdr x))
-              node-alist))
-      (setf (alist-get :file node-alist) (expand-file-name file))
-      node-alist)))
+(defun charge-collect-nodes-org (files)
+  (unless (listp files) (setq files '(files)))
+  (mapcar
+   (lambda (file)
+     (with-temp-buffer
+       (insert-file-contents file)
+       (delay-mode-hooks (org-mode))
+       (let (node-alist)
+         (dolist (x (org-collect-keywords charge-node-keywords))
+           (push (cons (intern (concat ":" (downcase (car x)))) (cadr x))
+                 node-alist))
+         (dolist (x (org-entry-properties 0))
+           (push (cons (intern (concat ":" (downcase (car x)))) (cdr x))
+                 node-alist))
+         (setf (alist-get :file node-alist) (expand-file-name file))
+         node-alist)))
+   files))
 
 ;; (alist-get :slug (charge-make-node-org "~/code/hungyi.net/content/posts/react-hook-use-debounce.org"))
 ;; (charge-make-node-org "~/Notes/roam/20210923142159-book_recommendations.org")
 
-(defun charge-enrich-node-org-with-html (node)
+(defun charge-export-node-org (node)
   (let ((org-html-htmlize-output-type 'css))
     (save-window-excursion
       (with-temp-buffer
         (insert-file-contents (alist-get :file node))
         (org-export-to-buffer 'charge (buffer-name))
-        (setf (alist-get :html node) (buffer-string))
-        node))))
+        (buffer-string)))))
 
-;; (charge-enrich-node-org-with-html (charge-make-node-org "~/Notes/roam/20210923142159-book_recommendations.org"))
-;; (charge-enrich-node-org-with-html (charge-make-node-org "~/code/hungyi.net/content/posts/react-hook-use-debounce.org"))
+;; (charge-enrich-node-org (charge-make-node-org "~/Notes/roam/20210923142159-book_recommendations.org"))
+;; (charge-enrich-node-org (charge-make-node-org "~/code/hungyi.net/content/posts/react-hook-use-debounce.org"))
 
 (defun charge-site (&rest site)
   (let ((base-url (plist-get site :base-url))
         (output-dir (plist-get site :output-dir))
         (routes (plist-get site :routes)))
     (dolist (route routes)
-      (let ((path (plist-get route :path))
+      (let ((output (plist-get route :output))
             (nodes (plist-get route :nodes))
-            (enricher (plist-get route :enricher))
-            (renderer (plist-get route :renderer)))
+            (writer (plist-get route :writer)))
         (dolist (node nodes)
-          (message "exporting: %s" (alist-get :file node))
-          (let ((enriched-node (funcall enricher node))
-                (write-destination (f-join output-dir (funcall path node))))
-            (mkdir (file-name-directory write-destination) t)
-            (write-region
-             (funcall renderer enriched-node route site)
-             nil
-             write-destination)))))))
+          (let ((destination (f-join output-dir (funcall output node))))
+            (mkdir (file-name-directory destination) t)
+            (funcall writer destination node route site)))))))
 
 (with-eval-after-load 'org
   (org-link-set-parameters
