@@ -1,12 +1,29 @@
 ;;; autoload/consult.el -*- lexical-binding: t; -*-
 
+(defun my/consult--color-builder (input)
+  (list
+   :command (list
+             "curl"
+             "https://www.colourlovers.com/api/colors?numResults=50&format=json"
+             "-H"
+             "user-agent: Emacs"
+             "--data-urlencode"
+             (concat "keywords=" (car (consult--command-split input))))))
+
+(defun my/consult--palette-builder (input)
+  (list
+   :command (list
+             "curl"
+             "https://www.colourlovers.com/api/palettes?numResults=50&format=json"
+             "-H"
+             "user-agent: Emacs"
+             "--data-urlencode"
+             (concat "keywords=" (car (consult--command-split input))))))
+
 ;;;###autoload
 (defun my/consult-color (&optional initial)
     (interactive)
-    (let* ((cmd "curl https://www.colourlovers.com/api/colors?numResults=50&format=json \
-                 -H \"user-agent: Emacs\" \
-                 --data-urlencode \"keywords=ARG\"")
-           (get-key
+    (let* ((get-key
             (lambda (color) (format "#%s" (downcase (alist-get 'hex color)))))
            (get-candidate
             (lambda (color)
@@ -17,7 +34,7 @@
                               (alist-get 'title color))
                       color))))
            (result (consult--read
-                    (consult--async-command cmd
+                    (consult--async-command #'my/consult--color-builder
                       (consult--async-transform
                        (lambda (response)
                          (mapcar
@@ -34,10 +51,7 @@
 ;;;###autoload
 (defun my/consult-palette (&optional initial)
     (interactive)
-    (let* ((cmd "curl https://www.colourlovers.com/api/palettes?numResults=50&format=json \
-                 -H \"user-agent: Emacs\" \
-                 --data-urlencode \"keywords=ARG\"")
-           (get-hex-colors
+    (let* ((get-hex-colors
             (lambda (palette)
               (mapcar
                (lambda (hex) (format "#%s" (downcase hex)))
@@ -55,7 +69,7 @@
                               (alist-get 'title palette))
                       palette))))
            (result (consult--read
-                    (consult--async-command cmd
+                    (consult--async-command #'my/consult--palette-builder
                       (consult--async-transform
                        (lambda (response)
                          (mapcar
