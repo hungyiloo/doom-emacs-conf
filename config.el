@@ -349,4 +349,5 @@
                  ".+\\.el$"))
     (load! file)))
 
-(setq safe-local-variable-values '((org-agenda-files . ("~/work/notes/"))))
+(setq safe-local-variable-values '((org-agenda-files . ("~/work/notes/"))
+                                   (org-directory . "~/code/hungyi.net/")))

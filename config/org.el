@@ -27,6 +27,8 @@
   ;; Don't inherit tags on sublevels
   (setq org-agenda-use-tag-inheritance nil)
   (setq org-use-tag-inheritance nil)
+  ;; Use relative file link paths always
+  (setq org-link-file-path-type 'relative)
 
   ;; Allow large tables to be processed
   (setq org-table-convert-region-max-lines 9999)
