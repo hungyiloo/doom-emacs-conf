@@ -1,15 +1,46 @@
-;;; lisp/blog.el -*- lexical-binding: t; -*-
+;;; lisp/charge.el -*- lexical-binding: t; -*-
 
 (require 'org)
 (require 'ox)
 (require 'f)
+(require 'seq)
 
-(defun charge-render (template)
+(defun charge-site (&rest options)
+  (let (site routes option-key)
+    ;; Split up options into site site and routes
+    (dolist (x options)
+      (cond ((and x (keywordp x)) (setq option-key x))
+            (option-key (push (cons option-key x) site)
+                        (setq option-key nil))
+            (t (push x routes))))
+
+    (let ((base-url (or (alist-get :base-url site) ""))
+          (output (or (alist-get :output site) "output")))
+      (dolist (route routes)
+        (let ((pathfinder (alist-get :path route))
+              (particles (alist-get :particles route))
+              (emitter (alist-get :emit route)))
+          (dolist (particle particles)
+            (let* ((paths (if (functionp pathfinder) (funcall pathfinder particle) pathfinder))
+                   (paths (if (listp paths) paths (list paths)))
+                   (destinations (mapcar (lambda (path) (f-join output path)) paths)))
+              (dolist (destination destinations)
+                (mkdir (file-name-directory destination) t)
+                (funcall emitter destination particle route site)))))))))
+
+(defun charge-route (particles &rest options)
+  (declare (indent defun))
+  (let ((route-alist (mapcar (lambda (x) (apply #'cons x))
+                             (seq-partition options 2))))
+    (setf (alist-get :particles route-alist) particles)
+    route-alist))
+
+(defun charge-html (template)
   (let (tag attr-name (content (list)) (attrs (list)))
     (dolist (x template)
       (cond ((and x (listp x))
              (push
-              (charge-render x)
+              (charge-html x)
               content))
             ((and (not tag) x (symbolp x)) (setq tag x))
             ((keywordp x) (setq attr-name x))
@@ -35,57 +66,64 @@
        (when (and tag (not tag-is-void))
          (format "</%s>" tag))))))
 
+(defun charge-write (text path)
+  (write-region text nil path))
+
+(defun charge-format (format-string key)
+  (lambda (particle)
+    (format format-string (alist-get key particle))))
+
 (defun charge--tag-is-void (tag)
   (when (memq tag '(area base br col embed hr img input link meta param source track wbr))
     t))
 
-(defvar charge-node-keywords '("slug" "title" "date" "draft" "filetags")
-  "The supported node field names to be parsed from org file keywords in the header.")
+(defvar charge-org-keywords '("slug" "title" "date" "draft" "filetags")
+  "The supported particle field names to be parsed from org file keywords in the header.")
 
-(defun charge-collect-nodes-org (files)
+(defun charge-collect-org (files)
   (unless (listp files) (setq files '(files)))
   (mapcar
    (lambda (file)
      (with-temp-buffer
        (insert-file-contents file)
        (delay-mode-hooks (org-mode))
-       (let (node-alist)
-         (dolist (x (org-collect-keywords charge-node-keywords))
+       (let (particle-alist)
+         (dolist (x (org-collect-keywords charge-org-keywords))
            (push (cons (intern (concat ":" (downcase (car x)))) (cadr x))
-                 node-alist))
+                 particle-alist))
          (dolist (x (org-entry-properties 0))
            (push (cons (intern (concat ":" (downcase (car x)))) (cdr x))
-                 node-alist))
-         (setf (alist-get :file node-alist) (expand-file-name file))
-         node-alist)))
+                 particle-alist))
+         (setf (alist-get :path particle-alist) file)
+         (setf (alist-get :filename particle-alist) (file-name-nondirectory file))
+         (setf (alist-get :full-path particle-alist) (expand-file-name file))
+         particle-alist)))
    files))
 
-;; (alist-get :slug (charge-make-node-org "~/code/hungyi.net/content/posts/react-hook-use-debounce.org"))
-;; (charge-make-node-org "~/Notes/roam/20210923142159-book_recommendations.org")
+(defun charge-collect-files (files)
+  (unless (listp files) (setq files '(files)))
+  (mapcar
+   (lambda (file)
+     (list
+      (cons :path file)
+      (cons :full-path (expand-file-name file))
+      (cons :filename (file-name-nondirectory file))
+      (cons :extension (file-name-extension file))))
+   files))
 
-(defun charge-export-node-org (node)
+;; (alist-get :slug (charge-make-particle-org "~/code/hungyi.net/content/posts/react-hook-use-debounce.org"))
+;; (charge-make-particle-org "~/Notes/roam/20210923142159-book_recommendations.org")
+
+(defun charge-export-particle-org (particle)
   (let ((org-html-htmlize-output-type 'css))
     (save-window-excursion
       (with-temp-buffer
-        (insert-file-contents (alist-get :file node))
+        (insert-file-contents (alist-get :full-path particle))
         (org-export-to-buffer 'charge (buffer-name))
         (buffer-string)))))
 
-;; (charge-enrich-node-org (charge-make-node-org "~/Notes/roam/20210923142159-book_recommendations.org"))
-;; (charge-enrich-node-org (charge-make-node-org "~/code/hungyi.net/content/posts/react-hook-use-debounce.org"))
-
-(defun charge-site (&rest site)
-  (let ((base-url (plist-get site :base-url))
-        (output-dir (plist-get site :output-dir))
-        (routes (plist-get site :routes)))
-    (dolist (route routes)
-      (let ((output (plist-get route :output))
-            (nodes (plist-get route :nodes))
-            (writer (plist-get route :writer)))
-        (dolist (node nodes)
-          (let ((destination (f-join output-dir (funcall output node))))
-            (mkdir (file-name-directory destination) t)
-            (funcall writer destination node route site)))))))
+;; (charge-enrich-particle-org (charge-make-particle-org "~/Notes/roam/20210923142159-book_recommendations.org"))
+;; (charge-enrich-particle-org (charge-make-particle-org "~/code/hungyi.net/content/posts/react-hook-use-debounce.org"))
 
 (with-eval-after-load 'org
   (org-link-set-parameters
@@ -139,17 +177,19 @@
   (concat "charge:"
           (file-relative-name (read-file-name "File: "))))
 
-;; (charge-render '((ul
+;; (charge-html '((ul
 ;;                   (li (button :class "apple" :disabled nil "shiny and red"))
 ;;                   (li (button :class "banana" :onClick "alert('foo')" "bent and yellow"))
 ;;                   (li (button :class "carrot" :disabled "" "pointy and orange")))
 ;;                  (p :class "prose" "lorem " (b :style "display: none;" "ipsum") " dolor sit amet")))
-;; (charge-render `(div ,(+ 1 2 3)))
-;; (charge-render `(section (div (img :src "kitten.jpg"))))
-;; (charge-render `(ul ,(mapcar (lambda (x) `(li "Number: " ,x)) '(1 2 3))))
-;; (charge-render `(html (head (title "My Blog")) (body "Hello World!")))
+;; (charge-html `(div ,(+ 1 2 3)))
+;; (charge-html `(section (div (img :src "kitten.jpg"))))
+;; (charge-html `(ul ,(mapcar (lambda (x) `(li "Number: " ,x)) '(1 2 3))))
+;; (charge-html `(html (head (title "My Blog")) (body "Hello World!")))
 
 ;; (defun my/blog-render-landing (title body)
-;;   (charge-render `(html (head (title ,title)) (body ,body))))
+;;   (charge-html `(html (head (title ,title)) (body ,body))))
 
 ;; (my/blog-render-landing "THE TITLE" "THE BODY")
+
+(provide 'charge)
