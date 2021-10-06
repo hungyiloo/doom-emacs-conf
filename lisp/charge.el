@@ -66,18 +66,20 @@
         (gethash (alist-get :id particle-or-id) urls)
       (gethash particle-or-id urls))))
 
-(defun charge-html (template)
+(defun charge--html (template)
   (let (tag attr-name (content (list)) (attrs (list)))
-    (dolist (x template)
-      (cond ((and x (listp x))
-             (push
-              (charge-html x)
-              content))
-            ((and (not tag) x (symbolp x)) (setq tag x))
-            ((keywordp x) (setq attr-name x))
-            (attr-name (push (cons attr-name x) attrs)
-                       (setq attr-name nil))
-            (t (push (format "%s" x) content))))
+    (mapc
+     (lambda (x)
+       (cond ((and x (listp x))
+              (push
+               (charge--html x)
+               content))
+             ((and (not tag) x (symbolp x)) (setq tag x))
+             ((keywordp x) (setq attr-name x))
+             (attr-name (push (cons attr-name x) attrs)
+                        (setq attr-name nil))
+             (t (when x (push (format "%s" x) content)))))
+     template)
     (let ((tag-is-void (charge--tag-is-void tag)))
       (concat
        (when (eq tag 'html)
@@ -96,6 +98,21 @@
        (unless tag-is-void (apply #'concat (nreverse content)))
        (when (and tag (not tag-is-void))
          (format "</%s>" tag))))))
+
+(defmacro charge-html (template)
+  `(charge--html (backquote ,template)))
+
+;; (charge-html ((ul
+;;                   (li (button :class "apple" :disabled nil "shiny and red"))
+;;                   (li (button :class "banana" :onClick "alert('foo')" "bent and yellow"))
+;;                   (li (button :class "carrot" :disabled "" "pointy and orange")))
+;;                  (p :class "prose" "lorem " (b :style "display: none;" "ipsum") " dolor sit amet")))
+;; (charge-html (div ,(+ 1 2 3)))
+;; (charge-html (section (div (img :src "kitten.jpg"))))
+;; (charge-html (ul ,(mapcar (lambda (x) `(li "Number: " ,x)) '(1 2 3))))
+;; (charge-html (html (head (title "My Blog")) (body "Hello World!")))
+;; (charge-html ("<?xml version=\"1.0\" ?>\n" (p "a")))
+
 
 (defun charge-write (text path)
   (write-region text nil path))
@@ -184,7 +201,6 @@
        '(warning org-link)))
    :export
    (lambda (path desc _backend)
-     (message "%s %s" charge--site charge--particle)
      (format
       "<a href=\"%s\">%s</a>"
       (if (and (bound-and-true-p charge--site) (bound-and-true-p charge--particle))
@@ -222,16 +238,6 @@
   "Create a file link using completion."
   (concat "charge:"
           (file-relative-name (read-file-name "File: "))))
-
-;; (charge-html '((ul
-;;                   (li (button :class "apple" :disabled nil "shiny and red"))
-;;                   (li (button :class "banana" :onClick "alert('foo')" "bent and yellow"))
-;;                   (li (button :class "carrot" :disabled "" "pointy and orange")))
-;;                  (p :class "prose" "lorem " (b :style "display: none;" "ipsum") " dolor sit amet")))
-;; (charge-html `(div ,(+ 1 2 3)))
-;; (charge-html `(section (div (img :src "kitten.jpg"))))
-;; (charge-html `(ul ,(mapcar (lambda (x) `(li "Number: " ,x)) '(1 2 3))))
-;; (charge-html `(html (head (title "My Blog")) (body "Hello World!")))
 
 ;; (defun my/blog-render-landing (title body)
 ;;   (charge-html `(html (head (title ,title)) (body ,body))))
