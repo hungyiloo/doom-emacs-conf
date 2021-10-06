@@ -125,7 +125,7 @@
   (when (memq tag '(area base br col embed hr img input link meta param source track wbr))
     t))
 
-(defcustom charge-org-keywords '("slug" "title" "date" "draft" "filetags")
+(defcustom charge-org-keywords '("slug" "title" "date" "draft" "filetags" "description")
   "The supported particle field names to be parsed from org file keywords in the header.")
 
 (defvar charge--site nil
