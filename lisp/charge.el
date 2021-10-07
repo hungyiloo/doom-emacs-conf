@@ -78,7 +78,7 @@
              ((keywordp x) (setq attr-name x))
              (attr-name (push (cons attr-name x) attrs)
                         (setq attr-name nil))
-             (t (when x (push (format "%s" x) content)))))
+             (t (unless (null x) (push (format "%s" x) content)))))
      template)
     (let ((tag-is-void (charge--tag-is-void tag)))
       (concat
@@ -101,18 +101,6 @@
 
 (defmacro charge-html (template)
   `(charge--html (backquote ,template)))
-
-;; (charge-html ((ul
-;;                   (li (button :class "apple" :disabled nil "shiny and red"))
-;;                   (li (button :class "banana" :onClick "alert('foo')" "bent and yellow"))
-;;                   (li (button :class "carrot" :disabled "" "pointy and orange")))
-;;                  (p :class "prose" "lorem " (b :style "display: none;" "ipsum") " dolor sit amet")))
-;; (charge-html (div ,(+ 1 2 3)))
-;; (charge-html (section (div (img :src "kitten.jpg"))))
-;; (charge-html (ul ,(mapcar (lambda (x) `(li "Number: " ,x)) '(1 2 3))))
-;; (charge-html (html (head (title "My Blog")) (body "Hello World!")))
-;; (charge-html ("<?xml version=\"1.0\" ?>\n" (p "a")))
-
 
 (defun charge-write (text path)
   (write-region text nil path))
@@ -168,9 +156,6 @@
       :extension (file-name-extension file)))
    files))
 
-;; (alist-get :slug (charge-make-particle-org "~/code/hungyi.net/content/posts/react-hook-use-debounce.org"))
-;; (charge-make-particle-org "~/Notes/roam/20210923142159-book_recommendations.org")
-
 (defun charge-export-particle-org (particle)
   (let ((org-html-htmlize-output-type 'css))
     (save-window-excursion
@@ -178,9 +163,6 @@
         (insert-file-contents (alist-get :id particle))
         (org-export-to-buffer 'charge (buffer-name))
         (buffer-string)))))
-
-;; (charge-enrich-particle-org (charge-make-particle-org "~/Notes/roam/20210923142159-book_recommendations.org"))
-;; (charge-enrich-particle-org (charge-make-particle-org "~/code/hungyi.net/content/posts/react-hook-use-debounce.org"))
 
 (with-eval-after-load 'org
   (org-link-set-parameters
@@ -214,34 +196,12 @@
 
   (org-export-define-derived-backend 'charge 'html
     :translate-alist
-    '(;; Replace the HTML generation code to prevent ox-html from adding
-      ;; headers and stuff around the HTML generated for the `body` tag.
-      (template . (lambda (contents _i) contents))
-      ;; Opinionated setting for generating headline anchor links with
-      ;; the headline text and to strip away the auto-generated IDs
-      ;; (headline . (lambda (headline contents info)
-      ;;               ;; Don't override existing value, so users can still put
-      ;;               ;; whatever they want
-      ;;               (unless (org-element-property :CUSTOM_ID headline)
-      ;;                 (let ((headline-slug (weblorg--slugify (org-element-property :raw-value headline))))
-      ;;                   (org-element-put-property headline :CUSTOM_ID headline-slug)))
-      ;;               ;; Replace these IDs that don't have much use. That
-      ;;               ;; will cause way less noise when re-generating a project without
-      ;;               ;; any changes.
-      ;;               (replace-regexp-in-string
-      ;;                " id=\".+-org[0-9a-f]\\{7\\}\""
-      ;;                ""
-      ;;                (org-html-headline headline contents info))))
-      )))
+    '((template . (lambda (contents _i) contents)))))
 
 (defun charge-link-complete-file (&optional arg)
   "Create a file link using completion."
   (concat "charge:"
           (file-relative-name (read-file-name "File: "))))
 
-;; (defun my/blog-render-landing (title body)
-;;   (charge-html `(html (head (title ,title)) (body ,body))))
-
-;; (my/blog-render-landing "THE TITLE" "THE BODY")
 
 (provide 'charge)
