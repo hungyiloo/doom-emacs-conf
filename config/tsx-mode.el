@@ -32,6 +32,9 @@
                            (bound-and-true-p tsx-mode--auto-closing-temporarily-disabled))
                   (setq-local tsx-mode-enable-auto-closing t))))
 
+    (after! 'evil-mc
+      (add-to-list 'evil-mc-custom-known-commands `(tsx-newline-and-indent (:default . evil-mc-execute-call))))
+
     ;; evil-nc (commenting) integration
     (setq-local evilnc-comment-or-uncomment-region-function 'tsx-comment-or-uncomment-region)
 
