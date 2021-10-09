@@ -4,6 +4,7 @@
 (require 'ox)
 (require 'f)
 (require 'seq)
+(require 'subr-x)
 
 (defun charge-site (&rest options)
   (let (site routes option-key)
@@ -66,13 +67,14 @@
         (gethash (alist-get :id particle-or-id) urls)
       (gethash particle-or-id urls))))
 
-(defun charge--html (template)
+(defun charge-html (template &optional depth)
+  (setq depth (or depth 0))
   (let (tag attr-name (content (list)) (attrs (list)))
     (mapc
      (lambda (x)
        (cond ((and x (listp x))
               (push
-               (charge--html x)
+               (charge-html x (+ (if tag 2 0) depth))
                content))
              ((and (not tag) x (symbolp x)) (setq tag x))
              ((keywordp x) (setq attr-name x))
@@ -85,22 +87,32 @@
        (when (eq tag 'html)
          "<!DOCTYPE html>\n")
        (when tag
-         (format
-          (if tag-is-void "<%s%s/>" "<%s%s>")
-          tag
-          (apply #'concat
-                 (mapcar
-                  (lambda (attr)
-                    (format
-                     (if (cdr attr) " %s=\"%s\"" " %s")
-                     (substring (symbol-name (car attr)) 1) (cdr attr)))
-                  (nreverse attrs)))))
-       (unless tag-is-void (apply #'concat (nreverse content)))
+         (thread-last attrs
+           (nreverse)
+           (mapcar
+            (lambda (attr)
+              (format
+               (if (cdr attr) " %s=\"%s\"" " %s")
+               (substring (symbol-name (car attr)) 1) (cdr attr))))
+           (apply #'concat)
+           (format
+            (if tag-is-void "<%s%s/>" "<%s%s>")
+            tag)))
+       (unless tag-is-void
+         (thread-last content
+           (nreverse)
+           (mapcan (lambda (c)
+                     (list "\n"
+                           (charge--indent (+ (if tag 2 0) depth))
+                           c)))
+           (apply #'concat)))
        (when (and tag (not tag-is-void))
-         (format "</%s>" tag))))))
+         (format
+          (concat "\n" (charge--indent depth) "</%s>")
+          tag))))))
 
-(defmacro charge-html (template)
-  `(charge--html (backquote ,template)))
+(defun charge--indent (depth)
+  (make-string depth 32))
 
 (defun charge-write (text path)
   (write-region text nil path))
