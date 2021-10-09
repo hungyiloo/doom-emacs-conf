@@ -74,7 +74,7 @@
      (lambda (x)
        (cond ((and x (listp x))
               (push
-               (charge-html x (+ (if tag 2 0) depth))
+               (charge-html x (+ (if (and tag (not (charge--tag-is-inline tag))) 2 0) depth))
                content))
              ((and (not tag) x (symbolp x)) (setq tag x))
              ((keywordp x) (setq attr-name x))
@@ -82,7 +82,8 @@
                         (setq attr-name nil))
              (t (unless (null x) (push (format "%s" x) content)))))
      template)
-    (let ((tag-is-void (charge--tag-is-void tag)))
+    (let ((tag-is-void (charge--tag-is-void tag))
+          (tag-is-inline (charge--tag-is-inline tag)))
       (concat
        (when (eq tag 'html)
          "<!DOCTYPE html>\n")
@@ -102,13 +103,17 @@
          (thread-last content
            (nreverse)
            (mapcan (lambda (c)
-                     (list "\n"
-                           (charge--indent (+ (if tag 2 0) depth))
-                           c)))
+                     (if tag-is-inline
+                       (list c)
+                       (list "\n"
+                             (charge--indent (+ (if tag 2 0) depth))
+                             c))))
            (apply #'concat)))
        (when (and tag (not tag-is-void))
          (format
-          (concat "\n" (charge--indent depth) "</%s>")
+          (concat (unless tag-is-inline "\n")
+                  (unless tag-is-inline (charge--indent depth))
+                  "</%s>")
           tag))))))
 
 (defun charge--indent (depth)
@@ -122,8 +127,15 @@
     (format format-string (alist-get key particle))))
 
 (defun charge--tag-is-void (tag)
-  (when (memq tag '(area base br col embed hr img input link meta param source track wbr))
-    t))
+  (memq tag '(area base br col embed hr img input link meta param source track wbr)))
+
+(defun charge--tag-is-inline (tag)
+  (memq
+   tag
+   '(a abbr acronym audio b bdi bdo big br button canvas cite
+       code data datalist del dfn em embed i iframe img input ins kbd label map mark
+       meter noscript object output picture progress q ruby s samp script select slot
+       small span strong sub sup svg template textarea time u tt var video wbr)))
 
 (defcustom charge-org-keywords '("slug" "title" "date" "draft" "filetags" "description")
   "The supported particle field names to be parsed from org file keywords in the header.")
