@@ -75,7 +75,7 @@
     (mapc
      (lambda (x)
        (cond ((and x (listp x))
-              (push (charge--html x) content))
+              (push (apply #'charge-html x) content))
              ((and (not tag) x (symbolp x))
               (setq tag x))
              ((keywordp x)
