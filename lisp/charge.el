@@ -57,9 +57,12 @@
     (setf (alist-get :particles route-alist) particles)
     route-alist))
 
-(defun charge-particle (&rest data)
-  (mapcar (lambda (x) (apply #'cons x))
-          (seq-partition data 2)))
+(defun charge-particle (id &rest data)
+  (declare (indent defun))
+  (cons
+   (cons :id id)
+   (mapcar (lambda (x) (apply #'cons x))
+           (seq-partition data 2))))
 
 (defun charge-url (site particle-or-id)
   (let ((urls (alist-get :urls site)))
@@ -67,26 +70,24 @@
         (gethash (alist-get :id particle-or-id) urls)
       (gethash particle-or-id urls))))
 
-(defun charge-html (template &optional depth)
-  (setq depth (or depth 0))
+(defun charge-html (&rest template)
   (let (tag attr-name (content (list)) (attrs (list)))
     (mapc
      (lambda (x)
        (cond ((and x (listp x))
-              (push
-               (charge-html x (+ (if (and tag (not (charge--tag-is-inline tag))) 2 0) depth))
-               content))
-             ((and (not tag) x (symbolp x)) (setq tag x))
-             ((keywordp x) (setq attr-name x))
-             (attr-name (push (cons attr-name x) attrs)
-                        (setq attr-name nil))
-             (t (unless (null x) (push (format "%s" x) content)))))
+              (push (charge--html x) content))
+             ((and (not tag) x (symbolp x))
+              (setq tag x))
+             ((keywordp x)
+              (setq attr-name x))
+             (attr-name
+              (push (cons attr-name x) attrs)
+              (setq attr-name nil))
+             (t
+              (unless (null x) (push (format "%s" x) content)))))
      template)
-    (let ((tag-is-void (charge--tag-is-void tag))
-          (tag-is-inline (charge--tag-is-inline tag)))
+    (let ((tag-is-void (charge--tag-is-void tag)))
       (concat
-       (when (eq tag 'html)
-         "<!DOCTYPE html>\n")
        (when tag
          (thread-last attrs
            (nreverse)
@@ -102,22 +103,18 @@
        (unless tag-is-void
          (thread-last content
            (nreverse)
-           (mapcan (lambda (c)
-                     (if tag-is-inline
-                       (list c)
-                       (list "\n"
-                             (charge--indent (+ (if tag 2 0) depth))
-                             c))))
            (apply #'concat)))
        (when (and tag (not tag-is-void))
-         (format
-          (concat (unless tag-is-inline "\n")
-                  (unless tag-is-inline (charge--indent depth))
-                  "</%s>")
-          tag))))))
+         (format "</%s>" tag))))))
 
-(defun charge--indent (depth)
-  (make-string depth 32))
+(defun charge-prettify-html (html)
+  "Reformats HTML to make it readable by adding newlines where necessary."
+  (with-temp-buffer
+    (insert html)
+    (goto-char (point-min))
+    (while (re-search-forward ">\\s-*<" (point-max) t)
+      (replace-match ">\n<" t t))
+    (buffer-string)))
 
 (defun charge-write (text path)
   (write-region text nil path))
@@ -128,14 +125,6 @@
 
 (defun charge--tag-is-void (tag)
   (memq tag '(area base br col embed hr img input link meta param source track wbr)))
-
-(defun charge--tag-is-inline (tag)
-  (memq
-   tag
-   '(a abbr acronym audio b bdi bdo big br button canvas cite
-       code data datalist del dfn em embed i iframe img input ins kbd label map mark
-       meter noscript object output picture progress q ruby s samp script select slot
-       small span strong sub sup svg template textarea time u tt var video wbr)))
 
 (defcustom charge-org-keywords '("slug" "title" "date" "draft" "filetags" "description")
   "The supported particle field names to be parsed from org file keywords in the header.")
@@ -156,10 +145,9 @@
      (with-temp-buffer
        (insert-file-contents file)
        (delay-mode-hooks (org-mode))
-       (let ((particle (charge-particle
-                        :id (expand-file-name file)
-                        :path file
-                        :filename (file-name-nondirectory file))))
+       (let ((particle (charge-particle (expand-file-name file)
+                         :path file
+                         :filename (file-name-nondirectory file))))
          (dolist (x (org-collect-keywords charge-org-keywords))
            (push (cons (intern (concat ":" (downcase (car x)))) (cadr x))
                  particle))
@@ -173,11 +161,10 @@
   (unless (listp files) (setq files '(files)))
   (mapcar
    (lambda (file)
-     (charge-particle
-      :path file
-      :id (expand-file-name file)
-      :filename (file-name-nondirectory file)
-      :extension (file-name-extension file)))
+     (charge-particle (expand-file-name file)
+       :path file
+       :filename (file-name-nondirectory file)
+       :extension (file-name-extension file)))
    files))
 
 (defun charge-export-particle-org (particle)
