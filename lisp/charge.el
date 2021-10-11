@@ -114,6 +114,8 @@
     (goto-char (point-min))
     (while (re-search-forward ">\\s-*<" (point-max) t)
       (replace-match ">\n<" t t))
+    (html-mode)
+    (indent-region (point-min) (point-max))
     (buffer-string)))
 
 (defun charge-write (text path)
