@@ -459,7 +459,7 @@ POSITION is a byte position in buffer like \\(point-min\\)."
              (content-beg (car content-region))
              (node (save-excursion (goto-char content-beg)
                                    (tree-sitter-node-at-pos 'jsx_expression)))
-             (is-jsx-comment t))
+             (is-jsx-comment nil))
     (while (and node is-jsx-comment (<= (tsc-node-end-position node) end))
       (setq is-jsx-comment (or (and (eq 'jsx_text (tsc-node-type node))
                                     (string-empty-p (string-trim (tsc-node-text node))))
