@@ -90,20 +90,20 @@
       (concat
        (when tag
          (thread-last attrs
-           (nreverse)
-           (mapcar
-            (lambda (attr)
-              (format
-               (if (cdr attr) " %s=\"%s\"" " %s")
-               (substring (symbol-name (car attr)) 1) (cdr attr))))
-           (apply #'concat)
-           (format
-            (if tag-is-void "<%s%s/>" "<%s%s>")
-            tag)))
+                      (nreverse)
+                      (mapcar
+                       (lambda (attr)
+                         (format
+                          (if (cdr attr) " %s=\"%s\"" " %s")
+                          (substring (symbol-name (car attr)) 1) (cdr attr))))
+                      (apply #'concat)
+                      (format
+                       (if tag-is-void "<%s%s/>" "<%s%s>")
+                       tag)))
        (unless tag-is-void
          (thread-last content
-           (nreverse)
-           (apply #'concat)))
+                      (nreverse)
+                      (apply #'concat)))
        (when (and tag (not tag-is-void))
          (format "</%s>" tag))))))
 
@@ -174,7 +174,7 @@
     (save-window-excursion
       (with-temp-buffer
         (insert-file-contents (alist-get :id particle))
-        (org-export-to-buffer 'charge (buffer-name))
+        (org-export-to-buffer 'html (buffer-name) nil nil nil t)
         (buffer-string)))))
 
 (with-eval-after-load 'org
@@ -184,37 +184,26 @@
    #'charge-link-complete-file
    :follow
    #'org-link-open-as-file
-   :face
-   (lambda (path)
-     (if
-         (or
-          (file-remote-p path)
-          (and IS-WINDOWS
-               (string-prefix-p "\\\\" path))
-          (file-exists-p path))
-         'org-link
-       '(warning org-link)))
    :export
-   (lambda (path desc _backend)
-     (format
-      "<a href=\"%s\">%s</a>"
-      (if (and (bound-and-true-p charge--site) (bound-and-true-p charge--particle))
-          (charge-url
-           charge--site
-           (concat
-            (file-name-directory (alist-get :id charge--particle))
-            path))
-        path)
-      desc)))
-
-  (org-export-define-derived-backend 'charge 'html
-    :translate-alist
-    '((template . (lambda (contents _i) contents)))))
+   #'charge-link-export))
 
 (defun charge-link-complete-file (&optional arg)
-  "Create a file link using completion."
+  "Create a charge link using completion."
   (concat "charge:"
           (file-relative-name (read-file-name "File: "))))
+
+(defun charge-link-export (path desc _backend)
+  "Exports a charge link based on the charge site context."
+  (format
+   "<a href=\"%s\">%s</a>"
+   (if (and (bound-and-true-p charge--site) (bound-and-true-p charge--particle))
+       (charge-url
+        charge--site
+        (concat
+         (file-name-directory (alist-get :id charge--particle))
+         path))
+     path)
+   desc))
 
 
 (provide 'charge)
