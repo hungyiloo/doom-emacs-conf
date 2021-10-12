@@ -9,6 +9,8 @@
   (map! :leader
         ;; "," #'my/consult-project-buffer
         ;; "<" #'consult-buffer
+        (:prefix-map ("s" . "search")
+         "f" #'+vertico/consult-fd)
         (:prefix-map ("M" . "mode")
          "M" #'consult-mode-command
          "N" #'consult-minor-mode-menu)
