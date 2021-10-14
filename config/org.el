@@ -67,6 +67,21 @@
 This function is called by `org-babel-execute-src-block'."
     body)
 
+  (defun org-babel-execute:tsx (body params)
+    "Execute a block of TSX code.
+This function is called by `org-babel-execute-src-block'.
+Depends on esbuild being installed and available on the path"
+    (with-temp-buffer
+      (insert body)
+      (call-process-region
+       (point-min) (point-max)
+       "esbuild"
+       t t nil
+       "--loader=tsx")
+      (if (member "html" (split-string (alist-get :results params) " "))
+          (concat "<script>\n" (buffer-string) "</script>")
+        (buffer-string))))
+
   ;; Map `my/org-retrieve-url-from-point' to live with its org link friends
   (map! :map org-mode-map
         :localleader
