@@ -18,6 +18,7 @@
     (let ((base-url (or (alist-get :base-url site) ""))
           (output (or (alist-get :output site) "output"))
           (urls (make-hash-table :test #'equal)))
+
       ;; Hash all IDs to canonical URLs
       (dolist (route routes)
         (let ((url (alist-get :url route)))
@@ -32,6 +33,7 @@
              urls))))
       (setf (alist-get :urls site) urls)
       (setq charge--site site)
+
       ;; Emit all routes and their particles
       (dolist (route routes)
         (let ((pathfinder (alist-get :path route))
@@ -46,23 +48,31 @@
               (dolist (destination destinations)
                 (mkdir (file-name-directory destination) t)
                 (funcall emitter destination particle route site))))))
+
+      ;; Clean up
       (setq charge--particle nil)
       (setq charge--route nil)
       (setq charge--site nil))))
 
-(defun charge-route (particles &rest options)
+(defun charge-route (particle-or-particles &rest options)
   (declare (indent defun))
   (let ((route-alist (mapcar (lambda (x) (apply #'cons x))
                              (seq-partition options 2))))
-    (setf (alist-get :particles route-alist) particles)
+    (setf (alist-get :particles route-alist)
+          (if (charge-particle-p particle-or-particles)
+              (list particle-or-particles) ; support a single particle as input to a route
+            particle-or-particles))
     route-alist))
 
 (defun charge-particle (id &rest data)
   (declare (indent defun))
-  (cons
-   (cons :id id)
-   (mapcar (lambda (x) (apply #'cons x))
-           (seq-partition data 2))))
+  `((:particle . t)
+    (:id . ,id)
+    ,@(mapcar (lambda (x) (apply #'cons x))
+              (seq-partition data 2))))
+
+(defun charge-particle-p (object)
+  (alist-get :particle object))
 
 (defun charge-url (site particle-or-id)
   (let ((urls (alist-get :urls site)))
@@ -121,9 +131,9 @@
 (defun charge-write (text path)
   (write-region text nil path))
 
-(defun charge-format (format-string key)
+(defun charge-format (format-string particle-key)
   (lambda (particle)
-    (format format-string (alist-get key particle))))
+    (format format-string (alist-get particle-key particle))))
 
 (defun charge--tag-is-void (tag)
   (memq tag '(area base br col embed hr img input link meta param source track wbr)))
@@ -176,11 +186,6 @@
         (insert-file-contents (alist-get :id particle))
         (org-export-as 'charge nil nil t)))))
 
-(with-eval-after-load 'org
-  (org-export-define-derived-backend 'charge 'html
-    :translate-alist
-    '((link . charge-org-html-link))))
-
 (defun charge-org-html-link (link desc _info)
   (let* ((path (org-element-property :path link))
          (href (if (and (bound-and-true-p charge--site) (bound-and-true-p charge--particle))
@@ -191,5 +196,9 @@
                      path))
                  path)))
     (format "<a href=\"%s\">%s</a>" href desc)))
+
+(org-export-define-derived-backend 'charge 'html
+  :translate-alist
+  '((link . charge-org-html-link)))
 
 (provide 'charge)
