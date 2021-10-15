@@ -103,7 +103,7 @@ Depends on esbuild being installed and available on the path"
                                  (org-narrow-to-subtree)
                                (recenter 0)))))
         :nvi "C-S-v" (cmd! (org-narrow-to-subtree)
-                         (goto-char 0))
+                           (goto-char 0))
         :nvi "C->" (cmd! (let ((narrowed (buffer-narrowed-p)))
                            (when narrowed
                              (goto-char 0)
@@ -201,7 +201,14 @@ Depends on esbuild being installed and available on the path"
           (when (re-search-forward org-complex-heading-regexp nil t)
             (goto-char (match-beginning 4)))))
       (run-hooks 'org-agenda-after-show-hook)
-      (and highlight (org-highlight (point-at-bol) (point-at-eol))))))
+      (and highlight (org-highlight (point-at-bol) (point-at-eol)))))
+
+  ;; Fix issues with @tag fontification, according to my preference
+  ;; Latest function can (probably) be found here:
+  ;; https://github.com/hlissner/emacs-doom-themes/blob/master/doom-themes-ext-org.el
+  (advice-add #'doom-themes-enable-org-fontification
+              :around
+              #'my/doom-themes-enable-org-fontification-replacement))
 
 (after! org-roam
   (setq org-roam-verbose t)
@@ -214,5 +221,5 @@ Depends on esbuild being installed and available on the path"
          (:prefix ("r" . "roam")
           :desc "Migrate" "m" #'my/org-roam-create-note-from-headline)))
   (add-hook! 'org-roam-find-file-hook
-             (defun my/org-roam-buffer-setup ()
-               (auto-fill-mode 1))))
+    (defun my/org-roam-buffer-setup ()
+      (auto-fill-mode 1))))
