@@ -174,36 +174,22 @@
     (save-window-excursion
       (with-temp-buffer
         (insert-file-contents (alist-get :id particle))
-        (org-export-to-buffer 'html (buffer-name) nil nil nil t)
-        (buffer-string)))))
+        (org-export-as 'charge nil nil t)))))
 
 (with-eval-after-load 'org
-  (org-link-set-parameters
-   "charge"
-   :complete
-   #'charge-link-complete-file
-   :follow
-   #'org-link-open-as-file
-   :export
-   #'charge-link-export))
+  (org-export-define-derived-backend 'charge 'html
+    :translate-alist
+    '((link . charge-org-html-link))))
 
-(defun charge-link-complete-file (&optional arg)
-  "Create a charge link using completion."
-  (concat "charge:"
-          (file-relative-name (read-file-name "File: "))))
-
-(defun charge-link-export (path desc _backend)
-  "Exports a charge link based on the charge site context."
-  (format
-   "<a href=\"%s\">%s</a>"
-   (if (and (bound-and-true-p charge--site) (bound-and-true-p charge--particle))
-       (charge-url
-        charge--site
-        (concat
-         (file-name-directory (alist-get :id charge--particle))
-         path))
-     path)
-   desc))
-
+(defun charge-org-html-link (link desc _info)
+  (let* ((path (org-element-property :path link))
+         (href (if (and (bound-and-true-p charge--site) (bound-and-true-p charge--particle))
+                   (charge-url
+                    charge--site
+                    (concat
+                     (file-name-directory (alist-get :id charge--particle))
+                     path))
+                 path)))
+    (format "<a href=\"%s\">%s</a>" href desc)))
 
 (provide 'charge)
