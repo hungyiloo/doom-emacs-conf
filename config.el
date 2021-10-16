@@ -350,4 +350,5 @@
     (load! file)))
 
 (setq safe-local-variable-values '((org-agenda-files . ("~/work/notes/"))
-                                   (org-directory . "~/code/hungyi.net/")))
+                                   (org-directory . "~/code/hungyi.net/")
+                                   (lsp-disabled-clients . (ts-ls))))
