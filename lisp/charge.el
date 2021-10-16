@@ -7,38 +7,41 @@
 (require 'subr-x)
 
 (defun charge-site (&rest options)
-  (let (site routes option-key)
+  (let ((site (list :charge-site t))
+        routes
+        option-key
+        (start-time (current-time)))
     ;; Split up options into site site and routes
     (dolist (x options)
       (cond ((and x (keywordp x)) (setq option-key x))
-            (option-key (push (cons option-key x) site)
+            (option-key (plist-put site option-key x)
                         (setq option-key nil))
             (t (push x routes))))
 
-    (let ((base-url (or (alist-get :base-url site) ""))
-          (output (or (alist-get :output site) "output"))
+    (let ((base-url (or (plist-get site :base-url) "/"))
+          (output (or (plist-get site :output) "output"))
           (urls (make-hash-table :test #'equal)))
 
       ;; Hash all IDs to canonical URLs
       (dolist (route routes)
-        (let ((url (alist-get :url route)))
-          (dolist (particle (alist-get :particles route))
+        (let ((url (plist-get route :url)))
+          (dolist (particle (plist-get route :particles))
             (puthash
-             (alist-get :id particle)
+             (plist-get particle :id)
              (concat
               base-url
               (if (functionp url)
                   (funcall url particle)
                 url))
              urls))))
-      (setf (alist-get :urls site) urls)
+      (plist-put site :urls urls)
       (setq charge--site site)
 
       ;; Emit all routes and their particles
       (dolist (route routes)
-        (let ((pathfinder (alist-get :path route))
-              (particles (alist-get :particles route))
-              (emitter (alist-get :emit route)))
+        (let ((pathfinder (plist-get route :path))
+              (particles (plist-get route :particles))
+              (emitter (plist-get route :emit)))
           (setq charge--route route)
           (dolist (particle particles)
             (setq charge--particle particle)
@@ -52,32 +55,31 @@
       ;; Clean up
       (setq charge--particle nil)
       (setq charge--route nil)
-      (setq charge--site nil))))
+      (setq charge--site nil))
+    (message "Generated in %.06f" (float-time (time-since start-time)))))
 
-(defun charge-route (particle-or-particles &rest options)
+(defun charge-route (particle-or-particles &rest data)
   (declare (indent defun))
-  (let ((route-alist (mapcar (lambda (x) (apply #'cons x))
-                             (seq-partition options 2))))
-    (setf (alist-get :particles route-alist)
-          (if (charge-particle-p particle-or-particles)
-              (list particle-or-particles) ; support a single particle as input to a route
-            particle-or-particles))
-    route-alist))
+  (plist-put
+   data
+   :particles
+   (if (charge-particle-p particle-or-particles)
+       (list particle-or-particles) ; support a single particle as input to a route
+     particle-or-particles)))
 
 (defun charge-particle (id &rest data)
   (declare (indent defun))
-  `((:particle . t)
-    (:id . ,id)
-    ,@(mapcar (lambda (x) (apply #'cons x))
-              (seq-partition data 2))))
+  `(:particle t
+    :id ,id
+    ,@data))
 
 (defun charge-particle-p (object)
-  (alist-get :particle object))
+  (plist-get object :particle))
 
 (defun charge-url (site particle-or-id)
-  (let ((urls (alist-get :urls site)))
+  (let ((urls (plist-get site :urls)))
     (if (listp particle-or-id)
-        (gethash (alist-get :id particle-or-id) urls)
+        (gethash (plist-get particle-or-id :id) urls)
       (gethash particle-or-id urls))))
 
 (defun charge-html (&rest template)
@@ -133,7 +135,7 @@
 
 (defun charge-format (format-string particle-key)
   (lambda (particle)
-    (format format-string (alist-get particle-key particle))))
+    (format format-string (plist-get particle particle-key))))
 
 (defun charge--tag-is-void (tag)
   (memq tag '(area base br col embed hr img input link meta param source track wbr)))
@@ -161,11 +163,13 @@
                          :path file
                          :filename (file-name-nondirectory file))))
          (dolist (x (org-collect-keywords charge-org-keywords))
-           (push (cons (intern (concat ":" (downcase (car x)))) (cadr x))
-                 particle))
+           (plist-put particle
+                      (intern (concat ":" (downcase (car x))))
+                      (cadr x)))
          (dolist (x (org-entry-properties 0))
-           (push (cons (intern (concat ":" (downcase (car x)))) (cdr x))
-                 particle))
+           (plist-put particle
+                      (intern (concat ":" (downcase (car x))))
+                      (cdr x)))
          particle)))
    files))
 
@@ -183,7 +187,7 @@
   (let ((org-html-htmlize-output-type 'css))
     (save-window-excursion
       (with-temp-buffer
-        (insert-file-contents (alist-get :id particle))
+        (insert-file-contents (plist-get particle :id))
         (org-export-as 'charge nil nil t)))))
 
 (defun charge-org-html-link (link desc _info)
@@ -192,7 +196,7 @@
                    (charge-url
                     charge--site
                     (concat
-                     (file-name-directory (alist-get :id charge--particle))
+                     (file-name-directory (plist-get charge--particle :id))
                      path))
                  path)))
     (format "<a href=\"%s\">%s</a>" href desc)))
