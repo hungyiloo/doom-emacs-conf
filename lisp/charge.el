@@ -11,10 +11,10 @@
         routes
         option-key
         (start-time (current-time)))
-    ;; Split up options into site site and routes
+    ;; Split up options into site plist and routes
     (dolist (x options)
       (cond ((and x (keywordp x)) (setq option-key x))
-            (option-key (plist-put site option-key x)
+            (option-key (setq site (plist-put site option-key x))
                         (setq option-key nil))
             (t (push x routes))))
 
@@ -34,7 +34,7 @@
                   (funcall url particle)
                 url))
              urls))))
-      (plist-put site :urls urls)
+      (setq site (plist-put site :urls urls))
       (setq charge--site site)
 
       ;; Emit all routes and their particles
@@ -56,7 +56,9 @@
       (setq charge--particle nil)
       (setq charge--route nil)
       (setq charge--site nil))
-    (message "Generated in %.06f" (float-time (time-since start-time)))))
+    (message "Generated \"%s\" in %.06f"
+             (or (plist-get site :name) "site")
+             (float-time (time-since start-time)))))
 
 (defun charge-route (particle-or-particles &rest data)
   (declare (indent defun))
@@ -163,13 +165,17 @@
                          :path file
                          :filename (file-name-nondirectory file))))
          (dolist (x (org-collect-keywords charge-org-keywords))
-           (plist-put particle
-                      (intern (concat ":" (downcase (car x))))
-                      (cadr x)))
+           (setq particle
+                 (plist-put
+                  particle
+                  (intern (concat ":" (downcase (car x))))
+                  (cadr x))))
          (dolist (x (org-entry-properties 0))
-           (plist-put particle
-                      (intern (concat ":" (downcase (car x))))
-                      (cdr x)))
+           (setq particle
+                 (plist-put
+                  particle
+                  (intern (concat ":" (downcase (car x))))
+                  (cdr x))))
          particle)))
    files))
 
@@ -185,21 +191,21 @@
 
 (defun charge-export-particle-org (particle)
   (let ((org-html-htmlize-output-type 'css))
-    (save-window-excursion
-      (with-temp-buffer
-        (insert-file-contents (plist-get particle :id))
-        (org-export-as 'charge nil nil t)))))
+    (with-temp-buffer
+      (insert-file-contents (plist-get particle :id))
+      (org-export-as 'charge nil nil t))))
 
 (defun charge-org-html-link (link desc _info)
   (let* ((path (org-element-property :path link))
-         (href (if (and (bound-and-true-p charge--site) (bound-and-true-p charge--particle))
+         (href (when (and (bound-and-true-p charge--site) (bound-and-true-p charge--particle))
                    (charge-url
                     charge--site
                     (concat
                      (file-name-directory (plist-get charge--particle :id))
-                     path))
-                 path)))
-    (format "<a href=\"%s\">%s</a>" href desc)))
+                     path)))))
+    (if href
+        (format "<a href=\"%s\">%s</a>" href desc)
+      desc)))
 
 (org-export-define-derived-backend 'charge 'html
   :translate-alist
