@@ -195,7 +195,7 @@
       (insert-file-contents (plist-get particle :id))
       (org-export-as 'charge nil nil t))))
 
-(defun charge-org-html-link (link desc _info)
+(defun charge-org-html-link (link desc info)
   (let* ((path (org-element-property :path link))
          (href (when (and (bound-and-true-p charge--site) (bound-and-true-p charge--particle))
                    (charge-url
@@ -205,7 +205,7 @@
                      path)))))
     (if href
         (format "<a href=\"%s\">%s</a>" href desc)
-      desc)))
+      (org-html-link link desc info))))
 
 (org-export-define-derived-backend 'charge 'html
   :translate-alist
