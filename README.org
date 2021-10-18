@@ -1,17 +1,37 @@
-#+TITLE: Hung-Yi's Doom Emacs Configuration
+#+begin_src text
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░░░██╗░░██╗░██╗░░░██╗░░░░░░███████╗░███╗░░░███╗░░█████╗░░░█████╗░░░██████╗░░░
+░░░██║░░██║░╚██╗░██╔╝░░░░░░██╔════╝░████╗░████║░██╔══██╗░██╔══██╗░██╔════╝░░░
+░░░███████║░░╚████╔╝░░██╗░░█████╗░░░██╔████╔██║░███████║░██║░░╚═╝░╚█████╗░░░░
+░░░██╔══██║░░░╚██╔╝░░░╚═╝░░██╔══╝░░░██║╚██╔╝██║░██╔══██║░██║░░██╗░░╚═══██╗░░░
+░░░██║░░██║░░░░██║░░░░░░░░░███████╗░██║░╚═╝░██║░██║░░██║░╚█████╔╝░██████╔╝░░░
+░░░╚═╝░░╚═╝░░░░╚═╝░░░░░░░░░╚══════╝░╚═╝░░░░░╚═╝░╚═╝░░╚═╝░░╚════╝░░╚═════╝░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+#+end_src
 
-* STRT External Dependencies
+* Hung-Yi's Doom Emacs Configuration
+This is my personal Doom Emacs config. It's not the tidiest thing in the world, as it's constantly in flux with some active development going on in various places (i.e. check out the =lisp= directory). As with other personal configs you might find on GitHub, it's not really intended to be reused by anyone but me, however feel free to take from it whatever is useful to you.
 
-** TODO Document how to download emojis into the correct directory
-[[file:config/emojify.el][See instructions here]]
+** Notable things
+The most visible "innovation" is probably the =emojify= setup, which has been hacked to only use the latest version of [[https://github.com/twitter/twemoji][twemoji]] and nothing else. This includes better emoji descriptions (for better searching) and integration with [[https://github.com/minad/vertico][vertico]] completion.
 
-** Font setup
+Also worth noting is the TypeScript/TSX development environment, powered by [[https://github.com/emacs-tree-sitter/elisp-tree-sitter][elisp-tree-sitter]] and a custom-written =tsx-mode= that replaces =web-mode=. This means greatly improved stability, syntax highlighting, performance while editing, and also AST-based editing for JSX tags, similar to the =web-mode= element/tag/attribute editing capabilities. Although I haven't published it anywhere, I use it for work every day.
+
+** Setup instructions
+All of the following needs to be set up for the config to run smoothly. This only has to be done once per environment. Note that the setup documentation here might be incomplete, as I don't regularly test the setup process, because I don't buy new laptops every day...
+
+*** Manually set up shared resources
+These fonts and graphics are required by my config, but have no convenient packages associated with them that can be installed. They must be set up manually for now, until I script them somehow.
+
+**** Fonts
 In order of importance:
 - JetBrains Mono is the all-purpose font for this config
 - Fira Code is a supplemental font for certain symbols that JetBrains Mono doesn't support
 - Noto Sans CJK is only for Chinese, Japanese and Korean character support.
 
-*** JetBrains Mono
+***** JetBrains Mono
 #+begin_src bash
 wget https://download.jetbrains.com/fonts/JetBrainsMono-2.225.zip
 unzip JetBrainsMono-2.225.zip
@@ -19,16 +39,24 @@ unzip JetBrainsMono-2.225.zip
 mv *.ttf ~/.local/share/fonts/
 #+end_src
 
-*** Fira Code
+***** Fira Code
 Run =./scripts/firacode.sh= to automatically install Fira Code fonts to =~/.local/share/fonts=
 
-*** Noto Sans CJK
+***** Noto Sans CJK
 Download the Super OTC =NotoSansCJK.ttc= file from https://www.google.com/get/noto/help/cjk/, unzip, then move the file to =~/.local/share/fonts=
 
-*** Noto Sans Thai
+***** Noto Sans Thai
 Download the zip file from https://www.google.com/get/noto/#sans-thai, unzip, the move all the =*.ttf= files to =~/.local/share/fonts=
 
-** Language Servers for lsp-mode
+**** Emojis
+1. Create a folder under doom config  =~/.config/doom/.local/emojis/twemoji-latest=
+2. Download and extract the zip file from https://github.com/twitter/twemoji
+3. Move the 72x72 PNG assets under the created folder so they look like =~/.config/doom/.local/emojis/twemoji-latest/*.png=
+
+*** Install APT and NPM packages
+My config currently is optimized for running on Ubuntu 20.04, where all of these packages should be available.
+
+**** Language Servers for lsp-mode
 Ensure that Node is installed, assuming Ubuntu 20.04:
 #+begin_src bash
 curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
@@ -37,46 +65,70 @@ sudo apt-get install -y nodejs
 
 For language servers other than those specified below, you can use the =lsp-install-server= command provided by lsp-mode.
 
-*** TypeScript
+***** TypeScript
 #+begin_src bash
 sudo npm install -g typescript-language-server typescript
 #+end_src
 
-*** CSS
+***** CSS
 #+begin_src bash
 sudo npm install -g vscode-css-languageserver-bin
 #+end_src
 
-** VTerm
-In order to compile vterm within Emacs, these dependencies are required:
+***** HTML
+#+begin_src bash
+sudo npm install -g vscode-html-languageserver-bin
+#+end_src
+
+**** VTerm compilation dependencies
+In order to compile vterm within Emacs on demand, these dependencies are required:
 #+begin_src bash
 # Assuming Ubuntu 20.04, which includes these packages by default
 sudo apt install libtool-bin cmake
 #+end_src
 
-** Auxiliary apps
-- ripgrep
-- fd
-- PDF tools server (it's hard to compile pdf-tools locally in WSL)
+**** File searching (ripgrep & fd)
 #+begin_src bash
-sudo apt install ripgrep fd-find elpa-pdf-tools-server
+sudo apt install ripgrep fd-find
 #+end_src
 
-** TODO WSL-specific setup
+**** PDF tools server
+Cheat's way to get PDF tools server (it's hard to compile pdf-tools from scratch locally in WSL)
+#+begin_src bash
+sudo apt install elpa-pdf-tools-server
+#+end_src
+
+*** Notes on WSL
 Ensure that WSL is set up to run as WSL 2. This makes a big difference in performance.
 
-Follow [[https://github.com/hubisan/emacs-wsl][these instructions]] paying special attention to the =apt install= dependencies that Emacs requires.
+Use [[https://github.com/hubisan/emacs-wsl][these instructions]] as a guide,, paying special attention to the =apt install= dependencies that Emacs requires.
 
 Then to run using X410 (a Windows X server), follow [[https://x410.dev/cookbook/wsl/using-x410-with-wsl2/][these instructions]], paying special attention to the firewall settings. "Public network" access is required. This can be manually configured in advanced firewall settings in Windows.
 
 In addition, there are a few bits of wiring to pipe stuff between WSL and the Windows host:
-- xdg-open workaround allows opening files and links into the Windows host
-- pinentry-wsl-ps1.sh for HTTPS authenticated git repos that need a password store
+- =xdg_open_wsl.py= workaround allows opening files and links into the Windows host
+- =pinentry-wsl-ps1.sh= for HTTPS authenticated git repos that need a password store
   + pass
   + gpg
 
 #+begin_src bash
 ln -rs ./scripts/xdg_open_wsl.py ~/.local/bin/xdg-open
 ln -rs ./scripts/pinentry-wsl-ps1.sh ~/.local/bin/
+#+end_src
+
+*** Windows shortcut
+First link the convenience script from this repo to an accessible location on the =PATH=:
+#+begin_src bash
 ln -rs ./scripts/runemacs.sh ~/.local/bin/
 #+end_src
+
+Then create a Windows desktop shortcut with the target:
+#+begin_src conf
+"C:\Program Files\PowerShell\7\pwsh.exe" -windowstyle hidden -command wsl.exe $command
+#+end_src
+
+Where =$command= is the command you want to run in [[id:5614ad79-6fb6-42e8-8132-6524fdcac729][WSL]]. A command prompt window will still flash up on screen briefly when the command is started.
+
+This shortcut can be placed in =C:\Users\username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs= to appear in the start menu.
+
+Note that the command may need to have an absolute path in order to work, e.g. =/home/username/.local/bin/runemacs.sh=
