@@ -1,6 +1,6 @@
 ;;; config/tsx-mode.el -*- lexical-binding: t; -*-
 
-(add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx?\\'" . tsx-mode))
 
 (use-package! tsx-mode
   :commands tsx-mode
