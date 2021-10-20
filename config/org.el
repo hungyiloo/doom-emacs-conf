@@ -223,3 +223,7 @@ Depends on esbuild being installed and available on the path"
   (add-hook! 'org-roam-find-file-hook
     (defun my/org-roam-buffer-setup ()
       (auto-fill-mode 1))))
+
+(after! outline
+  ;; Prevent folding from interfering with ediffing org files
+  (add-hook 'ediff-prepare-buffer-hook #'org-show-all))
