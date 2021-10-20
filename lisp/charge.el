@@ -140,7 +140,10 @@
     (format format-string (plist-get particle particle-key))))
 
 (defun charge--tag-is-void (tag)
-  (memq tag '(area base br col embed hr img input link meta param source track wbr)))
+  (memq tag charge-void-tags))
+
+(defcustom charge-void-tags '(area base br col embed hr img input link meta param source track wbr use)
+  "The HTML tag names considered void, so they should be self-closing.")
 
 (defcustom charge-org-keywords '("slug" "title" "date" "draft" "filetags" "description")
   "The supported particle field names to be parsed from org file keywords in the header.")
