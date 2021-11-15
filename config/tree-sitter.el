@@ -32,7 +32,7 @@
       (and (not (= (point-min) pos))
            (save-excursion
              (goto-char (1- pos))
-             (tree-sitter-node-at-point 'comment)))))
+             (tree-sitter-node-at-point 'comment nil t)))))
 
   ;; Don't really need to add this hook if we're already overriding `doom-point-in-comment-p'
   ;; (add-hook! 'doom-point-in-comment-functions #'my/tree-sitter-point-in-comment-p)
