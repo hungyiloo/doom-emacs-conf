@@ -2,7 +2,7 @@
 
 (after! org
   ;; Set custom header bullets
-  (setq org-superstar-headline-bullets-list '("•"))
+  (setq org-superstar-headline-bullets-list '("■" "▲" "━" "●" "•"))
   (setq org-superstar-cycle-headline-bullets nil)
   ;; Show more whitespace in org mode when cycling
   (setq org-cycle-separator-lines -1)
