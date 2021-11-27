@@ -1,10 +1,11 @@
 ;;; titular.el --- convert text to title case -*- lexical-binding: t; -*-
 
+(require 'cl-lib)
+(require 'subr-x)
+
 ;;;###autoload
 (defun titlecase-string (str)
   "Convert string STR to title case and return the resulting string."
-  (require 'cl-lib)
-  (require 'subr-x)
   (let* ((case-fold-search nil)
          (str-length (length str))
          ;; A list of markers that indicate start of a new phrase within the title, e.g. "The Lonely Reindeer: A Christmas Story"
@@ -69,8 +70,6 @@
 
 (defun titlecase--segment (segment capitalize-p)
   "Convert a title's inner SEGMENT to capitalized or lower case depending on CAPITALIZE-P, then return the result."
-  (require 'cl-lib)
-  (require 'subr-x)
   (let* ((case-fold-search nil)
          (ignore-chars '(?' ?\" ?\( ?\[ ?‘ ?“ ?’ ?” ?_))
          (final-state (cl-reduce
