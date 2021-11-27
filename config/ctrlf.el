@@ -2,6 +2,9 @@
 
 (ctrlf-mode 1)
 (after! ctrlf
+  ;; Always recenter on search results
+  (setq ctrlf-auto-recenter t)
+
   ;; Clearer active search face
   (custom-set-faces!
     `(ctrlf-highlight-active :background ,(doom-color 'magenta 256) :foreground ,(doom-color 'base0) :weight bold))
