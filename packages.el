@@ -47,6 +47,7 @@
 
 (package! tsx-mode
   :recipe (:local-repo "lisp"))
-
 (package! charge
+  :recipe (:local-repo "lisp"))
+(package! titular
   :recipe (:local-repo "lisp"))
