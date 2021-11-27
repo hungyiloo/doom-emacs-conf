@@ -50,4 +50,4 @@
 (package! charge
   :recipe (:local-repo "lisp"))
 (package! titular
-  :recipe (:local-repo "lisp"))
+  :recipe (:host github :repo "hungyiloo/titular.el") :pin "c906e93d099840d7ec72c870477af585c7beba81")
