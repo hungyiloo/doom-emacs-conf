@@ -28,6 +28,9 @@
 ;; Always revert files automatically
 (global-auto-revert-mode 1)
 
+;; Try out view-mode
+(setq view-read-only t)
+
 ;; Better buffer names for files of the same name
 ;; NOTE: Setting this here messes up persp-mode *really* badly with duplicate
 ;; buffer names. This is especially painful when copying common files between
@@ -91,6 +94,7 @@
       "M-u" #'undo-only
       "M-[" #'previous-buffer
       "M-]" #'next-buffer
+      "M-SPC" (cmd! (cycle-spacing -1))
       "<mouse-8>" #'better-jumper-jump-backward
       "<mouse-9>" #'better-jumper-jump-forward
       "<f12>" #'universal-argument)
