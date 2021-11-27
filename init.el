@@ -44,6 +44,7 @@
        (popup +defaults)      ; tame sudden yet inevitable temporary windows
        ;;tabs                 ; an tab bar for Emacs
        treemacs               ; a project drawer, like neotree but cooler
+       tree-sitter            ; better language parsing for highlighting and nav
        ;;unicode              ; extended unicode support for various languages
        vc-gutter              ; vcs diff in the fringe
        vi-tilde-fringe        ; fringe tildes to mark beyond EOB
