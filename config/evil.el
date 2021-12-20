@@ -37,13 +37,18 @@
   (setq evil-ex-search-vim-style-regexp nil)
 
   (map!
-   ;; A convenient binding for the psychic hippie-expand
-   :i "C-?" #'hippie-expand
-
    ;; I actually end up using C-n and C-p for up/down line navigation a lot.
    :n "C-n" #'next-line
    :n "C-p" #'previous-line
-   :n "C-M-y" #'evil-paste-pop-next
+
+   ;; If evil-paste-pop doesn't resolve (because last action wasn't a paste)
+   ;; then fall back to yank-pop/consult-yank-pop as a convenience.
+   :n "M-y" (cmd! (condition-case nil
+                      (call-interactively #'evil-paste-pop)
+                    (error (call-interactively #'consult-yank-replace))))
+   :n "M-Y" (cmd! (condition-case nil
+                      (call-interactively #'evil-paste-pop-next)
+                    (error (call-interactively #'consult-yank-replace))))
 
    ;; TODO: The evil-mc hydra I wrote should really be in *this* file, or an evil-mc config file.
    (:when (featurep! :editor multiple-cursors)
