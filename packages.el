@@ -32,14 +32,14 @@
 ;; rainbow-mode without the extra rgb module stuff (e.g. kurecolor)
 (package! rainbow-mode)
 
-(package! lsp-mode :pin "3a960e8b0575a6e4ba4bf4d547d2825de645a20c")
-(package! lsp-ui :pin "dd4c181a22d19a28236c442cf6c9cd4bbd6d85f8")
-(package! org-roam :pin "67f10864df04e6a789dcca03e8cf7637b571098b")
+(package! lsp-mode :pin "e43b9ddb3903a39c325966f21e7edc1192d1e8e2")
+(package! lsp-ui :pin "98d0ad00b8bf1d3a7cea490002169f2286d7208c")
+(package! org-roam :pin "abe63b436035049923ae96639b9b856697047779")
 (package! ctrlf :pin "e915c5920cd3e39f481a6ce024073dd28cc9f743")
-(package! vterm :pin "2681120b770573044832ba8c22ccbac192e1a294")
-(package! magit :pin "a66b86d51139479d74962cc077c5215d20dd72e6")
-(package! embark :recipe (:host github :repo "oantolin/embark") :pin "e0057f6a6621b24e0ba4c167b683a84039c6f084")
-(package! vertico-mouse :recipe (:host github :repo "minad/vertico") :pin "f3f55e4f5923fe2108a59eedb68e9989d1cef151")
+(package! vterm :pin "ed6e867cfab77c5a311a516d20af44f57526cfdc")
+(package! magit :pin "1eb183e7672bf25fa77ea06d97b3d9c502a698ae")
+(package! embark :recipe (:host github :repo "oantolin/embark") :pin "33b47bb8999f8c7d67e9d1e04668e421e3c7246f")
+(package! vertico-mouse :recipe (:host github :repo "minad/vertico") :pin "eedcb847869226701acaf9a36dce0a51d1b60862")
 ;; (package! corfu :recipe (:host github :repo "minad/corfu") :pin "68bba8355b0d84199f1b55442f9447d9b9c70bea")
 (package! literate-calc-mode)
 (package! weblorg)
@@ -50,4 +50,4 @@
 (package! charge
   :recipe (:local-repo "lisp"))
 (package! titular
-  :recipe (:host github :repo "hungyiloo/titular.el") :pin "c906e93d099840d7ec72c870477af585c7beba81")
+  :recipe (:host github :repo "hungyiloo/titular.el") :pin "688dff7f7dc945e2fe71f743cfee3f9f032b4b83")
