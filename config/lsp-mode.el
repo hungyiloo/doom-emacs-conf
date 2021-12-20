@@ -36,7 +36,19 @@
   (use-package! powershell
     :hook (powershell-mode . lsp)
     :config
-    (setq lsp-pwsh-exe "/usr/bin/pwsh")))
+    (setq lsp-pwsh-exe "/usr/bin/pwsh"))
+
+  ;; Better integrated ctrl+click find definition
+  (map! :map lsp-mode-map
+        [remap lsp-find-definition-mouse]
+        (cmd!
+          (call-interactively #'evil-mouse-drag-region)
+          (call-interactively #'+lookup/definition)))
+
+  ;; evil jump intergration with lsp mouse actions
+  ;; (after! evil
+  ;;   (evil-set-command-property #'lsp-find-definition-mouse :jump t))
+  )
 
 (after! lsp-ui
   ;; Fixes code action lightbulb icon background
