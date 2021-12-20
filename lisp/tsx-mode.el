@@ -2,7 +2,6 @@
 
 (require 'tree-sitter)
 (require 'tree-sitter-langs)
-(require 'evil)
 (require 'seq)
 (require 'cl-lib)
 
