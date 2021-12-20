@@ -92,3 +92,7 @@
         :nv "SPC m e `" #'web-mode-navigate
         :nv "SPC m e RET" #'my/web-mode-element-split-to-lines
         :nv "SPC m t RET" #'my/web-mode-tag-split-to-lines))
+
+
+;; use web-mode for php
+(add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
