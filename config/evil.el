@@ -95,30 +95,6 @@
   (map! :map evil-inner-text-objects-map "l" #'evil-inner-line)
   (map! :map evil-outer-text-objects-map "l" #'evil-outer-line)
 
-  ;; Try out some faster evil scroll up/down replacement commands
-  ;; ​https://www.reddit.com/r/emacs/comments/mdl5yo
-  ;; REVIEW: If these commands cause problems, they can be removed.
-  ;;         What am I missing by replacing evil-scroll-up/down like this?
-  (evil-define-command my/evil-scroll-up-fast
-    :repeat nil
-    :keep-visual t
-    (interactive)
-    (evil-save-column
-      (when (= (point-min) (line-beginning-position))
-        (signal 'beginning-of-buffer nil))
-      (scroll-down (/ (window-body-height) 2))))
-  (evil-define-command my/evil-scroll-down-fast
-    :repeat nil
-    :keep-visual t
-    (interactive)
-    (evil-save-column
-      (when (= (point-max) (line-end-position))
-        (signal 'end-of-buffer nil))
-      (scroll-up (/ (window-body-height) 2))))
-  (define-key!
-    [remap evil-scroll-up] #'my/evil-scroll-up-fast
-    [remap evil-scroll-down] #'my/evil-scroll-down-fast)
-
   ;; Clearer evil active search face
   (custom-set-faces!
     `(evil-ex-search :background ,(doom-color 'magenta 256) :foreground ,(doom-color 'base0) :weight bold))
