@@ -45,6 +45,11 @@
           (call-interactively #'evil-mouse-drag-region)
           (call-interactively #'+lookup/definition)))
 
+  ;; Patch doom's incompatibility with unpinned lsp-mode
+  ;; Error was: void-function lsp--matching-clients?
+  ;; https://github.com/hlissner/doom-emacs/issues/5904
+  (advice-remove #'lsp #'+lsp-dont-prompt-to-install-servers-maybe-a)
+
   ;; evil jump intergration with lsp mouse actions
   ;; (after! evil
   ;;   (evil-set-command-property #'lsp-find-definition-mouse :jump t))
