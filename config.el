@@ -53,6 +53,10 @@
 (setq standard-indent 2)
 (setq-default tab-width 2)
 
+;; Alt leader keys for WSLg workarounds
+(setq doom-leader-alt-key "M-`")
+(setq doom-localleader-alt-key "M-` m")
+
 ;; Some global keymap adjustments
 (map! :leader
       ";" #'execute-extended-command
@@ -101,6 +105,8 @@
 
 (map! :map universal-argument-map
       "<f12>" #'universal-argument-more)
+
+(map! [remap dabbrev-expand] #'hippie-expand)
 
 (setq +doom-dashboard-ascii-banner-fn
       (defun my/doom-dashboard-draw-ascii-banner-fn ()
@@ -152,35 +158,10 @@
 (add-hook! 'doom-first-buffer-hook
   (setq display-line-numbers-type t))
 
-;; Allow links to be opened outside WSL
-(when (and (eq system-type 'gnu/linux)
-           (string-match "Linux.*Microsoft.*Linux" (shell-command-to-string "uname -a")))
-  (defun my/browse-url-generic-wsl-safe (url &optional new-window)
-    (interactive)
-    (let ((parsed-url (thread-last
-                          url
-                        (replace-regexp-in-string "file://" (concat "file://wsl%24/" (getenv "WSL_DISTRO_NAME")))
-                        (replace-regexp-in-string (concat "\\(wsl%24/" (getenv "WSL_DISTRO_NAME") "\\)?/mnt/c/") "C:/")
-                        (replace-regexp-in-string "^/" (concat "file://wsl%24/" (getenv "WSL_DISTRO_NAME") "/"))
-                        (url-encode-url))))
-      (message "%s" (concat "Browsing to: " parsed-url))
-      (apply #'browse-url-generic (list parsed-url new-window))))
-  (setq
-   browse-url-generic-program  "/mnt/c/Windows/System32/cmd.exe"
-   browse-url-generic-args     '("/c" "start")
-   browse-url-browser-function #'my/browse-url-generic-wsl-safe)
-  (after! org
-    ;; Make sure org export opens things in the right directory
-    (setq org-file-apps '((auto-mode . emacs)
-                          (directory . emacs)
-                          ("\\.mm\\'" . default)
-                          ("\\.x?html?\\'" . (lambda (_file link) (my/browse-url-generic-wsl-safe link)))
-                          ("\\.pdf\\'" . (lambda (_file link) (my/browse-url-generic-wsl-safe link)))))))
-
 ;; This section is for UI and visual tweaks.
 ;; Not sure if there's a better place to put most of this stuff.
 ;; For now, this can be a catch all until I figure out how to defer them better.
-(add-hook! 'doom-load-theme-hook
+(add-hook! 'after-init-hook
   (let* ((bg (doom-color 'bg))
          (darker-bg (doom-darken bg 0.7))
          (color-A (doom-color 'red))
@@ -343,7 +324,10 @@
   ;; Tweak help popups
   (set-popup-rule!
     "^\\*helpful function"
-    :side 'bottom :height 20 :width 40 :quit t :select t :ttl 5))
+    :side 'bottom :height 20 :width 40 :quit t :select t :ttl 5)
+
+  ;; Pixel scrolling
+  (pixel-scroll-precision-mode +1))
 
 ;; Load some external files
 (dolist (dir (list "config"))
