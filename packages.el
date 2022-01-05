@@ -45,7 +45,6 @@
 (package! vertico-mouse :recipe (:host github :repo "minad/vertico") :pin "a8fe9a0b2e156e022136169a3159b4dad78b2439")
 ;; (package! corfu :recipe (:host github :repo "minad/corfu") :pin "68bba8355b0d84199f1b55442f9447d9b9c70bea")
 (package! literate-calc-mode)
-(package! weblorg)
 (package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
 
 (package! tsx-mode
