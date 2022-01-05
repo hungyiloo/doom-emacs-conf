@@ -105,14 +105,11 @@ Use [[https://github.com/hubisan/emacs-wsl][these instructions]] as a guide,, pa
 
 Then to run using X410 (a Windows X server), follow [[https://x410.dev/cookbook/wsl/using-x410-with-wsl2/][these instructions]], paying special attention to the firewall settings. "Public network" access is required. This can be manually configured in advanced firewall settings in Windows.
 
-In addition, there are a few bits of wiring to pipe stuff between WSL and the Windows host:
-- =xdg_open_wsl.py= workaround allows opening files and links into the Windows host
-- =pinentry-wsl-ps1.sh= for HTTPS authenticated git repos that need a password store
-  + pass
-  + gpg
+To set up =xdg-open= across the WSL border, which allows opening files and links from WSL into the Windows host, =wslview= from the [[https://github.com/wslutilities/wslu][wslu]] toolkit can be symlinked into =~/.local/bin/xdg-open=. Follow the commands in =./scripts/setup_xdg_open_wsl.sh= to set it up.
+
+=pinentry-wsl-ps1.sh= makes it possible (but still clunky) to use proper cretential storage for HTTPS authenticated git repos that need a password store.
 
 #+begin_src bash
-ln -rs ./scripts/xdg_open_wsl.py ~/.local/bin/xdg-open
 ln -rs ./scripts/pinentry-wsl-ps1.sh ~/.local/bin/
 #+end_src
 
