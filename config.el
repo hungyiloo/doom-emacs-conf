@@ -161,7 +161,7 @@
 ;; This section is for UI and visual tweaks.
 ;; Not sure if there's a better place to put most of this stuff.
 ;; For now, this can be a catch all until I figure out how to defer them better.
-(add-hook! 'after-init-hook
+(add-hook! 'doom-load-theme-hook
   (let* ((bg (doom-color 'bg))
          (darker-bg (doom-darken bg 0.7))
          (color-A (doom-color 'red))
@@ -327,7 +327,7 @@
     :side 'bottom :height 20 :width 40 :quit t :select t :ttl 5)
 
   ;; Pixel scrolling
-  (pixel-scroll-precision-mode +1))
+  (when (fboundp #'pixel-scroll-precision-mode) (pixel-scroll-precision-mode +1)))
 
 ;; Load some external files
 (dolist (dir (list "config"))
