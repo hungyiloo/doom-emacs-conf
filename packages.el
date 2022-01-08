@@ -38,6 +38,9 @@
 ;; mermaid JS charts
 (package! mermaid-mode)
 
+;; shine a light on cursor for big movements
+(package! beacon)
+
 (package! lsp-mode :pin "a82a4fa3467ec918273ab65d48c5c7d2dbfaec74")
 (package! lsp-ui :pin "21ce926eedd41ef305c2d89412506ce59b1a7eac")
 (package! org-roam :pin "679ef6ef001fd1a69b691108178721aa913e7f0f")
