@@ -41,7 +41,6 @@
 (package! lsp-mode :pin "a82a4fa3467ec918273ab65d48c5c7d2dbfaec74")
 (package! lsp-ui :pin "21ce926eedd41ef305c2d89412506ce59b1a7eac")
 (package! org-roam :pin "679ef6ef001fd1a69b691108178721aa913e7f0f")
-(package! ctrlf :pin "282eaa836d2198bb5947dfd3c454ae5305f55efb")
 (package! vterm :pin "a940dd2ee8a82684860e320c0f6d5e15d31d916f")
 (package! magit :pin "386843483b262ad57b24aec3167035b01acb4bf1")
 (package! embark :recipe (:host github :repo "oantolin/embark") :pin "c9b26c2e18f01ae401df6a69b7a0c1a6bc44b90c")

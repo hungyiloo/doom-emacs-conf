@@ -60,15 +60,7 @@
                       (setq evil-ex-search-pattern (list str nil t))
                       (setq evil-ex-search-direction 'forward)
                       (when evil-ex-search-persistent-highlight
-                        (evil-ex-search-activate-highlight evil-ex-search-pattern)))))))
-  (after! ctrlf
-    ;; Integrate with ctrl searching
-    (advice-add #'consult-line
-                :after
-                (defun my/consult-line-ctrlf-search-integrate (&rest _args)
-                  (when-let ((str (substring-no-properties (car consult--line-history))))
-                    (unless (eq str (car ctrlf-search-history))
-                      (add-to-history 'ctrlf-search-history str)))))))
+                        (evil-ex-search-activate-highlight evil-ex-search-pattern))))))))
 
 (use-package! consult-flycheck
   :commands consult-flycheck
