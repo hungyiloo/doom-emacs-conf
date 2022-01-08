@@ -146,9 +146,14 @@
     "gk" nil
     "gj" nil))
 
-(after! evil-goggles
-  (setq evil-goggles-duration 0.2)
-  (setq evil-goggles-enable-paste nil))
+(use-package! evil-goggles
+  :init
+  (setq evil-goggles-duration 0.2
+        evil-goggles-enable-paste t
+        evil-goggles-enable-delete t
+        evil-goggles-enable-change t)
+  :config
+  (evil-goggles-use-magit-faces))
 
 (after! evil-mc
   ;; Prevents evil-mc from clearing registers when multiple cursors are created
