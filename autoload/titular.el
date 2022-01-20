@@ -6,5 +6,4 @@
   (save-excursion
     (set-mark beg)
     (goto-char end)
-    (titlecase-dwim)))
-
+    (titular-titlecase-dwim)))
