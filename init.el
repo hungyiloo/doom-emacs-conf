@@ -20,7 +20,7 @@
        ;;layout               ; auie,ctsrnm is the superior home row
 
        :completion
-       company                ; the ultimate code completion backend
+       (company +childframe)                ; the ultimate code completion backend
        ;;helm                 ; the *other* search engine for love and life
        ;;ido                  ; the other *other* search engine...
        ;;(ivy +prescient)     ; a search engine for love and life
@@ -86,7 +86,7 @@
 
        :tools
        ;;ansible
-       ;;debugger             ; FIXME stepping through code, to help you add bugs
+       ;;(debugger +lsp)      ; FIXME stepping through code, to help you add bugs
        ;;direnv
        ;;docker
        editorconfig           ; let someone else argue about tabs vs spaces
