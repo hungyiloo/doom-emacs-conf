@@ -45,16 +45,17 @@
 (package! lsp-ui :pin "21ce926eedd41ef305c2d89412506ce59b1a7eac")
 (package! org-roam :pin "679ef6ef001fd1a69b691108178721aa913e7f0f")
 (package! vterm :pin "a940dd2ee8a82684860e320c0f6d5e15d31d916f")
-(package! magit :pin "386843483b262ad57b24aec3167035b01acb4bf1")
-(package! embark :recipe (:host github :repo "oantolin/embark") :pin "c9b26c2e18f01ae401df6a69b7a0c1a6bc44b90c")
-(package! vertico-mouse :recipe (:host github :repo "minad/vertico") :pin "a8fe9a0b2e156e022136169a3159b4dad78b2439")
+(package! magit :pin "a5f6705bf9a0b040a77eba67bafeec51ada90649")
+(package! embark :recipe (:host github :repo "oantolin/embark") :pin "8cf1fdbfacdbdb98ca3b4e50bf295059a02fe4a2")
+(package! vertico-mouse :recipe (:host github :repo "minad/vertico") :pin "8310587734250814be9b21483253017ffd0f6399")
 ;; (package! corfu :recipe (:host github :repo "minad/corfu") :pin "68bba8355b0d84199f1b55442f9447d9b9c70bea")
 (package! literate-calc-mode)
 (package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
+(package! org-alert)
 
 (package! tsx-mode
   :recipe (:local-repo "lisp"))
 (package! charge
   :recipe (:local-repo "lisp"))
 (package! titular
-  :recipe (:host github :repo "hungyiloo/titular.el") :pin "688dff7f7dc945e2fe71f743cfee3f9f032b4b83")
+  :recipe (:host github :repo "hungyiloo/titular.el"))
