@@ -21,7 +21,7 @@
 
   ;; NOTE: Angular/TS language servers might perform better if we have this
   ;; (setenv "TSC_NONPOLLING_WATCHER" "1")
-  (setq lsp-disabled-clients '(angular-ls)) ; disabled for performance for now. chews up so much CPU!
+  (setq lsp-disabled-clients '(angular-ls csharp-ls pwsh-ls))
   ;; (setq lsp-clients-angular-language-server-command
   ;;       `("node"
   ;;         ,(doom-path (getenv "HOME") ".config/yarn/global/node_modules/@angular/language-server")
