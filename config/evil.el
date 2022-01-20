@@ -69,14 +69,6 @@
       "^"  #'evil-first-non-blank-of-visual-line
       "g^" #'evil-first-non-blank))
 
-  ;; I like having evil search matches be in the middle of the screen
-  (defun my/recenter (&rest ignored)
-    (recenter))
-  (advice-add #'evil-ex-search-forward :after #'my/recenter)
-  (advice-add #'evil-ex-search-backward :after #'my/recenter)
-  (advice-add #'evil-ex-search-next :after #'my/recenter)
-  (advice-add #'evil-ex-search-previous :after #'my/recenter)
-
   ;; Evil text objects for inner/outer line selection
   (defun my/evil-select-line (type inner-p)
     (evil-range (save-excursion
@@ -207,16 +199,7 @@
                           my/sp-hydra/sp-backward-slurp-sexp
                           my/sp-hydra/sp-splice-sexp-killing-forward
                           my/sp-hydra/sp-splice-sexp-killing-backward))
-      (add-to-list 'evil-mc-custom-known-commands `(,sp-command (:default . evil-mc-execute-call)))))
-
-  ;; FIXME: This advice doesn't move the point like intended. Why?
-  ;; (advice-add #'evil-mc-set-pattern
-  ;;             :before
-  ;;             (defun my/evil-mc-linewise-set-pattern-shim (&rest ignored)
-  ;;               (when (and (evil-visual-state-p)
-  ;;                          (eq (evil-visual-type) 'line))
-  ;;                 (call-interactively #'move-end-of-line))))
-  )
+      (add-to-list 'evil-mc-custom-known-commands `(,sp-command (:default . evil-mc-execute-call))))))
 
 (after! evil-nerd-commenter
   ;; Detect TSX files as JSX for commenting purposes
