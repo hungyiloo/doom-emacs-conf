@@ -5,5 +5,4 @@ if ! pgrep -f syncthing &> /dev/null 2>&1; then
 	disown
 fi
 cd ~
-~/.config/emacs/bin/doom env
 emacs
