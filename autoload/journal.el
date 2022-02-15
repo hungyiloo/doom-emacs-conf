@@ -2,6 +2,7 @@
 
 (require 'org)
 (require 'seq)
+(require 'org-alert)
 
 (defun my/journal-date-stamp (&optional timestamp)
   (format-time-string
@@ -11,6 +12,7 @@
 (defun my/journal-goto-heading (heading &optional post-heading-action)
   (interactive)
   (evil-set-jump)
+  (org-alert-enable)
   (let ((existing-journal-window
          (seq-find
           (lambda (w)

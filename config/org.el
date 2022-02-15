@@ -133,12 +133,12 @@ Depends on esbuild being installed and available on the path"
         org-agenda-todo-ignore-timestamp t
         org-agenda-todo-ignore-with-date t
         org-agenda-breadcrumbs-separator "·")
-  (require 'emojify)
-  (setq org-agenda-category-icon-alist
-        `(("Journal" ,(doom-path emojify-emojis-dir emojify-emoji-set "1f4d8.png") nil nil :ascent center :height ,(* 2(default-font-width)))
-          ("Shopping" ,(doom-path emojify-emojis-dir emojify-emoji-set "1f6d2.png") nil nil :ascent center :height ,(* 2(default-font-width)))
-          ("Recipes" ,(doom-path emojify-emojis-dir emojify-emoji-set "1f955.png") nil nil :ascent center :height ,(* 2(default-font-width)))
-          ("" ,(doom-path emojify-emojis-dir emojify-emoji-set "25aa.png") nil nil :ascent center :height ,(* 2(default-font-width)))))
+  ;; (require 'emojify)
+  ;; (setq org-agenda-category-icon-alist
+  ;;       `(("Journal" ,(doom-path emojify-emojis-dir emojify-emoji-set "1f4d8.png") nil nil :ascent center :height ,(* 2(default-font-width)))
+  ;;         ("Shopping" ,(doom-path emojify-emojis-dir emojify-emoji-set "1f6d2.png") nil nil :ascent center :height ,(* 2(default-font-width)))
+  ;;         ("Recipes" ,(doom-path emojify-emojis-dir emojify-emoji-set "1f955.png") nil nil :ascent center :height ,(* 2(default-font-width)))
+  ;;         ("" ,(doom-path emojify-emojis-dir emojify-emoji-set "25aa.png") nil nil :ascent center :height ,(* 2(default-font-width)))))
   (defun my/org-agenda-format-big-date (date)
     (require 'cal-iso)
     (let* ((dayname (calendar-day-name date 1 nil))

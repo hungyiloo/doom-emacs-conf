@@ -12,5 +12,4 @@
   :config
   (setq org-alert-interval 300
         org-alert-notify-cutoff 10
-        org-alert-notification-title "Journal Reminder")
-  (org-alert-enable))
+        org-alert-notification-title "Journal Reminder"))
