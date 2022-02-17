@@ -15,9 +15,9 @@
 This is my personal Doom Emacs config. It's not the tidiest thing in the world, as it's constantly in flux with some active development going on in various places (i.e. check out the =lisp= directory). As with other personal configs you might find on GitHub, it's not really intended to be reused by anyone but me, however feel free to take from it whatever is useful to you.
 
 ** Notable things
-The most visible "innovation" is probably the =emojify= setup, which has been hacked to only use the latest version of [[https://github.com/twitter/twemoji][twemoji]] and nothing else. This includes better emoji descriptions (for better searching) and integration with [[https://github.com/minad/vertico][vertico]] completion.
+The TypeScript/TSX development environment is powered by [[https://github.com/emacs-tree-sitter/elisp-tree-sitter][elisp-tree-sitter]] and a custom-written =tsx-mode= that replaces =web-mode=. This means greatly improved stability, syntax highlighting, performance while editing, and also AST-based editing for JSX tags, similar to the =web-mode= element/tag/attribute editing capabilities. Although I haven't published it anywhere, I use it for work every day.
 
-Also worth noting is the TypeScript/TSX development environment, powered by [[https://github.com/emacs-tree-sitter/elisp-tree-sitter][elisp-tree-sitter]] and a custom-written =tsx-mode= that replaces =web-mode=. This means greatly improved stability, syntax highlighting, performance while editing, and also AST-based editing for JSX tags, similar to the =web-mode= element/tag/attribute editing capabilities. Although I haven't published it anywhere, I use it for work every day.
+Since Emacs 28+ now supports color emojis, I've moved away from the =emoji= module in Doom (which uses the =emojify= package under the hood) in favor of native emoji support. This means the =Noto Color Emoji= font, or some other emoji font, is needed instead of manually downloading twemoji images. While Emacs has a [[https://lars.ingebrigtsen.no/2021/10/28/emacs-emojis-a-%E2%9D%A4%EF%B8%8F-story/][shiny new]] built-in =emoji-insert= command, I missed being able to search emojis by keyword, so I've included a =emoji-insert-dwim= command that fills this gap.
 
 ** Setup instructions
 All of the following needs to be set up for the config to run smoothly. This only has to be done once per environment. Note that the setup documentation here might be incomplete, as I don't regularly test the setup process, because I don't buy new laptops every day...
@@ -48,10 +48,8 @@ Download the Super OTC =NotoSansCJK.ttc= file from https://www.google.com/get/no
 ***** Noto Sans Thai
 Download the zip file from https://www.google.com/get/noto/#sans-thai, unzip, the move all the =*.ttf= files to =~/.local/share/fonts=
 
-**** Emojis
-1. Create a folder under doom config  =~/.config/doom/.local/emojis/twemoji-latest=
-2. Download and extract the zip file from https://github.com/twitter/twemoji
-3. Move the 72x72 PNG assets under the created folder so they look like =~/.config/doom/.local/emojis/twemoji-latest/*.png=
+***** Noto Color Emoji
+Download the TTF file from https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf and put it in =~/.local/share/fonts=
 
 *** Install APT and NPM packages
 My config currently is optimized for running on Ubuntu 20.04, where all of these packages should be available.

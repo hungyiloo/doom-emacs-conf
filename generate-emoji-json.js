@@ -64,12 +64,8 @@ const transformedEmojisPromise = new Promise(resolve => https.get(
       console.log(`${sourceEmojis.length} emojis found`);
 
       const transformedEmojis = sourceEmojis.reduce((acc, curr) => {
-        acc[curr.char] = {
-          style: 'unicode',
-          image: `${toCodePoints(curr.char)}.png`,
-          // name: `${curr.name} - ${curr.category}`
-          name: curr.name
-        }
+        acc[curr.char] = curr.name
+
         return acc;
       }, {});
 
@@ -85,10 +81,10 @@ Promise.all([
   Object.keys(transformedEmojis).forEach(emoji => {
     const keywords = emojiKeywords[emoji];
     if (!keywords) return;
-    const existingName = transformedEmojis[emoji].name;
+    const existingName = transformedEmojis[emoji];
     const validKeywords = keywords.filter(k => !existingName.includes(k)).join(', ');
     if (validKeywords.length === 0) return;
-    transformedEmojis[emoji].name = `${existingName} [${keywords.filter(k => !existingName.includes(k)).join(', ')}]`;
+    transformedEmojis[emoji] = `${existingName} [${keywords.filter(k => !existingName.includes(k)).join(', ')}]`;
   });
   fs.writeFile('./emoji.json', JSON.stringify(transformedEmojis, null, 2), function (err) {
     if (err) return console.log(err);

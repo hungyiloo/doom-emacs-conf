@@ -81,7 +81,8 @@
        "v" #'projectile-run-vterm)
       (:prefix-map ("i" . "insert")
        "u" #'insert-char
-       "e" #'emoji-insert
+       "e" #'emoji-insert-dwim
+       "E" #'emoji-insert
        "i" #'all-the-icons-insert))
 
 (map! :leader
