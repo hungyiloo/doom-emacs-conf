@@ -2,15 +2,14 @@
 
 ;;;###autoload
 (defun toast (title message)
-  (message "%s: %s" title message)
-  ;; (save-window-excursion
-  ;;   (shell-command
-  ;;    (concat
-  ;;     "powershell.exe -ExecutionPolicy Bypass -File C:\\\\dev\\\\toast.ps1 -Title"
-  ;;     " \""
-  ;;     title
-  ;;     "\" \""
-  ;;     message
-  ;;     "\" > /dev/null 2>&1 &")
-  ;;    nil nil))
-  )
+  ;; (message "%s: %s" title message)
+  (save-window-excursion
+    (shell-command
+     (concat
+      "powershell.exe -WindowStyle hidden -ExecutionPolicy Bypass -File C:\\\\dev\\\\toast.ps1 -Title"
+      " \""
+      title
+      "\" \""
+      message
+      "\" > /dev/null 2>&1 &")
+     nil nil)))
