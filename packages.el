@@ -38,14 +38,7 @@
 ;; mermaid JS charts
 (package! mermaid-mode)
 
-(package! lsp-mode :pin "9b3a9215807af0727b514e8c7cf440bcc0bdad44")
-(package! lsp-ui :pin "21ce926eedd41ef305c2d89412506ce59b1a7eac")
-(package! org-roam :pin "b163c900b8ec2e3637bc251d9b90421efc771c02")
-(package! vterm :pin "a940dd2ee8a82684860e320c0f6d5e15d31d916f")
-(package! magit :pin "edc593c7c112dc6c26244acdd8755900175eaf67")
-(package! embark :recipe (:host github :repo "oantolin/embark") :pin "bc405f0e48a358dcf4ac1d4a20335f5060e3ab76")
-(package! vertico-mouse :recipe (:host github :repo "minad/vertico") :pin "c5d121d60d7f7fdb995c1b15c9e4ba3c3052a0ad")
-;; (package! corfu :recipe (:host github :repo "minad/corfu") :pin "68bba8355b0d84199f1b55442f9447d9b9c70bea")
+(package! org-roam :pin "3bb45afccb9f17758c5604e4d883c769f4fc3545")
 (package! literate-calc-mode)
 (package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
 (package! org-alert)
