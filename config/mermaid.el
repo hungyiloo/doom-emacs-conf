@@ -23,6 +23,7 @@
             (rename-buffer "*mermaid-preview*" ))
           (display-buffer buffer)))))
 
+  (require 'ob-mermaid)
 
   (set-popup-rule!
     "*mermaid-preview*"
