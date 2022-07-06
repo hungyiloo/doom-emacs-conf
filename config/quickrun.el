@@ -116,8 +116,8 @@ This seems to work better for me than doom's provided `+eval:replace-region'"
   (add-to-list 'quickrun--language-alist
                '("deno"
                  (:command . "deno run")
-                 (:exec . ("cp %s %n.ts" "%c --quiet %n.ts"))
-                 (:remove . ("%n.ts"))
+                 (:exec . ("cp %s /tmp/%n.ts" "%c --quiet /tmp/%n.ts"))
+                 (:remove . ("/tmp/%n.ts"))
                  (:description . "Run Typescript file with deno")))
   (add-to-list 'quickrun--major-mode-alist
                '(tsx-mode . "deno"))
