@@ -37,8 +37,9 @@
 
 ;; mermaid JS charts
 (package! mermaid-mode)
+(package! ob-mermaid)
 
-(package! org-roam :pin "3bb45afccb9f17758c5604e4d883c769f4fc3545")
+(package! org-roam :pin "c3867619147175faf89ed8f3e90a1e67a4fd9655")
 (package! literate-calc-mode)
 (package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
 (package! org-alert)
