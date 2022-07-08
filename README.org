@@ -96,6 +96,12 @@ Cheat's way to get PDF tools server (it's hard to compile pdf-tools from scratch
 sudo apt install elpa-pdf-tools-server
 #+end_src
 
+**** esbuild for building & transpiling TSX in org-mode
+There's a custom ~org-babel-execute:tsx~ function that helps transpile TSX for org-mode HTML exports. This uses [[https://esbuild.github.io/][esbuild]] to bundle the code into browser-runnable JavaScript.
+#+begin_src bash
+npm install -g esbuild
+#+end_src
+
 *** Notes on WSL
 Ensure that WSL is set up to run as WSL 2. This makes a big difference in performance.
 
