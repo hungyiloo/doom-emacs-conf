@@ -133,7 +133,7 @@
       node)))
 
 (defun tsx--element-at-point (&optional include-self-closing)
-  (tsx--closest-parent-node nil (list 'jsx_element
+  (tsx--closest-parent-node nil (list 'jsx_element 'jsx_fragment
                                       (when include-self-closing 'jsx_self_closing_element))))
 
 (defun tsx--tag-at-point ()
@@ -288,6 +288,7 @@
   (interactive)
   (when-let* ((node (tsx--element-at-point t))
               (closing-element (or (and (eq (tsc-node-type node) 'jsx_self_closing_element) node)
+                                   (and (eq (tsc-node-type node) 'jsx_fragment) node)
                                    (tsx--tsc-first-child-of-type node '(jsx_closing_element))))
               (target-pos (tsc-node-end-position closing-element)))
     (goto-char target-pos)))
@@ -298,6 +299,7 @@
                       (backward-char)
                       (tsx--element-at-point t)))
               (opening-element (or (and (eq (tsc-node-type node) 'jsx_self_closing_element) node)
+                                   (and (eq (tsc-node-type node) 'jsx_fragment) node)
                                    (tsx--tsc-first-child-of-type node '(jsx_opening_element))))
               (target-pos (tsc-node-start-position opening-element)))
     (goto-char target-pos)))
