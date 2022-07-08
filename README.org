@@ -11,13 +11,21 @@
 ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
 #+end_src
 
+[[./screenshot.png]]
+
 * Hung-Yi's Doom Emacs Configuration
 This is my personal Doom Emacs config. It's not the tidiest thing in the world, as it's constantly in flux with some active development going on in various places (i.e. check out the =lisp= directory). As with other personal configs you might find on GitHub, it's not really intended to be reused by anyone but me, however feel free to take from it whatever is useful to you.
 
 ** Notable things
 The TypeScript/TSX development environment is powered by [[https://github.com/emacs-tree-sitter/elisp-tree-sitter][elisp-tree-sitter]] and a custom-written =tsx-mode= that replaces =web-mode=. This means greatly improved stability, syntax highlighting, performance while editing, and also AST-based editing for JSX tags, similar to the =web-mode= element/tag/attribute editing capabilities. Although I haven't published it anywhere, I use it for work every day.
 
+Speaking of tree-sitter, it's implemented as a custom Doom Module, so that should be easy for anyone to migrate to another Doom Emacs config.
+
 Since Emacs 28+ now supports color emojis, I've moved away from the =emoji= module in Doom (which uses the =emojify= package under the hood) in favor of native emoji support. This means the =Noto Color Emoji= font, or some other emoji font, is needed instead of manually downloading twemoji images. While Emacs has a [[https://lars.ingebrigtsen.no/2021/10/28/emacs-emojis-a-%E2%9D%A4%EF%B8%8F-story/][shiny new]] built-in =emoji-insert= command, I missed being able to search emojis by keyword, so I've included a =emoji-insert-dwim= command that fills this gap.
+
+I've heavily customized my org-mode display to use [[https://github.com/rnkn/olivetti][olivetti]] for comfortable reading and writing (in favor of Doom's default zen-mode) and switched to "properly" sized bullet icons that don't ruin the monospace column layout of the nested content.
+
+There are some hydras for smartparens, window management, and a personalized hydra for enhanced evil-mc multiple cursor editing.
 
 ** Setup instructions
 All of the following needs to be set up for the config to run smoothly. This only has to be done once per environment. Note that the setup documentation here might be incomplete, as I don't regularly test the setup process, because I don't buy new laptops every day...
@@ -29,7 +37,9 @@ These fonts and graphics are required by my config, but have no convenient packa
 In order of importance:
 - JetBrains Mono is the all-purpose font for this config
 - Fira Code is a supplemental font for certain symbols that JetBrains Mono doesn't support
-- Noto Sans CJK is only for Chinese, Japanese and Korean character support.
+- Noto Color Emoji is for displaying emojis natively in Emacs 28+
+- Noto Sans CJK is only for Chinese, Japanese and Korean character support
+- Noto Sans Thai is only for Thai support
 
 ***** JetBrains Mono
 #+begin_src bash
@@ -42,23 +52,23 @@ mv *.ttf ~/.local/share/fonts/
 ***** Fira Code
 Run =./scripts/firacode.sh= to automatically install Fira Code fonts to =~/.local/share/fonts=
 
+***** Noto Color Emoji
+Download the TTF file from https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf and put it in =~/.local/share/fonts=
+
 ***** Noto Sans CJK
 Download the Super OTC =NotoSansCJK.ttc= file from https://www.google.com/get/noto/help/cjk/, unzip, then move the file to =~/.local/share/fonts=
 
 ***** Noto Sans Thai
 Download the zip file from https://www.google.com/get/noto/#sans-thai, unzip, the move all the =*.ttf= files to =~/.local/share/fonts=
 
-***** Noto Color Emoji
-Download the TTF file from https://github.com/googlefonts/noto-emoji/raw/main/fonts/NotoColorEmoji.ttf and put it in =~/.local/share/fonts=
-
 *** Install APT and NPM packages
 My config currently is optimized for running on Ubuntu 20.04, where all of these packages should be available.
 
 **** Language Servers for lsp-mode
-Ensure that Node is installed, assuming Ubuntu 20.04:
+Ensure that Node is installed:
 #+begin_src bash
-curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-sudo apt-get install -y nodejs
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+nvm install node
 #+end_src
 
 For language servers other than those specified below, you can use the =lsp-install-server= command provided by lsp-mode.
