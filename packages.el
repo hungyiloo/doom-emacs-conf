@@ -48,5 +48,7 @@
   :recipe (:local-repo "lisp"))
 (package! charge
   :recipe (:local-repo "lisp"))
+(package! tarzan
+  :recipe (:local-repo "lisp"))
 (package! titular
   :recipe (:host github :repo "hungyiloo/titular.el"))

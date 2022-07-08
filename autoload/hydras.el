@@ -180,3 +180,26 @@ _SPC_ 🎯    _x_ 🔫    _M-w_ ⌨️    _w_ 👟    _|_ ♊    "
   (interactive)
   (evil-window-vsplit)
   (previous-buffer))
+
+;;;###autoload (autoload #'my/tarzan-hydra/body "autoload/hydras" nil t)
+(defhydra my/tarzan-hydra (:color amaranth
+                           :hint nil
+                           :pre (recenter)
+                           :post (recenter))
+  "
+_w_: forward node    _e_: node end
+_b_: node beginning
+_j_: down node       _a_: expand region
+_k_: up node         _i_: contract region   _v_: toggle mark
+"
+  ("w" #'tarzan-goto-next-sibling)
+  ("b" #'tarzan-goto-prev-sibling-start)
+  ("e" #'tarzan-goto-next-sibling-end)
+  ("j" #'tarzan-goto-first-child)
+  ("k" #'tarzan-goto-parent)
+  ("a" #'tarzan-expand-region)
+  ("i" #'tarzan-contract-region)
+  ("v" #'evil-visual-char)
+  ("q" nil "quit" :color blue)
+  ("C-g" nil "quit" :color blue)
+  ("<escape>" nil "quit" :color blue))
