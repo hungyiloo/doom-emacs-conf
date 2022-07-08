@@ -60,7 +60,9 @@ This seems to work better for me than doom's provided `+eval:replace-region'"
     (goto-char end)
     (activate-mark)
     ;; Now the mark is set and activated, hand off to quickrun
-    (quickrun-replace-region beg end))
+    (if (eq major-mode 'emacs-lisp-mode)
+        (+eval/region-and-replace beg end)
+      (quickrun-replace-region beg end)))
 
   (evil-define-operator my/eval-region-quickrun (beg end)
     "Evaluate selection using quickrun and replace it with its result.
@@ -74,7 +76,10 @@ This seems to work better for me than doom's provided `+eval:replace-region'"
     (goto-char end)
     (activate-mark)
     ;; Now the mark is set and activated, hand off to quickrun
-    (quickrun-region beg end))
+    (setq quickrun-option-outputter nil) ; have to reset this for some reason?!
+    (if (eq major-mode 'emacs-lisp-mode)
+        (+eval/region beg end)
+      (quickrun-region beg end)))
 
   (defun quickrun--outputter-replace-region ()
     "Replace region with quickrun output, and truncate the last character if it's a newline"
@@ -116,8 +121,8 @@ This seems to work better for me than doom's provided `+eval:replace-region'"
   (add-to-list 'quickrun--language-alist
                '("deno"
                  (:command . "deno run")
-                 (:exec . ("cp %s /tmp/%n.ts" "%c --quiet /tmp/%n.ts"))
-                 (:remove . ("/tmp/%n.ts"))
+                 (:exec . ("cp %s %n.ts" "%c --quiet %n.ts"))
+                 (:remove . ("%n.ts"))
                  (:description . "Run Typescript file with deno")))
   (add-to-list 'quickrun--major-mode-alist
                '(tsx-mode . "deno"))

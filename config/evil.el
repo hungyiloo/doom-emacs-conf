@@ -59,8 +59,15 @@
    (:prefix "gs"
     :nv "p" #'my/sp-hydra/body)
 
+   (:prefix "gs"
+    :nv "z" #'my/tarzan-hydra/body)
+
    (:prefix "g"
-    :nv "|" #'my/evil-duplicate-operator))
+    :nv "|" #'my/evil-duplicate-operator)
+
+   (:prefix "g"
+    :nv "r" #'my/eval-region-quickrun
+    :nv "R" #'my/replace-region-quickrun))
 
   ;; Fix ^ movement to also respect visual line mode.
   ;; It works for 0 and $ so why not ^?
