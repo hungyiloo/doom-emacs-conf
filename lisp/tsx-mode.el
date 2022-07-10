@@ -51,11 +51,9 @@
 
 (defmacro tsx-with-single-undo (&rest body)
   "Execute BODY as a single undo step."
-  `(if (fboundp 'evil-with-single-undo)
-       (evil-with-single-undo
-         ,@body)
-     (atomic-change-group
-       ,@body)))
+  `(let ((marker (prepare-change-group)))
+     (unwind-protect ,@body
+       (undo-amalgamate-change-group marker))))
 
 (defun tsx-element-close (&optional dont-indent)
   (interactive)
