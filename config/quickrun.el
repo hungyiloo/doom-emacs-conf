@@ -54,15 +54,15 @@ of quickrun. This function lets me do it quickly."
 This seems to work better for me than doom's provided `+eval:replace-region'"
     :move-point nil
     (interactive "<r>")
-    ;; Setting the mark manually using evil's provided region beg/end
-    ;; allows quickrun to work as if evil didn't exist
-    (set-mark beg)
-    (goto-char end)
-    (activate-mark)
-    ;; Now the mark is set and activated, hand off to quickrun
     (if (eq major-mode 'emacs-lisp-mode)
         (+eval/region-and-replace beg end)
-      (quickrun-replace-region beg end)))
+      (progn
+        ;; Setting the mark manually using evil's provided region beg/end
+        ;; allows quickrun to work as if evil didn't exist
+        (set-mark beg)
+        (goto-char end)
+        ;; Now the mark is set and activated, hand off to quickrun
+        (quickrun-replace-region beg end))))
 
   (evil-define-operator my/eval-region-quickrun (beg end)
     "Evaluate selection using quickrun and replace it with its result.
@@ -70,16 +70,16 @@ This seems to work better for me than doom's provided `+eval:replace-region'"
 This seems to work better for me than doom's provided `+eval:replace-region'"
     :move-point nil
     (interactive "<r>")
-    ;; Setting the mark manually using evil's provided region beg/end
-    ;; allows quickrun to work as if evil didn't exist
-    (set-mark beg)
-    (goto-char end)
-    (activate-mark)
-    ;; Now the mark is set and activated, hand off to quickrun
-    (setq quickrun-option-outputter nil) ; have to reset this for some reason?!
     (if (eq major-mode 'emacs-lisp-mode)
-        (+eval/region beg end)
-      (quickrun-region beg end)))
+        (+eval:region beg end)
+      (progn
+        ;; Setting the mark manually using evil's provided region beg/end
+        ;; allows quickrun to work as if evil didn't exist
+        (set-mark beg)
+        (goto-char end)
+        ;; Now the mark is set and activated, hand off to quickrun
+        (setq quickrun-option-outputter nil) ; have to reset this for some reason?!
+        (quickrun-region beg end))))
 
   (defun quickrun--outputter-replace-region ()
     "Replace region with quickrun output, and truncate the last character if it's a newline"
