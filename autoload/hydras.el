@@ -183,16 +183,15 @@ _SPC_ 🎯    _x_ 🔫    _M-w_ ⌨️    _w_ 👟    _|_ ♊    "
 
 ;;;###autoload (autoload #'my/tarzan-hydra/body "autoload/hydras" nil t)
 (defhydra my/tarzan-hydra (:color amaranth
-                           :hint nil
-                           :pre (recenter)
-                           :post (recenter))
+                           :hint nil)
   "
-_w_: forward node    _e_: node end
-_b_: node beginning
+_l_: forward node    _e_: node end
+_h_: backward node   _b_: node beginning
 _j_: down node       _a_: expand region
 _k_: up node         _i_: contract region   _v_: toggle mark
 "
-  ("w" #'tarzan-goto-next-sibling)
+  ("l" #'tarzan-goto-next-sibling-start)
+  ("h" #'tarzan-goto-prev-sibling-end)
   ("b" #'tarzan-goto-prev-sibling-start)
   ("e" #'tarzan-goto-next-sibling-end)
   ("j" #'tarzan-goto-first-child)
