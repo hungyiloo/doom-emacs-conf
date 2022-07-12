@@ -61,6 +61,7 @@ This seems to work better for me than doom's provided `+eval:replace-region'"
         ;; allows quickrun to work as if evil didn't exist
         (set-mark beg)
         (goto-char end)
+        (activate-mark)
         ;; Now the mark is set and activated, hand off to quickrun
         (quickrun-replace-region beg end))))
 
