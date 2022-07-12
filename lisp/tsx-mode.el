@@ -52,7 +52,7 @@
 (defmacro tsx-with-single-undo (&rest body)
   "Execute BODY as a single undo step."
   (if (fboundp 'with-undo-amalgamate)
-      (with-undo-amalgamate ,@body)
+      `(with-undo-amalgamate ,@body)
     `(let ((marker (prepare-change-group)))
        (unwind-protect ,@body
          (undo-amalgamate-change-group marker)))))
