@@ -143,3 +143,10 @@ Where =$command= is the command you want to run in [[id:5614ad79-6fb6-42e8-8132-
 This shortcut can be placed in =C:\Users\username\AppData\Roaming\Microsoft\Windows\Start Menu\Programs= to appear in the start menu.
 
 Note that the command may need to have an absolute path in order to work, e.g. =/home/username/.local/bin/runemacs.sh=
+
+*** External Environment
+It's helpful to set this in =.bashrc= to force =lsp-mode= to use some [[https://emacs-lsp.github.io/lsp-mode/page/performance/][optimizations]].
+
+#+begin_src bash
+export LSP_USE_PLISTS=true # an emacs lsp-mode optimization
+#+end_src
