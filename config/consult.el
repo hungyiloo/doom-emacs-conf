@@ -46,6 +46,19 @@
   ;; (setq consult-preview-key (kbd "C-."))
   ;; (setq consult-config '((consult-line :preview-key any)))
 
+  ;; REVIEW: when this bug is fixed upstream, remove this hack
+  (after! vertico
+    (defun +vertico--consult--fd-builder (input)
+      (pcase-let* ((cmd (split-string-and-unquote +vertico-consult-fd-args))
+                   (`(,arg . ,opts) (consult--command-split input))
+                   (`(,re . ,hl) (funcall consult--regexp-compiler
+                                          arg 'extended t))) ;a missing third parameter was required here
+        (when re
+          (list :command (append cmd
+                                 (list (consult--join-regexps re 'extended))
+                                 opts)
+                :highlight hl)))))
+
   (after! evil
     ;; Integrate with evil jumping
     (evil-set-command-property #'consult--jump :jump t)
