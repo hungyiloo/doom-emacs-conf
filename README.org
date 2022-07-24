@@ -19,8 +19,6 @@ This is my personal Doom Emacs config. It's not the tidiest thing in the world, 
 ** Notable things
 The TypeScript/TSX development environment is powered by [[https://github.com/emacs-tree-sitter/elisp-tree-sitter][elisp-tree-sitter]] and a custom-written =tsx-mode= that replaces =web-mode=. This means greatly improved stability, syntax highlighting, performance while editing, and also AST-based editing for JSX tags, similar to the =web-mode= element/tag/attribute editing capabilities. Although I haven't published it anywhere, I use it for work every day.
 
-Speaking of tree-sitter, it's implemented as a custom Doom Module, so that should be easy for anyone to migrate to another Doom Emacs config.
-
 Since Emacs 28+ now supports color emojis, I've moved away from the =emoji= module in Doom (which uses the =emojify= package under the hood) in favor of native emoji support. This means the =Noto Color Emoji= font, or some other emoji font, is needed instead of manually downloading twemoji images. While Emacs has a [[https://lars.ingebrigtsen.no/2021/10/28/emacs-emojis-a-%E2%9D%A4%EF%B8%8F-story/][shiny new]] built-in =emoji-insert= command, I missed being able to search emojis by keyword, so I've included a =emoji-insert-dwim= command that fills this gap.
 
 I've heavily customized my org-mode display to use [[https://github.com/rnkn/olivetti][olivetti]] for comfortable reading and writing (in favor of Doom's default zen-mode) and switched to "properly" sized bullet icons that don't ruin the monospace column layout of the nested content.
