@@ -17,6 +17,7 @@
   ;; Don't autocomplete snippets in LSP by default.
   ;; It seems to interfere a lot more than it helps.
   ;; Use the C-x C-s binding to call company-snippets manually.
+  ;; REVIEW: pending migration to corfu?
   (setq +lsp-company-backends '(:separate company-capf))
 
   ;; NOTE: Angular/TS language servers might perform better if we have this
@@ -69,6 +70,11 @@
   ;; Not sure of a better fix right now.
   (map! :map lsp-ui-peek-mode-map
         "<tab>" #'lsp-ui-peek--toggle-file))
+
+(after! lsp-html
+  ;; don't want to use lsp html formatter,
+  ;; since web-mode and other emacs formatters are more flexible
+  (setq lsp-html-format-enable nil))
 
 ;; must be set before package loads
 (setq lsp-tailwindcss-add-on-mode t)
