@@ -64,26 +64,26 @@
       "]" #'better-jumper-jump-forward
       "[" #'better-jumper-jump-backward
       (:prefix-map ("=" . "calc")
-       "=" #'calc-dispatch
-       "l" #'literate-calc-minor-mode
-       "c" #'calc
-       "q" #'quick-calc
-       "g" #'calc-grab-region
-       "G" #'calc-grab-rectangle
-       (:prefix ("+" . "sum")
-        "+" #'calc-grab-sum-down
-        "=" #'calc-grab-sum-across))
+                   "=" #'calc-dispatch
+                   "l" #'literate-calc-minor-mode
+                   "c" #'calc
+                   "q" #'quick-calc
+                   "g" #'calc-grab-region
+                   "G" #'calc-grab-rectangle
+                   (:prefix ("+" . "sum")
+                            "+" #'calc-grab-sum-down
+                            "=" #'calc-grab-sum-across))
       (:prefix-map ("t" . "toggle")
        :desc "Git gutter" "v" #'git-gutter-mode
        :desc "Highlight line" "h" #'hl-line-mode
        :desc "Debug on error" "d" #'toggle-debug-on-error)
       (:prefix-map ("p" . "project")
-       "v" #'projectile-run-vterm)
+                   "v" #'projectile-run-vterm)
       (:prefix-map ("i" . "insert")
-       "u" #'insert-char
-       "e" #'emoji-insert-dwim
-       "E" #'emoji-insert
-       "i" #'all-the-icons-insert))
+                   "u" #'insert-char
+                   "e" #'emoji-insert-dwim
+                   "E" #'emoji-insert
+                   "i" #'all-the-icons-insert))
 
 (map! :leader
       :desc "window hydra" "w" #'my/window-hydra/body
@@ -329,6 +329,13 @@
 
   ;; Pixel scrolling
   (when (fboundp #'pixel-scroll-precision-mode) (pixel-scroll-precision-mode +1)))
+
+
+;; Fix broken/wrong/conflicting all-the-icons in later versions of Emacs 29.x
+;; Apparently this function from doom botches things.
+;; A clue for the fix came from this issue:
+;; https://github.com/domtronn/all-the-icons.el/issues/277
+(defun doom-init-all-the-icons-fonts-h () (ignore))
 
 ;; Load some external files
 (dolist (dir (list "config"))
