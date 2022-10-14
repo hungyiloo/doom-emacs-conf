@@ -35,21 +35,21 @@ nil, turn it into concatenation."
         (newline)
         (funcall indent-line-function))))))
 
-(after! evil
-  ;; Hook to install custom js/ts text objects
-  ;; All functions below are autoloaded
-  (add-hook! (js-mode js-jsx-mode js2-mode typescript-mode typescript-tsx-mode tsx-mode)
-    (map! :map evil-operator-state-local-map
-          "af" #'my/evil-outer-js-function
-          "if" #'my/evil-inner-js-function
-          "ad" #'my/evil-outer-js-declaration
-          "id" #'my/evil-inner-js-declaration
-          "as" #'my/evil-outer-js-statement
-          "is" #'my/evil-inner-js-statement
-          :map evil-visual-state-local-map
-          "af" #'my/evil-visual-outer-js-function
-          "if" #'my/evil-visual-inner-js-function
-          "ad" #'my/evil-visual-outer-js-declaration
-          "id" #'my/evil-visual-inner-js-declaration
-          "as" #'my/evil-visual-outer-js-statement
-          "is" #'my/evil-visual-inner-js-statement)))
+;; (after! evil
+;;   ;; Hook to install custom js/ts text objects
+;;   ;; All functions below are autoloaded
+;;   (add-hook! (js-mode js-jsx-mode js2-mode typescript-mode typescript-tsx-mode tsx-mode)
+;;     (map! :map evil-operator-state-local-map
+;;           "af" #'my/evil-outer-js-function
+;;           "if" #'my/evil-inner-js-function
+;;           "ad" #'my/evil-outer-js-declaration
+;;           "id" #'my/evil-inner-js-declaration
+;;           "as" #'my/evil-outer-js-statement
+;;           "is" #'my/evil-inner-js-statement
+;;           :map evil-visual-state-local-map
+;;           "af" #'my/evil-visual-outer-js-function
+;;           "if" #'my/evil-visual-inner-js-function
+;;           "ad" #'my/evil-visual-outer-js-declaration
+;;           "id" #'my/evil-visual-inner-js-declaration
+;;           "as" #'my/evil-visual-outer-js-statement
+;;           "is" #'my/evil-visual-inner-js-statement)))
