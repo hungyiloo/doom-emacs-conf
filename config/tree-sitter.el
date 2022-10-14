@@ -14,4 +14,7 @@
   (setf (map-elt
          evil-textobj-tree-sitter-major-mode-language-alist
          'tsx-mode)
-        "typescript"))
+        "typescript")
+
+  ;; Don't disable tree-sitter-hl-mode anywhere
+  (setq +tree-sitter-hl-enabled-modes t))
