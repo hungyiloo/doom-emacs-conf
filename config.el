@@ -314,13 +314,15 @@
   (set-fontset-font t ?⅔ (font-spec :family "Fira Code"))
 
   ;; Don't accelerate mouse wheel scrolling
-  (setq mouse-wheel-scroll-amount '(5
+  (setq mouse-wheel-scroll-amount '(3
                                     ((shift)
                                      . hscroll)
                                     ((meta))
                                     ((control)
                                      . text-scale)))
   (setq mouse-wheel-progressive-speed nil)
+  ;; Animate mouse wheel scrolling
+  (setq pixel-scroll-precision-large-scroll-height 40.0)
 
   ;; Tweak help popups
   (set-popup-rule!
