@@ -128,3 +128,11 @@
                               (:add)
                               :post-handlers
                               (("| " "SPC")))))))
+
+;; Enable doom tree-sitter support to tsx-mode
+(add-hook! '(tsx-mode-local-vars-hook) :append #'tree-sitter!)
+;; Add tree-sitter support for my custom tsx-mode
+(after! evil-textobj-tree-sitter
+        (pushnew! evil-textobj-tree-sitter-major-mode-language-alist '(tsx-mode . "tsx")))
+(after! tree-sitter
+        (pushnew! tree-sitter-major-mode-language-alist '(typescript-tsx-mode . tsx)))
