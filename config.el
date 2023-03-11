@@ -103,7 +103,11 @@
       "M-SPC" (cmd! (cycle-spacing -1))
       "<mouse-8>" #'better-jumper-jump-backward
       "<mouse-9>" #'better-jumper-jump-forward
-      "<f12>" #'universal-argument)
+      "<f12>" #'universal-argument
+      :i "M-?" #'hippie-expand)
+
+(map! :map minibuffer-mode-map
+      "M-?" #'hippie-expand)
 
 (map! :map universal-argument-map
       "<f12>" #'universal-argument-more)
