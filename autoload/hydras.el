@@ -20,7 +20,11 @@
 ;;;###autoload (autoload #'my/mc-hydra/body "autoload/hydras" nil t)
 (defhydra my/mc-hydra (:color pink
                        :hint nil
-                       :pre (evil-mc-pause-cursors)
+                       :pre (progn
+                              ;; make sure point is after mark, otherwise matching stuffs up
+                              (if (and (region-active-p) (> (mark) (point)))
+                                  (exchange-point-and-mark))
+                              (evil-mc-pause-cursors))
                        :post (progn
                                (evil-mc-resume-cursors)
                                (when evil-mc-pattern (my/mc-select-matches))))
