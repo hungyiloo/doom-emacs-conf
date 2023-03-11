@@ -66,8 +66,8 @@
     :nv "|" #'my/evil-duplicate-operator)
 
    (:prefix "g"
-    :nv "r" #'my/eval-region-quickrun
-    :nv "R" #'my/replace-region-quickrun))
+    :nv "r" #'+eval:region
+    :nv "R" #'+eval:replace-region))
 
   ;; Fix ^ movement to also respect visual line mode.
   ;; It works for 0 and $ so why not ^?
