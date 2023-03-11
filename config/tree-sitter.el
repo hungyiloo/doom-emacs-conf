@@ -12,3 +12,12 @@
 
   ;; Don't disable tree-sitter-hl-mode anywhere
   (setq +tree-sitter-hl-enabled-modes t))
+
+(after! tree-sitter-hl
+    (custom-set-faces!
+      ;; Fix blotches of wrong background color in org src blocks
+      `(tree-sitter-hl-face:punctuation.bracket :inherit nil)
+      `(tree-sitter-hl-face:punctuation.delimiter :inherit nil)
+      `(tree-sitter-hl-face:punctuation :inherit nil)
+      ;; Fix embedded code in strings to be distinguishable
+      `(tree-sitter-hl-face:embedded :weight bold)))
