@@ -33,6 +33,51 @@
             (goto-char pos)
             (replace-match (concat "<" tag-name)))))))
 
+  ;; Redefine this function to better handle when whole lines are selected
+  (defun web-mode-element-wrap (&optional tag-name)
+    "Wrap current REGION with start and end tags.
+Prompt user if TAG-NAME isn't provided."
+    (interactive)
+    (let (beg end pos tag sep)
+      (save-excursion
+        (setq tag (or tag-name (web-mode-element-complete)))
+        (setq pos (point))
+        (cond
+         (mark-active
+          (setq beg (region-beginning)
+                end (region-end))
+          ;; These next two sexps adjust the region beg/end
+          ;; to go to the first and last non-whitespace chars
+          ;; of the selected region, but only if the previously
+          ;; selected beg/end positions were at the beginning-of-line,
+          ;; which is how the evil visual line selection works
+          (save-excursion
+            (goto-char beg)
+            (when (bolp)
+              (back-to-indentation)
+              (setq beg (point))))
+          (save-excursion
+            (goto-char end)
+            (when (bolp)
+              (backward-char)
+              (skip-syntax-backward " " (pos-bol))
+              (setq end (point)))))
+         ((get-text-property pos 'tag-type)
+          (setq beg (web-mode-element-beginning-position pos)
+                end (1+ (web-mode-element-end-position pos))))
+         ((setq beg (web-mode-element-parent-position pos))
+          (setq end (1+ (web-mode-element-end-position pos))))
+         )
+        ;;      (message "beg(%S) end(%S)" beg end)
+        (when (and beg end (> end 0))
+          (setq sep (if (get-text-property beg 'tag-beg) "\n" ""))
+          (web-mode-insert-text-at-pos (concat sep "</" tag ">") end)
+          (web-mode-insert-text-at-pos (concat "<" tag ">" sep) beg)
+          (when (string= sep "\n") (indent-region beg (+ end (* (+ 3 (length tag)) 2))))
+          )
+        ) ;save-excursion
+      (web-mode-go beg)))
+
   (defun my/web-mode-element-split-to-lines ()
     "Splits the element into multiple lines by HTML tags in a generally beautified, sparse style."
     (interactive)
