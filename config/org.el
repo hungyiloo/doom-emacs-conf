@@ -208,7 +208,46 @@ Depends on esbuild being installed and available on the path"
   ;; https://github.com/hlissner/emacs-doom-themes/blob/master/doom-themes-ext-org.el
   (advice-add #'doom-themes-enable-org-fontification
               :around
-              #'my/doom-themes-enable-org-fontification-replacement))
+              #'my/doom-themes-enable-org-fontification-replacement)
+
+  ;; Try to hide drawers more completely with this function override and the hooks additions below
+  (defun org-cycle-hide-drawers (state)
+    "Re-hide all drawers after a visibility state change."
+    (when (and (derived-mode-p 'org-mode)
+               (not (memq state '(overview folded contents))))
+      (save-excursion
+        (let* ((globalp (memq state '(contents all)))
+               (beg (if globalp
+                        (point-min)
+                      (point)))
+               (end (if globalp
+                        (point-max)
+                      (if (eq state 'children)
+                          (save-excursion
+                            (outline-next-heading)
+                            (point))
+                        (org-end-of-subtree t)))))
+          (goto-char beg)
+          (while (re-search-forward org-drawer-regexp end t)
+            (save-excursion
+              (beginning-of-line 1)
+              (when (looking-at org-drawer-regexp)
+                (let* ((start (1- (match-beginning 0)))
+                       (limit
+                        (save-excursion
+                          (outline-next-heading)
+                          (point)))
+                       (msg (format
+                             (concat
+                              "org-cycle-hide-drawers:  "
+                              "`:END:`"
+                              " line missing at position %s")
+                             (1+ start))))
+                  (if (re-search-forward "^[ \t]*:END:" limit t)
+                      (outline-flag-region start (point-at-eol) t)
+                    (user-error msg))))))))))
+  (remove-hook 'org-cycle-hook 'org-optimize-window-after-visibility-change)
+  (add-hook 'org-cycle-hook 'org-cycle-hide-drawers))
 
 (after! org-roam
   (setq org-roam-verbose t)
