@@ -16,10 +16,9 @@
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
-(setq org-directory "~/Notes/")
-(setq org-agenda-files '("~/Notes/"))
-;; uncomment the line below to include archive in agenda search
-;; (setq org-agenda-files '("~/Notes/" "~/Notes/Archive/"))
+(setq org-directory "~/Notes/roam/journal/"
+      org-roam-directory "~/Notes/roam/"
+      org-agenda-files '("~/Notes/roam/journal/"))
 
 ;; Font adjustments should be more fine
 (setq text-scale-mode-step 1.05)
@@ -40,8 +39,8 @@
 ;; More emacs-y clipboard intergration
 (setq save-interprogram-paste-before-kill t)
 
-;; ISO calendar by default
-(setq calendar-date-style 'iso)
+(setq calendar-date-style 'iso  ; ISO calendar by default
+      calendar-week-start-day 1) ; weeks start on Mon; otherwise brain explodes
 
 ;; Re-enable some disabled commands
 (put #'narrow-to-region 'disabled nil)
@@ -344,7 +343,7 @@
 (defun doom-init-all-the-icons-fonts-h () (ignore))
 
 ;; Load some external files
-(dolist (dir (list "config"))
+(dolist (dir (list "config" ".local"))
   (dolist (file (directory-files
                  (doom-path doom-private-dir dir)
                  t

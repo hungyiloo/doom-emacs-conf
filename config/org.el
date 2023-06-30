@@ -123,7 +123,8 @@ Depends on esbuild being installed and available on the path"
 
   ;; Org agenda customization
   (setq org-agenda-span 3
-        org-agenda-start-day "+0d"
+        ;; org-agenda-start-day "+0d"
+        org-agenda-start-on-weekday 1
         org-agenda-block-separator 32
         org-agenda-skip-scheduled-if-deadline-is-shown t
         org-agenda-skip-deadline-prewarning-if-scheduled t
@@ -157,8 +158,8 @@ Depends on esbuild being installed and available on the path"
                      (org-agenda-current-time-string "◁─────────── NOW")
                      (org-agenda-scheduled-leaders '("" "🔺 %sd ago: "))
                      (org-agenda-deadline-leaders '("‼️" "🔻 %sd: " "⚠ %sd ago: "))
-                     (org-agenda-time-grid '((daily today remove-match)
-                                             (900 1200 1500 1800)
+                     (org-agenda-time-grid '((daily today remove-match required-time)
+                                             (800 1000 1200 1400 1600 1800 2000)
                                              "" "┈┈┈┈┈┈┈┈┈┈┈┈"))
                      (org-agenda-format-date #'my/org-agenda-format-big-date)))
         (my-todo-list '((org-agenda-overriding-header "\n\n            ┏━━━━━━━━━━━━━━━┓\n            ┃ Hanging Todos ┃\n            ┗━━━━━━━━━━━━━━━┛")
@@ -261,7 +262,7 @@ Depends on esbuild being installed and available on the path"
           :desc "Migrate" "m" #'my/org-roam-create-note-from-headline)))
   (add-hook! 'org-roam-find-file-hook
     (defun my/org-roam-buffer-setup ()
-      (auto-fill-mode 1))))
+      (olivetti-mode 1))))
 
 (after! outline
   ;; Prevent folding from interfering with ediffing org files
