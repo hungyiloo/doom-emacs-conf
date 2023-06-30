@@ -39,7 +39,7 @@
 (package! mermaid-mode)
 (package! ob-mermaid)
 
-(package! org-roam :pin "d95d25615e69e7cc847641800c1886366336c97e")
+(package! org-roam :pin "5c06471c3a11348342719fd9011486455adeb701")
 (package! literate-calc-mode)
 (package! lsp-tailwindcss :recipe (:host github :repo "merrickluo/lsp-tailwindcss"))
 (package! org-alert)
