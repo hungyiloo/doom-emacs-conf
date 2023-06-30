@@ -54,7 +54,8 @@
   ;; evil jump intergration with lsp mouse actions
   ;; (after! evil
   ;;   (evil-set-command-property #'lsp-find-definition-mouse :jump t))
-  )
+
+  (setenv "TSSERVER_LOG_FILE" "/tmp/tsserver.log"))
 
 (after! lsp-ui
   ;; Fixes code action lightbulb icon background
