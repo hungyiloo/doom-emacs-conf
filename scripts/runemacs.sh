@@ -1,9 +1,8 @@
 #!/bin/bash
 source ~/.bashrc
-source ~/.profile
 if ! pgrep -f dropbox &> /dev/null 2>&1; then
-	~/.dropbox-dist/dropboxd &>/dev/null &
+	nohup ~/.dropbox-dist/dropboxd </dev/null >/dev/null 2>&1  & # completely detach
 	disown
 fi
 cd ~
-emacs
+setsid emacs

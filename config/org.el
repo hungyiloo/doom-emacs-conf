@@ -157,7 +157,7 @@ Depends on esbuild being installed and available on the path"
                      (org-agenda-prefix-format "%11t  %s")
                      (org-agenda-current-time-string "◁─────────── NOW")
                      (org-agenda-scheduled-leaders '("" "🔺 %sd ago: "))
-                     (org-agenda-deadline-leaders '("‼️" "🔻 %sd: " "⚠ %sd ago: "))
+                     (org-agenda-deadline-leaders '("‼️" "🔻 %sd: " "⚠️ %sd ago: "))
                      (org-agenda-time-grid '((daily today remove-match required-time)
                                              (800 1000 1200 1400 1600 1800 2000)
                                              "" "┈┈┈┈┈┈┈┈┈┈┈┈"))

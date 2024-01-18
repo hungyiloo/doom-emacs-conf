@@ -82,7 +82,7 @@
                    "u" #'insert-char
                    "e" #'emoji-insert-dwim
                    "E" #'emoji-insert
-                   "i" #'all-the-icons-insert))
+                   "i" #'nerd-icons-insert))
 
 (map! :leader
       :desc "window hydra" "w" #'my/window-hydra/body
@@ -138,27 +138,6 @@
                                          32)))
                      "\n"))
            'face 'doom-dashboard-banner))))
-
-(setq +doom-dashboard-menu-sections
-      '(("Open org-agenda" :icon
-         (all-the-icons-octicon "calendar" :face 'doom-dashboard-menu-title)
-         :when
-         (fboundp 'org-agenda)
-         :action org-agenda)
-        ("Recently opened files" :icon
-         (all-the-icons-octicon "file-text" :face 'doom-dashboard-menu-title)
-         :action recentf-open-files)
-        ("Open project" :icon
-         (all-the-icons-octicon "briefcase" :face 'doom-dashboard-menu-title)
-         :action projectile-switch-project)
-        ("Jump to bookmark" :icon
-         (all-the-icons-octicon "bookmark" :face 'doom-dashboard-menu-title)
-         :action bookmark-jump)
-        ("Open private configuration" :icon
-         (all-the-icons-octicon "tools" :face 'doom-dashboard-menu-title)
-         :when
-         (file-directory-p doom-private-dir)
-         :action doom/open-private-config)))
 
 (add-hook! 'doom-first-buffer-hook
   (setq display-line-numbers-type t))
@@ -335,12 +314,6 @@
   ;; Pixel scrolling
   (when (fboundp #'pixel-scroll-precision-mode) (pixel-scroll-precision-mode +1)))
 
-
-;; Fix broken/wrong/conflicting all-the-icons in later versions of Emacs 29.x
-;; Apparently this function from doom botches things.
-;; A clue for the fix came from this issue:
-;; https://github.com/domtronn/all-the-icons.el/issues/277
-(defun doom-init-all-the-icons-fonts-h () (ignore))
 
 ;; Load some external files
 (dolist (dir (list "config" ".local"))
